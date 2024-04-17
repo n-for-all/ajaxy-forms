@@ -1,0 +1,37 @@
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+		"moduleResolution": "classic",
+		"noEmitHelpers": false,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"isolatedModules": false,
+		"skipLibCheck": true,
+		"lib": ["es6", "es5", "dom"],
+		"sourceMap": false,
+		"allowJs": true,
+		"noStrictGenericChecks": false,
+		"jsx": "react",
+		"strictNullChecks": false,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"declaration": false,
+		"noImplicitAny": false,
+		"removeComments": true,
+		"noLib": false,
+		"noUnusedLocals": true,
+		"noUnusedParameters": false,
+		"preserveConstEnums": true,
+		"suppressImplicitAnyIndexErrors": false,
+		"outDir": "../js/",
+		"baseUrl": "./",
+		"paths": {
+			"*": ["./*", "./node_modules/*", "/usr/local/lib/node_modules/*", "../../../../../../../../usr/local/lib/node_modules/*"],
+		},
+		"rootDirs": ["./node_modules/**/*", "./node_modules/*", "/usr/local/lib/node_modules/*"]
+	},
+	"exclude": ["build", "./node_modules/*", "acceptance-tests", "webpack", "jest"],
+	"include": ["./", "../../../../../../../../usr/local/lib/node_modules/*", "/usr/local/lib/node_modules/*"]
+}

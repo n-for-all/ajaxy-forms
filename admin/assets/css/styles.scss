@@ -1,0 +1,133 @@
+.ajaxy-data-table {
+    &.widefat {
+
+        td,
+        td ol,
+        td p,
+        td ul {
+            font-size: 12px;
+            line-height: 1em;
+        }
+    }
+}
+
+
+.af-form-wrap {
+    .major-publishing-actions {
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+
+        >* {
+            margin-right: 10px;
+        }
+    }
+
+    #post-body {
+        padding: 0 10px;
+        border-top: 1px solid #fff;
+        border-bottom: 1px solid #dcdcde;
+        background: #fff;
+        min-height: 400px;
+    }
+
+    #post-body-content {
+        position: relative;
+        float: none;
+    }
+
+    .draggable {
+        z-index: 9999;
+    }
+
+    .af-fields {
+        >li {
+            margin-bottom: 6px;
+
+            background: #f6f7f7;
+            border: 1px solid #dcdcde;
+            display: flex;
+            transition: all ease 0.3s;
+
+            >span {
+                margin-right: auto;
+                padding: 5px 10px;
+            }
+
+
+
+            >a {
+                margin-left: 10px;
+                font-size: 12px;
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                transition: all ease 0.3s;
+                color: #3c434a;
+                padding: 5px 5px;
+                border-left: 1px solid #dcdcde82;
+
+                &:hover {
+                    background-color: #fff;
+                }
+
+                >svg {
+                    width: 15px;
+                    margin-right: 2px;
+                }
+            }
+        }
+    }
+
+    .menu-item-edit-active .item-edit:before {
+        content: "\f142";
+    }
+
+    .item-edit {
+        position: absolute;
+        right: -20px;
+        top: 0;
+        display: block;
+        width: 30px;
+        height: 40px;
+        outline: 0;
+
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
+    .item-edit:before {
+        margin-top: 10px;
+        margin-left: 4px;
+        width: 20px;
+        border-radius: 50%;
+        text-indent: -1px;
+        content: "\f140";
+        font: normal 20px / 1 dashicons;
+        speak: never;
+        display: block;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-decoration: none;
+    }
+
+    .basic-settings{
+        h3{
+            display: none;
+        }
+
+        &:after{
+            content: "";
+            clear: both;
+            display: table;
+        }
+    }
+    .advanced-settings{
+        &:after{
+            content: "";
+            clear: both;
+            display: table;
+        }
+    }
+}

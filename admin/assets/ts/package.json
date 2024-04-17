@@ -1,0 +1,17 @@
+{
+  "name": "ajaxy-forms",
+  "version": "1.0.0",
+  "description": "Forms",
+  "main": "./script.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/backbone": "^1.4.19"
+  },
+  "dependencies": {
+    "backbone": "^1.6.0"
+  }
+}

@@ -1,0 +1,101 @@
+.ajaxy-data-table.widefat td,
+.ajaxy-data-table.widefat td ol,
+.ajaxy-data-table.widefat td p,
+.ajaxy-data-table.widefat td ul {
+  font-size: 12px;
+  line-height: 1em;
+}
+
+.af-form-wrap .major-publishing-actions {
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+}
+.af-form-wrap .major-publishing-actions > * {
+  margin-right: 10px;
+}
+.af-form-wrap #post-body {
+  padding: 0 10px;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #dcdcde;
+  background: #fff;
+  min-height: 400px;
+}
+.af-form-wrap #post-body-content {
+  position: relative;
+  float: none;
+}
+.af-form-wrap .draggable {
+  z-index: 9999;
+}
+.af-form-wrap .af-fields > li {
+  margin-bottom: 6px;
+  background: #f6f7f7;
+  border: 1px solid #dcdcde;
+  display: flex;
+  transition: all ease 0.3s;
+}
+.af-form-wrap .af-fields > li > span {
+  margin-right: auto;
+  padding: 5px 10px;
+}
+.af-form-wrap .af-fields > li > a {
+  margin-left: 10px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: all ease 0.3s;
+  color: #3c434a;
+  padding: 5px 5px;
+  border-left: 1px solid rgba(220, 220, 222, 0.5098039216);
+}
+.af-form-wrap .af-fields > li > a:hover {
+  background-color: #fff;
+}
+.af-form-wrap .af-fields > li > a > svg {
+  width: 15px;
+  margin-right: 2px;
+}
+.af-form-wrap .menu-item-edit-active .item-edit:before {
+  content: "\f142";
+}
+.af-form-wrap .item-edit {
+  position: absolute;
+  right: -20px;
+  top: 0;
+  display: block;
+  width: 30px;
+  height: 40px;
+  outline: 0;
+}
+.af-form-wrap .item-edit:focus {
+  box-shadow: none;
+}
+.af-form-wrap .item-edit:before {
+  margin-top: 10px;
+  margin-left: 4px;
+  width: 20px;
+  border-radius: 50%;
+  text-indent: -1px;
+  content: "\f140";
+  font: normal 20px/1 dashicons;
+  speak: never;
+  display: block;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-decoration: none;
+}
+.af-form-wrap .basic-settings h3 {
+  display: none;
+}
+.af-form-wrap .basic-settings:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.af-form-wrap .advanced-settings:after {
+  content: "";
+  clear: both;
+  display: table;
+}/*# sourceMappingURL=styles.css.map */

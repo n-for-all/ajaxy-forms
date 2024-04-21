@@ -21,6 +21,7 @@ exports.default = [
                 tsconfig: false,
             }),
             (0, plugin_replace_1.default)({
+                preventAssignment: true,
                 "process.env.NODE_ENV": JSON.stringify("production"),
             }),
         ],
@@ -30,10 +31,11 @@ exports.default = [
         output: {
             file: path_1.default.resolve(__dirname, "../js/builder.js"),
             format: "iife",
+            external: ["Backbone"],
             globals: {
-                backbone: 'Backbone',
-                underscore: '_'
-            }
+                backbone: "Backbone",
+                underscore: "_",
+            },
         },
         plugins: [
             (0, plugin_node_resolve_1.default)(),
@@ -42,6 +44,7 @@ exports.default = [
                 tsconfig: false,
             }),
             (0, plugin_replace_1.default)({
+                preventAssignment: true,
                 "process.env.NODE_ENV": JSON.stringify("production"),
             }),
         ],

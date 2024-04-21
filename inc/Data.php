@@ -25,24 +25,6 @@ class Data
         dbDelta($sql);
 
         add_option('ajaxy_forms_db_version', \Ajaxy\Forms\Plugin::DB_VERSION);
-
-        //we will deal with the upgrades later
-        // $installed_ver = get_option('ajaxy_forms_db_version');
-        // if ($installed_ver != \Ajaxy\Forms\Plugin::DB_VERSION) {
-        //     $sql = "CREATE TABLE " . $table_name . " (
-        //         id int(11) NOT NULL AUTO_INCREMENT,
-        //         name tinytext NOT NULL,
-        //         data text NOT NULL,
-        //         created datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-        //         PRIMARY KEY  (id)
-        //     );";
-
-        //     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        //     dbDelta($sql);
-
-        //     // notice that we are updating option, rather than adding it
-        //     update_option('ajaxy_forms_db_version', \Ajaxy\Forms\Plugin::DB_VERSION);
-        // }
     }
 
     public static function get_table_name()

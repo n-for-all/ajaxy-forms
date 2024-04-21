@@ -168,7 +168,6 @@
                 if ($destElement==null || $destElement.get(0)!=destElement) {
                     var $possibleDestElement = $(destElement);
                     if (options.canDrop($possibleDestElement)) {
-                        console.log("can drop");
                         if (options.dropClass) {
                             if ($destElement!=null)
                                 $destElement.removeClass(options.dropClass);

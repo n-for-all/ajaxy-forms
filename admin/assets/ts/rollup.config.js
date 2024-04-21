@@ -14,11 +14,13 @@ export default [
 			resolve(),
 			typescript({
 				exclude: path.resolve(__dirname, "./node_modules"),
+                include: [path.resolve(__dirname, "./script.ts")],
 				tsconfig: false,
 			}),
 			replace({
 				// If you would like DEV messages, specify 'development'
 				// Otherwise use 'production'
+                preventAssignment: true,
 				"process.env.NODE_ENV": JSON.stringify("production"),
 			}),
 		],
@@ -29,19 +31,19 @@ export default [
 			file: path.resolve(__dirname, "../js/builder.js"),
 			format: "iife",
 			globals: {
-                backbone: 'Backbone',
-                underscore: '_'
-              }
+				backbone: "Backbone",
+				underscore: "_",
+			},
 		},
 		plugins: [
 			resolve(),
 			typescript({
 				exclude: path.resolve(__dirname, "./node_modules"),
-				tsconfig: false,
 			}),
 			replace({
 				// If you would like DEV messages, specify 'development'
 				// Otherwise use 'production'
+                preventAssignment: true,
 				"process.env.NODE_ENV": JSON.stringify("production"),
 			}),
 		],

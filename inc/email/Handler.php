@@ -90,7 +90,7 @@ class Handler
             'public'             => true,
             'publicly_queryable' => true,
             'show_ui'            => true,
-            'show_in_menu'       => 'ajaxy_forms',
+            'show_in_menu'       => 'ajaxy-forms',
             'show_in_rest'       => false,
             'query_var'          => true,
             'has_archive'        => true,

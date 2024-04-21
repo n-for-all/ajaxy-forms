@@ -15,6 +15,7 @@ namespace Ajaxy\Forms;
 require 'vendor/autoload.php';
 require 'functions.php';
 
+use Ajaxy\Forms\Inc\Constraints;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Validation;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
@@ -27,7 +28,6 @@ use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Bridge\Twig\Extension\FormExtension;
-use Symfony\Component\Validator\Constraints as Assert;
 
 
 
@@ -47,60 +47,7 @@ class Plugin
 
 
     private $forms = [];
-    private $constraints = array(
-        'abstract_comparison' => Assert\AbstractComparison::class,
-        'all' => Assert\All::class,
-        'bic' => Assert\Bic::class,
-        'blank' => Assert\Blank::class,
-        'callback' => Assert\Callback::class,
-        'card_scheme' => Assert\CardScheme::class,
-        'choice' => Assert\Choice::class,
-        'collection' => Assert\Collection::class,
-        'composite' => Assert\Composite::class,
-        'count' => Assert\Count::class,
-        'country' => Assert\Country::class,
-        'currency' => Assert\Currency::class,
-        'date' => Assert\Date::class,
-        'date_time' => Assert\DateTime::class,
-        'email' => Assert\Email::class,
-        'equal_to' => Assert\EqualTo::class,
-        'existence' => Assert\Existence::class,
-        'expression' => Assert\Expression::class,
-        'file' => Assert\File::class,
-        'greater_than' => Assert\GreaterThan::class,
-        'greater_than_or_equal' => Assert\GreaterThanOrEqual::class,
-        'group_sequence' => Assert\GroupSequence::class,
-        'group_sequence_provider' => Assert\GroupSequenceProvider::class,
-        'iban' => Assert\Iban::class,
-        'identical_to' => Assert\IdenticalTo::class,
-        'image' => Assert\Image::class,
-        'ip' => Assert\Ip::class,
-        'is_false' => Assert\IsFalse::class,
-        'is_null' => Assert\IsNull::class,
-        'is_true' => Assert\IsTrue::class,
-        'isbn' => Assert\Isbn::class,
-        'issn' => Assert\Issn::class,
-        'language' => Assert\Language::class,
-        'length' => Assert\Length::class,
-        'less_than' => Assert\LessThan::class,
-        'less_than_or_equal' => Assert\LessThanOrEqual::class,
-        'locale' => Assert\Locale::class,
-        'luhn' => Assert\Luhn::class,
-        'not_blank' => Assert\NotBlank::class,
-        'not_equal_to' => Assert\NotEqualTo::class,
-        'not_identical_to' => Assert\NotIdenticalTo::class,
-        'not_null' => Assert\NotNull::class,
-        'optional' => Assert\Optional::class,
-        'range' => Assert\Range::class,
-        'regex' => Assert\Regex::class,
-        'required' => Assert\Required::class,
-        'time' => Assert\Time::class,
-        'traverse' => Assert\Traverse::class,
-        'type' => Assert\Type::class,
-        'url' => Assert\Url::class,
-        'uuid' => Assert\Uuid::class,
-        'valid' => Assert\Valid::class,
-    );
+    
 
 
     /**
@@ -163,7 +110,7 @@ class Plugin
                 'name' => ''
             ),
             $atts,
-            'ajaxy_forms'
+            'ajaxy-forms'
         );
 
         $name = $atts['name'] ?? '';
@@ -220,7 +167,7 @@ class Plugin
             $field_options = $field;
             if (!empty($field['constraints'])) {
                 $field_options['constraints'] = \array_filter(\array_map(function ($constraint) {
-                    return $this->get_constraint($constraint);
+                    return Constraints::getInstance()->create_constraint($constraint);
                 }, $field['constraints'] ?? []), function ($constraint) {
                     return !is_null($constraint);
                 });
@@ -368,35 +315,8 @@ class Plugin
     public function scripts()
     {
         wp_enqueue_style(AJAXY_FORMS_TEXT_DOMAIN . "-style", AJAXY_FORMS_PLUGIN_URL . '/assets/css/styles.css');
-        wp_enqueue_style(AJAXY_FORMS_TEXT_DOMAIN . "-style-d", AJAXY_FORMS_PLUGIN_URL . '/assets/src/scss/styles.css');
         wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . '-script',  AJAXY_FORMS_PLUGIN_URL  . '/assets/js/script.js', array(), 1.0, true);
         wp_localize_script(AJAXY_FORMS_TEXT_DOMAIN . '-script', 'ajaxyFormsSettings', array('ajaxurl' => admin_url('admin-ajax.php')));
-    }
-
-    public function get_constraints()
-    {
-        return $this->constraints;
-    }
-
-    public function get_constraint($constraint)
-    {
-        $options = null;
-        $message = null;
-        $mode = null;
-        if (\is_array($constraint)) {
-            $type = $constraint['type'] ?? 'not_blank';
-            $options = $constraint['options'] ?? null;
-            $message = $constraint['message'] ?? null;
-            $mode = $constraint['mode'] ?? null;
-        } else {
-            $type = $constraint;
-        }
-        $data = preg_split('/(?=[A-Z])/', $type);
-        $type = \strtolower(implode('_', array_filter($data)));
-        if (isset($this->constraints[$type])) {
-            return new $this->constraints[$type]($options, $message, $mode);
-        }
-        throw new \Exception('Constraint not found');
     }
 
 

@@ -44,11 +44,20 @@
                     var headers = _this.getHeaders();
                     data.append("action", "af_submit");
                     data.append("form_name", _this.element.name);
-                    fetch(ajaxyFormsSettings.ajaxurl || _this.element.action, {
+                    var method = (_this.element.method ? _this.element.method : "POST").toUpperCase();
+                    var fetchData = {
                         headers: headers,
-                        method: _this.element.method ? _this.element.method : "GET",
-                        body: data
-                    })
+                        method: method
+                    };
+                    var action = ajaxyFormsSettings.ajaxurl || _this.element.action;
+                    if (method == "GET" || method == "HEAD") {
+                        //@ts-ignore
+                        action = action + "?" + new URLSearchParams(data).toString();
+                    }
+                    else {
+                        fetchData["body"] = data;
+                    }
+                    fetch(action, fetchData)
                         .then(function (response) {
                         response
                             .json()
@@ -80,12 +89,14 @@
                             _this.clearErrors();
                             _this.trigger("error", error);
                             (_a = _this.submitButton) === null || _a === void 0 ? void 0 : _a.classList.remove("loading");
-                            _this.setMessage(error.message, 'error');
+                            _this.setMessage(error.message, "error");
                         });
                     })["catch"](function (e) {
                         var _a;
                         _this.trigger("error", e);
                         (_a = _this.submitButton) === null || _a === void 0 ? void 0 : _a.classList.remove("loading");
+                        console.error(e);
+                        _this.setMessage(e.message, "error");
                     });
                 }
                 else {

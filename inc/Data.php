@@ -5,14 +5,26 @@ namespace Ajaxy\Forms\Inc;
 class Data
 {
 
-    static $table_name = 'form_entries';
+    private static $forms = [];
+
+    private static $entries_table_name = 'form_entries';
+    private static $table_name = 'forms';
+
+    /**
+     * Create the tables in the database
+     *
+     * @date 2024-04-21
+     *
+     * @return void
+     */
     public static function install()
     {
         global $wpdb;
 
         $charset_collate = $wpdb->get_charset_collate();
-        $table_name = $wpdb->prefix . self::$table_name;
-        $sql = "CREATE TABLE " . $table_name . " (
+        $entries_table_name = $wpdb->prefix . self::$entries_table_name;
+
+        $sql = "CREATE TABLE IF NOT EXISTS " . $entries_table_name . " (
             id INT NOT NULL AUTO_INCREMENT,  
             name tinytext NOT NULL,
             data text NOT NULL,
@@ -24,15 +36,254 @@ class Data
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
 
+        $table_name = $wpdb->prefix . self::$table_name;
+        $sql = "CREATE TABLE IF NOT EXISTS " . $table_name . " (
+            id INT NOT NULL AUTO_INCREMENT,  
+            name tinytext NOT NULL,
+            metadata text NOT NULL,
+            created datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+            PRIMARY KEY  (id)
+        ) $charset_collate;";
+
+        dbDelta($sql);
+
         add_option('ajaxy_forms_db_version', \Ajaxy\Forms\Plugin::DB_VERSION);
     }
 
+
+    /**
+     * Get the forms table name
+     *
+     * @date 2024-04-21
+     *
+     * @return string
+     */
     public static function get_table_name()
     {
         global $wpdb;
         return $wpdb->prefix . self::$table_name;
     }
 
+    /**
+     * Add a form to the database
+     *
+     * @date 2024-04-21
+     *
+     * @param string $name
+     * @param array $metadata
+     *
+     * @return int|false — The number of rows inserted, or false on error.
+     */
+    public static function add_form($name, $metadata)
+    {
+        global $wpdb;
+        $table_name = self::get_table_name();
+        if ($wpdb->insert(
+            $table_name,
+            array(
+                'name' => $name,
+                'metadata' => \json_encode($metadata),
+                'created' => current_time('mysql'),
+            )
+        )) {
+            return $wpdb->insert_id;
+        }
+        return false;
+    }
+
+    /**
+     * Update a form in the database
+     *
+     * @date 2024-04-21
+     *
+     * @param int $id
+     * @param array $metadata
+     *
+     * @return int|false — The number of rows updated, or false on error.
+     */
+    public static function update_form($id, $name, $metadata)
+    {
+        global $wpdb;
+        $table_name = self::get_table_name();
+        return $wpdb->update(
+            $table_name,
+            array(
+                'metadata' => \json_encode($metadata),
+                'name' => $name,
+            ),
+            array('id' => $id)
+        );
+    }
+
+    /**
+     * Delete a form from the database
+     *
+     * @date 2024-04-21
+     *
+     * @param int $id
+     *
+     * @return int|false — The number of rows deleted, or false on error.
+     */
+    public static function delete_form($id)
+    {
+        global $wpdb;
+        $table_name = self::get_table_name();
+        return $wpdb->delete(
+            $table_name,
+            array('id' => $id)
+        );
+    }
+
+    /**
+     * Get all forms from the database
+     *
+     * @date 2024-04-21
+     *
+     * @return array|object|null — Database query results.
+     */
+    public static function get_forms($page = 1, $order_by = 'created', $order = 'desc', $per_page = 10)
+    {
+        global $wpdb;
+        $table_name = self::get_table_name();
+        return $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM $table_name ORDER BY $order_by $order LIMIT %d OFFSET %d",
+                $per_page,
+                ($page - 1) * $per_page
+            ),
+            ARRAY_A
+        );
+    }
+
+    public static function get_registered_forms()
+    {
+        return self::$forms;
+    }
+
+    /**
+     * Get a form from the database by name
+     *
+     * @date 2024-04-21
+     *
+     * @param string $name
+     *
+     * @return object|null — Database query results.
+     */
+    public static function get_form_by_name($name)
+    {
+        global $wpdb;
+        $table_name = self::get_table_name();
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE name = %s", $name), ARRAY_A);
+    }
+
+    /**
+     * Get a form from the database by id
+     *
+     * @date 2024-04-21
+     *
+     * @param string $id
+     *
+     * @return object|null — Database query results.
+     */
+    public static function get_form($id)
+    {
+        global $wpdb;
+        $table_name = self::get_table_name();
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %s", absint($id)), ARRAY_A);
+    }
+
+    /**
+     * Parses a form from the database or from the registered forms to be executed
+     *
+     * @date 2024-04-21
+     *
+     * @param string $name
+     *
+     * @return object|null — Database query results.
+     */
+    public static function parse_form($name)
+    {
+        if (isset(self::$forms[$name])) {
+            return self::parse_options(self::$forms[$name]);
+        }
+
+        $form = self::get_form_by_name($name);
+
+        if (!$form) {
+            return null;
+        }
+        $metadata = \json_decode($form['metadata'], true);
+
+        return self::parse_options([
+            'fields' => $metadata['fields'] ?? [],
+            'options' => $metadata['options'] ?? [],
+            'initial_data' => null,
+        ]);
+    }
+
+
+    public static function parse_options($form)
+    {
+        if (isset($form['fields'])) {
+            foreach ($form['fields'] as &$field) {
+                if (isset($field['label_html'])) {
+                    $field['label_html'] = $field['label_html'] == '1';
+                }
+                if (isset($field['help_html'])) {
+                    $field['help_html'] = $field['help_html'] == '1';
+                }
+
+                foreach ((array)$field as $key => $v) {
+                    if (\in_array($key, ['attr', 'help_attr', 'row_attr', 'label_attr'])) {
+                        $attributes = [];
+                        foreach ((array)$v as $attribute => $value) {
+                            if (isset($value['name'])) {
+                                $attributes[$value['name']] = $value['value'];
+                            } else if (\is_string($attribute)) {
+                                $attributes[$attribute] = $value;
+                            }
+                        }
+
+                        $field[$key] = $attributes;
+                    }
+                }
+            }
+        }
+        if (isset($form['options']['submission'])) {
+            if ($form['options']['submission'] != 0) {
+                if (!isset($form['options']['attr']['class'])) {
+                    $form['options']['attr']['class'] = '';
+                }
+                $form['options']['class'] = $form['options']['class'] + " is-ajax";
+            }
+            unset($form['options']['submission']);
+        }
+
+        return $form;
+    }
+
+    /**
+     * Get entries table name
+     *
+     * @date 2024-04-21
+     *
+     * @return string
+     */
+    public static function get_entries_table_name()
+    {
+        global $wpdb;
+        return $wpdb->prefix . self::$entries_table_name;
+    }
+
+    /**
+     * Add an entry to the database
+     *
+     * @date 2024-04-21
+     *
+     * @param string $name
+     * @param array $data
+     * @return int|false — The number of rows inserted, or false on error.
+     */
     public static function add($name, $data)
     {
         global $wpdb;
@@ -50,10 +301,9 @@ class Data
             ];
         }
 
-
-        $table_name = self::get_table_name();
+        $entries_table_name = self::get_entries_table_name();
         return $wpdb->insert(
-            $table_name,
+            $entries_table_name,
             array(
                 'name' => $name,
                 'data' => \json_encode($data),
@@ -63,12 +313,21 @@ class Data
         );
     }
 
+
+    /**
+     * Update an entry in the database
+     * 
+     * @date 2024-04-21
+     * @param int $id
+     * @param array $data
+     * @return int|false — The number of rows updated, or false on error.
+     */
     public static function update($id, $data)
     {
         global $wpdb;
-        $table_name = self::get_table_name();
+        $entries_table_name = self::get_entries_table_name();
         return $wpdb->update(
-            $table_name,
+            $entries_table_name,
             array(
                 'data' => \json_encode($data),
             ),
@@ -76,16 +335,74 @@ class Data
         );
     }
 
+    /**
+     * Delete an entry from the database
+     *
+     * @date 2024-04-21
+     *
+     * @param string|int $id
+     *
+     * @return int|false — The number of rows deleted, or false on error.
+     */
     public static function delete($id)
     {
         global $wpdb;
-        $table_name = self::get_table_name();
+        $entries_table_name = self::get_entries_table_name();
         return $wpdb->delete(
-            $table_name,
+            $entries_table_name,
             array('id' => $id)
         );
     }
 
+    /**
+     * Get an entry
+     *
+     * @date 2024-04-21
+     *
+     * @param string $id
+     *
+     * @return array|object|null|void Database query result in format specified by $output or null on failure
+     */
+    public static function get($id)
+    {
+        global $wpdb;
+        $entries_table_name = self::get_entries_table_name();
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $entries_table_name WHERE id = %s", absint($id)), ARRAY_A);
+    }
+
+    /**
+     * Delete bulk entries by id
+     *
+     * @date 2024-04-21
+     *
+     * @param array $ids
+     *
+     * @return int|bool Boolean true for CREATE, ALTER, TRUNCATE and DROP queries. Number of rows affected/selected for all other queries. Boolean false on error
+     */
+    public static function delete_entries($ids)
+    {
+        global $wpdb;
+        $ids = implode(',', array_map('absint', (array)$ids));
+        $entries_table_name = self::get_entries_table_name();
+        return $wpdb->query("DELETE FROM $entries_table_name WHERE ID IN ($ids)");
+    }
+
+
+    public static function delete_forms($ids)
+    {
+        global $wpdb;
+        $ids = implode(',', array_map('absint', (array)$ids));
+        $table_name = self::get_table_name();
+        return $wpdb->query("DELETE FROM $table_name WHERE ID IN ($ids)");
+    }
+
+    /**
+     * Get the ip address of the submitter
+     *
+     * @date 2024-04-21
+     *
+     * @return string
+     */
     public static function get_ip()
     {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
@@ -99,22 +416,72 @@ class Data
         return $ip;
     }
 
-    public static function get_entries($form)
+    /**
+     * Get all entries for a given form
+     *
+     * @date 2024-04-21
+     * @param string $form
+     *
+     * @return array|object|null — Database query results.
+     */
+    public static function get_entries($form = null, $page = 1, $order_by = 'created', $order = 'desc', $per_page = 10)
     {
         global $wpdb;
-        $table_name = self::get_table_name();
+        $entries_table_name = self::get_entries_table_name();
+        if ($form) {
+            return $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT * FROM $entries_table_name WHERE name = %s ORDER BY $order_by $order LIMIT %d OFFSET %d",
+                    $form,
+                    $per_page,
+                    max(0, intval($page - 1) * $per_page)
+                ),
+                ARRAY_A
+            );
+        }
+
         return $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT * FROM $table_name WHERE name = %s",
-                $form
+                "SELECT * FROM $entries_table_name ORDER BY $order_by $order LIMIT %d OFFSET %d",
+                $per_page,
+                ($page - 1) * $per_page
             ),
             ARRAY_A
         );
     }
 
+
+    /**
+     * Count entries for a given form
+     *
+     * @date 2024-04-21
+     *
+     * @param string $form
+     *
+     * @return string|null — Database query result (as string), or null on failure.
+     */
+    public static function count_entries($form = null)
+    {
+        global $wpdb;
+        $entries_table_name = self::get_entries_table_name();
+        if ($form) {
+            return $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $entries_table_name WHERE name = %s", $form));
+        }
+        return $wpdb->get_var("SELECT COUNT(*) FROM $entries_table_name");
+    }
+
+    /**
+     * Export all entries
+     *
+     * @date 2024-04-21
+     *
+     * @param string $form
+     *
+     * @return void
+     */
     public static function export($form)
     {
-        $entries = self::get_entries($form);
+        $entries = self::get_entries($form, 0, 'created', 'desc', 100000);
         $data = [];
         foreach ($entries as $entry) {
             $array = self::flatten(isset($entry['data']) ? \json_decode($entry['data'], true) : []);
@@ -143,6 +510,16 @@ class Data
     }
 
 
+    /**
+     * Flatter an array for export
+     *
+     * @date 2024-04-21
+     *
+     * @param array $array
+     * @param string $prefix
+     *
+     * @return array
+     */
     public static function flatten($array, $prefix = '')
     {
         $flat = array();
@@ -162,5 +539,14 @@ class Data
         }
 
         return $flat;
+    }
+
+    public static function register_form($name, $fields, $options = [], $initial_data = null)
+    {
+        self::$forms[$name] = [
+            'fields' => $fields,
+            'options' => $options,
+            'initial_data' => $initial_data,
+        ];
     }
 }

@@ -3,11 +3,13 @@
 class TextField extends Backbone.View<any> {
 	field: any;
 	basename: any;
-	constructor(basename, field) {
+	value: string;
+	constructor(basename, field, value: string) {
 		super();
 
 		this.field = field;
 		this.basename = basename;
+		this.value = value;
 	}
 
 	createField() {
@@ -23,15 +25,18 @@ class TextField extends Backbone.View<any> {
 		let input = jQuery("<input></input>")
 			.attr("type", this.field.type || "text")
 			.attr("name", `${this.basename}[${this.field.name}]`)
+			.val(this.value)
 			.addClass(["widefat", `af-input-${this.field.name}`]);
-		if (this.field.default) {
-			if (this.field.type === "checkbox" || this.field.type === "radio") {
-				input.attr("checked", "checked");
-				input.val(1);
-			} else {
-				input.val(this.field.default);
+
+		if (this.field.type === "checkbox" || this.field.type === "radio") {
+			(this.field.default || this.value == "1") && input.attr("checked", "checked");
+			input.val(1);
+		} else {
+			if (!this.value || this.value === "") {
+				input.val(this.field.default || "");
 			}
 		}
+
 		inputDiv.append(input);
 		if (this.field.help) {
 			let small = jQuery("<small></small>").html(this.field.help);

@@ -60,45 +60,50 @@
         clear: both;
     }
 
+    li.draggable {
+        margin-bottom: 6px;
+
+        background: #f6f7f7;
+        border: 1px solid #dcdcde;
+        display: flex;
+        transition: all ease 0.3s;
+
+        &.ui-draggable-dragging {
+            transition: none !important;
+        }
+
+        >span {
+            margin-right: auto;
+            padding: 5px 10px;
+        }
+
+
+
+        >a {
+            margin-left: 10px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: all ease 0.3s;
+            color: #3c434a;
+            padding: 5px 5px;
+            border-left: 1px solid #dcdcde82;
+
+            &:hover {
+                background-color: #fff;
+            }
+
+            >svg {
+                width: 15px;
+                margin-right: 2px;
+            }
+        }
+    }
 
 
     .af-fields {
-        li.draggable {
-            margin-bottom: 6px;
 
-            background: #f6f7f7;
-            border: 1px solid #dcdcde;
-            display: flex;
-            transition: all ease 0.3s;
-
-            >span {
-                margin-right: auto;
-                padding: 5px 10px;
-            }
-
-
-
-            >a {
-                margin-left: 10px;
-                font-size: 12px;
-                display: flex;
-                align-items: center;
-                text-decoration: none;
-                transition: all ease 0.3s;
-                color: #3c434a;
-                padding: 5px 5px;
-                border-left: 1px solid #dcdcde82;
-
-                &:hover {
-                    background-color: #fff;
-                }
-
-                >svg {
-                    width: 15px;
-                    margin-right: 2px;
-                }
-            }
-        }
 
         >li.more {
             text-align: center;
@@ -587,6 +592,13 @@
             border: 1px solid #dcdcde;
             border-top: 0;
         }
+    }
+}
+
+.af-shortcode{
+    input{
+        font-size: 12px;
+        background-color: #fff;
     }
 }
 

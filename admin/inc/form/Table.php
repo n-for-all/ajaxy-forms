@@ -1,7 +1,9 @@
 <?php
 
 
-namespace Ajaxy\Forms\Admin;
+namespace Ajaxy\Forms\Admin\Inc\Form;
+
+use Ajaxy\Forms\Inc\Data;
 
 if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
@@ -12,9 +14,11 @@ class Table extends \WP_List_Table
     public function __construct()
     {
         parent::__construct(array(
-            'singular' => 'entry',
-            'plural' => 'entries',
+            'singular' => 'form',
+            'plural' => 'forms',
         ));
+
+        add_action('admin_footer', array($this, '_script'));
     }
 
     /**
@@ -28,8 +32,9 @@ class Table extends \WP_List_Table
         $columns = array(
             'cb' => '<input type="checkbox" />',
             'name' => __('Form', AJAXY_FORMS_TEXT_DOMAIN),
-            'data' => __('Data', AJAXY_FORMS_TEXT_DOMAIN),
-            // 'metadata' => __('Metadata', AJAXY_FORMS_TEXT_DOMAIN),
+            'shortcode' => __('Shortcode', AJAXY_FORMS_TEXT_DOMAIN),
+            'entries' => __('Entries', AJAXY_FORMS_TEXT_DOMAIN),
+            'metadata' => __('Metadata', AJAXY_FORMS_TEXT_DOMAIN),
             'created' => __('Date', AJAXY_FORMS_TEXT_DOMAIN),
         );
         return $columns;
@@ -50,13 +55,6 @@ class Table extends \WP_List_Table
         }
 
         echo '<div class="alignleft actions">';
-
-        $output = ob_get_clean();
-
-        if (!empty($output) && $this->has_items()) {
-            echo $output;
-            echo \sprintf('<a href="%s" target="_blank" class="button apply">%s</a>', esc_url(add_query_arg('export_action', 1)), __('Export to Excel'));
-        }
         echo '</div>';
     }
 
@@ -83,7 +81,12 @@ class Table extends \WP_List_Table
      */
     function column_default($item, $column_name)
     {
-        return $item[$column_name];
+        return $item[$column_name] ?? '';
+    }
+
+    function column_entries($item)
+    {
+        return \sprintf('(%s) - <a href="%s">View Entries</a>', Data::count_entries($item['name']), admin_url('admin.php?page=ajaxy-form-entries&form=' . $item['name']));
     }
 
     /**
@@ -107,14 +110,37 @@ class Table extends \WP_List_Table
      */
     function column_name($item)
     {
+        $edit_url = esc_url(
+            add_query_arg(
+                array(
+                    'action' => 'edit',
+                    'form'   => $item['id'],
+                ),
+                admin_url('admin.php?page=ajaxy-form')
+            )
+        );
+
+        $delete_url = esc_url(
+            wp_nonce_url(
+                add_query_arg(
+                    array(
+                        'action' => 'delete',
+                        'form' => $item['id'],
+                    ),
+                    admin_url('admin.php?page=ajaxy-form')
+                ),
+                'delete-form-' . $item['id']
+            )
+        );
+
         $actions = array(
-            'edit' => sprintf('<a href="?page=ajaxy_forms_form&id=%s">%s</a>', $item['id'], __('Edit', AJAXY_FORMS_TEXT_DOMAIN)),
-            'delete' => sprintf('<a href="?page=%s&action=delete&id=%s">%s</a>', $_REQUEST['page'], $item['id'], __('Delete', AJAXY_FORMS_TEXT_DOMAIN)),
+            'edit' => sprintf('<a href="%s">%s</a>', $edit_url, __('Edit', AJAXY_FORMS_TEXT_DOMAIN)),
+            'delete' => sprintf('<a href="%s">%s</a>', $delete_url, __('Delete', AJAXY_FORMS_TEXT_DOMAIN)),
         );
 
         return sprintf(
             '%s %s',
-            $item['name'],
+            ucwords($item['name']),
             $this->row_actions($actions)
         );
     }
@@ -124,13 +150,16 @@ class Table extends \WP_List_Table
      * @param $item - row (key, value array)
      * @return HTML
      */
-    function column_data($item)
+    function column_shortcode($item)
     {
-        if (!isset($item['data'])) {
+        if (!isset($item['name'])) {
             return '';
         }
 
-        return self::convert_to_table(json_decode($item['data'], true));
+        return sprintf('<span class="af-shortcode">
+            <input type="text" onfocus="this.select();" readonly="readonly" value="%s" class="large-text code">
+            </span>
+        ', sprintf('[form name=&quot;%s&quot;]', \esc_attr($item['name'])));
     }
 
     function column_metadata($item)
@@ -139,7 +168,7 @@ class Table extends \WP_List_Table
             return '';
         }
 
-        return self::convert_to_table(json_decode($item['metadata'], true));
+        return $this->createOLList(json_decode($item['metadata'], true));
     }
 
     public function column_created($item)
@@ -216,15 +245,10 @@ class Table extends \WP_List_Table
      */
     function process_bulk_action()
     {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'form_entries'; // do not forget about tables prefix
-
-        if ('delete' === $this->current_action()) {
-            $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : array();
-            if (is_array($ids)) $ids = implode(',', $ids);
-
+        if ('delete' === $this->current_action() && \wp_verify_nonce($_REQUEST['_wpnonce'], 'bulk-' . $this->_args['plural'])) {
+            $ids = (array)(isset($_REQUEST['id']) ? $_REQUEST['id'] : array());
             if (!empty($ids)) {
-                $wpdb->query("DELETE FROM $table_name WHERE id IN($ids)");
+                Data::delete_forms($ids);
             }
         }
     }
@@ -235,48 +259,36 @@ class Table extends \WP_List_Table
      */
     function prepare_items()
     {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'form_entries'; // do not forget about tables prefix
-
-        $per_page = 5; // constant, how much records will be shown per page
+        $per_page = 10; // constant, how much records will be shown per page
 
         $columns = $this->get_columns();
         $hidden = array();
         $sortable = $this->get_sortable_columns();
 
-        // here we configure table headers, defined in our methods
         $this->_column_headers = array($columns, $hidden, $sortable);
-
-        // [OPTIONAL] process bulk action if any
         $this->process_bulk_action();
 
         // will be used in pagination settings
-        $total_items = $wpdb->get_var("SELECT COUNT(id) FROM $table_name");
+        $total_items = Data::count_entries();
         if ($total_items === null || \is_wp_error($total_items)) {
-            echo $wpdb->last_error;
-
+            global $wpdb;
             add_action('admin_notices', function () {
                 $class = 'notice notice-error';
-                $message = __('Irks! An error has occurred.', 'sample-text-domain');
+                $message = __('An error has occurred.', \AJAXY_FORMS_TEXT_DOMAIN);
 
                 printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));
             });
 
             \printf('<div id="message" class="notice notice-error"><p>Error: %s - %s</p></div>', $wpdb->last_error, 'Please activate and deactivate the plugin to reinstall the tables');
-            // die();
         }
 
         // prepare query params, as usual current page, order by and order direction
-        $paged = isset($_REQUEST['paged']) ? max(0, intval($_REQUEST['paged'] - 1) * $per_page) : 0;
-        $orderby = (isset($_REQUEST['orderby']) && in_array($_REQUEST['orderby'], array_keys($this->get_sortable_columns()))) ? $_REQUEST['orderby'] : 'name';
-        $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array('asc', 'desc'))) ? $_REQUEST['order'] : 'asc';
+        $paged = isset($_REQUEST['paged']) ? intval($_REQUEST['paged']) : 1;
+        $orderby = (isset($_REQUEST['orderby']) && in_array($_REQUEST['orderby'], array_keys($this->get_sortable_columns()))) ? $_REQUEST['orderby'] : 'created';
+        $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array('asc', 'desc'))) ? $_REQUEST['order'] : 'desc';
 
-        // [REQUIRED] define $items array
-        // notice that last argument is ARRAY_A, so we will retrieve array
-        $this->items = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name ORDER BY $orderby $order LIMIT %d OFFSET %d", $per_page, $paged), ARRAY_A);
+        $this->items = Data::get_forms($paged, $orderby, $order, $per_page);
 
-
-        // [REQUIRED] configure pagination
         $this->set_pagination_args(array(
             'total_items' => intval($total_items), // total items defined above
             'per_page' => $per_page, // per page constant defined at top of method
@@ -290,7 +302,7 @@ class Table extends \WP_List_Table
             return '';
         }
         $table = '
-    <table class="widefat fixed striped ajaxy-data-table">
+    <table class="fixed widefat striped ajaxy-data-table">
     ';
         foreach ($data as $key => $value) {
             $table .= '
@@ -341,5 +353,34 @@ class Table extends \WP_List_Table
         }
 
         return $datetime->setTimezone($wp_timezone);
+    }
+
+    public function _script()
+    {
+?>
+        <script type="text/javascript">
+            jQuery(function() {
+                jQuery(".row-actions .delete > a").click(function(event) {
+                    if (!confirm("Are you sure you want to delete this form?")) {
+                        event.preventDefault();
+                    }
+                });
+            });
+        </script>
+<?php
+    }
+
+    function createOLList($array)
+    {
+        $list = '<ul style="list-style-type: none; margin-left: 26px; padding-left: 0px;">';
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $list .= "<li style=\"position: relative;margin:0;\"><strong>$key</strong>: { <span style=\"position: absolute; cursor: pointer; top: 1px; left: -15px;\">-</span>" . $this->createOLList($value) . "}</li>";
+            } else {
+                $list .= "<li style=\"position: relative;margin:0;\"><strong>$key</strong>: $value</li>";
+            }
+        }
+        $list .= '</ul>';
+        return $list;
     }
 }

@@ -34,11 +34,20 @@ class Fields
     ];
     private $inherited_properties = [
 
+        "name" => [
+            "name" => "name",
+            "type" => "text",
+            "label" => "Name",
+            "help" => "Enter the name for the field, keep empty to generate it automatically",
+            "required" => false,
+            "section" => "basic",
+            "order" => -1
+        ],
         "label" => [
             "name" => "label",
             "type" => "text",
             "label" => "Label",
-            "help" => "Enter the label for the text box, keep empty to hide it",
+            "help" => "Enter the label for the field, keep empty to hide it",
             "required" => false,
             "section" => "basic",
             "order" => 0
@@ -47,7 +56,7 @@ class Fields
             "name" => "help",
             "type" => "text",
             "label" => "Help",
-            "help" => "Enter the help for the text box",
+            "help" => "Enter the help for the field",
             "required" => false,
             "section" => "basic",
             "order" => 1
@@ -56,25 +65,25 @@ class Fields
             "name" => "data",
             "type" => "text",
             "label" => "Data",
-            "help" => "Enter the initial value for the text box",
+            "help" => "Enter the initial value for the field",
             "required" => false,
-            "section" => "basic",
+            "section" => "advanced",
             "order" => 2
         ],
         "empty_data" => [
             "name" => "empty_data",
             "type" => "text",
             "label" => "Empty Data",
-            "help" => "Enter the initial empty value for the text box",
+            "help" => "Enter the initial empty value for the field",
             "required" => false,
-            "section" => "basic",
-            "order" => 3
+            "section" => "advanced",
+            "order" => 2
         ],
         "required" => [
             "name" => "required",
             "type" => "checkbox",
             "label" => "Required",
-            "help" => "Check to mark the text box as required",
+            "help" => "Check to mark the field as required",
             "required" => false,
             "section" => "basic",
             "order" => 4
@@ -84,7 +93,7 @@ class Fields
             "name" => "disabled",
             "type" => "checkbox",
             "label" => "Disabled",
-            "help" => "Check to disable the text box",
+            "help" => "Check to disable the field",
             "required" => false,
             "section" => "advanced",
             "order" => 0
@@ -105,9 +114,9 @@ class Fields
                     "label" => "Value",
                 ],
             ],
-            "help" => "Enter the attributes for the text box",
+            "help" => "Enter the attributes for the field",
             "required" => false,
-            "section" => "advanced",
+            "section" => "basic",
             "order" => 1
         ],
         "help_attr" => [
@@ -126,7 +135,7 @@ class Fields
                     "label" => "Value",
                 ],
             ],
-            "help" => "Enter the help attributes for the text box",
+            "help" => "Enter the help attributes for the field",
             "required" => false,
             "section" => "advanced",
             "order" => 2
@@ -156,7 +165,7 @@ class Fields
                     "label" => "Value",
                 ],
             ],
-            "help" => "Enter the label attributes for the text box",
+            "help" => "Enter the label attributes for the field",
             "required" => false,
             "section" => "advanced",
             "order" => 4
@@ -187,7 +196,7 @@ class Fields
                     "label" => "Value",
                 ],
             ],
-            "help" => "Enter the row attributes for the text box",
+            "help" => "Enter the row attributes for the field",
             "required" => false,
             "section" => "advanced",
             "order" => 6
@@ -212,7 +221,7 @@ class Fields
             "order" => 8
         ],
         "invalid_message" => [
-            "section" => "advanced",
+            "section" => "basic",
             "order" => 9,
             "type" => "text",
             "name" => "invalid_message",
@@ -221,14 +230,12 @@ class Fields
         ]
     ];
 
-    private $additional_fields = [];
-
     private $fields = array(
         'text' => [
             "label" => "Text",
             "class" => Type\TextType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/text.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim"],
             "additional" => [],
             "order" => 1,
             "keywords" => "text,short,small,string,textfield,paragraph",
@@ -238,7 +245,7 @@ class Fields
             "label" => "Textarea",
             "class" => Type\TextareaType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/textarea.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim"],
             "additional" => [],
             "order" => 2,
             "keywords" => "textarea,long,medium,text,paragraph",
@@ -248,7 +255,7 @@ class Fields
             "label" => "Email",
             "class" => Type\EmailType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/email.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [],
             "order" => 3,
             "keywords" => "email",
@@ -258,7 +265,7 @@ class Fields
             "label" => "Integer",
             "class" => Type\IntegerType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/integer.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -292,7 +299,7 @@ class Fields
             "label" => "Money",
             "class" => Type\MoneyType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/money.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -361,7 +368,7 @@ class Fields
             "label" => "Number",
             "class" => Type\NumberType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/number.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -422,7 +429,7 @@ class Fields
             "label" => "Password",
             "class" => Type\PasswordType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/password.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -442,7 +449,7 @@ class Fields
             "label" => "Percent",
             "class" => Type\PercentType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/percent.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -508,7 +515,7 @@ class Fields
             "label" => "Search",
             "class" => Type\SearchType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/search.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [],
             "order" => 33,
             "keywords" => "search",
@@ -518,7 +525,7 @@ class Fields
             "label" => "URL",
             "class" => Type\UrlType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/url.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -538,7 +545,7 @@ class Fields
             "label" => "Range",
             "class" => Type\RangeType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/range.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -564,7 +571,7 @@ class Fields
             "label" => "Phone",
             "class" => Type\TelType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/tel.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [],
             "order" => 5,
             "keywords" => "phone,telephone,tel",
@@ -574,7 +581,7 @@ class Fields
             "label" => "Color",
             "class" => Type\ColorType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/color.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -593,7 +600,7 @@ class Fields
             "label" => "Choice",
             "class" => Type\ChoiceType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/choice.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -659,7 +666,7 @@ class Fields
             "label" => "Country",
             "class" => Type\CountryType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/country.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -701,7 +708,7 @@ class Fields
             "label" => "Language",
             "class" => Type\LanguageType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/language.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -743,7 +750,7 @@ class Fields
             "label" => "Locale",
             "class" => Type\LocaleType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/locale.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -778,7 +785,7 @@ class Fields
             "label" => "Timezone",
             "class" => Type\TimezoneType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/timezone.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -826,7 +833,7 @@ class Fields
             "label" => "Currency",
             "class" => Type\CurrencyType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/currency.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -874,7 +881,7 @@ class Fields
             "label" => "Date",
             "class" => Type\DateType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/date.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -922,7 +929,7 @@ class Fields
             "label" => "DateTime",
             "class" => Type\DateTimeType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/datetime.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -992,7 +999,7 @@ class Fields
             "label" => "Time",
             "class" => Type\TimeType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/time.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -1039,7 +1046,7 @@ class Fields
             "label" => "Birthday",
             "class" => Type\BirthdayType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/birthday.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -1067,7 +1074,7 @@ class Fields
             "label" => "Checkbox",
             "class" => Type\CheckboxType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/checkbox.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -1087,7 +1094,7 @@ class Fields
             "label" => "File",
             "class" => Type\FileType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/file.html",
-            "inherited" => ["label", "help", "data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -1106,7 +1113,7 @@ class Fields
             "label" => "Radio",
             "class" => Type\RadioType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/radio.html",
-            "inherited" => ["label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [
                 [
                     "section" => "basic",
@@ -1126,7 +1133,7 @@ class Fields
             "label" => "UUID",
             "class" => Type\UuidType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/uuid.html",
-            "inherited" => ["label", "help", "data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [],
             "order" => 36,
             "keywords" => "uuid",
@@ -1136,7 +1143,7 @@ class Fields
             "label" => "ULID",
             "class" => Type\UlidType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/ulid.html",
-            "inherited" => ["label", "help", "data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+            "inherited" => ["name", "label", "help", "data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
             "additional" => [],
             "order" => 37,
             "keywords" => "ulid",
@@ -1146,7 +1153,7 @@ class Fields
             "label" => "Collection",
             "class" => Type\CollectionType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/collection.html",
-            "inherited" => ["label", "help", "empty_data", "attr", "help_attr", "help_html", "label_attr", "label_html", "invalid_message"],
+            "inherited" => ["name", "label", "help", "empty_data", "attr", "help_attr", "help_html", "label_attr", "label_html", "invalid_message"],
             "additional" => [],
             "order" => 38,
             "keywords" => "collection",
@@ -1164,7 +1171,7 @@ class Fields
             "label" => "Hidden",
             "class" => Type\HiddenType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/hidden.html",
-            "inherited" => ["data",  "empty_data", "required", "attr", "row_attr", "invalid_message"],
+            "inherited" => ["name", "data",  "empty_data", "required", "attr", "row_attr", "invalid_message"],
             "additional" => [],
             "order" => 39,
             "keywords" => "hidden",
@@ -1174,7 +1181,7 @@ class Fields
             "label" => "Button",
             "class" => Type\ButtonType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/button.html",
-            "inherited" => ["label",  "label_html", "disabled", "attr", "row_attr"],
+            "inherited" => ["name", "label",  "label_html", "disabled", "attr", "row_attr"],
             "order" => 10,
             "keywords" => "button",
             "common" => true
@@ -1183,7 +1190,7 @@ class Fields
             "label" => "Reset Button",
             "class" => Type\ResetType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/reset.html",
-            "inherited" => ["label",  "label_html", "disabled", "attr", "row_attr"],
+            "inherited" => ["name", "label",  "label_html", "disabled", "attr", "row_attr"],
             "order" => 37,
             "keywords" => "button,reset",
             "common" => false
@@ -1192,7 +1199,7 @@ class Fields
             "label" => "Submit Button",
             "class" => Type\SubmitType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/submit.html",
-            "inherited" => ["label",  "label_html", "disabled", "attr", "row_attr"],
+            "inherited" => ["name", "label",  "label_html", "disabled", "attr", "row_attr"],
             "order" => 10,
             "keywords" => "button,submit",
             "common" => true
@@ -1257,7 +1264,7 @@ class Fields
     }
 
 
-    public function get_inherited_properties($name, $section)
+    public function get_inherited_properties($name, $section = null)
     {
         $field = $this->fields[$name];
         if ($field) {
@@ -1266,15 +1273,22 @@ class Fields
                 $values = \array_filter(\array_map(function ($value) {
                     return $this->inherited_properties[$value] ?? null;
                 }, $inherited), function ($value) use ($section) {
-                    return $value !== null && $value['section'] === $section;
+                    return $value !== null && (!$section || $value['section'] === $section);
                 });
-
-
 
                 return $values;
             }
         }
         return array();
+    }
+
+
+    public function get_properties($name)
+    {
+        $field = $this->get($name);
+        $values = array_merge($this->get_inherited_properties($name), $field['additional'] ?? []);
+
+        return $values;
     }
 
     public function get_all_properties()

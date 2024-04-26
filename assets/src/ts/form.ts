@@ -48,16 +48,27 @@ class Form {
 				data.append("action", "af_submit");
 				data.append("form_name", this.element.name);
 
-				fetch(ajaxyFormsSettings.ajaxurl || this.element.action, {
+                let method = (this.element.method ? this.element.method : "POST").toUpperCase();
+
+				let fetchData = {
 					headers: headers,
-					method: this.element.method ? this.element.method : "GET",
-					body: data,
-				})
+					method: method,
+				};
+				let action = ajaxyFormsSettings.ajaxurl || this.element.action;
+
+				if (method == "GET" || method == "HEAD") {
+                    //@ts-ignore
+					action = action + "?" + new URLSearchParams(data).toString();
+				} else {
+					fetchData["body"] = data;
+				}
+
+				fetch(action, fetchData)
 					.then((response: any) => {
 						response
 							.json()
 							.then((json) => {
-                                this.clearErrors();
+								this.clearErrors();
 								this.trigger("response", json);
 								this.submitButton?.classList.remove("loading");
 								if (json) {
@@ -79,15 +90,17 @@ class Form {
 								}
 							})
 							.catch((error) => {
-                                this.clearErrors();
+								this.clearErrors();
 								this.trigger("error", error);
 								this.submitButton?.classList.remove("loading");
-                                this.setMessage(error.message, 'error');
+								this.setMessage(error.message, "error");
 							});
 					})
 					.catch((e) => {
 						this.trigger("error", e);
 						this.submitButton?.classList.remove("loading");
+						console.error(e);
+						this.setMessage(e.message, "error");
 					});
 			} else {
 				this.submitButton?.classList.remove("loading");
@@ -135,9 +148,9 @@ class Form {
 		if (this.errorElms) {
 			this.errorElms.forEach((elm) => (elm.innerHTML = ""));
 		}
-        if(this.messageElm){
-            this.messageElm.innerHTML = "";
-        }
+		if (this.messageElm) {
+			this.messageElm.innerHTML = "";
+		}
 	}
 
 	public addErrors(field: string, errors: Array<string> | { [x: string]: Array<string> }) {
@@ -165,9 +178,9 @@ class Form {
 	}
 
 	public setMessage(message: string, type: string = "success") {
-        if(!this.messageElm || !message || message == ""){
-            return;
-        }
+		if (!this.messageElm || !message || message == "") {
+			return;
+		}
 		this.messageElm.classList.remove("success", "error");
 
 		this.messageElm.innerHTML = message;

@@ -1,7 +1,6 @@
 /// <reference path='../node_modules/@types/backbone/index.d.ts' />
 
 import DraggableModel from "./DraggableModel";
-import DraggableView from "./DraggableView";
 import DroppableCollection from "./DroppableCollection";
 import FieldView from "./FieldView";
 
@@ -9,6 +8,13 @@ class DroppableView extends Backbone.View<DraggableModel> {
 	collection: DroppableCollection;
 	fields: Array<any> = [];
 	sortable: any;
+	onDrop: (event, ui) => {};
+	constructor(options: any = {}) {
+		super(options);
+		this.collection = options.collection;
+		this.onDrop = options.onDrop;
+		this.render();
+	}
 	droppable(options: any = {}) {
 		this.$el.data("view", this);
 		this.$el.data("collection", this.collection);
@@ -18,25 +24,28 @@ class DroppableView extends Backbone.View<DraggableModel> {
 
 		//@ts-ignore
 		this.sortable = this.$el.sortable({
-			placeholder: "ui-state-highlight",
-			handle: ".ui-sortable-handle",
-		});
-	}
-
-	canDrop(draggableView: DraggableView) {
-		return true;
+				placeholder: "ui-state-highlight",
+				handle: ".ui-sortable-handle",
+				receive: this.onDrop.bind(this),
+				update: (event, ui) => {
+					this.$el.children().each((index, el) => {
+						jQuery(el).find(".sort-index").val(index);
+					});
+				},
+			})
+			.disableSelection();
 	}
 
 	render() {
 		return this;
 	}
 
-	add(type, data) {
-		let fieldView = new FieldView(this.fields.length, type, data);
+	add(type, data, index) {
+		let fieldView = new FieldView(this.fields.length, type, data, index);
 		this.fields.push(fieldView);
 
 		let record = fieldView.render().el;
-		this.$el.append(record);
+		this.insertAt(index, record);
 		try {
 			setTimeout(() => {
 				window.scrollTo({
@@ -47,12 +56,22 @@ class DroppableView extends Backbone.View<DraggableModel> {
 		} catch (e) {}
 	}
 
-	// remove(fieldView: FieldView) {
-	//     this.fields.splice(this.fields.indexOf(fieldView), 1);
-	//     fieldView.$el.detach();
-
-	//     return this;
-	// }
+	insertAt(index, item) {
+		if (this.$el.children().length == 0) {
+			return this.$el.append(item);
+		} else {
+			return this.$el.children().each(() => {
+				if (index === 0) {
+					this.$el.prepend(item);
+				} else {
+					this.$el
+						.children()
+						.eq(index - 1)
+						.after(item);
+				}
+			});
+		}
+	}
 }
 
 export default DroppableView;

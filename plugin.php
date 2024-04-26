@@ -16,6 +16,7 @@ require 'vendor/autoload.php';
 require 'functions.php';
 
 use Ajaxy\Forms\Inc\Constraints;
+use Ajaxy\Forms\Inc\Data;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Validation;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
@@ -39,15 +40,13 @@ define("AJAXY_FORMS_VERSION", "1.0.0");
 class Plugin
 {
     public const DB_VERSION = '1.0.0';
-    private $license = null;
     public static $instance = null;
-    private  $logger = null;
-    private  $settings = null;
-    private  $builder = null;
+    private $logger = null;
+    private $settings = null;
+    private $entry_settings = null;
+    private $builder = null;
 
 
-    private $forms = [];
-    
 
 
     /**
@@ -87,14 +86,17 @@ class Plugin
         );
 
 
+        define('VENDOR_DIR', \plugin_dir_path(__FILE__) . 'vendor');
+        define('VENDOR_FORM_DIR', VENDOR_DIR . '/symfony/form');
+        define('VENDOR_VALIDATOR_DIR', VENDOR_DIR . '/symfony/validator');
+        define('VENDOR_TWIG_BRIDGE_DIR', VENDOR_DIR . '/symfony/twig-bridge');
+        define('THEMES_DIR', \plugin_dir_path(__FILE__) . 'inc/themes');
+
         if (is_admin()) {
-            $this->license = new Admin\License();
-            $this->settings = new Admin\Settings($this->license->is_licensed());
+            $this->settings = new Admin\Inc\Form\Settings();
+            $this->entry_settings = new Admin\Inc\Entry\Settings();
             $this->builder = new Admin\Inc\Form\Builder();
         }
-        // if (!$this->license->is_licensed()) {
-        //     return;
-        // }
 
 
         $this->actions();
@@ -117,23 +119,22 @@ class Plugin
 
         if ('' === $name) {
             return '';
-        } else if (isset($this->forms[$name])) {
-            $form = $this->create_form($name, $this->forms[$name]['fields'] ?? [], $this->forms[$name]['options'] ?? [], $this->forms[$name]['initial_data'] ?? null);
-            $this->on_submit($name, $form);
-            return $this->render($name, $form);
         } else {
-            return \sprintf(__('Form %s not found', AJAXY_FORMS_TEXT_DOMAIN), $name);
+            $form = Data::parse_form($name);
+            if ($form) {
+                $form = $this->create_form($name, $form['fields'] ?? [], $form['options'] ?? [], $form['initial_data'] ?? null);
+                $this->on_submit($name, $form);
+                return $this->render($name, $form);
+            } else {
+                return \sprintf(__('Form %s not found', AJAXY_FORMS_TEXT_DOMAIN), $name);
+            }
         }
     }
 
 
     public function create_form($form_name, $fields, $options = [], $initial_data = null)
     {
-        define('VENDOR_DIR', \plugin_dir_path(__FILE__) . 'vendor');
-        define('VENDOR_FORM_DIR', VENDOR_DIR . '/symfony/form');
-        define('VENDOR_VALIDATOR_DIR', VENDOR_DIR . '/symfony/validator');
-        define('VENDOR_TWIG_BRIDGE_DIR', VENDOR_DIR . '/symfony/twig-bridge');
-        define('THEMES_DIR', \plugin_dir_path(__FILE__) . 'inc/themes');
+
 
         // Set up the CSRF Token Manager
         $csrfTokenManager = new CsrfTokenManager();
@@ -238,7 +239,11 @@ class Plugin
         ));
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $messages = $this->forms[$name]['options']['messages'] ?? [];
+            $registered_form = Data::parse_form($name);
+            $messages = array_replace([
+                'success' => __('Form submitted successfully', \AJAXY_FORMS_TEXT_DOMAIN),
+                'error' => __('Form failed to submit, Please try again', \AJAXY_FORMS_TEXT_DOMAIN),
+            ], $registered_form['options']['messages'] ?? []);
             return sprintf('<div class="ajaxy-form"><div class="form-message success">%s</div></div>', $messages['success'] ?? '');
         }
 
@@ -261,15 +266,16 @@ class Plugin
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            if (isset($this->forms[$form_name]['notifications'])) {
-                foreach ($this->forms[$form_name]['notifications'] as $notification) {
+            $registered_form = Data::parse_form($form_name);
+            if (isset($registered_form['notifications'])) {
+                foreach ($registered_form['notifications'] as $notification) {
                     $notification->send($form_name, $data);
                 }
             }
 
-            if (isset($this->forms[$form_name]['storage'])) {
+            if (isset($registered_form['storage'])) {
                 unset($data['_message']);
-                $this->forms[$form_name]['storage']($form_name, $data);
+                $registered_form['storage']($form_name, $data);
             }
 
             return true;
@@ -326,16 +332,12 @@ class Plugin
         $type = \strtolower(implode('_', $data));
 
         $field = Inc\Fields::getInstance()->get($type);
-        return $field;
+        return $field['class'];
     }
 
     public function register($name, $fields, $options = [], $initial_data = null)
     {
-        $this->forms[$name] = [
-            'fields' => $fields,
-            'options' => $options,
-            'initial_data' => $initial_data,
-        ];
+        Data::register_form($name, $fields, $options, $initial_data);
     }
 
     /**
@@ -351,29 +353,30 @@ class Plugin
      */
     public function register_notification($form_name, $type, $options)
     {
-        if (!$this->forms[$form_name]) {
+        $form = Data::parse_form($form_name);
+        if (!$form) {
             throw new \Exception('Please register the form first before registering the notification');
         }
 
-        if (!$this->forms[$form_name]['notifications']) {
-            $this->forms[$form_name]['notifications'] = [];
+        if (!$form['notifications']) {
+            $form['notifications'] = [];
         }
 
         switch ($type) {
             case 'email':
-                $this->forms[$form_name]['notifications'][] = new Inc\Notifications\EmailNotification($options);
+                $form['notifications'][] = new Inc\Notifications\EmailNotification($options);
                 break;
             case 'sms':
-                $this->forms[$form_name]['notifications'][] = new Inc\Notifications\SmsNotification($options);
+                $form['notifications'][] = new Inc\Notifications\SmsNotification($options);
                 break;
             case 'webhook':
-                $this->forms[$form_name]['notifications'][] = new Inc\Notifications\WebhookNotification($options);
+                $form['notifications'][] = new Inc\Notifications\WebhookNotification($options);
                 break;
             case 'whatsapp':
-                $this->forms[$form_name]['notifications'][] = new Inc\Notifications\WhatsappNotification($options);
+                $form['notifications'][] = new Inc\Notifications\WhatsappNotification($options);
                 break;
             case 'telegram':
-                $this->forms[$form_name]['notifications'][] = new Inc\Notifications\TelegramNotification($options);
+                $form['notifications'][] = new Inc\Notifications\TelegramNotification($options);
                 break;
             default:
                 throw new \Exception('Notification type not found');
@@ -382,13 +385,17 @@ class Plugin
 
     public function register_storage($form_name, $options = [])
     {
+        $form = Data::parse_form($form_name);
+        if (!$form) {
+            throw new \Exception('Please register the form first before registering the storage');
+        }
         if (isset($options['callback'])) {
             if (!\is_callable($options['callback'])) {
                 throw new \Exception('Callback should be a function or a callable string');
             }
-            $this->forms[$form_name]['storage'] = $options['callback'];
+            $form['storage'] = $options['callback'];
         } else {
-            $this->forms[$form_name]['storage'] = function ($form_name, $data) {
+            $form['storage'] = function ($form_name, $data) {
                 Inc\Data::add($form_name, $data);
             };
         }
@@ -396,19 +403,25 @@ class Plugin
 
     public function ajax()
     {
-        $form_name = $_POST['form_name'];
-        $data = $_POST['data'];
 
-        if (!$this->forms[$form_name]) {
-            return \wp_json_encode(['status' => 'error', 'message' => 'Form not found']);
+        $form_name = $_REQUEST['form_name'];
+        $data = $_REQUEST['data'];
+
+        if (!$form_name || trim($form_name) == "") {
+            echo \wp_json_encode(['status' => 'error', 'message' => 'Form not found']);
+            wp_die();
+        }
+        $form = Data::parse_form($form_name);
+        if (!$form) {
+            echo \wp_json_encode(['status' => 'error', 'message' => 'Form not found']);
         }
 
-        $form = $this->create_form($form_name, $this->forms[$form_name]['fields'] ?? [], $this->forms[$form_name]['options'] ?? [], $data);
+        $form = $this->create_form($form_name, $form['fields'] ?? [], $form['options'] ?? [], $data);
         $valid = $this->on_submit($form_name, $form);
         if ($valid) {
-            echo \wp_json_encode(['status' => 'success', 'message' => 'Form submitted successfully']);
+            echo \wp_json_encode(['status' => 'success', 'message' => __('Form submitted successfully', \AJAXY_FORMS_TEXT_DOMAIN)]);
         } else {
-            echo \wp_json_encode(['status' => 'error', 'message' => $this->forms[$form_name]['options']['messages']['error'] ?? null, 'fields' => $this->getErrorMessages($form)]);
+            echo \wp_json_encode(['status' => 'error', 'message' => $form['options']['messages']['error'] ?? __('Form failed to submit, Please try again', \AJAXY_FORMS_TEXT_DOMAIN), 'fields' => $this->getErrorMessages($form)]);
         }
 
         wp_die();
@@ -427,7 +440,7 @@ class Plugin
 
             $errors[$key] = $template;
         }
-        if ($form->count()) {
+        if ($form->count() && $form->isSubmitted()) {
             foreach ($form as $child) {
                 if (!$child->isValid()) {
                     $errors[$child->getName()] = $this->getErrorMessages($child);

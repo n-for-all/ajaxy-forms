@@ -40,31 +40,53 @@
         return DraggableModel;
     }(Backbone.Model));
 
-    var _uniqueId = 0;
-    function uniqueId() {
-        return _uniqueId++;
-    }
+    var DroppableCollection = (function (_super) {
+        __extends(DroppableCollection, _super);
+        function DroppableCollection() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        DroppableCollection.prototype.initialize = function () {
+            this.on("add", this._add);
+            this.on("remove", this._remove);
+        };
+        DroppableCollection.prototype._add = function (model) {
+            if (this.view && model.view) {
+                this.view.$el.append(model.view.$el);
+            }
+        };
+        DroppableCollection.prototype._remove = function (model) {
+            if (model.view) {
+                model.view.$el.detach();
+            }
+        };
+        return DroppableCollection;
+    }(Backbone.Collection));
+
     var RepeaterField = (function (_super) {
         __extends(RepeaterField, _super);
         function RepeaterField(basename, field, data) {
             var _this = _super.call(this) || this;
             _this.data = [];
-            _this.data = data;
+            _this.data = data || [];
             _this.field = field;
             _this.basename = basename;
+            _this.index = 1;
             return _this;
         }
-        RepeaterField.prototype.createInnerField = function (_field, index) {
+        RepeaterField.prototype.createInnerField = function (_field, item, index) {
             var el = jQuery("<div></div>").addClass(["af-field", "af-field-".concat(_field.type)]);
             var inputDiv = jQuery("<div></div>").addClass("af-field-input");
             var input = jQuery("<input></input>")
                 .addClass("widefat")
                 .attr("type", _field.type || "text")
-                .attr("name", _field.name ? "".concat(this.basename, "[").concat(this.field.name, "][").concat(uniqueId(), "][").concat(_field.name, "]") : "".concat(this.basename, "[").concat(this.field.name, "][").concat(uniqueId(), "]"))
-                .val(this.data && this.data[index] ? this.data[index][_field.name] || "" : "");
+                .attr("name", _field.name ? "".concat(this.basename, "[").concat(this.field.name, "][").concat(index, "][").concat(_field.name, "]") : "".concat(this.basename, "[").concat(this.field.name, "][").concat(index, "]"))
+                .val(item ? item[_field.name] || "" : "");
             if (_field.label) {
                 input.attr("placeholder", _field.label);
             }
+            input.on("change", function (e) {
+                item[_field.name] = jQuery(e.target).val();
+            });
             inputDiv.append(input);
             if (_field.help) {
                 var small = jQuery("<small></small>").html(_field.help);
@@ -87,27 +109,31 @@
             var lnk = jQuery("<a></a>").addClass("af-repeater-add").html('<span class="dashicons dashicons-insert"></span>').attr("href", "#");
             lnk.on("click", function (e) {
                 e.preventDefault();
-                _this.data.push({});
-                _this.addRepeater(_this.data.length - 1);
+                _this.add();
             });
             return lnk;
         };
         RepeaterField.prototype.removeRepeater = function (index) {
             this.data.splice(index, 1);
-            this.$el.children(".af-repeater-inner").eq(index).remove();
+            this.render();
         };
-        RepeaterField.prototype.addRepeater = function (index) {
+        RepeaterField.prototype.addRepeater = function (item, index) {
             var _this = this;
             var repeaterDiv = jQuery("<div></div>").addClass("af-repeater-inner");
             this.field.fields.map(function (_field) {
-                var inner = _this.createInnerField(_field, index);
+                var inner = _this.createInnerField(_field, item, index);
                 repeaterDiv.append(inner);
             });
             repeaterDiv.append(this.createRemoveButton(index));
             this.$el.append(repeaterDiv);
         };
+        RepeaterField.prototype.add = function () {
+            this.data.push({});
+            this.render();
+        };
         RepeaterField.prototype.render = function () {
             var _this = this;
+            this.$el.empty();
             if (this.field.label) {
                 var heading = jQuery("<h4></h4>").html(this.field.label);
                 this.$el.append(heading);
@@ -118,7 +144,7 @@
             }
             if (this.data) {
                 this.data.map(function (item, index) {
-                    _this.addRepeater(index);
+                    _this.addRepeater(item, index);
                 });
             }
             this.$el.addClass(["af-repeater"]);
@@ -130,10 +156,11 @@
 
     var SelectField = (function (_super) {
         __extends(SelectField, _super);
-        function SelectField(basename, field) {
+        function SelectField(basename, field, value) {
             var _this = _super.call(this) || this;
             _this.field = field;
             _this.basename = basename;
+            _this.value = value;
             return _this;
         }
         SelectField.prototype.createField = function () {
@@ -144,7 +171,7 @@
                 this.$el.append(label);
             }
             var inputDiv = jQuery("<div></div>").addClass("af-field-input");
-            var select = jQuery("<select></select>").attr("name", "".concat(this.basename, "[").concat(this.field.name, "]")).addClass("widefat");
+            var select = jQuery("<select></select>").attr("name", "".concat(this.basename, "[").concat(this.field.name, "]")).addClass("widefat").val(this.value);
             Object.keys(this.field.options)
                 .map(function (key) {
                 var option = _this.field.options[key];
@@ -168,10 +195,11 @@
 
     var TextAreaField = (function (_super) {
         __extends(TextAreaField, _super);
-        function TextAreaField(basename, field) {
+        function TextAreaField(basename, field, value) {
             var _this = _super.call(this) || this;
             _this.field = field;
             _this.basename = basename;
+            _this.value = value;
             return _this;
         }
         TextAreaField.prototype.createField = function () {
@@ -181,7 +209,7 @@
                 this.$el.append(label);
             }
             var inputDiv = jQuery("<div></div>").addClass("af-field-input");
-            var input = jQuery("<textarea></textarea>").attr("name", "".concat(this.basename, "[").concat(this.field.name, "]")).addClass("widefat");
+            var input = jQuery("<textarea></textarea>").attr("name", "".concat(this.basename, "[").concat(this.field.name, "]")).addClass("widefat").val(this.value);
             inputDiv.append(input);
             if (this.field.help) {
                 var small = jQuery("<small></small>").html(this.field.help);
@@ -198,10 +226,11 @@
 
     var TextField = (function (_super) {
         __extends(TextField, _super);
-        function TextField(basename, field) {
+        function TextField(basename, field, value) {
             var _this = _super.call(this) || this;
             _this.field = field;
             _this.basename = basename;
+            _this.value = value;
             return _this;
         }
         TextField.prototype.createField = function () {
@@ -214,14 +243,15 @@
             var input = jQuery("<input></input>")
                 .attr("type", this.field.type || "text")
                 .attr("name", "".concat(this.basename, "[").concat(this.field.name, "]"))
+                .val(this.value)
                 .addClass(["widefat", "af-input-".concat(this.field.name)]);
-            if (this.field.default) {
-                if (this.field.type === "checkbox" || this.field.type === "radio") {
-                    input.attr("checked", "checked");
-                    input.val(1);
-                }
-                else {
-                    input.val(this.field.default);
+            if (this.field.type === "checkbox" || this.field.type === "radio") {
+                (this.field.default || this.value == "1") && input.attr("checked", "checked");
+                input.val(1);
+            }
+            else {
+                if (!this.value || this.value === "") {
+                    input.val(this.field.default || "");
                 }
             }
             inputDiv.append(input);
@@ -240,10 +270,11 @@
 
     var SettingsSectionFields = (function (_super) {
         __extends(SettingsSectionFields, _super);
-        function SettingsSectionFields(basename, fields) {
+        function SettingsSectionFields(basename, fields, data) {
             var _this = _super.call(this) || this;
             _this.fields = fields;
             _this.basename = basename;
+            _this.data = data;
             return _this;
         }
         SettingsSectionFields.prototype.render = function () {
@@ -254,13 +285,13 @@
                 var _field = _this.fields[key];
                 switch (_field.type) {
                     case "repeater":
-                        return new RepeaterField(_this.basename, _field, []);
+                        return new RepeaterField(_this.basename, _field, _this.data ? _this.data[_field.name] || [] : []);
                     case "select":
-                        return new SelectField(_this.basename, _field);
+                        return new SelectField(_this.basename, _field, _this.data ? _this.data[_field.name] || "" : "");
                     case "textarea":
-                        return new TextAreaField(_this.basename, _field);
+                        return new TextAreaField(_this.basename, _field, _this.data ? _this.data[_field.name] || "" : "");
                     default:
-                        return new TextField(_this.basename, _field);
+                        return new TextField(_this.basename, _field, _this.data ? _this.data[_field.name] || "" : "");
                 }
             });
             fieldMap.forEach(function (field) {
@@ -273,21 +304,22 @@
 
     var ConstraintsView = (function (_super) {
         __extends(ConstraintsView, _super);
-        function ConstraintsView(basename) {
+        function ConstraintsView(basename, data) {
             var _this = _super.call(this) || this;
             _this.index = 0;
-            _this.basename = '';
+            _this.basename = "";
+            _this.data = data || {};
             _this.basename = basename;
             return _this;
         }
-        ConstraintsView.prototype.createSelect = function (index) {
+        ConstraintsView.prototype.createSelect = function (constraintValue, index) {
             var _this = this;
             var container = jQuery("<div class='expand-settings'><h3><span class=\"af-text\">Constraint</span><a href=\"#\" class=\"item-toggle\"><svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                <path d=\"M6 12H12M12 12H18M12 12V18M12 12V6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n            </svg></a></h3></div>");
             var toggleContainer = jQuery('<div class="section-toggle"></div>');
             var fieldsContainer = jQuery('<div class="section-inner"></div>');
             var field = jQuery("<div class='af-field af-field-select'></div>");
             var $select = jQuery("<select></select>");
-            $select.attr('name', "".concat(this.basename, "[constraints][").concat(index, "][type]"));
+            $select.attr("name", "".concat(this.basename, "[constraints][").concat(index, "][type]"));
             $select.append(jQuery("<option></option>").val("").text("---"));
             Object.keys(ajaxyFormsBuilder.constraints).forEach(function (key) {
                 $select.append(jQuery("<option></option>").val(key).text(ajaxyFormsBuilder.constraints[key].label));
@@ -314,7 +346,7 @@
                 var value = $select.val().toString();
                 var constraint = ajaxyFormsBuilder.constraints[value];
                 fields.html("");
-                fields.append(new SettingsSectionFields("".concat(_this.basename, "[constraints][").concat(index, "]"), constraint.fields).render().el);
+                fields.append(new SettingsSectionFields("".concat(_this.basename, "[constraints][").concat(index, "]"), constraint.fields, constraintValue).render().el);
                 if (value && ajaxyFormsBuilder.constraints[value] && ajaxyFormsBuilder.constraints[value].help) {
                     help.html(ajaxyFormsBuilder.constraints[value].help);
                     if (ajaxyFormsBuilder.constraints[value].docs) {
@@ -327,19 +359,33 @@
                     help.html("");
                 }
             });
+            $select.val(constraintValue.type || "");
+            if (constraintValue.type) {
+                $select.trigger("change");
+            }
             return container;
+        };
+        ConstraintsView.prototype.renderSettings = function () {
+            var _this = this;
+            this.container.empty();
+            if (this.data) {
+                this.data.forEach(function (constraint, index) {
+                    _this.container.append(_this.createSelect(constraint, index));
+                });
+            }
         };
         ConstraintsView.prototype.render = function () {
             var _this = this;
             this.$el.addClass("constraints-settings");
-            var container = jQuery("<div></div>").addClass("constraints-container");
+            this.container = jQuery("<div></div>").addClass("constraints-container");
             var addMore = jQuery("<a href='#' class='af-add-more'>Add Constraint</a>");
             addMore.on("click", function (e) {
                 e.preventDefault();
-                container.append(_this.createSelect(_this.index));
-                _this.index++;
+                _this.data.push({ type: "" });
+                _this.renderSettings();
             });
-            this.$el.append(container);
+            this.renderSettings();
+            this.$el.append(this.container);
             this.$el.append(addMore);
             return this;
         };
@@ -348,9 +394,10 @@
 
     var Settings = (function (_super) {
         __extends(Settings, _super);
-        function Settings(index, field, onRemove) {
+        function Settings(index, field, data, onRemove) {
             var _this = _super.call(this) || this;
             _this.field = field;
+            _this.data = data;
             _this.onRemove = onRemove;
             _this.index = index;
             return _this;
@@ -358,7 +405,7 @@
         Settings.prototype.createBasicSettings = function () {
             var basicSettings = jQuery("<div></div>").addClass("basic-settings");
             var basicInnerSection = jQuery("<div></div>").addClass("section-inner");
-            basicInnerSection.append(new SettingsSectionFields("field[".concat(this.index, "]"), this.field.properties.basic.fields).render().el);
+            basicInnerSection.append(new SettingsSectionFields("fields[".concat(this.index, "]"), this.field.properties.basic.fields, this.data).render().el);
             basicSettings.append(basicInnerSection);
             return basicSettings;
         };
@@ -378,7 +425,7 @@
             settings.append(heading);
             var toggleInnerSection = jQuery("<div></div>").addClass("section-toggle");
             var innerSection = jQuery("<div></div>").addClass("section-inner");
-            innerSection.append(new SettingsSectionFields("field[".concat(this.index, "]"), data.fields).render().el);
+            innerSection.append(new SettingsSectionFields("fields[".concat(this.index, "]"), data.fields, this.data).render().el);
             toggleInnerSection.append(innerSection);
             settings.append(toggleInnerSection);
             return settings;
@@ -399,7 +446,7 @@
             settings.append(heading);
             var toggleInnerSection = jQuery("<div></div>").addClass("section-toggle");
             var innerSection = jQuery("<div></div>").addClass("section-inner");
-            innerSection.append(new ConstraintsView("field[".concat(this.index, "]")).render().el);
+            innerSection.append(new ConstraintsView("fields[".concat(this.index, "]"), this.data.constraints || []).render().el);
             toggleInnerSection.append(innerSection);
             settings.append(toggleInnerSection);
             return settings;
@@ -471,16 +518,17 @@
 
     var FieldView = (function (_super) {
         __extends(FieldView, _super);
-        function FieldView(index, type, data) {
+        function FieldView(index, type, data, sortIndex) {
             var _this = _super.call(this, { tagName: "li" }) || this;
             _this.type = type;
             _this.data = data;
             _this.index = index;
+            _this.sortIndex = sortIndex;
             return _this;
         }
         FieldView.prototype.createSettings = function (field) {
             var _this = this;
-            return new Settings(this.index, field, function () {
+            return new Settings(this.index, field, this.data, function () {
                 _this.remove();
             });
         };
@@ -493,6 +541,8 @@
             });
             this.$el.append(header.render().el);
             this.$el.append(settings.render().el);
+            this.$el.append("<input class=\"type-index\" name=\"fields[".concat(this.index, "][type]\" type=\"hidden\" value=\"").concat(this.type, "\">"));
+            this.$el.append("<input class=\"sort-index\" name=\"fields[".concat(this.index, "][_sort]\" type=\"hidden\" value=\"").concat(this.sortIndex, "\">"));
             this.$el.on("blur", '.expand-settings-basic input.af-input-label', function () {
                 if (!this.value || this.value === "") {
                     header.title.text("No Label");
@@ -507,12 +557,17 @@
 
     var DroppableView = (function (_super) {
         __extends(DroppableView, _super);
-        function DroppableView() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
+        function DroppableView(options) {
+            if (options === void 0) { options = {}; }
+            var _this = _super.call(this, options) || this;
             _this.fields = [];
+            _this.collection = options.collection;
+            _this.onDrop = options.onDrop;
+            _this.render();
             return _this;
         }
         DroppableView.prototype.droppable = function (options) {
+            var _this = this;
             this.$el.data("view", this);
             this.$el.data("collection", this.collection);
             this.collection.view = this;
@@ -520,19 +575,23 @@
             this.sortable = this.$el.sortable({
                 placeholder: "ui-state-highlight",
                 handle: ".ui-sortable-handle",
-            });
-        };
-        DroppableView.prototype.canDrop = function (draggableView) {
-            return true;
+                receive: this.onDrop.bind(this),
+                update: function (event, ui) {
+                    _this.$el.children().each(function (index, el) {
+                        jQuery(el).find(".sort-index").val(index);
+                    });
+                },
+            })
+                .disableSelection();
         };
         DroppableView.prototype.render = function () {
             return this;
         };
-        DroppableView.prototype.add = function (type, data) {
-            var fieldView = new FieldView(this.fields.length, type, data);
+        DroppableView.prototype.add = function (type, data, index) {
+            var fieldView = new FieldView(this.fields.length, type, data, index);
             this.fields.push(fieldView);
             var record = fieldView.render().el;
-            this.$el.append(record);
+            this.insertAt(index, record);
             try {
                 setTimeout(function () {
                     window.scrollTo({
@@ -543,107 +602,63 @@
             }
             catch (e) { }
         };
+        DroppableView.prototype.insertAt = function (index, item) {
+            var _this = this;
+            if (this.$el.children().length == 0) {
+                return this.$el.append(item);
+            }
+            else {
+                return this.$el.children().each(function () {
+                    if (index === 0) {
+                        _this.$el.prepend(item);
+                    }
+                    else {
+                        _this.$el
+                            .children()
+                            .eq(index - 1)
+                            .after(item);
+                    }
+                });
+            }
+        };
         return DroppableView;
     }(Backbone.View));
 
-    var DraggableView = (function (_super) {
-        __extends(DraggableView, _super);
-        function DraggableView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        DraggableView.prototype.initialize = function () {
-            this.model.view = this;
-            this.$el.attr("draggable", "true");
-        };
-        DraggableView.prototype.draggable = function (options) {
-            if (options === void 0) { options = {}; }
-            options.canDrop = this._canDrop.bind(this);
-            options.didDrop = this._didDrop.bind(this);
-            this.$el.dragdrop(options);
-            this.$el.data("view", this);
-            this.$el.data("model", this.model);
-        };
-        DraggableView.prototype._canDrop = function (el) {
-            var droppableView = jQuery(el).data("view");
-            if (!droppableView || !(droppableView instanceof DroppableView)) {
-                return false;
-            }
-            return droppableView.canDrop(this) && this.canDrop(droppableView);
-        };
-        DraggableView.prototype._didDrop = function (src, dst) {
-            var draggableView = src.data("view");
-            var draggableModel = src.data("model");
-            var droppableView = dst.data("view");
-            var srcCollection = src.parent().data("collection");
-            var dstCollection = dst.data("collection");
-            if (srcCollection) {
-                srcCollection.remove(draggableModel);
-                droppableView.trigger("remove");
-            }
-            if (dstCollection) {
-                dstCollection.add(draggableModel);
-                droppableView.trigger("add");
-            }
-            draggableView.trigger("drag");
-            draggableModel.trigger("drag");
-            this.didDrop(draggableView, droppableView);
-        };
-        DraggableView.prototype.canDrop = function (droppableView) {
-            return true;
-        };
-        DraggableView.prototype.didDrop = function (draggableView, droppableView) {
-            var srcElm = draggableView.$el;
-            var type = srcElm.data("type");
-            droppableView.add(type, {});
-        };
-        return DraggableView;
-    }(Backbone.View));
-
-    var DroppableCollection = (function (_super) {
-        __extends(DroppableCollection, _super);
-        function DroppableCollection() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        DroppableCollection.prototype.initialize = function () {
-            this.on("add", this._add);
-            this.on("remove", this._remove);
-        };
-        DroppableCollection.prototype._add = function (model) {
-            if (this.view && model.view) {
-                this.view.$el.append(model.view.$el);
-            }
-        };
-        DroppableCollection.prototype._remove = function (model) {
-            if (model.view) {
-                model.view.$el.detach();
-            }
-        };
-        return DroppableCollection;
-    }(Backbone.Collection));
-
     jQuery(function () {
         var droppable = document.querySelector(".af-form-wrap .droppable");
+        if (!droppable) {
+            return;
+        }
         var dropCollection = new DroppableCollection();
         var dropView = new DroppableView({
             collection: dropCollection,
             el: jQuery(droppable),
+            onDrop: function (event, ui) {
+                event.preventDefault();
+                this.add(ui.item.data("type"), {}, ui.helper.index());
+                return true;
+            },
         });
         dropView.droppable();
+        jQuery(".af-fields li.draggable").draggable({
+            containment: ".af-form-wrap",
+            helper: "clone",
+            revert: "invalid",
+            connectToSortable: ".ui-sortable",
+            start: function (event, ui) {
+                ui.helper.height(ui.helper.prevObject.height());
+                ui.helper.width(ui.helper.prevObject.width());
+            },
+            stop: function (event, ui) {
+                ui.helper.remove();
+            },
+        });
         var draggables = document.querySelectorAll(".af-fields li.draggable");
         [].forEach.call(draggables, function (draggable, i) {
             var dragModel = new DraggableModel({
                 type: draggable.getAttribute("data-type"),
             });
             dropCollection.add(dragModel);
-            var dragView = new DraggableView({
-                model: dragModel,
-                el: jQuery(draggable),
-            });
-            dragView.draggable({
-                makeClone: true,
-                canDropClass: "can-drop",
-                dropClass: "af-drop",
-            });
         });
         var toggleMore = document.querySelector(".af-fields li.more");
         toggleMore.addEventListener("click", function (e) {
@@ -657,6 +672,13 @@
                 setTimeout(function () { return (toggleMore.querySelector("span").innerHTML = "Load More"); }, 500);
             }
         });
+        if (form_metadata) {
+            if (form_metadata.fields) {
+                form_metadata.fields.forEach(function (field, index) {
+                    dropView.add(field.type, field, index);
+                });
+            }
+        }
         window.dropCollection = dropCollection;
     });
 

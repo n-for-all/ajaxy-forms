@@ -26,6 +26,32 @@
   background-position: center;
   background-size: contain;
 }
+.ajaxy-form .field-error ul li {
+  font-size: 80%;
+  background: rgba(255, 0, 0, 0.1098039216);
+  border: 1px solid rgba(255, 0, 0, 0.231372549);
+  border-radius: 2px;
+  color: red;
+  padding: 0.1rem 0.4rem;
+  margin-top: 0.4rem;
+}
+.ajaxy-form .form-message {
+  padding: 0.1rem 0.4rem;
+  margin-top: 0.4rem;
+  font-size: 80%;
+  border: 1px solid transparent;
+  border-radius: 2px;
+}
+.ajaxy-form .form-message.error {
+  background: rgba(255, 0, 0, 0.1098039216);
+  border-color: rgba(255, 0, 0, 0.231372549);
+  color: red;
+}
+.ajaxy-form .form-message.success {
+  background: rgba(0, 255, 0, 0.1098039216);
+  border-color: rgba(0, 255, 0, 0.231372549);
+  color: green;
+}
 
 @keyframes rotation {
   0% {

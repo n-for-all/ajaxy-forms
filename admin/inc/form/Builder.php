@@ -2,6 +2,8 @@
 
 namespace Ajaxy\Forms\Admin\Inc\Form;
 
+use Ajaxy\Forms\Inc\Data;
+
 class Builder
 {
     /**
@@ -18,18 +20,32 @@ class Builder
 
     function admin_menu()
     {
-        add_submenu_page('ajaxy-forms', __('Add New Form', AJAXY_FORMS_TEXT_DOMAIN), __('Add New Form', AJAXY_FORMS_TEXT_DOMAIN), 'activate_plugins', 'ajaxy-form', [$this, "form_page_handler"]);
+        add_submenu_page('ajaxy-forms', __('New Form', AJAXY_FORMS_TEXT_DOMAIN), __('New Form', AJAXY_FORMS_TEXT_DOMAIN), 'activate_plugins', 'ajaxy-form', [$this, "form_page_handler"]);
     }
 
     function admin_init()
     {
+        $page = $_GET['page'] ?? '';
+        if ($page !== 'ajaxy-form') return;
+
+        $select_id = isset($_GET['form']) ? (int)$_GET['form'] : null;
+        $action = isset($_GET['action']) ? $_GET['action'] : '';
+        if ($action == 'delete') {
+            if (!wp_verify_nonce($_REQUEST['_wpnonce'] ?? '', 'delete-form-' . $select_id)) {
+                wp_die('You already submitted this delete request, please reload and try again.');
+            }
+
+            Data::delete_form($select_id);
+            \wp_redirect(admin_url(sprintf('admin.php?page=ajaxy-forms&message=%s', urlencode(__('Form deleted successfully', AJAXY_FORMS_TEXT_DOMAIN)))));
+            exit();
+        }
+
         $this->metaboxes();
     }
 
     function scripts()
     {
-        \wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . "-admin-script-dragdrop", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/dragdrop.js', ['jquery'], AJAXY_FORMS_VERSION, true);
-        \wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . "-admin-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/builder.js', [AJAXY_FORMS_TEXT_DOMAIN . "-admin-script-dragdrop", 'jquery', 'backbone'], AJAXY_FORMS_VERSION, true);
+        \wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . "-admin-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/builder.js', ['jquery', 'backbone', 'jquery-ui-draggable'], AJAXY_FORMS_VERSION, true);
         wp_localize_script(
             AJAXY_FORMS_TEXT_DOMAIN . "-admin-script",
             'ajaxyFormsBuilder',
@@ -39,7 +55,6 @@ class Builder
             )
         );
     }
-
 
     function metaboxes()
     {
@@ -100,17 +115,143 @@ class Builder
 
     function form_page_handler()
     {
-        $count = 10;
-        $select_id = 1;
-        $add_new_screen = (isset($_GET['form']) && 0 === (int) $_GET['form']) ? true : false;
-        $add_new_screen = false;
-
+        $select_id = isset($_GET['form']) ? (int)$_GET['form'] : null;
+        $message = isset($_GET['message']) ? ["type" => "success", "message" => $_GET['message']] : '';
+        $message = isset($_GET['error']) ? ["type" => "error", "message" => $_GET['error']] : $message;
         $action = isset($_GET['action']) ? $_GET['action'] : '';
+        if ($action == 'delete') {
+            if (!wp_verify_nonce($_REQUEST['_wpnonce'] ?? '', 'delete-form-' . $select_id)) {
+                wp_die('You already submitted this delete request, please reload and try again.');
+            }
+
+            Data::delete_form($select_id);
+            \wp_redirect(admin_url(sprintf('admin.php?page=ajaxy-form&message=%s', urlencode(__('Form deleted successfully', AJAXY_FORMS_TEXT_DOMAIN)))));
+            exit();
+        }
+
+        $form = null;
+        $metadata = null;
+        if ($select_id) {
+            $form = Data::get_form($select_id);
+            if (!$form) {
+                wp_die('Form not found.');
+            }
+
+            try {
+                $metadata = \json_decode($form['metadata'], true);
+                echo '<script>var form_metadata = ' . $form['metadata'] . '</script>';
+                $form['metadata'] = $metadata;
+            } catch (\Exception $e) {
+                $metadata = null;
+            }
+        }
+
+        $add_new_screen = $action == '' || $action == 'add' ? true : false;
+        $nonce = 'save_form_' . ($select_id ? $select_id : 'new');
+        if (isset($_POST['save_form'])) {
+            if (!wp_verify_nonce($_REQUEST['_wpnonce'] ?? '', $nonce)) {
+                $message = [
+                    'type' => 'error',
+                    'message' => __('Nonce verification failed, Please try again.', AJAXY_FORMS_TEXT_DOMAIN),
+                ];
+            } else {
+                $fields = [];
+                if (isset($_POST['fields'])) {
+                    $fields = $_POST['fields'];
+
+                    \usort($fields, function ($a, $b) {
+                        return $a['_sort'] <=> $b['_sort'];
+                    });
+
+                    $names = [];
+                    $index = 1;
+                    $fields = \array_map(function ($field) use (&$names, &$index) {
+                        unset($field['_sort']);
+
+                        $name = $field['name'] ?? '';
+                        if (\trim($name) === '') {
+                            $field['name'] = \sanitize_title($field['label']);
+                        } else {
+                            $field['name'] = \sanitize_title($field['name']);
+                        }
+
+                        if (\trim($field['name']) === '') {
+                            $field['name'] = 'field_' . ($index++);
+                        }
+
+                        if (\in_array($field['name'], $names)) {
+                            $field['name'] = 'field_' . \uniqid();
+                        }
+
+                        $names[] = $field['name'];
+
+                        $properties = \Ajaxy\Forms\Inc\Fields::getInstance()->get_properties($field['type']);
+                        //remove default properties to reduce the settings size
+                        foreach ($properties as $key => $property) {
+                            $default = $property['default'] ?? '';
+                            switch ($property['type']) {
+                                case 'radio':
+                                case 'checkbox':
+                                    $default = intval($property['default'] ?? 0);
+                                    break;
+                                default:
+                                    $default = $property['default'] ?? '';
+                                    break;
+                            }
+                            if (isset($field[$property['name']]) && ($field[$property['name']] === $default || intval($field[$property['name']]) === $default)) {
+                                unset($field[$property['name']]);
+                            }
+                        }
+
+                        return $field;
+                    }, $fields);
+                }
+
+                $metadata = [
+                    'fields' =>  $fields,
+                    'options' => $_POST['options'] ?? [],
+                    'initial_data' => [],
+                ];
+
+                $name = \sanitize_title($_POST['name'] ?? '');
+                if (\trim($name) === '') {
+                    $name = 'form_' . \uniqid();
+                } else {
+                    $old_form = Data::get_form_by_name($name);
+                    if ($old_form && $old_form['id'] != $select_id) {
+                        $name = 'form_' . \uniqid();
+                    }
+                }
+
+                if ($select_id) {
+                    Data::update_form($select_id, $name, $metadata);
+                } else {
+                    $select_id = Data::add_form($name, $metadata);
+                }
+
+                if ($select_id) {
+                    \wp_redirect(
+                        add_query_arg(
+                            array(
+                                'action' => 'edit',
+                                'form'   => $select_id,
+                                'message' => urlencode(__('Form saved successfully', AJAXY_FORMS_TEXT_DOMAIN)),
+                            ),
+                            admin_url('admin.php?page=ajaxy-form')
+                        )
+                    );
+                }
+            }
+        }
     ?>
         <div class="wrap af-form-wrap">
             <h1 class="wp-heading-inline"><?php esc_html_e('Form'); ?></h1>
             <hr class="wp-header-end">
-
+            <?php if ($message) : ?>
+                <div id="message" class="notice notice-<?php echo $message['type']; ?>">
+                    <p><?php echo $message['message']; ?></p>
+                </div>
+            <?php endif; ?>
             <nav class="nav-tab-wrapper wp-clearfix">
                 <a href="<?php esc_url(
                                 add_query_arg(
@@ -138,13 +279,7 @@ class Builder
                     printf(
                         __('Edit your form below, or <a href="%s">create a new form</a>. Do not forget to save your changes!'),
                         esc_url(
-                            add_query_arg(
-                                array(
-                                    'action' => 'edit',
-                                    'form'   => 0,
-                                ),
-                                admin_url('admin.php?page=ajaxy-form')
-                            )
+                            admin_url('admin.php?page=ajaxy-form')
                         )
                     );
                     ?>
@@ -165,19 +300,20 @@ class Builder
                 <div class="af-management-liquid">
                     <div class="af-management">
                         <h2><?php _e('Form Structure'); ?></h2>
-                        <form action="<?php echo admin_url('admin-ajax.php'); ?>" class="af-edit">
+                        <form method="post" class="af-edit">
                             <input type="hidden" name="action" value="af-form-save" />
+                            <?php wp_nonce_field($nonce); ?>
                             <?php
                             ?>
                             <div class="af-header">
                                 <div class="major-publishing-actions wp-clearfix">
                                     <label for="form-name"><?php _e('Form Name'); ?></label>
-                                    <input name="name" id="form-name" type="text" class="regular-text form-required" required="required" />
+                                    <input name="name" id="form-name" type="text" class="regular-text form-required" required="required" value="<?php echo $form ? \esc_attr($form['name']) : ''; ?>" />
                                 </div>
                             </div>
                             <div id="post-body">
                                 <div id="post-body-content" class="wp-clearfix">
-                                    <?php if (!$add_new_screen) : ?>
+                                    <?php if ($add_new_screen) : ?>
                                         <?php
                                         $starter_copy = __('Drag the items into the order you prefer. Click the arrow on the right of the item to reveal additional configuration options.');
                                         ?>
@@ -192,39 +328,39 @@ class Builder
                                         <fieldset class="af-settings-group">
                                             <legend class="af-settings-group-name howto"><?php _e('Extra fields'); ?></legend>
                                             <div class="af-settings-input checkbox-input">
-                                                <input name="allow_extra_fields" type="checkbox" value="1" /> <label for="auto-add-pages"><?php _e('Allow extra fields'); ?></label>
+                                                <input name="options[allow_extra_fields]" type="checkbox" value="1" <?php \checked($form && isset($form['metadata']['options']['allow_extra_fields'])); ?> /> <label for="auto-add-pages"><?php _e('Allow extra fields'); ?></label>
                                             </div>
                                         </fieldset>
                                         <fieldset class="af-settings-group">
                                             <legend class="af-settings-group-name howto"><?php _e('No Validate'); ?></legend>
                                             <div class="af-settings-input checkbox-input">
-                                                <input name="attr[novalidate]" type="checkbox" value="1" /> <label for="auto-add-pages"><?php _e('Disable client side validation'); ?></label>
+                                                <input name="options[attr][novalidate]" type="checkbox" value="1" <?php \checked($form && isset($form['metadata']['options']['attr']['novalidate'])); ?> /> <label for="auto-add-pages"><?php _e('Disable client side validation'); ?></label>
                                             </div>
                                         </fieldset>
                                         <fieldset class="af-settings-group">
                                             <legend class="af-settings-group-name howto"><?php _e('Class Name'); ?></legend>
                                             <div class="af-settings-input text-input">
-                                                <input name="attr[class]" type="text" value="" />
+                                                <input name="options[attr][class]" type="text" value="<?php echo isset($form['metadata']['options']['attr']['class']) ? $form['metadata']['options']['attr']['class'] : ''; ?>" />
                                             </div>
                                         </fieldset>
                                         <fieldset class="af-settings-group">
                                             <legend class="af-settings-group-name howto"><?php _e('Method'); ?></legend>
                                             <div class="af-settings-input text-input">
-                                                <select name="method">
-                                                    <option value="post">POST</option>
-                                                    <option value="get">GET</option>
-                                                    <option value="put">PUT</option>
-                                                    <option value="delete">DELETE</option>
-                                                    <option value="patch">PATCH</option>
+                                                <select name="options[method]">
+                                                    <option value="post" <?php \selected($form && isset($form['metadata']['options']['method']) && $form['metadata']['options']['method'] == 'post'); ?>>POST</option>
+                                                    <option value="get" <?php \selected($form && isset($form['metadata']['options']['method']) && $form['metadata']['options']['method'] == 'get'); ?>>GET</option>
+                                                    <option value="put" <?php \selected($form && isset($form['metadata']['options']['method']) && $form['metadata']['options']['method'] == 'put'); ?>>PUT</option>
+                                                    <option value="delete" <?php \selected($form && isset($form['metadata']['options']['method']) && $form['metadata']['options']['method'] == 'delete'); ?>>DELETE</option>
+                                                    <option value="patch" <?php \selected($form && isset($form['metadata']['options']['method']) && $form['metadata']['options']['method'] == 'patch'); ?>>PATCH</option>
                                                 </select>
                                             </div>
                                         </fieldset>
                                         <fieldset class="af-settings-group">
                                             <legend class="af-settings-group-name howto"><?php _e('Submission'); ?></legend>
                                             <div class="af-settings-input text-input">
-                                                <select name="submission">
-                                                    <option value="1">Ajax</option>
-                                                    <option value="0">Normal</option>
+                                                <select name="options[submission]">
+                                                    <option value="1" <?php \selected($form && isset($form['metadata']['options']['submission']) && $form['metadata']['options']['submission'] == '1'); ?>>Ajax</option>
+                                                    <option value="0" <?php \selected($form && isset($form['metadata']['options']['submission']) && $form['metadata']['options']['submission'] == '0'); ?>>Normal</option>
                                                 </select>
                                             </div>
                                         </fieldset>
@@ -236,27 +372,25 @@ class Builder
                                     <div class="publishing-action">
                                         <?php submit_button(empty($select_id) ? __('Create Form') : __('Save Form'), 'primary large form-save', 'save_form', false); ?>
                                     </div>
-                                    <?php if ($count > 0) : ?>
-                                        <?php if (!$add_new_screen) : ?>
-                                            <span class="delete-action">
-                                                <a class="submitdelete deletion af-delete" href="
+                                    <?php if (!$add_new_screen) : ?>
+                                        <span class="delete-action">
+                                            <a class="submitdelete deletion af-delete" href="
 									<?php
-                                            echo esc_url(
-                                                wp_nonce_url(
-                                                    add_query_arg(
-                                                        array(
-                                                            'action' => 'delete',
-                                                            'form' => $select_id,
-                                                        ),
-                                                        admin_url('admin.php?page=ajaxy-form')
+                                        echo esc_url(
+                                            wp_nonce_url(
+                                                add_query_arg(
+                                                    array(
+                                                        'action' => 'delete',
+                                                        'form' => $select_id,
                                                     ),
-                                                    'delete-nav_form-' . $select_id
-                                                )
-                                            );
+                                                    admin_url('admin.php?page=ajaxy-form')
+                                                ),
+                                                'delete-form-' . $select_id
+                                            )
+                                        );
                                     ?>
 									"><?php _e('Delete Form'); ?></a>
-                                            </span>
-                                        <?php endif; ?>
+                                        </span>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -265,17 +399,6 @@ class Builder
                 </div>
             </div>
         </div>
-        <script>
-            jQuery(function(jQuery) {
-                jQuery('.af-edit').on('submit', function(e) {
-                    e.preventDefault();
-                    var data = jQuery(this).serialize();
-                    jQuery.post(ajaxurl, data, function(response) {
-                        console.log(response);
-                    });
-                });
-            });
-        </script>
 <?php
     }
 

@@ -12,17 +12,18 @@ class FieldView extends Backbone.View<DraggableModel> {
 	data: any;
 	type: string;
 	index: number;
-	constructor(index, type, data) {
+	sortIndex: number;
+	constructor(index, type, data, sortIndex) {
 		super({ tagName: "li" });
 
-		//_.template($("#templ").html());
 		this.type = type;
 		this.data = data;
 		this.index = index;
+        this.sortIndex = sortIndex;
 	}
 
 	createSettings(field) {
-		return new Settings(this.index, field, () => {
+		return new Settings(this.index, field, this.data, () => {
 			this.remove();
 		});
 	}
@@ -35,6 +36,8 @@ class FieldView extends Backbone.View<DraggableModel> {
 		});
 		this.$el.append(header.render().el); 
 		this.$el.append(settings.render().el);
+		this.$el.append(`<input class="type-index" name="fields[${this.index}][type]" type="hidden" value="${this.type}">`);
+		this.$el.append(`<input class="sort-index" name="fields[${this.index}][_sort]" type="hidden" value="${this.sortIndex}">`);
 		this.$el.on("blur", '.expand-settings-basic input.af-input-label', function () {
 			if (!this.value || this.value === "") {
 				header.title.text("No Label");

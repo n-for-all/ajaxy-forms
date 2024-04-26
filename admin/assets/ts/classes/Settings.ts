@@ -11,9 +11,11 @@ class Settings extends Backbone.View<any> {
 	field: any;
 	onRemove: any;
 	index: number;
-	constructor(index, field, onRemove) {
+    data: any;
+	constructor(index, field, data, onRemove) {
 		super();
 		this.field = field;
+		this.data = data;
 		this.onRemove = onRemove;
 		this.index = index;
 	}
@@ -22,7 +24,7 @@ class Settings extends Backbone.View<any> {
 		let basicSettings = jQuery("<div></div>").addClass("basic-settings");
 		let basicInnerSection = jQuery("<div></div>").addClass("section-inner");
 
-		basicInnerSection.append(new SettingsSectionFields(`field[${this.index}]`, this.field.properties.basic.fields).render().el);
+		basicInnerSection.append(new SettingsSectionFields(`fields[${this.index}]`, this.field.properties.basic.fields, this.data).render().el);
 		basicSettings.append(basicInnerSection);
 		return basicSettings;
 	}
@@ -50,7 +52,7 @@ class Settings extends Backbone.View<any> {
 		let toggleInnerSection = jQuery("<div></div>").addClass("section-toggle");
 		let innerSection = jQuery("<div></div>").addClass("section-inner");
 
-		innerSection.append(new SettingsSectionFields(`field[${this.index}]`, data.fields).render().el);
+		innerSection.append(new SettingsSectionFields(`fields[${this.index}]`, data.fields, this.data).render().el);
 		toggleInnerSection.append(innerSection);
 		settings.append(toggleInnerSection);
 		return settings;
@@ -78,7 +80,7 @@ class Settings extends Backbone.View<any> {
 		let toggleInnerSection = jQuery("<div></div>").addClass("section-toggle");
 		let innerSection = jQuery("<div></div>").addClass("section-inner");
 
-		innerSection.append(new ConstraintsView(`field[${this.index}]`).render().el);
+		innerSection.append(new ConstraintsView(`fields[${this.index}]`, this.data.constraints || []).render().el);
 		toggleInnerSection.append(innerSection);
 		settings.append(toggleInnerSection);
 		return settings;

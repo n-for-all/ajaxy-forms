@@ -1,11 +1,13 @@
 class SelectField extends Backbone.View<any> {
 	field: any;
 	basename: string;
-	constructor(basename: string, field) {
+	value: string;
+	constructor(basename: string, field, value: string) {
 		super();
 
 		this.field = field;
-        this.basename = basename;
+		this.basename = basename;
+		this.value = value;
 	}
 
 	createField() {
@@ -17,7 +19,7 @@ class SelectField extends Backbone.View<any> {
 		}
 
 		let inputDiv = jQuery("<div></div>").addClass("af-field-input");
-		let select = jQuery("<select></select>").attr("name", `${this.basename}[${this.field.name}]`).addClass("widefat");
+		let select = jQuery("<select></select>").attr("name", `${this.basename}[${this.field.name}]`).addClass("widefat").val(this.value);
 
 		Object.keys(this.field.options)
 			.map((key) => {

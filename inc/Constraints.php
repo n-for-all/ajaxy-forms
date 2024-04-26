@@ -1186,8 +1186,8 @@ class Constraints
         $data = preg_split('/(?=[A-Z])/', $type);
         $type = \strtolower(implode('_', array_filter($data)));
         if (isset($this->constraints[$type])) {
-            return new $this->constraints[$type]($options, $message, $mode);
+            return new $this->constraints[$type]['class']($options, $message, $mode);
         }
-        throw new \Exception('Constraint not found');
+        throw new \Exception(sprintf('Constraint %s not found', $constraint));
     }
 }

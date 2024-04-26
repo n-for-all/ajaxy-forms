@@ -43,18 +43,21 @@
 .af-form-wrap .settings-column .inside {
   clear: both;
 }
-.af-form-wrap .af-fields li.draggable {
+.af-form-wrap li.draggable {
   margin-bottom: 6px;
   background: #f6f7f7;
   border: 1px solid #dcdcde;
   display: flex;
   transition: all ease 0.3s;
 }
-.af-form-wrap .af-fields li.draggable > span {
+.af-form-wrap li.draggable.ui-draggable-dragging {
+  transition: none !important;
+}
+.af-form-wrap li.draggable > span {
   margin-right: auto;
   padding: 5px 10px;
 }
-.af-form-wrap .af-fields li.draggable > a {
+.af-form-wrap li.draggable > a {
   margin-left: 10px;
   font-size: 12px;
   display: flex;
@@ -65,10 +68,10 @@
   padding: 5px 5px;
   border-left: 1px solid rgba(220, 220, 222, 0.5098039216);
 }
-.af-form-wrap .af-fields li.draggable > a:hover {
+.af-form-wrap li.draggable > a:hover {
   background-color: #fff;
 }
-.af-form-wrap .af-fields li.draggable > a > svg {
+.af-form-wrap li.draggable > a > svg {
   width: 15px;
   margin-right: 2px;
 }
@@ -462,6 +465,10 @@
   padding: 0.6rem;
   border: 1px solid #dcdcde;
   border-top: 0;
+}
+
+.af-shortcode input {
+  font-size: 12px;
 }
 
 @media only screen and (min-width: 783px) {

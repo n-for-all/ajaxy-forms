@@ -8,27 +8,37 @@ class RepeaterField extends Backbone.View<any> {
 	field: any;
 	data: Array<any> = [];
 	basename: any;
-	constructor(basename:string, field, data) {
+	index: number;
+	constructor(basename: string, field, data) {
 		super();
 
-		this.data = data;
+		this.data = data || [];
 		this.field = field;
 		this.basename = basename;
+		this.index = 1;
 	}
 
-	createInnerField(_field, index) {
+	createInnerField(_field, item, index) {
 		let el = jQuery("<div></div>").addClass(["af-field", `af-field-${_field.type}`]);
 		let inputDiv = jQuery("<div></div>").addClass("af-field-input");
 
 		let input = jQuery("<input></input>")
 			.addClass("widefat")
 			.attr("type", _field.type || "text")
-			.attr("name", _field.name ? `${this.basename}[${this.field.name}][${uniqueId()}][${_field.name}]` : `${this.basename}[${this.field.name}][${uniqueId()}]`)
-			.val(this.data && this.data[index] ? this.data[index][_field.name] || "" : "");
+			.attr(
+				"name",
+				_field.name ? `${this.basename}[${this.field.name}][${index}][${_field.name}]` : `${this.basename}[${this.field.name}][${index}]`
+			)
+			.val(item ? item[_field.name] || "" : "");
 
 		if (_field.label) {
 			input.attr("placeholder", _field.label);
 		}
+
+        input.on("change", (e) => {
+            item[_field.name] = jQuery(e.target).val();
+        });
+
 		inputDiv.append(input);
 		if (_field.help) {
 			let small = jQuery("<small></small>").html(_field.help);
@@ -52,8 +62,7 @@ class RepeaterField extends Backbone.View<any> {
 		let lnk = jQuery("<a></a>").addClass("af-repeater-add").html('<span class="dashicons dashicons-insert"></span>').attr("href", "#");
 		lnk.on("click", (e) => {
 			e.preventDefault();
-			this.data.push({});
-			this.addRepeater(this.data.length - 1);
+			this.add();
 		});
 
 		return lnk;
@@ -61,20 +70,26 @@ class RepeaterField extends Backbone.View<any> {
 
 	removeRepeater(index) {
 		this.data.splice(index, 1);
-		this.$el.children(".af-repeater-inner").eq(index).remove();
+		this.render();
 	}
 
-	addRepeater(index) {
+	addRepeater(item, index) {
 		let repeaterDiv = jQuery("<div></div>").addClass("af-repeater-inner");
 		this.field.fields.map((_field) => {
-			let inner = this.createInnerField(_field, index);
+			let inner = this.createInnerField(_field, item, index);
 			repeaterDiv.append(inner);
 		});
 		repeaterDiv.append(this.createRemoveButton(index));
 		this.$el.append(repeaterDiv);
 	}
 
+	add() {
+		this.data.push({});
+		this.render();
+	}
+
 	render(): this {
+        this.$el.empty();
 		if (this.field.label) {
 			let heading = jQuery("<h4></h4>").html(this.field.label);
 			this.$el.append(heading);
@@ -86,7 +101,7 @@ class RepeaterField extends Backbone.View<any> {
 
 		if (this.data) {
 			this.data.map((item, index) => {
-				this.addRepeater(index);
+				this.addRepeater(item, index);
 			});
 		}
 

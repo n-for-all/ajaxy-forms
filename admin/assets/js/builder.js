@@ -661,7 +661,7 @@
             dropCollection.add(dragModel);
         });
         var toggleMore = document.querySelector(".af-fields li.more");
-        toggleMore.addEventListener("click", function (e) {
+        toggleMore === null || toggleMore === void 0 ? void 0 : toggleMore.addEventListener("click", function (e) {
             e.preventDefault();
             var more = document.querySelector(".af-fields .af-all-fields");
             more.classList.toggle("active");

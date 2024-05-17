@@ -1,10 +1,11 @@
 <?php
 
-namespace Ajaxy\Forms\Inc\Notifications;
+namespace Ajaxy\Forms\Inc\Actions;
 
-class TelegramNotification extends SmsNotification
+class Telegram extends Sms
 {
     private $token;
+    private $channel_id;
 
     public function __construct($options)
     {
@@ -16,6 +17,8 @@ class TelegramNotification extends SmsNotification
         if (empty($this->channel_id)) {
             throw new \Exception('Channel Id is required to send a telegram notification');
         }
+
+        parent::__construct($options);
     }
 
     public function send($form, $data)

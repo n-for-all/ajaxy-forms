@@ -1,8 +1,8 @@
 <?php
 
-namespace Ajaxy\Forms\Inc\Notifications;
+namespace Ajaxy\Forms\Inc\Actions;
 
-class WebhookNotification implements NotificationInterface
+class Webhook implements ActionInterface
 {
     private $url;
 

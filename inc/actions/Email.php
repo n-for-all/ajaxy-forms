@@ -1,9 +1,9 @@
 <?php
 
-namespace Ajaxy\Forms\Inc\Notifications;
+namespace Ajaxy\Forms\Inc\Actions;
 
 //create a class to send email notification from form data via wordpress
-class EmailNotification implements NotificationInterface
+class Email implements ActionInterface
 {
     private $to;
     private $from;
@@ -15,7 +15,7 @@ class EmailNotification implements NotificationInterface
     {
         $this->to = $options['to'];
         if (empty($this->to)) {
-            throw new \Exception('To email address is required to send an email notification');
+            throw new \Exception('To email address is required to send an email');
         }
 
         $this->from = $options['from'] ?? get_option('admin_email');
@@ -31,7 +31,7 @@ class EmailNotification implements NotificationInterface
         }
         $sent = \wp_mail($this->to, $this->subject, $this->message, $this->headers);
         if (!$sent) {
-            \error_log('Email notification failed to send to ' . $this->to);
+            \error_log('Email action failed to send to ' . $this->to);
         }
     }
 }

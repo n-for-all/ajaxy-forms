@@ -34,6 +34,7 @@ use Symfony\Bridge\Twig\Extension\FormExtension;
 
 define("AJAXY_FORMS_TEXT_DOMAIN", "ajaxy-forms");
 define("AJAXY_FORMS_PLUGIN_URL", plugins_url('', __FILE__));
+define("AJAXY_FORMS_PLUGIN_DIR", plugin_dir_path(__FILE__));
 define("AJAXY_FORMS_BASENAME", plugin_basename(__FILE__));
 define("AJAXY_FORMS_VERSION", "1.0.0");
 
@@ -364,19 +365,19 @@ class Plugin
 
         switch ($type) {
             case 'email':
-                $form['notifications'][] = new Inc\Notifications\EmailNotification($options);
+                $form['notifications'][] = new Inc\Actions\Email($options);
                 break;
             case 'sms':
-                $form['notifications'][] = new Inc\Notifications\SmsNotification($options);
+                $form['notifications'][] = new Inc\Actions\Sms($options);
                 break;
             case 'webhook':
-                $form['notifications'][] = new Inc\Notifications\WebhookNotification($options);
+                $form['notifications'][] = new Inc\Actions\Webhook($options);
                 break;
             case 'whatsapp':
-                $form['notifications'][] = new Inc\Notifications\WhatsappNotification($options);
+                $form['notifications'][] = new Inc\Actions\Whatsapp($options);
                 break;
             case 'telegram':
-                $form['notifications'][] = new Inc\Notifications\TelegramNotification($options);
+                $form['notifications'][] = new Inc\Actions\Telegram($options);
                 break;
             default:
                 throw new \Exception('Notification type not found');

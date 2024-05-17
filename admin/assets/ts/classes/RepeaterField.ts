@@ -1,9 +1,3 @@
-let _uniqueId = 0;
-
-function uniqueId() {
-	return _uniqueId++;
-}
-
 class RepeaterField extends Backbone.View<any> {
 	field: any;
 	data: Array<any> = [];

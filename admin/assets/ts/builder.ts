@@ -51,7 +51,7 @@ jQuery(() => {
 	});
 
 	const toggleMore = document.querySelector(".af-fields li.more");
-	toggleMore.addEventListener("click", (e) => {
+	toggleMore?.addEventListener("click", (e) => {
 		e.preventDefault();
 		const more = document.querySelector(".af-fields .af-all-fields");
 		more.classList.toggle("active");

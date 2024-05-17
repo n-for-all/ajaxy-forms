@@ -1,24 +1,30 @@
 <?php
 
-namespace Ajaxy\Forms\Inc\Notifications;
+namespace Ajaxy\Forms\Inc\Actions;
 
 //create a class to send email notification from form data via wordpress
-class SmsNotification implements NotificationInterface
+class Sms implements ActionInterface
 {
-    private $to;
-    private $from;
-    private $message;
-    private $bitly_token;
+    protected $to;
+    protected $from;
+    protected $message;
+    protected $bitly_token;
+    protected $key;
+    protected $token;
 
     public function __construct($options)
     {
         $this->to = $options['to'];
         if (empty($this->to)) {
-            throw new \Exception('To email address is required to send an email notification');
+            throw new \Exception('To phone number is required');
         }
 
-        $this->from = $options['from'] ?? get_option('admin_email');
+        $this->from = $options['from'];
         $this->message = $options['message'] ?? '';
+        if(empty($this->message)) {
+            throw new \Exception('Message is required');
+        }
+
         $this->key = $options['key'] ?? '';
         $this->token = $options['token'] ?? '';
 
@@ -29,7 +35,7 @@ class SmsNotification implements NotificationInterface
     {
         $message = $this->parseMessage($this->message);
         try {
-            $client = new Twilio\Rest\Client($this->key, $this->token);
+            $client = new \Twilio\Rest\Client($this->key, $this->token);
             $client->messages->create(
                 $this->to,
                 [
@@ -37,8 +43,8 @@ class SmsNotification implements NotificationInterface
                     'body' => $message
                 ]
             );
-        } catch (TwilioException $e) {
-            \error_log(\sprintf('SMS notification failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage()));
+        } catch (\Twilio\Exceptions\TwilioException $e) {
+            \error_log(\sprintf('SMS action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage()));
         }
     }
 

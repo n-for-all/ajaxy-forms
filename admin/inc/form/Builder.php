@@ -14,13 +14,11 @@ class Builder
         add_action('admin_init', [$this, 'admin_init']);
         add_action('admin_menu', [$this, 'admin_menu'], 9);
         add_action('admin_enqueue_scripts', array(&$this, 'scripts'));
-
-        add_action('wp_ajax_af-form-save', [$this, 'save_form'], 10, 2);
     }
 
     function admin_menu()
     {
-        add_submenu_page('ajaxy-forms', __('New Form', AJAXY_FORMS_TEXT_DOMAIN), __('New Form', AJAXY_FORMS_TEXT_DOMAIN), 'activate_plugins', 'ajaxy-form', [$this, "form_page_handler"]);
+        add_submenu_page('ajaxy-forms', __('Form Builder', AJAXY_FORMS_TEXT_DOMAIN), __('New Form', AJAXY_FORMS_TEXT_DOMAIN), 'activate_plugins', 'ajaxy-form', [$this, "form_page_handler"]);
     }
 
     function admin_init()
@@ -46,6 +44,7 @@ class Builder
     function scripts()
     {
         \wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . "-admin-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/builder.js', ['jquery', 'backbone', 'jquery-ui-draggable'], AJAXY_FORMS_VERSION, true);
+        \wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . "-admin-actions-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/actions.js', ['jquery', 'backbone', 'jquery-ui-draggable'], AJAXY_FORMS_VERSION, true);
         wp_localize_script(
             AJAXY_FORMS_TEXT_DOMAIN . "-admin-script",
             'ajaxyFormsBuilder',
@@ -129,6 +128,12 @@ class Builder
             exit();
         }
 
+        if (!\in_array($action, ['edit', 'actions', 'new', 'add'])) {
+            $action = '';
+        }
+
+        $tab = isset($_GET['tab']) ? $_GET['tab'] : 0;
+
         $form = null;
         $metadata = null;
         if ($select_id) {
@@ -144,9 +149,10 @@ class Builder
             } catch (\Exception $e) {
                 $metadata = null;
             }
+        } else {
+            $action = 'new';
         }
 
-        $add_new_screen = $action == '' || $action == 'add' ? true : false;
         $nonce = 'save_form_' . ($select_id ? $select_id : 'new');
         if (isset($_POST['save_form'])) {
             if (!wp_verify_nonce($_REQUEST['_wpnonce'] ?? '', $nonce)) {
@@ -234,6 +240,7 @@ class Builder
                         add_query_arg(
                             array(
                                 'action' => 'edit',
+                                'tab'   => $tab,
                                 'form'   => $select_id,
                                 'message' => urlencode(__('Form saved successfully', AJAXY_FORMS_TEXT_DOMAIN)),
                             ),
@@ -243,6 +250,8 @@ class Builder
                 }
             }
         }
+
+
     ?>
         <div class="wrap af-form-wrap">
             <h1 class="wp-heading-inline"><?php esc_html_e('Form'); ?></h1>
@@ -253,159 +262,61 @@ class Builder
                 </div>
             <?php endif; ?>
             <nav class="nav-tab-wrapper wp-clearfix">
-                <a href="<?php esc_url(
+                <a href="<?php echo esc_url(
                                 add_query_arg(
                                     array(
-                                        'action' => 'edit',
-                                        'form'   => 0,
+                                        'tab' => '0',
+                                        'action' => $action,
+                                        'form'   => $select_id,
                                     ),
                                     admin_url('admin.php?page=ajaxy-form')
                                 )
-                            ); ?>
-                            " class="nav-tab<?php echo $action == 'edit' || $action == '' ? ' nav-tab-active' : ''; ?>"><?php esc_html_e('Edit Form'); ?></a>
-                <a href="<?php esc_url(
-                                add_query_arg(
-                                    array(
-                                        'action' => 'actions',
-                                        'form'   => 0,
-                                    ),
-                                    admin_url('admin.php?page=ajaxy-form')
-                                )
-                            ); ?>" class="nav-tab<?php echo $action == 'actions' ? ' nav-tab-active' : ''; ?>"><?php esc_html_e('Actions'); ?></a>
-            </nav>
-            <div class="af-manage">
-                <span>
-                    <?php
-                    printf(
-                        __('Edit your form below, or <a href="%s">create a new form</a>. Do not forget to save your changes!'),
-                        esc_url(
-                            admin_url('admin.php?page=ajaxy-form')
-                        )
-                    );
-                    ?>
-                    <span class="screen-reader-text">
-                        <?php
-                        /* translators: Hidden accessibility text. */
-                        _e('Click the Save Form button to save your changes.');
-                        ?>
-                    </span>
-                </span>
-            </div>
-            <div class="wp-clearfix af-frame">
-                <div class="settings-column">
-                    <div class="clear"></div>
-                    <h2><?php _e('Add Fields'); ?></h2>
-                    <?php do_accordion_sections('form-fields', 'side', null); ?>
-                </div>
-                <div class="af-management-liquid">
-                    <div class="af-management">
-                        <h2><?php _e('Form Structure'); ?></h2>
-                        <form method="post" class="af-edit">
-                            <input type="hidden" name="action" value="af-form-save" />
-                            <?php wp_nonce_field($nonce); ?>
-                            <?php
-                            ?>
-                            <div class="af-header">
-                                <div class="major-publishing-actions wp-clearfix">
-                                    <label for="form-name"><?php _e('Form Name'); ?></label>
-                                    <input name="name" id="form-name" type="text" class="regular-text form-required" required="required" value="<?php echo $form ? \esc_attr($form['name']) : ''; ?>" />
-                                </div>
-                            </div>
-                            <div id="post-body">
-                                <div id="post-body-content" class="wp-clearfix">
-                                    <?php if ($add_new_screen) : ?>
-                                        <?php
-                                        $starter_copy = __('Drag the items into the order you prefer. Click the arrow on the right of the item to reveal additional configuration options.');
-                                        ?>
-                                        <div class="drag-instructions post-body-plain">
-                                            <p><?php echo $starter_copy; ?></p>
-                                        </div>
-                                    <?php endif;  ?>
-                                    <ul class="ui-sortable droppable"></ul>
+                            ); ?>" class="nav-tab<?php echo !$tab || $tab == 0 ? ' nav-tab-active' : ''; ?>"><?php esc_html_e('Edit Form'); ?></a>
 
-                                    <div class="af-settings">
-                                        <h3><?php _e('Form Settings'); ?></h3>
-                                        <fieldset class="af-settings-group">
-                                            <legend class="af-settings-group-name howto"><?php _e('Extra fields'); ?></legend>
-                                            <div class="af-settings-input checkbox-input">
-                                                <input name="options[allow_extra_fields]" type="checkbox" value="1" <?php \checked($form && isset($form['metadata']['options']['allow_extra_fields'])); ?> /> <label for="auto-add-pages"><?php _e('Allow extra fields'); ?></label>
-                                            </div>
-                                        </fieldset>
-                                        <fieldset class="af-settings-group">
-                                            <legend class="af-settings-group-name howto"><?php _e('No Validate'); ?></legend>
-                                            <div class="af-settings-input checkbox-input">
-                                                <input name="options[attr][novalidate]" type="checkbox" value="1" <?php \checked($form && isset($form['metadata']['options']['attr']['novalidate'])); ?> /> <label for="auto-add-pages"><?php _e('Disable client side validation'); ?></label>
-                                            </div>
-                                        </fieldset>
-                                        <fieldset class="af-settings-group">
-                                            <legend class="af-settings-group-name howto"><?php _e('Class Name'); ?></legend>
-                                            <div class="af-settings-input text-input">
-                                                <input name="options[attr][class]" type="text" value="<?php echo isset($form['metadata']['options']['attr']['class']) ? $form['metadata']['options']['attr']['class'] : ''; ?>" />
-                                            </div>
-                                        </fieldset>
-                                        <fieldset class="af-settings-group">
-                                            <legend class="af-settings-group-name howto"><?php _e('Method'); ?></legend>
-                                            <div class="af-settings-input text-input">
-                                                <select name="options[method]">
-                                                    <option value="post" <?php \selected($form && isset($form['metadata']['options']['method']) && $form['metadata']['options']['method'] == 'post'); ?>>POST</option>
-                                                    <option value="get" <?php \selected($form && isset($form['metadata']['options']['method']) && $form['metadata']['options']['method'] == 'get'); ?>>GET</option>
-                                                    <option value="put" <?php \selected($form && isset($form['metadata']['options']['method']) && $form['metadata']['options']['method'] == 'put'); ?>>PUT</option>
-                                                    <option value="delete" <?php \selected($form && isset($form['metadata']['options']['method']) && $form['metadata']['options']['method'] == 'delete'); ?>>DELETE</option>
-                                                    <option value="patch" <?php \selected($form && isset($form['metadata']['options']['method']) && $form['metadata']['options']['method'] == 'patch'); ?>>PATCH</option>
-                                                </select>
-                                            </div>
-                                        </fieldset>
-                                        <fieldset class="af-settings-group">
-                                            <legend class="af-settings-group-name howto"><?php _e('Submission'); ?></legend>
-                                            <div class="af-settings-input text-input">
-                                                <select name="options[submission]">
-                                                    <option value="1" <?php \selected($form && isset($form['metadata']['options']['submission']) && $form['metadata']['options']['submission'] == '1'); ?>>Ajax</option>
-                                                    <option value="0" <?php \selected($form && isset($form['metadata']['options']['submission']) && $form['metadata']['options']['submission'] == '0'); ?>>Normal</option>
-                                                </select>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="af-footer">
-                                <div class="major-publishing-actions">
-                                    <div class="publishing-action">
-                                        <?php submit_button(empty($select_id) ? __('Create Form') : __('Save Form'), 'primary large form-save', 'save_form', false); ?>
-                                    </div>
-                                    <?php if (!$add_new_screen) : ?>
-                                        <span class="delete-action">
-                                            <a class="submitdelete deletion af-delete" href="
-									<?php
-                                        echo esc_url(
-                                            wp_nonce_url(
-                                                add_query_arg(
-                                                    array(
-                                                        'action' => 'delete',
-                                                        'form' => $select_id,
-                                                    ),
-                                                    admin_url('admin.php?page=ajaxy-form')
-                                                ),
-                                                'delete-form-' . $select_id
-                                            )
-                                        );
+                <a href="<?php echo esc_url(
+                                add_query_arg(
+                                    array(
+                                        'tab' => '1',
+                                        'action' => $action,
+                                        'form'   => $select_id,
+                                    ),
+                                    admin_url('admin.php?page=ajaxy-form')
+                                )
+                            ); ?>" class="nav-tab<?php echo $tab == 1 ? ' nav-tab-active' : ''; ?>"><?php esc_html_e('Actions'); ?></a>
+            </nav>
+            <?php switch ($tab) {
+                case '1':
+                    include(AJAXY_FORMS_PLUGIN_DIR . '/admin/inc/form/templates/actions.tpl.php');
+                    break;
+                default:
+                    if ($action == 'edit') :
+            ?>
+                        <div class="af-manage">
+                            <span>
+                                <?php
+                                printf(
+                                    __('Edit your form below, or <a href="%s">create a new form</a>. Do not forget to save your changes!'),
+                                    esc_url(
+                                        admin_url('admin.php?page=ajaxy-form')
+                                    )
+                                );
+                                ?>
+                                <span class="screen-reader-text">
+                                    <?php
+                                    /* translators: Hidden accessibility text. */
+                                    _e('Click the Save Form button to save your changes.');
                                     ?>
-									"><?php _e('Delete Form'); ?></a>
-                                        </span>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+                                </span>
+                            </span>
+                        </div>
+            <?php
+                    endif;
+                    include(AJAXY_FORMS_PLUGIN_DIR . '/admin/inc/form/templates/edit.tpl.php');
+                    break;
+            } ?>
+
+
         </div>
 <?php
-    }
-
-    public function save_form()
-    {
-        \print_r($_POST);
-
-        die();
     }
 }

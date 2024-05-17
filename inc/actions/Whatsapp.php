@@ -1,9 +1,9 @@
 <?php
 
-namespace Ajaxy\Forms\Inc\Notifications;
+namespace Ajaxy\Forms\Inc\Actions;
 
 //create a class to send email notification from form data via wordpress
-class WhatsappNotification extends SmsNotification
+class Whatsapp extends Sms
 {
     public function __construct($options)
     {
@@ -18,7 +18,7 @@ class WhatsappNotification extends SmsNotification
     {
         $message = $this->parseMessage($this->message);
         try {
-            $client = new Twilio\Rest\Client($this->key, $this->token);
+            $client = new \Twilio\Rest\Client($this->key, $this->token);
             $client->messages->create(
                 'whatsapp:' . $this->to,
                 [
@@ -26,7 +26,7 @@ class WhatsappNotification extends SmsNotification
                     'body' => $message
                 ]
             );
-        } catch (TwilioException $e) {
+        } catch (\Twilio\Exceptions\TwilioException $e) {
             \error_log(\sprintf('Whatsapp notification failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage()));
         }
     }

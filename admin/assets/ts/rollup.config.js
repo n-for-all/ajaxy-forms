@@ -48,4 +48,27 @@ export default [
 			}),
 		],
 	},
+	{
+		input: path.resolve(__dirname, "./actions.ts"),
+		output: {
+			file: path.resolve(__dirname, "../js/actions.js"),
+			format: "iife",
+			globals: {
+				backbone: "Backbone",
+				underscore: "_",
+			},
+		},
+		plugins: [
+			resolve(),
+			typescript({
+				exclude: path.resolve(__dirname, "./node_modules"),
+			}),
+			replace({
+				// If you would like DEV messages, specify 'development'
+				// Otherwise use 'production'
+                preventAssignment: true,
+				"process.env.NODE_ENV": JSON.stringify("production"),
+			}),
+		],
+	},
 ];

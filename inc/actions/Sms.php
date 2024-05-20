@@ -21,7 +21,7 @@ class Sms implements ActionInterface
 
         $this->from = $options['from'];
         $this->message = $options['message'] ?? '';
-        if(empty($this->message)) {
+        if (empty($this->message)) {
             throw new \Exception('Message is required');
         }
 
@@ -31,7 +31,17 @@ class Sms implements ActionInterface
         $this->bitly_token = $options['bitly_token'] ?? null;
     }
 
-    public function send($form, $data)
+    public function get_name()
+    {
+        return 'sms';
+    }
+
+    public function get_title()
+    {
+        return 'SMS';
+    }
+
+    public function execute($data, $form)
     {
         $message = $this->parseMessage($this->message);
         try {
@@ -46,6 +56,42 @@ class Sms implements ActionInterface
         } catch (\Twilio\Exceptions\TwilioException $e) {
             \error_log(\sprintf('SMS action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage()));
         }
+    }
+
+    public function get_properties($values = [])
+    {
+        return [
+            'to' => [
+                'label' => 'To',
+                'value' => $this->to,
+                'type' => 'text'
+            ],
+            'from' => [
+                'label' => 'From',
+                'value' => $this->from,
+                'type' => 'text'
+            ],
+            'message' => [
+                'label' => 'Message',
+                'value' => $this->message,
+                'type' => 'textarea'
+            ],
+            'key' => [
+                'label' => 'Twilio Key',
+                'value' => $this->key,
+                'type' => 'text'
+            ],
+            'token' => [
+                'label' => 'Twilio Token',
+                'value' => $this->token,
+                'type' => 'text'
+            ],
+            'bitly_token' => [
+                'label' => 'Bitly Token',
+                'value' => $this->bitly_token,
+                'type' => 'text'
+            ]
+        ];
     }
 
     /**

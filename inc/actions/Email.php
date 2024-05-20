@@ -24,7 +24,17 @@ class Email implements ActionInterface
         $this->headers = (array)$options['headers'] ?? [];
     }
 
-    public function send($form, $data)
+    public function get_name()
+    {
+        return 'email';
+    }
+
+    public function get_title()
+    {
+        return 'Email';
+    }
+
+    public function execute($data, $form)
     {
         if (!empty($this->from)) {
             $this->headers[] = 'From: ' . $this->from;
@@ -33,5 +43,32 @@ class Email implements ActionInterface
         if (!$sent) {
             \error_log('Email action failed to send to ' . $this->to);
         }
+    }
+
+    public function get_properties($values = [])
+    {
+        return [
+            'to' => [
+                'label' => 'To',
+                'value' => $this->to,
+                'type' => 'text'
+            ],
+            'from' => [
+                'label' => 'From',
+                'value' => $this->from,
+                'type' => 'text'
+            ],
+            'subject' => [
+                'label' => 'Subject',
+                'value' => $this->subject,
+                'type' => 'text'
+            ],
+            'message' => [
+                'label' => 'Message',
+                'value' => $this->message,
+                'type' => 'textarea'
+            ],
+            // 'headers' => $this->headers
+        ];
     }
 }

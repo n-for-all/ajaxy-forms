@@ -47,3 +47,33 @@ function register_form_storage($form_name, $options = [])
 {
     \Ajaxy\Forms\Plugin::init()->register_storage($form_name, $options);
 }
+
+/**
+ * Register a form field type
+ *
+ * @date 2024-05-19
+ *
+ * @param string $type
+ * @param string $options
+ *
+ * @return void
+ */
+function register_form_field($type, $options)
+{
+    \Ajaxy\Forms\Plugin::init()->register_field($type, $options);
+}
+
+/**
+ * Register a form action type
+ *
+ * @date 2024-05-19
+ *
+ * @param string $type
+ * @param string $options
+ *
+ * @return void
+ */
+function register_form_action($type, $options)
+{
+    \Ajaxy\Forms\Plugin::init()->register_action($type, $options);
+}

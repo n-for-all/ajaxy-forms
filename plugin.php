@@ -268,9 +268,9 @@ class Plugin
             $data = $form->getData();
 
             $registered_form = Data::parse_form($form_name);
-            if (isset($registered_form['notifications'])) {
-                foreach ($registered_form['notifications'] as $notification) {
-                    $notification->send($form_name, $data);
+            if (isset($registered_form['actions'])) {
+                foreach ($registered_form['actions'] as $action) {
+                    $action->execute($data, $registered_form);
                 }
             }
 
@@ -384,6 +384,12 @@ class Plugin
         }
     }
 
+
+    public function register_action($type, $options)
+    {
+        Inc\Actions::getInstance()->register($type, $options);
+    }
+
     public function register_storage($form_name, $options = [])
     {
         $form = Data::parse_form($form_name);
@@ -450,6 +456,11 @@ class Plugin
         }
         return $errors;
     }
+
+    public function register_field($type, $options)
+    {
+        Inc\Fields::getInstance()->register($type, $options);
+    }
 }
 
 register_activation_hook(__FILE__, function () {
@@ -457,3 +468,61 @@ register_activation_hook(__FILE__, function () {
 });
 
 \Ajaxy\Forms\Plugin::init();
+
+
+\register_form_field('html', [
+    "label" => "HTML",
+    "class" => Inc\Fields\HtmlType::class,
+    "docs" => false,
+    "inherited" => [],
+    "properties" => [[
+        "section" => "basic",
+        "order" => 1,
+        "label" => "Html",
+        "type" => "textarea",
+        "name" => "html",
+        "help" => "Enter the HTML to display in the form",
+    ]],
+    "order" => 50,
+    "keywords" => "html,custom",
+    "common" => false
+]);
+
+\register_form_action('email', [
+    "label" => "Email",
+    "class" => Inc\Actions\Email::class,
+    "docs" => false,
+    "properties" => [
+        [
+            "order" => 0,
+            "label" => "From",
+            "type" => "text",
+            "name" => "from",
+            "required" => true,
+            "help" => "Enter the email address to send the email from",
+        ],
+        [
+            "order" => 1,
+            "label" => "To",
+            "type" => "text",
+            "name" => "to",
+            "required" => true,
+            "help" => "Enter the email address to send the email to",
+        ],
+        [
+            "order" => 2,
+            "label" => "Subject",
+            "type" => "text",
+            "name" => "subject",
+            "required" => true,
+            "help" => "Enter the subject of the email",
+        ],
+        [
+            "order" => 3,
+            "label" => "Message",
+            "type" => "textarea",
+            "name" => "message",
+            "help" => "Enter the message of the email",
+        ],
+    ]
+]);

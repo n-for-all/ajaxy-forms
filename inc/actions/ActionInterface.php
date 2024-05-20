@@ -4,5 +4,8 @@ namespace Ajaxy\Forms\Inc\Actions;
 
 interface ActionInterface
 {
-    public function send($form, $data);
+    public function execute($data, $form);
+    public function get_properties($values = []);
+    public function get_name();
+    public function get_title();
 }

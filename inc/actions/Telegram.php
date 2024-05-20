@@ -21,7 +21,17 @@ class Telegram extends Sms
         parent::__construct($options);
     }
 
-    public function send($form, $data)
+    public function get_name()
+    {
+        return 'telegram';
+    }
+
+    public function get_title()
+    {
+        return 'Telegram';
+    }
+
+    public function execute($data, $form)
     {
         // send telegram notification
         $message = $this->parseMessage($this->message);
@@ -40,5 +50,26 @@ class Telegram extends Sms
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
+    }
+
+    public function get_properties($values = [])
+    {
+        return [
+            'token' => [
+                'label' => 'Token',
+                'value' => $this->token,
+                'type' => 'text'
+            ],
+            'channel_id' => [
+                'label' => 'Channel Id',
+                'value' => $this->channel_id,
+                'type' => 'text'
+            ],
+            'message' => [
+                'label' => 'Message',
+                'value' => $this->message,
+                'type' => 'textarea'
+            ],
+        ];
     }
 }

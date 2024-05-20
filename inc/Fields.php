@@ -236,7 +236,7 @@ class Fields
             "class" => Type\TextType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/text.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim"],
-            "additional" => [],
+            "properties" => [],
             "order" => 1,
             "keywords" => "text,short,small,string,textfield,paragraph",
             "common" => true
@@ -246,7 +246,7 @@ class Fields
             "class" => Type\TextareaType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/textarea.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim"],
-            "additional" => [],
+            "properties" => [],
             "order" => 2,
             "keywords" => "textarea,long,medium,text,paragraph",
             "common" => true
@@ -256,7 +256,7 @@ class Fields
             "class" => Type\EmailType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/email.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [],
+            "properties" => [],
             "order" => 3,
             "keywords" => "email",
             "common" => true
@@ -266,7 +266,7 @@ class Fields
             "class" => Type\IntegerType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/integer.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 6,
@@ -300,7 +300,7 @@ class Fields
             "class" => Type\MoneyType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/money.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 6,
@@ -369,7 +369,7 @@ class Fields
             "class" => Type\NumberType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/number.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 7,
@@ -430,7 +430,7 @@ class Fields
             "class" => Type\PasswordType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/password.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 1,
@@ -450,7 +450,7 @@ class Fields
             "class" => Type\PercentType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/percent.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 8,
@@ -516,7 +516,7 @@ class Fields
             "class" => Type\SearchType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/search.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [],
+            "properties" => [],
             "order" => 33,
             "keywords" => "search",
             "common" => false
@@ -526,7 +526,7 @@ class Fields
             "class" => Type\UrlType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/url.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 9,
@@ -546,7 +546,7 @@ class Fields
             "class" => Type\RangeType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/range.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 1,
@@ -572,7 +572,7 @@ class Fields
             "class" => Type\TelType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/tel.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [],
+            "properties" => [],
             "order" => 5,
             "keywords" => "phone,telephone,tel",
             "common" => true
@@ -582,7 +582,7 @@ class Fields
             "class" => Type\ColorType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/color.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 3,
@@ -601,7 +601,7 @@ class Fields
             "class" => Type\ChoiceType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/choice.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 1,
@@ -667,7 +667,7 @@ class Fields
             "class" => Type\CountryType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/country.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 1,
@@ -709,7 +709,7 @@ class Fields
             "class" => Type\LanguageType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/language.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 1,
@@ -751,7 +751,7 @@ class Fields
             "class" => Type\LocaleType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/locale.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 4,
@@ -786,7 +786,7 @@ class Fields
             "class" => Type\TimezoneType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/timezone.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 4,
@@ -834,7 +834,7 @@ class Fields
             "class" => Type\CurrencyType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/currency.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 4,
@@ -882,7 +882,7 @@ class Fields
             "class" => Type\DateType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/date.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 4,
@@ -930,7 +930,7 @@ class Fields
             "class" => Type\DateTimeType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/datetime.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 1,
@@ -1000,7 +1000,7 @@ class Fields
             "class" => Type\TimeType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/time.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 1,
@@ -1047,7 +1047,7 @@ class Fields
             "class" => Type\BirthdayType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/birthday.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 1,
@@ -1075,7 +1075,7 @@ class Fields
             "class" => Type\CheckboxType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/checkbox.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 1,
@@ -1095,7 +1095,7 @@ class Fields
             "class" => Type\FileType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/file.html",
             "inherited" => ["name", "label", "help", "data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 5,
@@ -1114,7 +1114,7 @@ class Fields
             "class" => Type\RadioType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/radio.html",
             "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [
+            "properties" => [
                 [
                     "section" => "basic",
                     "order" => 1,
@@ -1134,7 +1134,7 @@ class Fields
             "class" => Type\UuidType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/uuid.html",
             "inherited" => ["name", "label", "help", "data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [],
+            "properties" => [],
             "order" => 36,
             "keywords" => "uuid",
             "common" => false
@@ -1144,7 +1144,7 @@ class Fields
             "class" => Type\UlidType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/ulid.html",
             "inherited" => ["name", "label", "help", "data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-            "additional" => [],
+            "properties" => [],
             "order" => 37,
             "keywords" => "ulid",
             "common" => false
@@ -1154,7 +1154,7 @@ class Fields
             "class" => Type\CollectionType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/collection.html",
             "inherited" => ["name", "label", "help", "empty_data", "attr", "help_attr", "help_html", "label_attr", "label_html", "invalid_message"],
-            "additional" => [],
+            "properties" => [],
             "order" => 38,
             "keywords" => "collection",
             "common" => false
@@ -1172,7 +1172,7 @@ class Fields
             "class" => Type\HiddenType::class,
             "docs" => "https://symfony.com/doc/current/reference/forms/types/hidden.html",
             "inherited" => ["name", "data",  "empty_data", "required", "attr", "row_attr", "invalid_message"],
-            "additional" => [],
+            "properties" => [],
             "order" => 39,
             "keywords" => "hidden",
             "common" => false
@@ -1203,24 +1203,7 @@ class Fields
             "order" => 10,
             "keywords" => "button,submit",
             "common" => true
-        ],
-        'html' => [
-            "label" => "HTML",
-            "class" => Fields\HtmlType::class,
-            "docs" => false,
-            "inherited" => [],
-            "additional" => [[
-                "section" => "basic",
-                "order" => 1,
-                "label" => "Html",
-                "type" => "textarea",
-                "name" => "html",
-                "help" => "Enter the HTML to display in the form",
-            ]],
-            "order" => 50,
-            "keywords" => "html,custom",
-            "common" => false
-        ],
+        ]
     );
 
     static $instance = null;
@@ -1238,9 +1221,9 @@ class Fields
         return isset($this->fields[$name]) ? $this->fields[$name] : ($default ? $this->fields[$default] : null);
     }
 
-    public function set($name, $class)
+    public function set($name, $properties =[])
     {
-        $this->fields[$name] = $class;
+        $this->fields[$name] = $properties;
     }
 
     public function has($name)
@@ -1286,7 +1269,7 @@ class Fields
     public function get_properties($name)
     {
         $field = $this->get($name);
-        $values = array_merge($this->get_inherited_properties($name), $field['additional'] ?? []);
+        $values = array_merge($this->get_inherited_properties($name), $field["properties"] ?? []);
 
         return $values;
     }
@@ -1301,7 +1284,7 @@ class Fields
             $properties = $this->sections;
 
             foreach ($properties as $key => &$section) {
-                $values = array_merge($this->get_inherited_properties($name, $key), \array_filter($field['additional'] ?? [], function ($value) use ($key) {
+                $values = array_merge($this->get_inherited_properties($name, $key), \array_filter($field["properties"] ?? [], function ($value) use ($key) {
                     return $value['section'] === $key;
                 }));
                 \array_multisort(\array_column($values, 'order'), SORT_ASC, $values);
@@ -1311,5 +1294,13 @@ class Fields
         }
 
         return $output;
+    }
+
+    public function register($name, $properties)
+    {
+        if (!isset($properties['class']) || !is_subclass_of($properties['class'], \Symfony\Component\Form\AbstractType::class)) {
+            throw new \Exception("Field properties class must be an instance of Symfony\Component\Form\AbstractType");
+        }
+        $this->fields[$name] = $properties;
     }
 }

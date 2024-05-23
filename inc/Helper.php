@@ -49,6 +49,16 @@ class Helper
         return "<table style='font-size:16px;min-width:300px;width:100%;white-space:pre-wrap;'>" . implode('', $rows) . '</table>';
     }
 
+    /**
+     * Create an html table from a multi dimensional array of rows and cells
+     *
+     * @date 2024-05-23
+     *
+     * @param string $data
+     * @param Form   $form
+     *
+     * @return string
+     */
     public static function create_table($data, Form $form)
     {
         $fields = $form->get_fields();

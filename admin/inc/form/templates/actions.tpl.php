@@ -46,6 +46,7 @@ try {
         $('.af-actions-list li .af-toggle-enabled').on('change', function() {
             var checked = $(this).is(':checked');
             $(this).closest('li.af-form-item').toggleClass('is-enabled', checked);
+            $(this).closest('form').find('button[type="submit"]').click();
         });
         $('.af-actions-list li form').submit(function(event) {
             event.preventDefault(); // Prevent default form submission

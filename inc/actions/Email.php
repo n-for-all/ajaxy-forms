@@ -32,12 +32,12 @@ class Email implements ActionInterface
 
     private function parse_headers(string $headers)
     {
-        $splitted = explode("\n", $headers);
+        $splitted = explode("\n", str_replace("\r\n", "\n", $headers));
         $parsed = [];
         foreach ($splitted as $header) {
             $parts = explode(':', $header);
             if (count($parts) === 2) {
-                $parsed[] = $parts[0] . ": " . $parts[1];
+                $parsed[] = $parts[0] . ": " . \trim((string)$parts[1]);
             }
         }
         return $parsed;
@@ -50,7 +50,7 @@ class Email implements ActionInterface
     public function execute($data, $form)
     {
         if (!empty($this->from)) {
-            $this->headers[] = 'From: ' . $this->from;
+            $this->headers[] = 'From: ' . \trim((string)$this->from);
         }
 
         $this->headers[] = 'Content-Type: text/html; charset=UTF-8';
@@ -69,19 +69,12 @@ class Email implements ActionInterface
             ]
         );
 
-        \var_dump($message);
-        // add_filter('wp_mail_content_type', [$this, 'set_content_type']);
         $sent = \wp_mail($to, $subject, $message, $this->headers);
-        // remove_filter('wp_mail_content_type', [$this, 'set_content_type']);
+
         if (!$sent) {
             \error_log('Email action failed to send to ' . $to);
             throw new \Exception('Failed to send email');
         }
-    }
-
-    public function set_content_type()
-    {
-        return 'text/html';
     }
 
     public static function get_properties()

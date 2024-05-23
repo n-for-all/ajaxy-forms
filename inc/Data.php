@@ -285,7 +285,7 @@ class Data
      *
      * @date 2024-04-21
      *
-     * @param string $name
+     * @param string $name the form name
      * @param array $data
      * @return int|false — The number of rows inserted, or false on error.
      */

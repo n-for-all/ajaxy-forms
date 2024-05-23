@@ -2,6 +2,8 @@
 
 namespace Ajaxy\Forms\Inc\Actions;
 
+use Ajaxy\Forms\Inc\Helper;
+
 class Sms implements ActionInterface
 {
     protected $to;
@@ -24,9 +26,11 @@ class Sms implements ActionInterface
             throw new \Exception('Message is required');
         }
 
-        $this->key = $options['key'] ?? '';
-        $this->token = $options['token'] ?? '';
-
+        $this->key = $options['account_sid'] ?? '';
+        $this->token = $options['auth_token'] ?? '';
+        if (!$this->key || !$this->token) {
+            throw new \Exception('Twilio credentials are required: account_sid and auth_token are required');
+        }
         $this->bitly_token = $options['bitly_token'] ?? null;
     }
 
@@ -42,18 +46,25 @@ class Sms implements ActionInterface
 
     public function execute($data, $form)
     {
-        $message = $this->parseMessage($this->message);
+        $values = [
+            'data' => $data,
+        ];
+
+        $to = Helper::create_twig_template($this->to, $values);
+        
+        $message = $this->parseMessage(Helper::create_twig_template($this->message, $values));
         try {
             $client = new \Twilio\Rest\Client($this->key, $this->token);
             $client->messages->create(
-                $this->to,
+                $to,
                 [
                     'from' => $this->from,
                     'body' => $message
                 ]
             );
         } catch (\Twilio\Exceptions\TwilioException $e) {
-            \error_log(\sprintf('SMS action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage()));
+            \error_log(\sprintf('SMS/Whatsapp action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage()));
+            throw new \Exception(\sprintf('SMS/Whatsapp action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage()));
         }
     }
 
@@ -64,26 +75,31 @@ class Sms implements ActionInterface
                 'label' => 'To Number',
                 'type' => 'text',
                 'name' => 'to',
-                'help' => 'Enter the phone number to send the SMS to'
+                'required' => true,
+                'help' => 'Enter the phone number to send the message to'
             ], [
                 'label' => 'From Number',
                 'type' => 'text',
                 'name' => 'from',
-                'help' => 'Enter the phone number to send the SMS from (Twilio Number)'
+                'required' => true,
+                'help' => 'Enter the phone number to send the message from (Twilio Number)'
             ], [
                 'label' => 'Message',
                 'type' => 'textarea',
                 'name' => 'message',
+                'required' => true,
                 'help' => 'Enter the message to send'
             ], [
                 'label' => 'Twilio Key',
                 'type' => 'text',
                 'name' => 'key',
+                'required' => true,
                 'help' => 'Enter the Twilio API Key'
             ], [
                 'label' => 'Twilio Token',
                 'type' => 'text',
                 'name' => 'token',
+                'required' => true,
                 'help' => 'Enter the Twilio API Token'
             ], [
                 'label' => 'Bitly Token',
@@ -105,8 +121,8 @@ class Sms implements ActionInterface
      */
     public function parseMessage($message)
     {
-        if (!$message) {
-            return '';
+        if (!$message || !$this->bitly_token) {
+            return $message;
         }
         $matches = [];
         preg_match_all(

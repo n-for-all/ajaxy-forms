@@ -17,6 +17,7 @@ require 'functions.php';
 
 use Ajaxy\Forms\Inc\Constraints;
 use Ajaxy\Forms\Inc\Data;
+use Ajaxy\Forms\Inc\Form;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Validation;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
@@ -46,6 +47,7 @@ class Plugin
     private $settings = null;
     private $entry_settings = null;
     private $builder = null;
+    private $csrf_token_manager = null;
 
 
 
@@ -86,19 +88,13 @@ class Plugin
         );
 
 
-        define('VENDOR_DIR', \plugin_dir_path(__FILE__) . 'vendor');
-        define('VENDOR_FORM_DIR', VENDOR_DIR . '/symfony/form');
-        define('VENDOR_VALIDATOR_DIR', VENDOR_DIR . '/symfony/validator');
-        define('VENDOR_TWIG_BRIDGE_DIR', VENDOR_DIR . '/symfony/twig-bridge');
-        define('THEMES_DIR', \plugin_dir_path(__FILE__) . 'inc/themes');
-
         if (is_admin()) {
             $this->settings = new Admin\Inc\Form\Settings();
             $this->entry_settings = new Admin\Inc\Entry\Settings();
             $this->builder = new Admin\Inc\Form\Builder();
         }
 
-
+        $this->csrf_token_manager = new CsrfTokenManager();
         $this->actions();
         $this->filters();
 
@@ -122,8 +118,8 @@ class Plugin
         } else {
             $form = Data::parse_form($name);
             if ($form) {
-                $form = $this->create_form($name, $form->get_fields(), $form->get_options(), $form->get_initial_data());
-                $this->on_submit($name, $form);
+                $form = $this->create_form($form, $form->get_initial_data());
+                $valid = $this->on_submit($name, $form);
                 return $this->render($name, $form);
             } else {
                 return \sprintf(__('Form %s not found', AJAXY_FORMS_TEXT_DOMAIN), $name);
@@ -131,29 +127,26 @@ class Plugin
         }
     }
 
-
-    public function create_form($form_name, $fields, $options = [], $initial_data = null)
+    public function create_form(Form $form, $initial_data = null)
     {
-
-
-        // Set up the CSRF Token Manager
-        $csrfTokenManager = new CsrfTokenManager();
 
         // Set up the Validator component
         $validator = Validation::createValidator();
 
         // Set up the Form component
         $formFactory = Forms::createFormFactoryBuilder()
-            ->addExtension(new CsrfExtension($csrfTokenManager))
+            ->addExtension(new CsrfExtension($this->csrf_token_manager))
             ->addExtension(new ValidatorExtension($validator))
             ->getFormFactory();
 
 
         $options = \array_replace([
             'csrf_protection' => true,
+            'csrf_message' => __('It appears you\'ve already submitted this form, or it may have timed out. Please refresh the page and try again.', \AJAXY_FORMS_TEXT_DOMAIN),
+            'csrf_token_id'   => 'form_intention_' . $form->get_name(),
             'allow_extra_fields' => true,
             'required' => false,
-        ], $options);
+        ], $form->get_options());
 
         unset($options['messages']);
 
@@ -162,9 +155,11 @@ class Plugin
         } else {
             $options['attr']['class'] = 'ajaxy-form';
         }
-        $builder = $formFactory->createNamedBuilder($form_name, Type\FormType::class, $initial_data, $options);
 
-        foreach ($fields as $field) {
+        $options['action'] = $form->is_ajax() ? get_rest_url(null, sprintf('ajaxy-forms/v1/form/%s', $form->get_name())) : '';
+        $builder = $formFactory->createNamedBuilder($form->get_name(), Type\FormType::class, $initial_data, $options);
+
+        foreach ($form->get_fields() as $field) {
             $field_options = $field;
             if (!empty($field['constraints'])) {
                 $field_options['constraints'] = \array_filter(\array_map(function ($constraint) {
@@ -193,6 +188,7 @@ class Plugin
         $builder->add('_message', $this->get_field('html'), [
             'html' => '<div class="form-message"></div>'
         ]);
+        
         return $builder->getForm();
     }
 
@@ -207,9 +203,10 @@ class Plugin
      */
     public function render($name, $form)
     {
+
         $twig = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array(
-            THEMES_DIR,
-            VENDOR_TWIG_BRIDGE_DIR . '/Resources/views/Form',
+            AJAXY_FORMS_PLUGIN_DIR . 'inc/themes',
+            AJAXY_FORMS_PLUGIN_DIR . 'vendor/symfony/twig-bridge/Resources/views/Form',
         )), [
             'debug' => true
         ]);
@@ -218,8 +215,8 @@ class Plugin
         // Set up the Translation component
         $translator = new Translator('en');
         $translator->addLoader('xlf', new XliffFileLoader());
-        $translator->addResource('xlf', VENDOR_FORM_DIR . '/Resources/translations/validators.en.xlf', 'en', 'validators');
-        $translator->addResource('xlf', VENDOR_VALIDATOR_DIR . '/Resources/translations/validators.en.xlf', 'en', 'validators');
+        $translator->addResource('xlf', AJAXY_FORMS_PLUGIN_DIR . 'vendor/symfony/form/Resources/translations/validators.en.xlf', 'en', 'validators');
+        $translator->addResource('xlf', AJAXY_FORMS_PLUGIN_DIR . 'vendor/symfony/validator/Resources/translations/validators.en.xlf', 'en', 'validators');
 
         $twig->addExtension(new TranslationExtension($translator));
 
@@ -243,7 +240,7 @@ class Plugin
             $messages = array_replace([
                 'success' => __('Form submitted successfully', \AJAXY_FORMS_TEXT_DOMAIN),
                 'error' => __('Form failed to submit, Please try again', \AJAXY_FORMS_TEXT_DOMAIN),
-            ], $registered_form['options']['messages'] ?? []);
+            ], $registered_form->get_option('messages', []));
             return sprintf('<div class="ajaxy-form"><div class="form-message success">%s</div></div>', $messages['success'] ?? '');
         }
 
@@ -271,7 +268,7 @@ class Plugin
             foreach ($actions as $action) {
                 \call_user_func($action, $data, $registered_form);
             }
-
+            $this->csrf_token_manager->refreshToken('form_intention_' . $registered_form->get_name());
             return true;
         }
 
@@ -307,9 +304,14 @@ class Plugin
     }
     public function actions()
     {
+        add_action('rest_api_init', function () {
+            register_rest_route(AJAXY_FORMS_TEXT_DOMAIN . '/v1', '/form/(?P<name>\w+)', array(
+                'methods' => 'POST',
+                'callback' => [$this, 'submit'],
+            ));
+        });
+
         add_action('wp_enqueue_scripts', array(&$this, 'scripts'));
-        add_action('wp_ajax_af_submit', [$this, 'ajax'], 10, 2);
-        add_action('wp_ajax_nopriv_af_submit', [$this, 'ajax'], 10, 2);
     }
 
     public function scripts()
@@ -390,36 +392,51 @@ class Plugin
         Inc\Actions::getInstance()->register($type, $options);
     }
 
-    public function ajax()
+    public function submit(\WP_REST_Request $request)
     {
-
-        $form_name = $_REQUEST['form_name'];
-        $data = $_REQUEST['data'];
+        $form_name = $request->get_param('name');
+        $data = $request->get_body_params()[$form_name];
 
         if (!$form_name || trim($form_name) == "") {
-            echo \wp_json_encode(['status' => 'error', 'message' => 'Form not found']);
-            wp_die();
+            return new \WP_REST_Response(['status' => 'error', 'message' => 'Form not found']);
         }
         $form = Data::parse_form($form_name);
         if (!$form) {
-            echo \wp_json_encode(['status' => 'error', 'message' => 'Form not found']);
+            return new \WP_REST_Response(['status' => 'error', 'message' => 'Form not found']);
         }
 
-        $submitted_form = $this->create_form($form_name, $form->get_fields(), $form->get_options(), $data);
+        $submitted_form = $this->create_form($form, $data);
         $valid = $this->on_submit($form_name, $submitted_form);
         if ($valid) {
             $message = $form->get_message('success');
 
-            echo \wp_json_encode(['status' => 'success', 'message' => $message ? $message : __('Form submitted successfully', \AJAXY_FORMS_TEXT_DOMAIN)]);
-        } else {
-            $message = $form->get_message('error');
-            echo \wp_json_encode(['status' => 'error', 'message' => $message ? $message : __('Form failed to submit, Please try again', \AJAXY_FORMS_TEXT_DOMAIN), 'fields' => $this->getErrorMessages($submitted_form)]);
+            return new \WP_REST_Response([
+                'status' => 'success', 'message' => $message ? $message : __('Form submitted successfully', \AJAXY_FORMS_TEXT_DOMAIN),
+                '_token' => $this->csrf_token_manager->getToken('form_intention_' . $form->get_name())->getValue()
+            ]);
         }
-
-        wp_die();
+        $message = $form->get_message('error');
+        $errors = $this->get_form_error_messages($submitted_form);
+        if (count($errors) > 0) {
+            $message .= implode('<br>', $errors);
+        }
+        return new \WP_REST_Response(['status' => 'error', 'message' => $message ? $message : __('Form failed to submit, Please try again', \AJAXY_FORMS_TEXT_DOMAIN), 'fields' => $this->get_fields_error_messages($submitted_form)]);
     }
 
-    private function getErrorMessages(\Symfony\Component\Form\Form $form)
+    private function get_fields_error_messages(\Symfony\Component\Form\FormInterface $form)
+    {
+        $errors = array();
+        if ($form->count() && $form->isSubmitted()) {
+            foreach ($form as $child) {
+                if (!$child->isValid()) {
+                    $errors[$child->getName()] = implode(', ', $this->get_form_error_messages($child));
+                }
+            }
+        }
+        return $errors;
+    }
+
+    private function get_form_error_messages(\Symfony\Component\Form\FormInterface $form)
     {
         $errors = array();
         foreach ($form->getErrors() as $key => $error) {
@@ -430,14 +447,7 @@ class Plugin
                 $template = str_replace($var, $value, $template);
             }
 
-            $errors[$key] = $template;
-        }
-        if ($form->count() && $form->isSubmitted()) {
-            foreach ($form as $child) {
-                if (!$child->isValid()) {
-                    $errors[$child->getName()] = $this->getErrorMessages($child);
-                }
-            }
+            $errors[] = $template;
         }
         return $errors;
     }
@@ -473,6 +483,13 @@ register_activation_hook(__FILE__, function () {
     "common" => false
 ]);
 
+\register_form_action_type('storage', [
+    "label" => "Storage",
+    "class" => Inc\Actions\Storage::class,
+    "docs" => false,
+    "properties" => Inc\Actions\Storage::get_properties()
+]);
+
 \register_form_action_type('email', [
     "label" => "Email",
     "class" => Inc\Actions\Email::class,
@@ -480,10 +497,31 @@ register_activation_hook(__FILE__, function () {
     "properties" => Inc\Actions\Email::get_properties()
 ]);
 
-
 \register_form_action_type('sms', [
     "label" => "SMS",
     "class" => Inc\Actions\Sms::class,
     "docs" => false,
     "properties" => Inc\Actions\Sms::get_properties()
+]);
+
+
+\register_form_action_type('whatsapp', [
+    "label" => "Whatsapp",
+    "class" => Inc\Actions\Whatsapp::class,
+    "docs" => false,
+    "properties" => Inc\Actions\Whatsapp::get_properties()
+]);
+
+\register_form_action_type('webhook', [
+    "label" => "Webhook",
+    "class" => Inc\Actions\Webhook::class,
+    "docs" => false,
+    "properties" => Inc\Actions\Webhook::get_properties()
+]);
+
+\register_form_action_type('email_responder', [
+    "label" => "Auto Responder Email",
+    "class" => Inc\Actions\Email::class,
+    "docs" => false,
+    "properties" => Inc\Actions\Email::get_properties()
 ]);

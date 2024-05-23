@@ -34,12 +34,14 @@ class Webhook implements ActionInterface
         }
     }
 
-    public function get_properties($values = [])
+    public static function get_properties()
     {
         return [
-            'url' => [
+            [
                 'label' => 'Url',
-                'value' => $this->url,
+                'name' => 'url',
+                'required' => true,
+                'placeholder' => 'ex: https://example.com/webhook',
                 'type' => 'text'
             ],
         ];

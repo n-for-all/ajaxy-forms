@@ -42,7 +42,9 @@
 {%- endblock collection_widget -%}
 
 {%- block widget_attributes -%}
+    {% if type != 'hidden' %}
     {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('block w-full rounded-sm border-0 px-2 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-800 placeholder:opacity-40 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm')) ~ (disabled ? ' ' ~ widget_disabled_class|default('border-gray-300 text-gray-500')) ~ (errors|length ? ' ' ~ widget_errors_class|default('border-red-700')) }) -%}
+    {% endif %}
     {{- parent() -}}
 {%- endblock widget_attributes -%}
 

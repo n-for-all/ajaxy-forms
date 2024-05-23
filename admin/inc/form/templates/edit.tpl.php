@@ -64,8 +64,8 @@
                                 <legend class="af-settings-group-name howto"><?php _e('Submission'); ?></legend>
                                 <div class="af-settings-input text-input">
                                     <select name="options[submission]">
-                                        <option value="1" <?php \selected($form && isset($form['metadata']['options']['submission']) && $form['metadata']['options']['submission'] == '1'); ?>>Ajax</option>
-                                        <option value="0" <?php \selected($form && isset($form['metadata']['options']['submission']) && $form['metadata']['options']['submission'] == '0'); ?>>Normal</option>
+                                        <option value="0" <?php \selected($form && isset($form['metadata']['options']['submission']) && $form['metadata']['options']['submission'] == '0'); ?>>Ajax</option>
+                                        <option value="1" <?php \selected($form && isset($form['metadata']['options']['submission']) && $form['metadata']['options']['submission'] == '1'); ?>>Normal</option>
                                     </select>
                                 </div>
                             </fieldset>

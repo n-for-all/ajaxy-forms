@@ -45,19 +45,19 @@ class Form {
 				const data = new FormData(this.element);
 				const headers = this.getHeaders();
 
-				data.append("action", "af_submit");
+				// data.append("action", "af_submit");
 				data.append("form_name", this.element.name);
 
-                let method = (this.element.method ? this.element.method : "POST").toUpperCase();
+				let method = (this.element.method ? this.element.method : "POST").toUpperCase();
 
 				let fetchData = {
 					headers: headers,
 					method: method,
 				};
-				let action = ajaxyFormsSettings.ajaxurl || this.element.action;
+				let action = this.element.action;
 
 				if (method == "GET" || method == "HEAD") {
-                    //@ts-ignore
+					//@ts-ignore
 					action = action + "?" + new URLSearchParams(data).toString();
 				} else {
 					fetchData["body"] = data;
@@ -86,6 +86,12 @@ class Form {
 									}
 									if (json.message) {
 										this.setMessage(json.message, json.status);
+									}
+									if (json._token) {
+										var token: HTMLInputElement = this.element.querySelector('[name*="[_token]"]');
+										if (token) {
+											token.value = json._token;
+										}
 									}
 								}
 							})

@@ -56,8 +56,16 @@ class Helper
         $htmlAttributes = [];
         foreach ($attributes as $key => $value) {
             $key = \strtolower($key);
-            if (!\in_array($key, ["required", "selected"]) && ((\is_string($value) && (empty($value) || \trim($value) == "") || \is_null($value)))) {
+            if (!\in_array($key, ["required", "selected", "multiple"]) && ((\is_string($value) && (empty($value) || \trim($value) == "") || \is_null($value)))) {
                 continue;
+            }
+
+            if (\in_array($key, ["required", "selected", "multiple"])) {
+                if ($value == true || $value == "1") {
+                    $value = true;
+                } else {
+                    continue;
+                }
             }
             // Handle boolean attributes (without value in JS, empty string in PHP)
             if (is_bool($value)) {

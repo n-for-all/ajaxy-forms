@@ -28,7 +28,7 @@ function register_form($form_name, $fields, $options = [], $initial_data = null)
  *
  * @return void
  */
-function register_form_action($form_name, $action_name, $options)
+function register_form_action($form_name, $action_name, $options = [])
 {
     \Ajaxy\Forms\Plugin::init()->register_action($form_name, $action_name, $options);
 }

@@ -9,6 +9,7 @@ class Form
     private $actions;
     private $options;
     private $initial_data;
+    private $ajax = false;
 
     public function __construct($name, $fields, $options = [], $actions = [], $initial_data = null)
     {
@@ -98,16 +99,30 @@ class Form
         return $this->options[$key] ?? $default;
     }
 
+    public function is_ajax()
+    {
+        return $this->ajax;
+    }
+
     public function set_options(array $options)
     {
-        if ($options && isset($options['submission'])) {
-            if ($options['submission'] != 0) {
+        if ($options) {
+            $submission = $options['submission'] ?? null;
+            if ($submission != "1") {
                 if (!isset($options['attr']['class'])) {
                     $options['attr']['class'] = '';
                 }
-                $options['class'] = $options['class'] + " is-ajax";
+                $options['attr']['class'] .= " is-ajax";
+
+                $this->ajax = true;
             }
             unset($options['submission']);
+        } else {
+            $options = [];
+            $options['attr'] = [];
+            $options['attr']['class'] = 'is-ajax';
+
+            $this->ajax = true;
         }
         $this->options = $options ?? [];
     }

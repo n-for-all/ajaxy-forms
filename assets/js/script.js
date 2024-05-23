@@ -42,14 +42,14 @@
                     }
                     var data = new FormData(_this.element);
                     var headers = _this.getHeaders();
-                    data.append("action", "af_submit");
+                    // data.append("action", "af_submit");
                     data.append("form_name", _this.element.name);
                     var method = (_this.element.method ? _this.element.method : "POST").toUpperCase();
                     var fetchData = {
                         headers: headers,
                         method: method
                     };
-                    var action = ajaxyFormsSettings.ajaxurl || _this.element.action;
+                    var action = _this.element.action;
                     if (method == "GET" || method == "HEAD") {
                         //@ts-ignore
                         action = action + "?" + new URLSearchParams(data).toString();
@@ -82,6 +82,12 @@
                                 }
                                 if (json.message) {
                                     _this.setMessage(json.message, json.status);
+                                }
+                                if (json._token) {
+                                    var token = _this.element.querySelector('[name*="[_token]"]');
+                                    if (token) {
+                                        token.value = json._token;
+                                    }
                                 }
                             }
                         })["catch"](function (error) {
@@ -183,7 +189,7 @@
             var _this = this;
             this.forms = {};
             this.ready(function () {
-                var forms = document.querySelectorAll("form.ajaxy-form");
+                var forms = document.querySelectorAll("form.ajaxy-form.is-ajax");
                 if (forms.length > 0) {
                     [].forEach.call(forms, function (form) {
                         _this.forms[form.name] = new Form(form);

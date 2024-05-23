@@ -5,7 +5,7 @@ class AjaxyForms {
 	forms: { [x: string]: Form } = {};
 	constructor() {
 		this.ready(() => {
-			let forms = document.querySelectorAll("form.ajaxy-form");
+			let forms = document.querySelectorAll("form.ajaxy-form.is-ajax");
 			if (forms.length > 0) {
 				[].forEach.call(forms, (form) => {
 					this.forms[form.name] = new Form(form);

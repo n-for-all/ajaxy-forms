@@ -2,7 +2,6 @@
 
 namespace Ajaxy\Forms\Inc\Actions;
 
-//create a class to send email notification from form data via wordpress
 class Whatsapp extends Sms
 {
     public function __construct($options)
@@ -41,37 +40,41 @@ class Whatsapp extends Sms
         }
     }
 
-    public function get_properties($values = [])
+    public static function get_properties()
     {
         return [
-            'to' => [
+            [
                 'label' => 'To',
-                'value' => $this->to,
+                'name' => 'to',
+                'required' => true,
                 'type' => 'text'
             ],
-            'from' => [
+            [
                 'label' => 'From',
-                'value' => $this->from,
+                'name' => 'from',
+                'required' => true,
                 'type' => 'text'
             ],
-            'message' => [
+            [
                 'label' => 'Message',
-                'value' => $this->message,
+                'name' => 'message',
                 'type' => 'textarea'
             ],
-            'key' => [
+            [
                 'label' => 'Twilio Key',
-                'value' => $this->key,
+                'name' => 'key',
+                'required' => true,
                 'type' => 'text'
             ],
-            'token' => [
+            [
                 'label' => 'Twilio Token',
-                'value' => $this->token,
+                'name' => 'token',
+                'required' => true,
                 'type' => 'text'
             ],
-            'bitly_token' => [
+            [
                 'label' => 'Bitly Token',
-                'value' => $this->bitly_token,
+                'name' => 'bitly_token',
                 'type' => 'text'
             ],
         ];

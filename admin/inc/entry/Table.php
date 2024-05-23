@@ -53,10 +53,10 @@ class Table extends \WP_List_Table
 
         switch ($which) {
             case 'top':
-                $forms = Data::get_forms(1, 'created', 'desc', 100000);
+                $forms = Data::get_database_forms(1, 'created', 'desc', 100000);
                 $selected = isset($_GET['form']) ? $_GET['form'] : 0;
 
-                $registered_forms = array_keys(Data::get_registered_forms());
+                $registered_forms = array_keys(Data::get_forms());
 ?>
                 <div class="alignleft actions">
                     <select name="form" id="filter-by-form">

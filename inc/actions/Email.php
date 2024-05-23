@@ -2,7 +2,8 @@
 
 namespace Ajaxy\Forms\Inc\Actions;
 
-//create a class to send email notification from form data via wordpress
+use Ajaxy\Forms\Inc\Helper;
+
 class Email implements ActionInterface
 {
     private $to;
@@ -21,7 +22,7 @@ class Email implements ActionInterface
         $this->from = $options['from'] ?? get_option('admin_email');
         $this->subject = $options['subject'] ?? '';
         $this->message = $options['message'] ?? '';
-        $this->headers = (array)$options['headers'] ?? [];
+        $this->headers = $this->parse_headers((string)$options['headers']);
     }
 
     public function get_name()
@@ -29,6 +30,18 @@ class Email implements ActionInterface
         return 'email';
     }
 
+    private function parse_headers(string $headers)
+    {
+        $splitted = explode("\n", $headers);
+        $parsed = [];
+        foreach ($splitted as $header) {
+            $parts = explode(':', $header);
+            if (count($parts) === 2) {
+                $parsed[] = $parts[0] . ": " . $parts[1];
+            }
+        }
+        return $parsed;
+    }
     public function get_title()
     {
         return 'Email';
@@ -39,36 +52,97 @@ class Email implements ActionInterface
         if (!empty($this->from)) {
             $this->headers[] = 'From: ' . $this->from;
         }
-        $sent = \wp_mail($this->to, $this->subject, $this->message, $this->headers);
+
+        $this->headers[] = 'Content-Type: text/html; charset=UTF-8';
+
+        $values = [
+            'data' => $data,
+        ];
+
+        $to = Helper::create_twig_template($this->to, $values);
+        $subject = Helper::create_twig_template($this->subject, $values);
+        $message = Helper::create_twig_template(
+            $this->message,
+            [
+                'data' => $data,
+                'table' => Helper::create_table($data, $form)
+            ]
+        );
+
+        \var_dump($message);
+        // add_filter('wp_mail_content_type', [$this, 'set_content_type']);
+        $sent = \wp_mail($to, $subject, $message, $this->headers);
+        // remove_filter('wp_mail_content_type', [$this, 'set_content_type']);
         if (!$sent) {
-            \error_log('Email action failed to send to ' . $this->to);
+            \error_log('Email action failed to send to ' . $to);
+            throw new \Exception('Failed to send email');
         }
     }
 
-    public function get_properties($values = [])
+    public function set_content_type()
+    {
+        return 'text/html';
+    }
+
+    public static function get_properties()
     {
         return [
-            'to' => [
-                'label' => 'To',
-                'value' => $this->to,
-                'type' => 'text'
+            [
+                "order" => 0,
+                "label" => "From",
+                "type" => "email",
+                "name" => "from",
+                "required" => true,
+                "help" => "Enter the email address to send the email from",
             ],
-            'from' => [
-                'label' => 'From',
-                'value' => $this->from,
-                'type' => 'text'
+            [
+                "order" => 1,
+                "label" => "To",
+                "type" => "text",
+                "name" => "to",
+                "required" => true,
+                "help" => "Enter the email address to send the email to",
             ],
-            'subject' => [
-                'label' => 'Subject',
-                'value' => $this->subject,
-                'type' => 'text'
+            [
+                "order" => 2,
+                "label" => "Subject",
+                "type" => "text",
+                "name" => "subject",
+                "required" => true,
+                "help" => "Enter the subject of the email",
             ],
-            'message' => [
-                'label' => 'Message',
-                'value' => $this->message,
-                'type' => 'textarea'
+            [
+                "order" => 3,
+                "label" => "Message",
+                "type" => "textarea",
+                "name" => "message",
+                "help" => "Enter the message of the email",
             ],
-            // 'headers' => $this->headers
+            [
+                "order" => 4,
+                "type" => "separator",
+                "name" => "html",
+            ],
+            [
+                "order" => 4,
+                "label" => "Additional Headers",
+                "type" => "textarea",
+                "name" => "headers",
+                "default" => "",
+                "help" => "Add some headers, ex. <b>cc: john@test.com</b>",
+            ],
+            [
+                "order" => 4,
+                "label" => "Send as plain text",
+                "type" => "select",
+                "name" => "html",
+                "default" => "0",
+                "options" => [
+                    "1" => "Yes",
+                    "0" => "No",
+                ],
+                "help" => "Send the email as plain text or html",
+            ]
         ];
     }
 }

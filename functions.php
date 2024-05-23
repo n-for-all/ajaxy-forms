@@ -18,34 +18,19 @@ function register_form($form_name, $fields, $options = [], $initial_data = null)
 }
 
 /**
- * Register a form notification
+ * Register a form action
  *
  * @date 2024-04-10
  *
  * @param string $form_name
- * @param string $type
- * @param string $options
+ * @param string $action_name
+ * @param array $options
  *
  * @return void
  */
-function register_form_notification($form_name, $type, $options)
+function register_form_action($form_name, $action_name, $options)
 {
-    \Ajaxy\Forms\Plugin::init()->register_notification($form_name, $type, $options);
-}
-
-/**
- * Register the form storage
- *
- * @date 2024-04-11
- *
- * @param string $form_name
- * @param string $options
- *
- * @return void
- */
-function register_form_storage($form_name, $options = [])
-{
-    \Ajaxy\Forms\Plugin::init()->register_storage($form_name, $options);
+    \Ajaxy\Forms\Plugin::init()->register_action($form_name, $action_name, $options);
 }
 
 /**
@@ -54,7 +39,7 @@ function register_form_storage($form_name, $options = [])
  * @date 2024-05-19
  *
  * @param string $type
- * @param string $options
+ * @param array $options
  *
  * @return void
  */
@@ -69,11 +54,11 @@ function register_form_field($type, $options)
  * @date 2024-05-19
  *
  * @param string $type
- * @param string $options
+ * @param array $options
  *
  * @return void
  */
-function register_form_action($type, $options)
+function register_form_action_type($type, $options)
 {
-    \Ajaxy\Forms\Plugin::init()->register_action($type, $options);
+    \Ajaxy\Forms\Plugin::init()->register_action_type($type, $options);
 }

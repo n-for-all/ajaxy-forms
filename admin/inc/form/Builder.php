@@ -14,6 +14,7 @@ class Builder
         add_action('admin_init', [$this, 'admin_init']);
         add_action('admin_menu', [$this, 'admin_menu'], 9);
         add_action('admin_enqueue_scripts', array(&$this, 'scripts'));
+        add_action('wp_ajax_ajaxy_forms_action', [$this, 'action_ajax_handler']); // For non-logged-in users
     }
 
     function admin_menu()
@@ -44,7 +45,7 @@ class Builder
     function scripts()
     {
         \wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . "-admin-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/builder.js', ['jquery', 'backbone', 'jquery-ui-draggable'], AJAXY_FORMS_VERSION, true);
-        \wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . "-admin-actions-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/actions.js', ['jquery', 'backbone', 'jquery-ui-draggable'], AJAXY_FORMS_VERSION, true);
+        // \wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . "-admin-actions-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/actions.js', ['jquery', 'backbone', 'jquery-ui-draggable'], AJAXY_FORMS_VERSION, true);
         wp_localize_script(
             AJAXY_FORMS_TEXT_DOMAIN . "-admin-script",
             'ajaxyFormsBuilder',
@@ -315,8 +316,56 @@ class Builder
                     break;
             } ?>
 
-
+            <div class="af-toast"></div>
         </div>
 <?php
+    }
+
+
+    public function action_ajax_handler()
+    {
+        $name = $_POST['name'] ?? '';
+
+        if (!$name) {
+            wp_send_json([
+                'status' => 'error',
+                'message' => __('Invalid action name', AJAXY_FORMS_TEXT_DOMAIN),
+            ], 200);
+            return;
+        }
+
+        $form = Data::get_form($_GET['form_id'] ?? '');
+        if (!$form) {
+            wp_send_json([
+                'status' => 'error',
+                'message' => __('Form doesn\'t exist or haven\'t been saved yet', AJAXY_FORMS_TEXT_DOMAIN),
+            ], 200);
+            return;
+        }
+
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'ajaxy_forms_action_' . $name)) {
+            wp_send_json([
+                'status' => 'error',
+                'message' => __('Nonce verification failed, Please try again.', AJAXY_FORMS_TEXT_DOMAIN),
+            ], 200);
+            return;
+        }
+
+        // Process your form data (e.g., save it to database, send an email)
+        $data = $_POST;  // Access form data
+        $saved = Data::update_form_action($form['id'], $name, $data['form_action'] ?? []);
+        if ($saved === false) {
+            wp_send_json([
+                'status' => 'error',
+                'message' => __('Failed to save the action', AJAXY_FORMS_TEXT_DOMAIN)
+            ], 200);
+            return;
+        }
+        // Return a response (optional)
+        $response = [
+            'status' => 'success',
+            'message' => \sprintf(__('Action "%s" is saved!', AJAXY_FORMS_TEXT_DOMAIN), $name),
+        ];
+        wp_send_json($response);
     }
 }

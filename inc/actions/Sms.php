@@ -2,7 +2,6 @@
 
 namespace Ajaxy\Forms\Inc\Actions;
 
-//create a class to send email notification from form data via wordpress
 class Sms implements ActionInterface
 {
     protected $to;
@@ -58,38 +57,39 @@ class Sms implements ActionInterface
         }
     }
 
-    public function get_properties($values = [])
+    public static function get_properties()
     {
         return [
-            'to' => [
-                'label' => 'To',
-                'value' => $this->to,
-                'type' => 'text'
-            ],
-            'from' => [
-                'label' => 'From',
-                'value' => $this->from,
-                'type' => 'text'
-            ],
-            'message' => [
+            [
+                'label' => 'To Number',
+                'type' => 'text',
+                'name' => 'to',
+                'help' => 'Enter the phone number to send the SMS to'
+            ], [
+                'label' => 'From Number',
+                'type' => 'text',
+                'name' => 'from',
+                'help' => 'Enter the phone number to send the SMS from (Twilio Number)'
+            ], [
                 'label' => 'Message',
-                'value' => $this->message,
-                'type' => 'textarea'
-            ],
-            'key' => [
+                'type' => 'textarea',
+                'name' => 'message',
+                'help' => 'Enter the message to send'
+            ], [
                 'label' => 'Twilio Key',
-                'value' => $this->key,
-                'type' => 'text'
-            ],
-            'token' => [
+                'type' => 'text',
+                'name' => 'key',
+                'help' => 'Enter the Twilio API Key'
+            ], [
                 'label' => 'Twilio Token',
-                'value' => $this->token,
-                'type' => 'text'
-            ],
-            'bitly_token' => [
+                'type' => 'text',
+                'name' => 'token',
+                'help' => 'Enter the Twilio API Token'
+            ], [
                 'label' => 'Bitly Token',
-                'value' => $this->bitly_token,
-                'type' => 'text'
+                'type' => 'text',
+                'name' => 'bitly_token',
+                'help' => 'Enter the Bitly API Token to shorten the URLs if any URLs are used'
             ]
         ];
     }

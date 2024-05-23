@@ -10,8 +10,6 @@
             <h2><?php _e('Form Structure'); ?></h2>
             <form method="post" class="af-edit">
                 <?php wp_nonce_field($nonce); ?>
-                <?php
-                ?>
                 <div class="af-header">
                     <div class="major-publishing-actions wp-clearfix">
                         <label for="form-name"><?php _e('Form Name'); ?></label>

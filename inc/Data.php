@@ -29,6 +29,7 @@ class Data
             name tinytext NOT NULL,
             data text NOT NULL,
             metadata text NOT NULL,
+            actions text NOT NULL,
             created datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
             PRIMARY KEY  (id)
         ) $charset_collate;";
@@ -116,6 +117,53 @@ class Data
     }
 
     /**
+     * Update a form actions in the database
+     *
+     * @date 2024-04-21
+     *
+     * @param int $id
+     * @param array $actions
+     *
+     * @return int|false — The number of rows updated, or false on error.
+     */
+    public static function update_form_actions($id, $actions)
+    {
+        global $wpdb;
+        $table_name = self::get_table_name();
+        return $wpdb->update(
+            $table_name,
+            array(
+                'actions' => \json_encode($actions),
+            ),
+            array('id' => $id)
+        );
+    }
+
+    /**
+     * Update a form action in the database
+     *
+     * @date 2024-05-21
+     *
+     * @param string $id
+     * @param string $action_name
+     * @param array $action
+     *
+     * @return int|false — The number of rows updated, or false on error.
+     */
+    public static function update_form_action($id, $action_name, $action)
+    {
+        $form = self::get_form($id);
+        $actions = [];
+        try {
+            $actions = \json_decode($form['actions'], true);
+        } catch (\Exception $e) {
+        }
+
+        $actions[$action_name] = $action;
+        return self::update_form_actions($id, $actions);
+    }
+
+    /**
      * Delete a form from the database
      *
      * @date 2024-04-21
@@ -141,7 +189,7 @@ class Data
      *
      * @return array|object|null — Database query results.
      */
-    public static function get_forms($page = 1, $order_by = 'created', $order = 'desc', $per_page = 10)
+    public static function get_database_forms($page = 1, $order_by = 'created', $order = 'desc', $per_page = 10)
     {
         global $wpdb;
         $table_name = self::get_table_name();
@@ -155,7 +203,7 @@ class Data
         );
     }
 
-    public static function get_registered_forms()
+    public static function get_forms()
     {
         return self::$forms;
     }
@@ -199,68 +247,25 @@ class Data
      *
      * @param string $name
      *
-     * @return object|null — Database query results.
+     * @return Form|null — Database query results.
      */
     public static function parse_form($name)
     {
-        if (isset(self::$forms[$name])) {
-            return self::parse_options(self::$forms[$name]);
+        if (!isset(self::$forms[$name])) {
+            $form = self::get_form_by_name($name);
+
+            if (!$form) {
+                return null;
+            }
+            $metadata = \json_decode($form['metadata'], true);
+            $actions = \json_decode($form['actions'], true);
+
+            self::$forms[$name] = new Form($name, $metadata['fields'] ?? [], $metadata['options'] ?? [], $actions, null);
         }
-
-        $form = self::get_form_by_name($name);
-
-        if (!$form) {
-            return null;
-        }
-        $metadata = \json_decode($form['metadata'], true);
-
-        return self::parse_options([
-            'fields' => $metadata['fields'] ?? [],
-            'options' => $metadata['options'] ?? [],
-            'initial_data' => null,
-        ]);
+        return self::$forms[$name];
     }
 
 
-    public static function parse_options($form)
-    {
-        if (isset($form['fields'])) {
-            foreach ($form['fields'] as &$field) {
-                if (isset($field['label_html'])) {
-                    $field['label_html'] = $field['label_html'] == '1';
-                }
-                if (isset($field['help_html'])) {
-                    $field['help_html'] = $field['help_html'] == '1';
-                }
-
-                foreach ((array)$field as $key => $v) {
-                    if (\in_array($key, ['attr', 'help_attr', 'row_attr', 'label_attr'])) {
-                        $attributes = [];
-                        foreach ((array)$v as $attribute => $value) {
-                            if (isset($value['name'])) {
-                                $attributes[$value['name']] = $value['value'];
-                            } else if (\is_string($attribute)) {
-                                $attributes[$attribute] = $value;
-                            }
-                        }
-
-                        $field[$key] = $attributes;
-                    }
-                }
-            }
-        }
-        if (isset($form['options']['submission'])) {
-            if ($form['options']['submission'] != 0) {
-                if (!isset($form['options']['attr']['class'])) {
-                    $form['options']['attr']['class'] = '';
-                }
-                $form['options']['class'] = $form['options']['class'] + " is-ajax";
-            }
-            unset($form['options']['submission']);
-        }
-
-        return $form;
-    }
 
     /**
      * Get entries table name
@@ -543,10 +548,6 @@ class Data
 
     public static function register_form($name, $fields, $options = [], $initial_data = null)
     {
-        self::$forms[$name] = [
-            'fields' => $fields,
-            'options' => $options,
-            'initial_data' => $initial_data,
-        ];
+        self::$forms[$name] = new Form($name, $fields, $options, [], $initial_data);
     }
 }

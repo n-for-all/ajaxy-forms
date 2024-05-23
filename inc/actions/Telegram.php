@@ -33,7 +33,6 @@ class Telegram extends Sms
 
     public function execute($data, $form)
     {
-        // send telegram notification
         $message = $this->parseMessage($this->message);
 
         $query = http_build_query([
@@ -52,22 +51,24 @@ class Telegram extends Sms
         }
     }
 
-    public function get_properties($values = [])
+    public static function get_properties()
     {
         return [
             'token' => [
                 'label' => 'Token',
-                'value' => $this->token,
+                'name' => 'token',
+                'required' => true,
                 'type' => 'text'
             ],
             'channel_id' => [
                 'label' => 'Channel Id',
-                'value' => $this->channel_id,
+                'name' => 'channel_id',
+                'required' => true, 
                 'type' => 'text'
             ],
             'message' => [
                 'label' => 'Message',
-                'value' => $this->message,
+                'name' => 'message',
                 'type' => 'textarea'
             ],
         ];

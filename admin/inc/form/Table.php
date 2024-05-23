@@ -287,7 +287,7 @@ class Table extends \WP_List_Table
         $orderby = (isset($_REQUEST['orderby']) && in_array($_REQUEST['orderby'], array_keys($this->get_sortable_columns()))) ? $_REQUEST['orderby'] : 'created';
         $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array('asc', 'desc'))) ? $_REQUEST['order'] : 'desc';
 
-        $this->items = Data::get_forms($paged, $orderby, $order, $per_page);
+        $this->items = Data::get_database_forms($paged, $orderby, $order, $per_page);
 
         $this->set_pagination_args(array(
             'total_items' => intval($total_items), // total items defined above

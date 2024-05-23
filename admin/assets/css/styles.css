@@ -466,9 +466,102 @@
   border: 1px solid #dcdcde;
   border-top: 0;
 }
+.af-form-wrap .af-actions-frame .af-item-handle {
+  max-width: 90%;
+  box-sizing: border-box;
+}
+.af-form-wrap .af-actions-frame .wrap-settings {
+  max-width: 90%;
+}
+.af-form-wrap .af-actions-frame .wrap-settings .settings-inner {
+  padding: 15px;
+  background-color: #f6f7f7;
+}
+.af-form-wrap .af-actions-frame .af-form-field {
+  margin-bottom: 0.5rem;
+}
+.af-form-wrap .af-actions-frame .af-form-field .af-title {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.af-form-wrap .af-actions-frame .af-form-field.af-form-field-checkbox .af-form-field-inner {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: flex-end;
+}
+.af-form-wrap .af-actions-frame .af-form-field p.description {
+  font-size: 12px;
+}
+.af-form-wrap .af-actions-frame .af-form-item {
+  opacity: 0.6;
+}
+.af-form-wrap .af-actions-frame .af-form-item.is-enabled {
+  opacity: 1;
+}
 
+.af-toast {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  padding: 10px 20px;
+  background-color: #528e98;
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.29);
+  z-index: 9999;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+.af-toast.af-success {
+  background-color: #579852;
+  color: #fff;
+}
+.af-toast.af-info {
+  background-color: #528e98;
+}
+.af-toast.af-warning {
+  background-color: #a1a15c;
+  color: #fff;
+}
+.af-toast.af-error {
+  background-color: #a15c5c;
+  color: #fff;
+}
+.af-toast .dashicons {
+  margin-right: 10px;
+}
+
+.af-loading {
+  position: relative;
+  padding-left: 30px !important;
+  transition: all ease 0.3s;
+}
+.af-loading:before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  margin: 0 auto;
+  border-top: 2px solid transparent;
+  border-right: 2px solid rgba(34, 113, 177, 0.7098039216);
+  border-bottom: 2px solid rgba(34, 113, 177, 0.7098039216);
+  border-left: 2px solid rgba(34, 113, 177, 0.7098039216);
+  border-radius: 12px;
+  transform: translateY(-50%);
+  animation: af-spin 0.7s infinite linear;
+  position: absolute;
+  top: 50%;
+  left: 10px;
+}
+
+@keyframes af-spin {
+  100% {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
 .af-shortcode input {
   font-size: 12px;
+  background-color: #fff;
 }
 
 @media only screen and (min-width: 783px) {

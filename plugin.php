@@ -42,11 +42,10 @@ class Plugin
 {
     public const DB_VERSION = '1.0.0';
     public static $instance = null;
-    private $logger = null;
+
     private $settings = null;
     private $entry_settings = null;
     private $builder = null;
-
 
 
 
@@ -123,7 +122,7 @@ class Plugin
         } else {
             $form = Data::parse_form($name);
             if ($form) {
-                $form = $this->create_form($name, $form['fields'] ?? [], $form['options'] ?? [], $form['initial_data'] ?? null);
+                $form = $this->create_form($name, $form->get_fields(), $form->get_options(), $form->get_initial_data());
                 $this->on_submit($name, $form);
                 return $this->render($name, $form);
             } else {
@@ -268,15 +267,9 @@ class Plugin
             $data = $form->getData();
 
             $registered_form = Data::parse_form($form_name);
-            if (isset($registered_form['actions'])) {
-                foreach ($registered_form['actions'] as $action) {
-                    $action->execute($data, $registered_form);
-                }
-            }
-
-            if (isset($registered_form['storage'])) {
-                unset($data['_message']);
-                $registered_form['storage']($form_name, $data);
+            $actions = $registered_form->get_actions();
+            foreach ($actions as $action) {
+                \call_user_func($action, $data, $registered_form);
             }
 
             return true;
@@ -342,70 +335,59 @@ class Plugin
     }
 
     /**
-     * Register a form notification
+     * Register a form action
      *
      * @date 2024-04-10
      *
      * @param string $form_name
-     * @param string $type
-     * @param array $options
+     * @param string $action_name
+     * @param array|callable $optionsOrCallable
      *
      * @return void
      */
-    public function register_notification($form_name, $type, $options)
+    public function register_action($form_name, $action_name, $optionsOrCallable)
     {
         $form = Data::parse_form($form_name);
         if (!$form) {
-            throw new \Exception('Please register the form first before registering the notification');
+            throw new \Exception('Please register the form first before registering the action');
         }
 
-        if (!$form['notifications']) {
-            $form['notifications'] = [];
-        }
 
-        switch ($type) {
-            case 'email':
-                $form['notifications'][] = new Inc\Actions\Email($options);
-                break;
-            case 'sms':
-                $form['notifications'][] = new Inc\Actions\Sms($options);
-                break;
-            case 'webhook':
-                $form['notifications'][] = new Inc\Actions\Webhook($options);
-                break;
-            case 'whatsapp':
-                $form['notifications'][] = new Inc\Actions\Whatsapp($options);
-                break;
-            case 'telegram':
-                $form['notifications'][] = new Inc\Actions\Telegram($options);
-                break;
-            default:
-                throw new \Exception('Notification type not found');
+        if (\is_callable($optionsOrCallable)) {
+            $form->add_action($action_name, function ($data, $form) use ($optionsOrCallable) {
+                $optionsOrCallable($data, $form);
+            });
+        } else if (\is_array($optionsOrCallable)) {
+            $form->add_action($action_name, function ($data, $form) use ($action_name, $optionsOrCallable) {
+                $action = Inc\Actions::getInstance()->get($action_name);
+                if (!$action) {
+                    throw new \Exception(sprintf('Action %s not found', $action_name));
+                }
+                $class = $action['class'];
+                if (\is_string($class)) {
+                    if ((!class_exists($class) || !\is_subclass_of($class, Inc\Actions\ActionInterface::class))) {
+                        throw new \Exception(sprintf('Action %s class must be a callable function or a class that implements the __invoke() method, you can pass the class name as string', $action_name));
+                    }
+
+                    $instance = new $class($optionsOrCallable);
+                    $instance->execute($data, $form);
+                } else {
+                    if (!\is_callable($class)) {
+                        throw new \Exception(sprintf('Action %s class must be a callable function or a class that implements the __invoke() method', $action_name));
+                    }
+
+                    \call_user_func($class, $data, $form, $optionsOrCallable);
+                }
+            });
+        } else {
+            throw new \Exception('Invalid action options, must be a callable function or an array of options that have a class key with the class name');
         }
     }
 
 
-    public function register_action($type, $options)
+    public function register_action_type($type, $options)
     {
         Inc\Actions::getInstance()->register($type, $options);
-    }
-
-    public function register_storage($form_name, $options = [])
-    {
-        $form = Data::parse_form($form_name);
-        if (!$form) {
-            throw new \Exception('Please register the form first before registering the storage');
-        }
-        if (isset($options['callback'])) {
-            if (!\is_callable($options['callback'])) {
-                throw new \Exception('Callback should be a function or a callable string');
-            }
-            $form['storage'] = $options['callback'];
-        } else {
-            $form['storage'] = function ($form_name, $data) {
-                Inc\Data::add($form_name, $data);
-            };
-        }
     }
 
     public function ajax()
@@ -423,12 +405,15 @@ class Plugin
             echo \wp_json_encode(['status' => 'error', 'message' => 'Form not found']);
         }
 
-        $form = $this->create_form($form_name, $form['fields'] ?? [], $form['options'] ?? [], $data);
-        $valid = $this->on_submit($form_name, $form);
+        $submitted_form = $this->create_form($form_name, $form->get_fields(), $form->get_options(), $data);
+        $valid = $this->on_submit($form_name, $submitted_form);
         if ($valid) {
-            echo \wp_json_encode(['status' => 'success', 'message' => __('Form submitted successfully', \AJAXY_FORMS_TEXT_DOMAIN)]);
+            $message = $form->get_message('success');
+
+            echo \wp_json_encode(['status' => 'success', 'message' => $message ? $message : __('Form submitted successfully', \AJAXY_FORMS_TEXT_DOMAIN)]);
         } else {
-            echo \wp_json_encode(['status' => 'error', 'message' => $form['options']['messages']['error'] ?? __('Form failed to submit, Please try again', \AJAXY_FORMS_TEXT_DOMAIN), 'fields' => $this->getErrorMessages($form)]);
+            $message = $form->get_message('error');
+            echo \wp_json_encode(['status' => 'error', 'message' => $message ? $message : __('Form failed to submit, Please try again', \AJAXY_FORMS_TEXT_DOMAIN), 'fields' => $this->getErrorMessages($submitted_form)]);
         }
 
         wp_die();
@@ -488,41 +473,17 @@ register_activation_hook(__FILE__, function () {
     "common" => false
 ]);
 
-\register_form_action('email', [
+\register_form_action_type('email', [
     "label" => "Email",
     "class" => Inc\Actions\Email::class,
     "docs" => false,
-    "properties" => [
-        [
-            "order" => 0,
-            "label" => "From",
-            "type" => "text",
-            "name" => "from",
-            "required" => true,
-            "help" => "Enter the email address to send the email from",
-        ],
-        [
-            "order" => 1,
-            "label" => "To",
-            "type" => "text",
-            "name" => "to",
-            "required" => true,
-            "help" => "Enter the email address to send the email to",
-        ],
-        [
-            "order" => 2,
-            "label" => "Subject",
-            "type" => "text",
-            "name" => "subject",
-            "required" => true,
-            "help" => "Enter the subject of the email",
-        ],
-        [
-            "order" => 3,
-            "label" => "Message",
-            "type" => "textarea",
-            "name" => "message",
-            "help" => "Enter the message of the email",
-        ],
-    ]
+    "properties" => Inc\Actions\Email::get_properties()
+]);
+
+
+\register_form_action_type('sms', [
+    "label" => "SMS",
+    "class" => Inc\Actions\Sms::class,
+    "docs" => false,
+    "properties" => Inc\Actions\Sms::get_properties()
 ]);

@@ -147,6 +147,9 @@ class Form {
 	public getHeaders(): Headers {
 		const headers = new Headers();
 		headers.set("accept", "application/json, application/xml, text/plain, text/html, *.*");
+		headers.set("X-WP-Nonce", ajaxyFormsSettings.nonce);
+		headers.set("cache", "no-cache");
+		headers.set("redirect", "follow");
 		return headers;
 	}
 

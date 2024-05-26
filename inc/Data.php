@@ -83,7 +83,7 @@ class Data
             $table_name,
             array(
                 'name' => $name,
-                'metadata' => \json_encode($metadata),
+                'metadata' => \wp_json_encode($metadata),
                 'created' => current_time('mysql'),
             )
         )) {
@@ -109,7 +109,7 @@ class Data
         return $wpdb->update(
             $table_name,
             array(
-                'metadata' => \json_encode($metadata),
+                'metadata' => \wp_json_encode($metadata),
                 'name' => $name,
             ),
             array('id' => $id)
@@ -133,7 +133,7 @@ class Data
         return $wpdb->update(
             $table_name,
             array(
-                'actions' => \json_encode($actions),
+                'actions' => \wp_json_encode($actions),
             ),
             array('id' => $id)
         );
@@ -195,7 +195,11 @@ class Data
         $table_name = self::get_table_name();
         return $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT * FROM $table_name ORDER BY $order_by $order LIMIT %d OFFSET %d",
+                // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+                "SELECT * FROM %i ORDER BY %i %1s LIMIT %d OFFSET %d",
+                $table_name,
+                $order_by,
+                $order,
                 $per_page,
                 ($page - 1) * $per_page
             ),
@@ -221,7 +225,7 @@ class Data
     {
         global $wpdb;
         $table_name = self::get_table_name();
-        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE name = %s", $name), ARRAY_A);
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM %i WHERE name = %s", $table_name, $name), ARRAY_A);
     }
 
     /**
@@ -237,7 +241,7 @@ class Data
     {
         global $wpdb;
         $table_name = self::get_table_name();
-        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %s", absint($id)), ARRAY_A);
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM %i WHERE id = %s", $table_name, absint($id)), ARRAY_A);
     }
 
     /**
@@ -295,11 +299,11 @@ class Data
         $metadata = array(
             'ip' => self::get_ip(),
             'user_agent' => $_SERVER['HTTP_USER_AGENT'],
-            'referer' => $_SERVER['HTTP_REFERER'],
-            'user' => null
+            'referer' => $_SERVER['HTTP_REFERER']
         );
-        $user = wp_get_current_user();
-        if ($user) {
+
+        if (is_user_logged_in()) {
+            $user = wp_get_current_user();
             $metadata['user'] = [
                 'id' => $user->ID,
                 'display_name' => !empty($user->display_name) ? $user->display_name : $user->user_login,
@@ -311,8 +315,8 @@ class Data
             $entries_table_name,
             array(
                 'name' => $name,
-                'data' => \json_encode($data),
-                'metadata' => \json_encode($metadata),
+                'data' => \wp_json_encode($data),
+                'metadata' => \wp_json_encode($metadata),
                 'created' => current_time('mysql'),
             )
         );
@@ -334,7 +338,7 @@ class Data
         return $wpdb->update(
             $entries_table_name,
             array(
-                'data' => \json_encode($data),
+                'data' => \wp_json_encode($data),
             ),
             array('id' => $id)
         );
@@ -372,7 +376,7 @@ class Data
     {
         global $wpdb;
         $entries_table_name = self::get_entries_table_name();
-        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $entries_table_name WHERE id = %s", absint($id)), ARRAY_A);
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM %i WHERE id = %s", $entries_table_name, absint($id)), ARRAY_A);
     }
 
     /**
@@ -389,7 +393,7 @@ class Data
         global $wpdb;
         $ids = implode(',', array_map('absint', (array)$ids));
         $entries_table_name = self::get_entries_table_name();
-        return $wpdb->query("DELETE FROM $entries_table_name WHERE ID IN ($ids)");
+        return $wpdb->query($wpdb->prepare("DELETE FROM %i WHERE ID IN (%s)", $entries_table_name, $ids));
     }
 
 
@@ -398,7 +402,7 @@ class Data
         global $wpdb;
         $ids = implode(',', array_map('absint', (array)$ids));
         $table_name = self::get_table_name();
-        return $wpdb->query("DELETE FROM $table_name WHERE ID IN ($ids)");
+        return $wpdb->query($wpdb->prepare("DELETE FROM %i WHERE ID IN (%s)", $table_name, $ids));
     }
 
     /**
@@ -436,7 +440,11 @@ class Data
         if ($form) {
             return $wpdb->get_results(
                 $wpdb->prepare(
-                    "SELECT * FROM $entries_table_name WHERE name = %s ORDER BY $order_by $order LIMIT %d OFFSET %d",
+                    // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+                    "SELECT * FROM %i WHERE name = %s ORDER BY %i %1s LIMIT %d OFFSET %d",
+                    $entries_table_name,
+                    $order_by,
+                    $order,
                     $form,
                     $per_page,
                     max(0, intval($page - 1) * $per_page)
@@ -447,7 +455,11 @@ class Data
 
         return $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT * FROM $entries_table_name ORDER BY $order_by $order LIMIT %d OFFSET %d",
+                // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+                "SELECT * FROM %i ORDER BY %i %1s LIMIT %d OFFSET %d",
+                $entries_table_name,
+                $order_by,
+                $order,
                 $per_page,
                 ($page - 1) * $per_page
             ),
@@ -470,9 +482,9 @@ class Data
         global $wpdb;
         $entries_table_name = self::get_entries_table_name();
         if ($form) {
-            return $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $entries_table_name WHERE name = %s", $form));
+            return $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM %i WHERE name = %s", $entries_table_name, $form));
         }
-        return $wpdb->get_var("SELECT COUNT(*) FROM $entries_table_name");
+        return $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM %i", $entries_table_name));
     }
 
     /**
@@ -510,7 +522,7 @@ class Data
 
         $csv = new Export\Csv([
             'Name', 'Data', 'Metadata', 'Date'
-        ], $data, sprintf('%s-form-entries-%s.csv', $form, \date('Y-m-d')));
+        ], $data, sprintf('%s-form-entries-%s.csv', $form, \gmdate('Y-m-d')));
         return $csv->download();
     }
 
@@ -546,6 +558,18 @@ class Data
         return $flat;
     }
 
+    /**
+     * Register a form from code
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     * @param array $fields
+     * @param array  $options
+     * @param array|null $initial_data
+     *
+     * @return void
+     */
     public static function register_form($name, $fields, $options = [], $initial_data = null)
     {
         self::$forms[$name] = new Form($name, $fields, $options, [], $initial_data);

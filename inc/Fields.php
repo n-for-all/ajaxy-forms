@@ -1208,6 +1208,13 @@ class Fields
 
     static $instance = null;
 
+    /**
+     * Create a new instance of Fields
+     *
+     * @date 2024-05-24
+     *
+     * @return self
+     */
     public static function getInstance()
     {
         if (self::$instance == null) {
@@ -1216,37 +1223,98 @@ class Fields
         return self::$instance;
     }
 
+    /**
+     * Get a field by its name
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     * @param string $default
+     *
+     * @return array|null
+     */
     public function get($name, $default = "text")
     {
         return isset($this->fields[$name]) ? $this->fields[$name] : ($default ? $this->fields[$default] : null);
     }
 
-    public function set($name, $properties =[])
+    /**
+     * Set a form field by name
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     * @param array  $properties
+     *
+     * @return void
+     */
+    public function set($name, $properties = [])
     {
         $this->fields[$name] = $properties;
     }
 
+    /**
+     * Check if the field exists
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     *
+     * @return boolean
+     */
     public function has($name)
     {
         return isset($this->fields[$name]);
     }
 
+    /**
+     * Remove a field
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     *
+     * @return void
+     */
     public function remove($name)
     {
         unset($this->fields[$name]);
     }
 
+    /**
+     * Remove all fields
+     *
+     * @date 2024-05-24
+     *
+     * @return void
+     */
     public function clear()
     {
         $this->fields = array();
     }
 
+    /**
+     * Get all form fields
+     *
+     * @date 2024-05-24
+     *
+     * @return array
+     */
     public function get_fields()
     {
         return $this->fields;
     }
 
-
+    /**
+     * Get field inherited properties
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     * @param string $section
+     *
+     * @return array
+     */
     public function get_inherited_properties($name, $section = null)
     {
         $field = $this->fields[$name];
@@ -1265,7 +1333,15 @@ class Fields
         return array();
     }
 
-
+    /**
+     * Get field properties by name
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     *
+     * @return array
+     */
     public function get_properties($name)
     {
         $field = $this->get($name);
@@ -1274,6 +1350,13 @@ class Fields
         return $values;
     }
 
+    /**
+     * Get all properties for all fields
+     *
+     * @date 2024-05-24
+     *
+     * @return array
+     */
     public function get_all_properties()
     {
         $output = [];
@@ -1296,6 +1379,16 @@ class Fields
         return $output;
     }
 
+    /**
+     * Register a new field
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     * @param string $properties
+     *
+     * @return void
+     */
     public function register($name, $properties)
     {
         if (!isset($properties['class']) || !is_subclass_of($properties['class'], \Symfony\Component\Form\AbstractType::class)) {

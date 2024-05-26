@@ -703,6 +703,75 @@
     }
 }
 
+.af-tree {
+    list-style-type: none;
+    margin: 0 0 0 20px;
+    padding-left: 0px;
+    font-family: monospace;
+    font-size: 12px !important;
+
+    .af-start-tick,
+    .af-end-tick {
+        opacity: 0.5;
+    }
+
+    .af-value {
+        font-weight: bold;
+        color: #2272b1;
+    }
+
+    li {
+        position: relative;
+        margin: 0;
+        font-size: 12px !important;
+
+        span.af-handle {
+            position: absolute;
+            cursor: pointer;
+            top: 1px;
+            left: -15px;
+
+            &::before {
+                content: "+";
+            }
+        }
+
+        &.af-active {
+            >ul {
+                display: block;
+            }
+
+            >.af-tick {
+                display: none;
+            }
+
+            >.af-start-tick,
+            >.af-end-tick {
+                opacity: 1;
+                font-weight: bold;
+            }
+
+            >.af-key {
+                opacity: 0.8;
+            }
+
+            >.af-handle {
+                &::before {
+                    content: "-";
+                }
+            }
+
+        }
+
+        ul {
+            display: none;
+            list-style-type: none;
+            margin: 0 0 0 20px;
+            padding-left: 0px;
+        }
+    }
+}
+
 @keyframes af-spin {
     100% {
         transform: translateY(-50%) rotate(360deg);

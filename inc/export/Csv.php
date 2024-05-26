@@ -123,6 +123,7 @@ class Csv
             fputcsv($fp, $row);
         }
 
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         fclose($fp);
 
         exit();

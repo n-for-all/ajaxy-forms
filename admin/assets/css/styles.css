@@ -554,6 +554,59 @@
   left: 10px;
 }
 
+.af-tree {
+  list-style-type: none;
+  margin: 0 0 0 20px;
+  padding-left: 0px;
+  font-family: monospace;
+  font-size: 12px !important;
+}
+.af-tree .af-start-tick,
+.af-tree .af-end-tick {
+  opacity: 0.5;
+}
+.af-tree .af-value {
+  font-weight: bold;
+  color: #2272b1;
+}
+.af-tree li {
+  position: relative;
+  margin: 0;
+  font-size: 12px !important;
+}
+.af-tree li span.af-handle {
+  position: absolute;
+  cursor: pointer;
+  top: 1px;
+  left: -15px;
+}
+.af-tree li span.af-handle::before {
+  content: "+";
+}
+.af-tree li.af-active > ul {
+  display: block;
+}
+.af-tree li.af-active > .af-tick {
+  display: none;
+}
+.af-tree li.af-active > .af-start-tick,
+.af-tree li.af-active > .af-end-tick {
+  opacity: 1;
+  font-weight: bold;
+}
+.af-tree li.af-active > .af-key {
+  opacity: 0.8;
+}
+.af-tree li.af-active > .af-handle::before {
+  content: "-";
+}
+.af-tree li ul {
+  display: none;
+  list-style-type: none;
+  margin: 0 0 0 20px;
+  padding-left: 0px;
+}
+
 @keyframes af-spin {
   100% {
     transform: translateY(-50%) rotate(360deg);

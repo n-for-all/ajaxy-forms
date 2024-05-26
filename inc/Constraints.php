@@ -2,7 +2,6 @@
 
 namespace Ajaxy\Forms\Inc;
 
-use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Constraints
@@ -1096,6 +1095,13 @@ class Constraints
 
     static $instance = null;
 
+    /**
+     * Create a new constraints instance
+     *
+     * @date 2024-05-24
+     *
+     * @return self
+     */
     public static function getInstance()
     {
         if (self::$instance == null) {
@@ -1104,32 +1110,85 @@ class Constraints
         return self::$instance;
     }
 
+    /**
+     * Get constraint by name
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     * @param string $default
+     *
+     * @return array
+     */
     public function get($name, $default = "required")
     {
         return isset($this->constraints[$name]) ? $this->constraints[$name] : ($default ? $this->constraints[$default] : null);
     }
 
-    public function set($name, $class)
+    /**
+     * Set a constraint
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     * @param array $values
+     *
+     * @return void
+     */
+    public function set($name, $values)
     {
-        $this->constraints[$name] = $class;
+        $this->constraints[$name] = $values;
     }
 
+    /**
+     * Check if constraint exist
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     *
+     * @return boolean
+     */
     public function has($name)
     {
         return isset($this->constraints[$name]);
     }
 
+    /**
+     * Remove a constraint
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     *
+     * @return void
+     */
     public function remove($name)
     {
         unset($this->constraints[$name]);
     }
 
+    /**
+     * Get all constraints
+     *
+     * @date 2024-05-24
+     *
+     * @return array
+     */
     public function get_constraints()
     {
         return $this->constraints;
     }
 
-
+    /**
+     * Get inherited properties of a constraint by name
+     *
+     * @date 2024-05-24
+     *
+     * @param string $name
+     *
+     * @return array
+     */
     public function get_inherited_properties($name)
     {
         $field = $this->constraints[$name];
@@ -1147,6 +1206,13 @@ class Constraints
         return array();
     }
 
+    /**
+     * Get all properties of all constraints
+     *
+     * @date 2024-05-24
+     *
+     * @return array
+     */
     public function get_all_properties()
     {
         $output = [];
@@ -1169,7 +1235,17 @@ class Constraints
         return $output;
     }
 
-
+    /**
+     * Create a new constraint
+     *
+     * @date 2024-05-24
+     *
+     * @param string $constraint
+     *
+     * @return \Symfony\Component\Validator\Constraint
+     * 
+     * @throws Exception if constraint is not found
+     */
     public function create_constraint($constraint)
     {
         $options = null;

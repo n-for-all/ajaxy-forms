@@ -168,7 +168,7 @@ class Table extends \WP_List_Table
             return '';
         }
 
-        return $this->createOLList(json_decode($item['metadata'], true));
+        return $this->create_tree_list(json_decode($item['metadata'], true));
     }
 
     public function column_created($item)
@@ -296,46 +296,6 @@ class Table extends \WP_List_Table
         ));
     }
 
-    public static function convert_to_table($data)
-    {
-        if (!$data) {
-            return '';
-        }
-        $table = '
-    <table class="fixed widefat striped ajaxy-data-table">
-    ';
-        foreach ($data as $key => $value) {
-            $table .= '
-        <tr valign="top">
-        ';
-            if (!is_numeric($key)) {
-                $table .= '
-            <td>
-                <strong>' . $key . ':</strong>
-            </td>
-            <td>
-            ';
-            } else {
-                $table .= '
-            <td colspan="2">
-            ';
-            }
-            if (is_object($value) || is_array($value)) {
-                $table .= self::convert_to_table($value);
-            } else {
-                $table .= $value;
-            }
-            $table .= '
-            </td>
-        </tr>
-        ';
-        }
-        $table .= '
-    </table>
-    ';
-        return $table;
-    }
-
     function parse_datetime($time)
     {
         $wp_timezone = wp_timezone();;
@@ -365,22 +325,34 @@ class Table extends \WP_List_Table
                         event.preventDefault();
                     }
                 });
+                jQuery(".af-handle").click(function() {
+                    jQuery(this).closest('li').toggleClass('af-active');
+                });
             });
         </script>
 <?php
     }
 
-    function createOLList($array)
+    function create_tree_list($array, $class = "af-tree")
     {
-        $list = '<ul style="list-style-type: none; margin-left: 26px; padding-left: 0px;">';
+        $list = '<ul class="' . $class . '">';
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $list .= "<li style=\"position: relative;margin:0;\"><strong>$key</strong>: { <span style=\"position: absolute; cursor: pointer; top: 1px; left: -15px;\">-</span>" . $this->createOLList($value) . "}</li>";
+                $is_list = $this->is_list($value);
+                $list .= \sprintf('<li><span class="af-key">%s: </span><span class="af-start-tick">%s</span><span class="af-tick">...</span><span class="af-handle"></span></span>%s<span class="af-end-tick">%s</span></li>', $key, $is_list ? "[" : "{", $this->create_tree_list($value, ""), $is_list ? "]" : "}");
             } else {
-                $list .= "<li style=\"position: relative;margin:0;\"><strong>$key</strong>: $value</li>";
+                $list .= \sprintf('<li>%s: <span class="af-value">%s</span></li>', $key, $value);
             }
         }
         $list .= '</ul>';
         return $list;
+    }
+
+    function is_list(array $arr)
+    {
+        if ($arr === []) {
+            return true;
+        }
+        return array_keys($arr) === range(0, count($arr) - 1);
     }
 }

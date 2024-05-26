@@ -103,7 +103,7 @@ class Settings
             // if this is not post back we load item to edit or give new one to create
             $item = $default;
             if (isset($_REQUEST['id'])) {
-                $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %d", $_REQUEST['id']), ARRAY_A);
+                $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM %s WHERE id = %d", $table_name, $_REQUEST['id']), ARRAY_A);
                 if (!$item) {
                     $item = $default;
                     $notice = __('Item not found', AJAXY_FORMS_TEXT_DOMAIN);

@@ -188,7 +188,7 @@ class Plugin
         $builder->add('_message', $this->get_field('html'), [
             'html' => '<div class="form-message"></div>'
         ]);
-        
+
         return $builder->getForm();
     }
 
@@ -318,7 +318,9 @@ class Plugin
     {
         wp_enqueue_style(AJAXY_FORMS_TEXT_DOMAIN . "-style", AJAXY_FORMS_PLUGIN_URL . '/assets/css/styles.css');
         wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . '-script',  AJAXY_FORMS_PLUGIN_URL  . '/assets/js/script.js', array(), 1.0, true);
-        wp_localize_script(AJAXY_FORMS_TEXT_DOMAIN . '-script', 'ajaxyFormsSettings', array('ajaxurl' => admin_url('admin-ajax.php')));
+        wp_localize_script(AJAXY_FORMS_TEXT_DOMAIN . '-script', 'ajaxyFormsSettings', array(
+            'nonce' => wp_create_nonce('wp_rest')
+        ));
     }
 
 

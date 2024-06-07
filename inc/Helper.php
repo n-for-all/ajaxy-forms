@@ -17,7 +17,7 @@ class Helper
     public static function create_twig_template($string, $parameters)
     {
         $loader = new \Twig\Loader\ArrayLoader([]);
-        $twig = new \Twig\Environment($loader);
+        $twig = new \Twig\Environment($loader, ['autoescape' => false]);
         $template = $twig->createTemplate($string);
         return $template->render($parameters);
     }

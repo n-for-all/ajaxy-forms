@@ -269,7 +269,7 @@
     {% endif %}
     <label{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}>
         {{ widget|raw }}
-        {%- if label is not same as(false) -%}
+        {%- if label is not same as(false) and label is not empty -%}
             {{- block('form_label_content') -}}
         {%- endif -%}
     </label>

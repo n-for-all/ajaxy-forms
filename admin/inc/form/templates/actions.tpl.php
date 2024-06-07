@@ -2,7 +2,7 @@
 $actions = \Ajaxy\Forms\Inc\Actions::getInstance()->get_actions();
 $values = [];
 try {
-    $values = $form ? json_decode($form['actions'], true) : [];
+    $values = $form && isset($form['actions']) ? json_decode($form['actions'], true) : [];
 } catch (\Exception $e) {
     $values = [];
 }

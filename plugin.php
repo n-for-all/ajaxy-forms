@@ -161,6 +161,12 @@ class Plugin
 
         foreach ($form->get_fields() as $field) {
             $field_options = $field;
+            
+            $field['constraints'] = $field['constraints'] ?? [];
+            if(isset($field['required']) && $field['required'] == "1"){
+                $field['constraints'][] = ['type' => 'not_blank'];
+            }
+
             if (!empty($field['constraints'])) {
                 $field_options['constraints'] = \array_filter(\array_map(function ($constraint) {
                     return Constraints::getInstance()->create_constraint($constraint);
@@ -265,6 +271,7 @@ class Plugin
 
             $registered_form = Data::parse_form($form_name);
             $actions = $registered_form->get_actions();
+
             foreach ($actions as $action) {
                 \call_user_func($action, $data, $registered_form);
             }
@@ -305,8 +312,9 @@ class Plugin
     public function actions()
     {
         add_action('rest_api_init', function () {
-            register_rest_route(AJAXY_FORMS_TEXT_DOMAIN . '/v1', '/form/(?P<name>\w+)', array(
-                'methods' => 'POST',
+            register_rest_route(AJAXY_FORMS_TEXT_DOMAIN . '/v1', '/form/(?P<name>.+)', array(
+                'methods' => 'GET,POST',
+                'permission_callback' => '__return_true',
                 'callback' => [$this, 'submit'],
             ));
         });
@@ -333,9 +341,9 @@ class Plugin
         return $field['class'];
     }
 
-    public function register($name, $fields, $options = [], $initial_data = null)
+    public function register($name, $fields, $options = [], $actions = [], $initial_data = null)
     {
-        Data::register_form($name, $fields, $options, $initial_data);
+        Data::register_form($name, $fields, $options, $actions, $initial_data);
     }
 
     /**
@@ -356,36 +364,7 @@ class Plugin
             throw new \Exception('Please register the form first before registering the action');
         }
 
-
-        if (\is_callable($optionsOrCallable)) {
-            $form->add_action($action_name, function ($data, $form) use ($optionsOrCallable) {
-                $optionsOrCallable($data, $form);
-            });
-        } else if (\is_array($optionsOrCallable)) {
-            $form->add_action($action_name, function ($data, $form) use ($action_name, $optionsOrCallable) {
-                $action = Inc\Actions::getInstance()->get($action_name);
-                if (!$action) {
-                    throw new \Exception(sprintf('Action %s not found', $action_name));
-                }
-                $class = $action['class'];
-                if (\is_string($class)) {
-                    if ((!class_exists($class) || !\is_subclass_of($class, Inc\Actions\ActionInterface::class))) {
-                        throw new \Exception(sprintf('Action %s class must be a callable function or a class that implements the __invoke() method, you can pass the class name as string', $action_name));
-                    }
-
-                    $instance = new $class($optionsOrCallable);
-                    $instance->execute($data, $form);
-                } else {
-                    if (!\is_callable($class)) {
-                        throw new \Exception(sprintf('Action %s class must be a callable function or a class that implements the __invoke() method', $action_name));
-                    }
-
-                    \call_user_func($class, $data, $form, $optionsOrCallable);
-                }
-            });
-        } else {
-            throw new \Exception('Invalid action options, must be a callable function or an array of options that have a class key with the class name');
-        }
+        $form->add_action($action_name, $optionsOrCallable);
     }
 
 
@@ -396,17 +375,16 @@ class Plugin
 
     public function submit(\WP_REST_Request $request)
     {
-        $form_name = $request->get_param('name');
-        $data = $request->get_body_params()[$form_name];
-
+        $form_name = $request->get_param('name') ?? null;
         if (!$form_name || trim($form_name) == "") {
             return new \WP_REST_Response(['status' => 'error', 'message' => 'Form not found']);
         }
+        
         $form = Data::parse_form($form_name);
         if (!$form) {
             return new \WP_REST_Response(['status' => 'error', 'message' => 'Form not found']);
         }
-
+        $data = $request->get_body_params()[$form_name] ?? [];
         $submitted_form = $this->create_form($form, $data);
         $valid = $this->on_submit($form_name, $submitted_form);
         if ($valid) {

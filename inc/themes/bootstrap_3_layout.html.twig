@@ -94,7 +94,7 @@
             {% set embed_label_classes = parent_label_class|split(' ')|filter(class => class in ['checkbox-inline', 'radio-inline']) %}
             {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ embed_label_classes|join(' '))|trim}) -%}
         {% endif %}
-        {%- if label is not same as(false) and label is empty -%}
+        {%- if label is not same as(false) and label is not empty -%}
             {%- if label_format is not empty -%}
                 {%- set label = label_format|replace({
                     '%name%': name,
@@ -106,7 +106,7 @@
         {%- endif -%}
         <label{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}>
             {#- if statement must be kept on the same line, to force the space between widget and label -#}
-            {{- widget|raw }} {% if label is not same as(false) -%}
+            {{- widget|raw }} {% if label is not same as(false) and label is not empty -%}
                 {%- if translation_domain is same as(false) -%}
                     {%- if label_html is same as(false) -%}
                         {{ label -}}

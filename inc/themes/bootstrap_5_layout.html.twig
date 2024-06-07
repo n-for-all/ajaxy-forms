@@ -31,7 +31,7 @@
         {%- if datetime is not defined or not datetime -%}
             <div {{ block('widget_container_attributes') -}}>
         {%- endif %}
-        {%- if label is not same as(false) -%}
+        {%- if label is not same as(false) and label is not empty -%}
             <div class="visually-hidden">
                 {{- form_label(form.year) -}}
                 {{- form_label(form.month) -}}
@@ -62,7 +62,7 @@
         {%- if datetime is not defined or false == datetime -%}
             <div {{ block('widget_container_attributes') -}}>
         {%- endif -%}
-        {%- if label is not same as(false) -%}
+        {%- if label is not same as(false) and label is not empty -%}
             <div class="visually-hidden">
                 {{- form_label(form.hour) -}}
                 {%- if with_minutes -%}{{ form_label(form.minute) }}{%- endif -%}
@@ -273,7 +273,7 @@
 {# Labels #}
 
 {%- block form_label -%}
-    {% if label is not same as(false) -%}
+    {% if label is not same as(false) and label is not empty -%}
         {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
         {%- if compound is defined and compound -%}
             {%- set element = 'legend' -%}
@@ -311,7 +311,7 @@
 
         {{ widget|raw }}
         <label{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}>
-            {%- if label is not same as(false) -%}
+            {%- if label is not same as(false) and label is not empty -%}
                 {{- block('form_label_content') -}}
             {%- endif -%}
         </label>

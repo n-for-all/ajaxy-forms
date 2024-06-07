@@ -236,7 +236,13 @@ class Builder
                     $select_id = Data::add_form($name, $metadata);
                 }
 
-                if ($select_id) {
+                if(\is_wp_error($select_id)){
+                    $message = [
+                        'type' => 'error',
+                        'message' => $select_id->get_error_message(),
+                    ];
+                }
+                else if ($select_id) {
                     \wp_redirect(
                         add_query_arg(
                             array(
@@ -248,6 +254,11 @@ class Builder
                             admin_url('admin.php?page=ajaxy-form')
                         )
                     );
+                }else{
+                    $message = [
+                        'type' => 'error',
+                        'message' => __('Failed to save the form', AJAXY_FORMS_TEXT_DOMAIN)
+                    ];
                 }
             }
         }

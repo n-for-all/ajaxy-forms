@@ -29,7 +29,6 @@ class Data
             name tinytext NOT NULL,
             data text NOT NULL,
             metadata text NOT NULL,
-            actions text NOT NULL,
             created datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
             PRIMARY KEY  (id)
         ) $charset_collate;";
@@ -42,6 +41,7 @@ class Data
             id INT NOT NULL AUTO_INCREMENT,  
             name tinytext NOT NULL,
             metadata text NOT NULL,
+            actions text NOT NULL,
             created datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
             PRIMARY KEY  (id)
         ) $charset_collate;";
@@ -73,7 +73,7 @@ class Data
      * @param string $name
      * @param array $metadata
      *
-     * @return int|false — The number of rows inserted, or false on error.
+     * @return int|false|\WP_Error — The number of rows inserted, or false on error.
      */
     public static function add_form($name, $metadata)
     {
@@ -89,7 +89,9 @@ class Data
         )) {
             return $wpdb->insert_id;
         }
-        return false;
+
+        $error = $wpdb->last_error;
+        return $error ? new \WP_Error($error) : false;
     }
 
     /**
@@ -261,8 +263,8 @@ class Data
             if (!$form) {
                 return null;
             }
-            $metadata = \json_decode($form['metadata'], true);
-            $actions = \json_decode($form['actions'], true);
+            $metadata = isset($form['metadata']) ? \json_decode($form['metadata'], true) : [];
+            $actions = isset($form['actions']) ? \json_decode($form['actions'], true) : [];
 
             self::$forms[$name] = new Form($name, $metadata['fields'] ?? [], $metadata['options'] ?? [], $actions, null);
         }
@@ -570,8 +572,8 @@ class Data
      *
      * @return void
      */
-    public static function register_form($name, $fields, $options = [], $initial_data = null)
+    public static function register_form($name, $fields, $options = [], $actions = [], $initial_data = null)
     {
-        self::$forms[$name] = new Form($name, $fields, $options, [], $initial_data);
+        self::$forms[$name] = new Form($name, $fields, $options, $actions, $initial_data);
     }
 }

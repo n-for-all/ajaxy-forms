@@ -9,6 +9,11 @@
             this.addListener = function (name, callback) {
                 _this.listeners[name] = callback;
             };
+            this.isObject = function (value) {
+                return (value != null && // Exclude null
+                    typeof value === "object" &&
+                    !Array.isArray(value)); // Exclude arrays
+            };
             if (!element || element.tagName != "FORM") {
                 console.warn("The element you passed to the form is invalid", element);
                 return;
@@ -154,25 +159,31 @@
         };
         Form.prototype.addErrors = function (field, errors) {
             if (this.errorElms) {
-                if (!(errors instanceof Array)) {
+                if (this.isObject(errors)) {
                     var subnames = Object.keys(errors);
                     for (var i = 0; i < subnames.length; i++) {
                         this.addErrors(subnames[i], errors[subnames[i]]);
                     }
                     return;
                 }
-                this.errorElms.forEach(function (elm) {
-                    if (elm.classList.contains("field-" + field)) {
-                        var ul_1 = document.createElement("ul");
-                        errors.map(function (error) {
-                            var li = document.createElement("li");
-                            li.innerHTML = error;
-                            ul_1.appendChild(li);
-                        });
-                        elm.innerHTML = "";
-                        elm.appendChild(ul_1);
-                    }
-                });
+                else if (typeof errors == "string") {
+                    errors = [errors];
+                }
+                if (Array.isArray(errors)) {
+                    this.errorElms.forEach(function (elm) {
+                        if (elm.classList.contains("field-" + field)) {
+                            var ul_1 = document.createElement("ul");
+                            //@ts-ignore
+                            errors.forEach(function (error) {
+                                var li = document.createElement("li");
+                                li.innerHTML = error;
+                                ul_1.appendChild(li);
+                            });
+                            elm.innerHTML = "";
+                            elm.appendChild(ul_1);
+                        }
+                    });
+                }
             }
         };
         Form.prototype.setMessage = function (message, type) {

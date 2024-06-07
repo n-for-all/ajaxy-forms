@@ -223,7 +223,7 @@
 {# Labels #}
 
 {% block form_label -%}
-    {% if label is not same as(false) -%}
+    {% if label is not same as(false) and label is not empty -%}
         {%- if compound is defined and compound -%}
             {%- set element = 'legend' -%}
             {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' col-form-label')|trim}) -%}
@@ -268,7 +268,7 @@
 
         {{ widget|raw }}
         <label{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}>
-            {%- if label is not same as(false) -%}
+            {%- if label is not same as(false) and label is not empty -%}
                 {{- block('form_label_content') -}}
             {%- endif -%}
             {{- form_errors(form) -}}

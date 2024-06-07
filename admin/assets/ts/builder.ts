@@ -63,7 +63,7 @@ jQuery(() => {
 		}
 	});
 
-    if (form_metadata) {
+    if (typeof form_metadata != undefined && form_metadata) {
 		if (form_metadata.fields) {
 			form_metadata.fields.forEach((field, index) => {
 				dropView.add(field.type, field, index);

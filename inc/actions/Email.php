@@ -102,14 +102,14 @@ class Email implements ActionInterface
                 "type" => "text",
                 "name" => "subject",
                 "required" => true,
-                "help" => "Enter the subject of the email",
+                "help" => "Enter the subject of the email: you can use {{data.FIELD_NAME}} to display the field data",
             ],
             [
                 "order" => 3,
                 "label" => "Message",
                 "type" => "textarea",
                 "name" => "message",
-                "help" => "Enter the message of the email",
+                "help" => "Enter the message of the email: use {{table}} or {{data.FIELD_NAME}} to display the data",
             ],
             [
                 "order" => 4,

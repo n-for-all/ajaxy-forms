@@ -129,9 +129,12 @@ class Form
      *
      * @return void
      */
-    public function set_actions(array $actions)
+    public function set_actions($actions)
     {
-        $this->actions = $actions ?? [];
+        $this->actions = [];
+        foreach ((array)$actions as $action_name => $optionsOrCallable) {
+            $this->add_action($action_name, $optionsOrCallable);
+        }
     }
 
     /**
@@ -144,9 +147,37 @@ class Form
      *
      * @return void
      */
-    public function add_action($name, $action)
+    public function add_action($action_name, $optionsOrCallable)
     {
-        $this->actions[$name] = $action;
+        if (\is_callable($optionsOrCallable)) {
+            $this->actions[$action_name] = function ($data, $form) use ($optionsOrCallable) {
+                $optionsOrCallable($data, $form);
+            };
+        } else if (\is_array($optionsOrCallable)) {
+            $this->actions[$action_name] =  function ($data, $form) use ($action_name, $optionsOrCallable) {
+                $action = Actions::getInstance()->get($action_name);
+                if (!$action) {
+                    throw new \Exception(sprintf('Action %s not found', $action_name));
+                }
+                $class = $action['class'];
+                if (\is_string($class)) {
+                    if ((!class_exists($class) || !\is_subclass_of($class, Actions\ActionInterface::class))) {
+                        throw new \Exception(sprintf('Action %s class must be a callable function or a class that implements the __invoke() method, you can pass the class name as string', $action_name));
+                    }
+
+                    $instance = new $class($optionsOrCallable);
+                    $instance->execute($data, $form);
+                } else {
+                    if (!\is_callable($class)) {
+                        throw new \Exception(sprintf('Action %s class must be a callable function or a class that implements the __invoke() method', $action_name));
+                    }
+
+                    \call_user_func($class, $data, $form, $optionsOrCallable);
+                }
+            };
+        } else {
+            throw new \Exception('Invalid action options, must be a callable function or an array of options that have a class key with the class name');
+        }
     }
 
     /**

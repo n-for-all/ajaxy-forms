@@ -162,27 +162,40 @@ class Form {
 		}
 	}
 
+	public isObject = (value) => {
+		return (
+			value != null && // Exclude null
+			typeof value === "object" &&
+			!Array.isArray(value)
+		); // Exclude arrays
+	};
+
 	public addErrors(field: string, errors: Array<string> | { [x: string]: Array<string> }) {
 		if (this.errorElms) {
-			if (!(errors instanceof Array)) {
+			if (this.isObject(errors)) {
 				let subnames = Object.keys(errors);
 				for (let i = 0; i < subnames.length; i++) {
 					this.addErrors(subnames[i], errors[subnames[i]]);
 				}
 				return;
+			} else if (typeof errors == "string") {
+				errors = [errors];
+			} 
+            if (Array.isArray(errors)) {
+				this.errorElms.forEach((elm) => {
+					if (elm.classList.contains("field-" + field)) {
+						let ul = document.createElement("ul");
+                        //@ts-ignore
+						errors.forEach((error) => {
+							let li = document.createElement("li");
+							li.innerHTML = error;
+							ul.appendChild(li);
+						});
+						elm.innerHTML = "";
+						elm.appendChild(ul);
+					}
+				});
 			}
-			this.errorElms.forEach((elm) => {
-				if (elm.classList.contains("field-" + field)) {
-					let ul = document.createElement("ul");
-					errors.map((error) => {
-						let li = document.createElement("li");
-						li.innerHTML = error;
-						ul.appendChild(li);
-					});
-					elm.innerHTML = "";
-					elm.appendChild(ul);
-				}
-			});
 		}
 	}
 

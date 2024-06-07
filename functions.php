@@ -12,9 +12,9 @@
  *
  * @return void
  */
-function register_form($form_name, $fields, $options = [], $initial_data = null)
+function register_form($form_name, $fields, $options = [], $actions = [], $initial_data = null)
 {
-    \Ajaxy\Forms\Plugin::init()->register($form_name, $fields, $options, $initial_data);
+    \Ajaxy\Forms\Plugin::init()->register($form_name, $fields, $options, $actions, $initial_data);
 }
 
 /**

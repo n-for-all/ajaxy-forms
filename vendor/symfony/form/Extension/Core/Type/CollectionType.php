@@ -21,15 +21,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CollectionType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $resizePrototypeOptions = null;
         if ($options['allow_add'] && $options['prototype']) {
-            $resizePrototypeOptions = array_replace($options['entry_options'], $options['prototype_options']);
             $prototypeOptions = array_replace([
                 'required' => $options['required'],
                 'label' => $options['prototype_name'].'label__',
-            ], $resizePrototypeOptions);
+            ], $options['entry_options']);
 
             if (null !== $options['prototype_data']) {
                 $prototypeOptions['data'] = $options['prototype_data'];
@@ -44,14 +45,16 @@ class CollectionType extends AbstractType
             $options['entry_options'],
             $options['allow_add'],
             $options['allow_delete'],
-            $options['delete_empty'],
-            $resizePrototypeOptions
+            $options['delete_empty']
         );
 
         $builder->addEventSubscriber($resizeListener);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options): void
+    /**
+     * {@inheritdoc}
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars = array_replace($view->vars, [
             'allow_add' => $options['allow_add'],
@@ -64,7 +67,10 @@ class CollectionType extends AbstractType
         }
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options): void
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $prefixOffset = -2;
         // check if the entry type also defines a block prefix
@@ -95,9 +101,12 @@ class CollectionType extends AbstractType
         }
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $entryOptionsNormalizer = static function (Options $options, $value) {
+        $entryOptionsNormalizer = function (Options $options, $value) {
             $value['block_name'] = 'entry';
 
             return $value;
@@ -111,18 +120,22 @@ class CollectionType extends AbstractType
             'prototype_name' => '__name__',
             'entry_type' => TextType::class,
             'entry_options' => [],
-            'prototype_options' => [],
             'delete_empty' => false,
-            'invalid_message' => 'The collection is invalid.',
+            'invalid_message' => function (Options $options, $previousValue) {
+                return ($options['legacy_error_messages'] ?? true)
+                    ? $previousValue
+                    : 'The collection is invalid.';
+            },
         ]);
 
         $resolver->setNormalizer('entry_options', $entryOptionsNormalizer);
-
         $resolver->setAllowedTypes('delete_empty', ['bool', 'callable']);
-        $resolver->setAllowedTypes('prototype_options', 'array');
     }
 
-    public function getBlockPrefix(): string
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return 'collection';
     }

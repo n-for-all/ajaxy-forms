@@ -1,6 +1,7 @@
 /// <reference path='../node_modules/@types/backbone/index.d.ts' />
 
 import ConstraintsView from "./ConstraintsView";
+import FieldView from "./FieldView";
 import SettingsSectionFields from "./SettingsSectionFields";
 
 declare let ajaxyFormsBuilder: {
@@ -8,12 +9,14 @@ declare let ajaxyFormsBuilder: {
 };
 
 class Settings extends Backbone.View<any> {
+	fieldView: FieldView;
 	field: any;
 	onRemove: any;
 	index: number;
-    data: any;
-	constructor(index, field, data, onRemove) {
+	data: any;
+	constructor(fieldView, index, field, data, onRemove) {
 		super();
+		this.fieldView = fieldView;
 		this.field = field;
 		this.data = data;
 		this.onRemove = onRemove;
@@ -24,7 +27,7 @@ class Settings extends Backbone.View<any> {
 		let basicSettings = jQuery("<div></div>").addClass("basic-settings");
 		let basicInnerSection = jQuery("<div></div>").addClass("section-inner");
 
-		basicInnerSection.append(new SettingsSectionFields(`fields[${this.index}]`, this.field.properties.basic.fields, this.data).render().el);
+		basicInnerSection.append(new SettingsSectionFields(this.fieldView, `fields[${this.index}]`, this.field.properties.basic.fields, this.data).render().el);
 		basicSettings.append(basicInnerSection);
 		return basicSettings;
 	}
@@ -36,8 +39,7 @@ class Settings extends Backbone.View<any> {
 		}
 		let heading = jQuery("<h3></h3>").html(`<span>${data.label}</span>`);
 
-		let toggle = jQuery("<a></a>").attr("href", "#").addClass("item-toggle")
-			.html(`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+		let toggle = jQuery("<a></a>").attr("href", "#").addClass("item-toggle").html(`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6 12H12M12 12H18M12 12V18M12 12V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>`);
 
@@ -52,7 +54,7 @@ class Settings extends Backbone.View<any> {
 		let toggleInnerSection = jQuery("<div></div>").addClass("section-toggle");
 		let innerSection = jQuery("<div></div>").addClass("section-inner");
 
-		innerSection.append(new SettingsSectionFields(`fields[${this.index}]`, data.fields, this.data).render().el);
+		innerSection.append(new SettingsSectionFields(this.fieldView, `fields[${this.index}]`, data.fields, this.data).render().el);
 		toggleInnerSection.append(innerSection);
 		settings.append(toggleInnerSection);
 		return settings;
@@ -64,8 +66,7 @@ class Settings extends Backbone.View<any> {
 		}
 		let heading = jQuery("<h3></h3>").html(`<span>${data.label}</span>`);
 
-		let toggle = jQuery("<a></a>").attr("href", "#").addClass("item-toggle")
-			.html(`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+		let toggle = jQuery("<a></a>").attr("href", "#").addClass("item-toggle").html(`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6 12H12M12 12H18M12 12V18M12 12V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>`);
 
@@ -80,7 +81,7 @@ class Settings extends Backbone.View<any> {
 		let toggleInnerSection = jQuery("<div></div>").addClass("section-toggle");
 		let innerSection = jQuery("<div></div>").addClass("section-inner");
 
-		innerSection.append(new ConstraintsView(`fields[${this.index}]`, this.data.constraints || []).render().el);
+		innerSection.append(new ConstraintsView(this.fieldView, `fields[${this.index}]`, this.data.constraints || []).render().el);
 		toggleInnerSection.append(innerSection);
 		settings.append(toggleInnerSection);
 		return settings;
@@ -92,12 +93,14 @@ class Settings extends Backbone.View<any> {
 
 		innerSettings.append(this.createSettings(this.field.properties.basic, "basic"));
 		innerSettings.append(this.createSettings(this.field.properties.advanced, "advanced"));
-		innerSettings.append(
-			this.createConstraintsSettings({
-				label: "Validation",
-				constraints: ajaxyFormsBuilder.constraints,
-			})
-		);
+		if (!this.field.disable_constraints) {
+			innerSettings.append(
+				this.createConstraintsSettings({
+					label: "Validation",
+					constraints: ajaxyFormsBuilder.constraints,
+				})
+			);
+		}
 
 		innerSettings.append(jQuery("<hr/>"));
 

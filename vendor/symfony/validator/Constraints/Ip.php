@@ -18,6 +18,9 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
 /**
  * Validates that a value is a valid IP address.
  *
+ * @Annotation
+ * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
+ *
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
@@ -45,7 +48,7 @@ class Ip extends Constraint
 
     public const INVALID_IP_ERROR = 'b1b427ae-9f6f-41b0-aa9b-84511fbb3c5b';
 
-    protected const VERSIONS = [
+    protected static $versions = [
         self::V4,
         self::V6,
         self::ALL,
@@ -63,22 +66,26 @@ class Ip extends Constraint
         self::ALL_ONLY_PUBLIC,
     ];
 
-    protected const ERROR_NAMES = [
+    protected static $errorNames = [
         self::INVALID_IP_ERROR => 'INVALID_IP_ERROR',
     ];
 
-    public string $version = self::V4;
-    public string $message = 'This is not a valid IP address.';
-    /** @var callable|null */
+    public $version = self::V4;
+
+    public $message = 'This is not a valid IP address.';
+
     public $normalizer;
 
+    /**
+     * {@inheritdoc}
+     */
     public function __construct(
         ?array $options = null,
         ?string $version = null,
         ?string $message = null,
         ?callable $normalizer = null,
         ?array $groups = null,
-        mixed $payload = null
+        $payload = null
     ) {
         parent::__construct($options, $groups, $payload);
 
@@ -86,8 +93,8 @@ class Ip extends Constraint
         $this->message = $message ?? $this->message;
         $this->normalizer = $normalizer ?? $this->normalizer;
 
-        if (!\in_array($this->version, static::VERSIONS, true)) {
-            throw new ConstraintDefinitionException(sprintf('The option "version" must be one of "%s".', implode('", "', static::VERSIONS)));
+        if (!\in_array($this->version, self::$versions)) {
+            throw new ConstraintDefinitionException(sprintf('The option "version" must be one of "%s".', implode('", "', self::$versions)));
         }
 
         if (null !== $this->normalizer && !\is_callable($this->normalizer)) {

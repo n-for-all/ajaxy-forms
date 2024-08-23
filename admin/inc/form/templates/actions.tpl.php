@@ -11,14 +11,14 @@ try {
 <div class="wp-clearfix af-actions-frame">
     <div class="af-management-liquid">
         <div class="af-management">
-            <h2><?php _e('Form Actions'); ?></h2>
+            <h2><?php esc_html_e('Form Actions', 'ajaxy-forms'); ?></h2>
             <div id="post-body">
                 <div id="post-body-content" class="wp-clearfix">
                     <?php
                     $starter_copy = __('Use the actions below to send notifications or to execute a specific command');
                     ?>
                     <div class="drag-instructions post-body-plain">
-                        <p><?php echo $starter_copy; ?></p>
+                        <p><?php echo esc_html($starter_copy); ?></p>
                     </div>
                     <ul class="ui-sortable af-actions-list">
                         <?php foreach ($actions as $action_name => $action) : ?>

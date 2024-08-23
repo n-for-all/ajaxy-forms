@@ -18,15 +18,14 @@ use Symfony\Component\Mime\Email;
  */
 class TemplatedEmail extends Email
 {
-    private ?string $htmlTemplate = null;
-    private ?string $textTemplate = null;
-    private ?string $locale = null;
-    private array $context = [];
+    private $htmlTemplate;
+    private $textTemplate;
+    private $context = [];
 
     /**
      * @return $this
      */
-    public function textTemplate(?string $template): static
+    public function textTemplate(?string $template)
     {
         $this->textTemplate = $template;
 
@@ -36,19 +35,9 @@ class TemplatedEmail extends Email
     /**
      * @return $this
      */
-    public function htmlTemplate(?string $template): static
+    public function htmlTemplate(?string $template)
     {
         $this->htmlTemplate = $template;
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function locale(?string $locale): static
-    {
-        $this->locale = $locale;
 
         return $this;
     }
@@ -63,15 +52,10 @@ class TemplatedEmail extends Email
         return $this->htmlTemplate;
     }
 
-    public function getLocale(): ?string
-    {
-        return $this->locale;
-    }
-
     /**
      * @return $this
      */
-    public function context(array $context): static
+    public function context(array $context)
     {
         $this->context = $context;
 
@@ -83,24 +67,12 @@ class TemplatedEmail extends Email
         return $this->context;
     }
 
-    public function isRendered(): bool
-    {
-        return null === $this->htmlTemplate && null === $this->textTemplate;
-    }
-
-    public function markAsRendered(): void
-    {
-        $this->textTemplate = null;
-        $this->htmlTemplate = null;
-        $this->context = [];
-    }
-
     /**
      * @internal
      */
     public function __serialize(): array
     {
-        return [$this->htmlTemplate, $this->textTemplate, $this->context, parent::__serialize(),  $this->locale];
+        return [$this->htmlTemplate, $this->textTemplate, $this->context, parent::__serialize()];
     }
 
     /**
@@ -109,7 +81,6 @@ class TemplatedEmail extends Email
     public function __unserialize(array $data): void
     {
         [$this->htmlTemplate, $this->textTemplate, $this->context, $parentData] = $data;
-        $this->locale = $data[4] ?? null;
 
         parent::__unserialize($parentData);
     }

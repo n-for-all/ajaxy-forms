@@ -28,18 +28,18 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CoreExtension extends AbstractExtension
 {
-    private PropertyAccessorInterface $propertyAccessor;
-    private ChoiceListFactoryInterface $choiceListFactory;
-    private ?TranslatorInterface $translator;
+    private $propertyAccessor;
+    private $choiceListFactory;
+    private $translator;
 
-    public function __construct(?PropertyAccessorInterface $propertyAccessor = null, ?ChoiceListFactoryInterface $choiceListFactory = null, ?TranslatorInterface $translator = null)
+    public function __construct(PropertyAccessorInterface $propertyAccessor = null, ChoiceListFactoryInterface $choiceListFactory = null, TranslatorInterface $translator = null)
     {
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
         $this->choiceListFactory = $choiceListFactory ?? new CachingFactoryDecorator(new PropertyAccessDecorator(new DefaultChoiceListFactory(), $this->propertyAccessor));
         $this->translator = $translator;
     }
 
-    protected function loadTypes(): array
+    protected function loadTypes()
     {
         return [
             new Type\FormType($this->propertyAccessor),
@@ -80,7 +80,7 @@ class CoreExtension extends AbstractExtension
         ];
     }
 
-    protected function loadTypeExtensions(): array
+    protected function loadTypeExtensions()
     {
         return [
             new TransformationFailureExtension($this->translator),

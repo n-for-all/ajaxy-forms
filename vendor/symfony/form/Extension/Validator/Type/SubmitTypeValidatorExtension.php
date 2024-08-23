@@ -18,6 +18,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
  */
 class SubmitTypeValidatorExtension extends BaseValidatorExtension
 {
+    /**
+     * {@inheritdoc}
+     */
     public static function getExtendedTypes(): iterable
     {
         return [SubmitType::class];

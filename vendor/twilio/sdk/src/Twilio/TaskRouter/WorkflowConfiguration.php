@@ -18,7 +18,7 @@ class WorkflowConfiguration implements \JsonSerializable {
     }
 
     public function toJSON() {
-        return \wp_json_encode($this);
+        return \json_encode($this);
     }
 
     public static function parse(string $json) {

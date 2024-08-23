@@ -1,3 +1,4 @@
+import FieldView from "./FieldView";
 import SettingsSectionFields from "./SettingsSectionFields";
 
 declare let ajaxyFormsBuilder: {
@@ -9,9 +10,11 @@ class ConstraintsView extends Backbone.View<any> {
 	basename = "";
 	data: any;
 	container: JQuery<HTMLElement>;
-	constructor(basename, data) {
+    fieldView: FieldView;
+	constructor(fieldView, basename, data) {
 		super();
 
+        this.fieldView = fieldView;
 		this.data = data || {};
 		this.basename = basename;
 	}
@@ -62,7 +65,7 @@ class ConstraintsView extends Backbone.View<any> {
 			let value: string = $select.val().toString();
 			let constraint = ajaxyFormsBuilder.constraints[value];
 			fields.html("");
-			fields.append(new SettingsSectionFields(`${this.basename}[constraints][${index}]`, constraint.fields, constraintValue).render().el);
+			fields.append(new SettingsSectionFields(this.fieldView, `${this.basename}[constraints][${index}]`, constraint.fields, constraintValue).render().el);
 			if (value && ajaxyFormsBuilder.constraints[value] && ajaxyFormsBuilder.constraints[value].help) {
 				help.html(ajaxyFormsBuilder.constraints[value].help);
 				if (ajaxyFormsBuilder.constraints[value].docs) {

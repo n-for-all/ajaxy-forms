@@ -22,18 +22,24 @@ use Symfony\Component\Form\RequestHandlerInterface;
  */
 class FormTypeHttpFoundationExtension extends AbstractTypeExtension
 {
-    private RequestHandlerInterface $requestHandler;
+    private $requestHandler;
 
-    public function __construct(?RequestHandlerInterface $requestHandler = null)
+    public function __construct(RequestHandlerInterface $requestHandler = null)
     {
         $this->requestHandler = $requestHandler ?? new HttpFoundationRequestHandler();
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->setRequestHandler($this->requestHandler);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getExtendedTypes(): iterable
     {
         return [FormType::class];

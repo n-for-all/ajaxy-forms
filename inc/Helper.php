@@ -54,23 +54,111 @@ class Helper
      *
      * @date 2024-05-23
      *
-     * @param string $data
+     * @param array $data
      * @param Form   $form
      *
      * @return string
      */
     public static function create_table($data, Form $form)
     {
-        $fields = $form->get_fields();
         $output = [];
 
-        foreach ($fields as $field) {
-            $label = $field['label'] && !empty($field['label']) ? $field['label'] : '';
+        foreach ($data as $field) {
             $output[] = [
-                $label ? $label : $field['attr']['placeholder'] ?? '', $data[$field['name']] ?? ''
+                $field['label'] ?? '',
+                $field['value_label'] ?? $field['value'] ?? ''
             ];
         }
 
         return Helper::to_html($output);
+    }
+
+    public static function is_list(array $arr)
+    {
+        if ($arr === []) {
+            return true;
+        }
+        return array_keys($arr) === range(0, count($arr) - 1);
+    }
+
+    public static function create_tree_list($array, $class = "af-tree")
+    {
+        $list = '<ul class="' . $class . '">';
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $is_list = self::is_list($value);
+                $list .= \sprintf('<li><span class="af-key">%s: </span><span class="af-start-tick">%s</span><span class="af-tick">...</span><span class="af-handle"></span>%s<span class="af-end-tick">%s</span></li>', $key, $is_list ? "[" : "{", self::create_tree_list($value, ""), $is_list ? "]" : "}");
+            } else {
+                $list .= \sprintf('<li>%s: <span class="af-value">%s</span></li>', $key, htmlentities($value));
+            }
+        }
+        $list .= '</ul>';
+        return $list;
+    }
+
+    public static function parse_submit_data($data, Form $form, $exclude = ['_message', '_token'], $exclude_types = ['submit', 'button', 'recaptcha', 'html'])
+    {
+        $nData = [];
+        $fields = $form->get_fields();
+        foreach ($fields as $field) {
+            if (in_array($field['type'], $exclude_types) || in_array($field['name'], $exclude)) {
+                continue;
+            }
+
+            $value = isset($data[$field['name']]) ? $data[$field['name']] : $field['default'];
+            $label = $field['label'] && !empty($field['label']) ? $field['label'] : null;
+
+            $nData[$field['name']] = [
+                'type' => $field['type'],
+                'value' => $value,
+                'value_label' => $value,
+                'label' => $label ? $label : $field['attr']['placeholder'] ?? '',
+            ];
+
+            if (!$value) {
+                continue;
+            }
+
+            switch ($field['type']) {
+                case 'posts':
+                    if (\is_array($data[$field['name']])) {
+                        foreach ($data[$field['name']] as $post_id) {
+                            $pst = get_post($post_id);
+                            $nData[$field['name']]['value_label'][] = $pst && !is_wp_error($pst) ? $pst->post_title : '';
+                        }
+                    } else {
+                        $pst = get_post($data[$field['name']]);
+                        $nData[$field['name']]['value_label'] = $pst && !\is_wp_error($pst) ? $pst->post_title : '';
+                    }
+                    break;
+                case 'terms':
+                    if (\is_array($data[$field['name']])) {
+                        foreach ($data[$field['name']] as $term_id) {
+                            $trm = get_term($term_id, $field['taxonomy']);
+                            $nData[$field['name']]['value_label'][] = $trm && !\is_wp_error($trm) ? $trm->name : '';
+                        }
+                    } else {
+                        $trm = get_term($data[$field['name']], $field['taxonomy']);
+                        $nData[$field['name']]['value_label'] = $trm && !\is_wp_error($trm) ? $trm->name : '';
+                    }
+                case 'term_posts':
+                    $values = [];
+                    if (isset($data[$field['name']]['terms'])) {
+                        $trm = get_term($data[$field['name']]['terms'], $field['taxonomy']);
+                        $values[] = $trm && !\is_wp_error($trm) ? $trm->name : '';
+                    }
+
+                    if (isset($data[$field['name']]['posts'])) {
+                        $pst = get_post($data[$field['name']]['posts']);
+                        $values[] = $pst && !\is_wp_error($pst) ? $pst->post_title : '';
+                    }
+
+                    $nData[$field['name']]['value_label'] = \implode(' - ', $values);
+
+                    break;
+            }
+        }
+
+        return $nData;
     }
 }

@@ -1,11 +1,3 @@
-CHANGELOG
-=========
-
-6.2
----
-
- * Use `SensitiveParameter` attribute to redact sensitive values in back traces
-
 5.3
 ---
 

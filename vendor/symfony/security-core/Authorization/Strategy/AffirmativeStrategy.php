@@ -24,13 +24,19 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
  */
 final class AffirmativeStrategy implements AccessDecisionStrategyInterface, \Stringable
 {
-    private bool $allowIfAllAbstainDecisions;
+    /**
+     * @var bool
+     */
+    private $allowIfAllAbstainDecisions;
 
     public function __construct(bool $allowIfAllAbstainDecisions = false)
     {
         $this->allowIfAllAbstainDecisions = $allowIfAllAbstainDecisions;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function decide(\Traversable $results): bool
     {
         $deny = 0;

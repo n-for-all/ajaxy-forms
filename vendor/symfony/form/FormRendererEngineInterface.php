@@ -25,7 +25,7 @@ interface FormRendererEngineInterface
      * @param mixed    $themes The theme(s). The type of these themes
      *                         is open to the implementation.
      */
-    public function setTheme(FormView $view, mixed $themes, bool $useDefaultThemes = true): void;
+    public function setTheme(FormView $view, $themes, bool $useDefaultThemes = true);
 
     /**
      * Returns the resource for a block name.
@@ -43,7 +43,7 @@ interface FormRendererEngineInterface
      *
      * @return mixed the renderer resource or false, if none was found
      */
-    public function getResourceForBlockName(FormView $view, string $blockName): mixed;
+    public function getResourceForBlockName(FormView $view, string $blockName);
 
     /**
      * Returns the resource for a block hierarchy.
@@ -79,7 +79,7 @@ interface FormRendererEngineInterface
      *
      * @return mixed The renderer resource or false, if none was found
      */
-    public function getResourceForBlockNameHierarchy(FormView $view, array $blockNameHierarchy, int $hierarchyLevel): mixed;
+    public function getResourceForBlockNameHierarchy(FormView $view, array $blockNameHierarchy, int $hierarchyLevel);
 
     /**
      * Returns the hierarchy level at which a resource can be found.
@@ -114,8 +114,10 @@ interface FormRendererEngineInterface
      * @param int      $hierarchyLevel     The level in the hierarchy at which to start
      *                                     looking. Level 0 indicates the root block, i.e.
      *                                     the first element of $blockNameHierarchy.
+     *
+     * @return int|false
      */
-    public function getResourceHierarchyLevel(FormView $view, array $blockNameHierarchy, int $hierarchyLevel): int|false;
+    public function getResourceHierarchyLevel(FormView $view, array $blockNameHierarchy, int $hierarchyLevel);
 
     /**
      * Renders a block in the given renderer resource.
@@ -127,6 +129,8 @@ interface FormRendererEngineInterface
      * @param FormView $view      The view to render
      * @param mixed    $resource  The renderer resource
      * @param array    $variables The variables to pass to the template
+     *
+     * @return string
      */
-    public function renderBlock(FormView $view, mixed $resource, string $blockName, array $variables = []): string;
+    public function renderBlock(FormView $view, $resource, string $blockName, array $variables = []);
 }

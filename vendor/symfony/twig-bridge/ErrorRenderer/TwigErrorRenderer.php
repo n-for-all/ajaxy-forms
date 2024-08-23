@@ -25,33 +25,40 @@ use Twig\Environment;
  */
 class TwigErrorRenderer implements ErrorRendererInterface
 {
-    private Environment $twig;
-    private HtmlErrorRenderer $fallbackErrorRenderer;
-    private \Closure|bool $debug;
+    private $twig;
+    private $fallbackErrorRenderer;
+    private $debug;
 
     /**
      * @param bool|callable $debug The debugging mode as a boolean or a callable that should return it
      */
-    public function __construct(Environment $twig, ?HtmlErrorRenderer $fallbackErrorRenderer = null, bool|callable $debug = false)
+    public function __construct(Environment $twig, HtmlErrorRenderer $fallbackErrorRenderer = null, $debug = false)
     {
-        $this->twig = $twig;
-        $this->fallbackErrorRenderer = $fallbackErrorRenderer ?? new HtmlErrorRenderer();
-        $this->debug = \is_bool($debug) ? $debug : $debug(...);
-    }
-
-    public function render(\Throwable $exception): FlattenException
-    {
-        $flattenException = FlattenException::createFromThrowable($exception);
-        $debug = \is_bool($this->debug) ? $this->debug : ($this->debug)($flattenException);
-
-        if ($debug || !$template = $this->findTemplate($flattenException->getStatusCode())) {
-            return $this->fallbackErrorRenderer->render($exception);
+        if (!\is_bool($debug) && !\is_callable($debug)) {
+            throw new \TypeError(sprintf('Argument 3 passed to "%s()" must be a boolean or a callable, "%s" given.', __METHOD__, get_debug_type($debug)));
         }
 
-        return $flattenException->setAsString($this->twig->render($template, [
-            'exception' => $flattenException,
-            'status_code' => $flattenException->getStatusCode(),
-            'status_text' => $flattenException->getStatusText(),
+        $this->twig = $twig;
+        $this->fallbackErrorRenderer = $fallbackErrorRenderer ?? new HtmlErrorRenderer();
+        $this->debug = $debug;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function render(\Throwable $exception): FlattenException
+    {
+        $exception = $this->fallbackErrorRenderer->render($exception);
+        $debug = \is_bool($this->debug) ? $this->debug : ($this->debug)($exception);
+
+        if ($debug || !$template = $this->findTemplate($exception->getStatusCode())) {
+            return $exception;
+        }
+
+        return $exception->setAsString($this->twig->render($template, [
+            'exception' => $exception,
+            'status_code' => $exception->getStatusCode(),
+            'status_text' => $exception->getStatusText(),
         ]));
     }
 

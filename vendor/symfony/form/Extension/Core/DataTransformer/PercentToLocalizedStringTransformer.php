@@ -20,35 +20,39 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Florian Eckerstorfer <florian@eckerstorfer.org>
- *
- * @implements DataTransformerInterface<int|float, string>
  */
 class PercentToLocalizedStringTransformer implements DataTransformerInterface
 {
     public const FRACTIONAL = 'fractional';
     public const INTEGER = 'integer';
 
-    protected static array $types = [
+    protected static $types = [
         self::FRACTIONAL,
         self::INTEGER,
     ];
 
-    private int $roundingMode;
-    private string $type;
-    private int $scale;
-    private bool $html5Format;
+    private $roundingMode;
+    private $type;
+    private $scale;
+    private $html5Format;
 
     /**
      * @see self::$types for a list of supported types
      *
-     * @param int  $roundingMode A value from \NumberFormatter, such as \NumberFormatter::ROUND_HALFUP
-     * @param bool $html5Format  Use an HTML5 specific format, see https://www.w3.org/TR/html51/sec-forms.html#date-time-and-number-formats
+     * @param int|null $roundingMode A value from \NumberFormatter, such as \NumberFormatter::ROUND_HALFUP
+     * @param bool     $html5Format  Use an HTML5 specific format, see https://www.w3.org/TR/html51/sec-forms.html#date-time-and-number-formats
      *
      * @throws UnexpectedTypeException if the given value of type is unknown
      */
-    public function __construct(?int $scale = null, ?string $type = null, int $roundingMode = \NumberFormatter::ROUND_HALFUP, bool $html5Format = false)
+    public function __construct(int $scale = null, string $type = null, int $roundingMode = null, bool $html5Format = false)
     {
-        $type ??= self::FRACTIONAL;
+        if (null === $type) {
+            $type = self::FRACTIONAL;
+        }
+
+        if (null === $roundingMode && (\func_num_args() < 4 || func_get_arg(3))) {
+            trigger_deprecation('symfony/form', '5.1', 'Not passing a rounding mode to "%s()" is deprecated. Starting with Symfony 6.0 it will default to "\NumberFormatter::ROUND_HALFUP".', __METHOD__);
+        }
 
         if (!\in_array($type, self::$types, true)) {
             throw new UnexpectedTypeException($type, implode('", "', self::$types));
@@ -65,10 +69,12 @@ class PercentToLocalizedStringTransformer implements DataTransformerInterface
      *
      * @param int|float $value Normalized value
      *
+     * @return string
+     *
      * @throws TransformationFailedException if the given value is not numeric or
      *                                       if the value could not be transformed
      */
-    public function transform(mixed $value): string
+    public function transform($value)
     {
         if (null === $value) {
             return '';
@@ -98,10 +104,12 @@ class PercentToLocalizedStringTransformer implements DataTransformerInterface
      *
      * @param string $value Percentage value
      *
+     * @return int|float|null
+     *
      * @throws TransformationFailedException if the given value is not a string or
      *                                       if the value could not be transformed
      */
-    public function reverseTransform(mixed $value): int|float|null
+    public function reverseTransform($value)
     {
         if (!\is_string($value)) {
             throw new TransformationFailedException('Expected a string.');
@@ -167,8 +175,10 @@ class PercentToLocalizedStringTransformer implements DataTransformerInterface
 
     /**
      * Returns a preconfigured \NumberFormatter instance.
+     *
+     * @return \NumberFormatter
      */
-    protected function getNumberFormatter(): \NumberFormatter
+    protected function getNumberFormatter()
     {
         // Values used in HTML5 number inputs should be formatted as in "1234.5", ie. 'en' format without grouping,
         // according to https://www.w3.org/TR/html51/sec-forms.html#date-time-and-number-formats
@@ -189,8 +199,12 @@ class PercentToLocalizedStringTransformer implements DataTransformerInterface
 
     /**
      * Rounds a number according to the configured scale and rounding mode.
+     *
+     * @param int|float $number A number
+     *
+     * @return int|float
      */
-    private function round(int|float $number): int|float
+    private function round($number)
     {
         if (null !== $this->scale && null !== $this->roundingMode) {
             // shift number to maintain the correct scale during rounding

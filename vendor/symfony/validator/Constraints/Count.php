@@ -15,6 +15,9 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\MissingOptionsException;
 
 /**
+ * @Annotation
+ * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
+ *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
@@ -25,23 +28,28 @@ class Count extends Constraint
     public const NOT_EQUAL_COUNT_ERROR = '9fe5d43f-3784-4ece-a0e1-473fc02dadbc';
     public const NOT_DIVISIBLE_BY_ERROR = DivisibleBy::NOT_DIVISIBLE_BY;
 
-    protected const ERROR_NAMES = [
+    protected static $errorNames = [
         self::TOO_FEW_ERROR => 'TOO_FEW_ERROR',
         self::TOO_MANY_ERROR => 'TOO_MANY_ERROR',
         self::NOT_EQUAL_COUNT_ERROR => 'NOT_EQUAL_COUNT_ERROR',
         self::NOT_DIVISIBLE_BY_ERROR => 'NOT_DIVISIBLE_BY_ERROR',
     ];
 
-    public string $minMessage = 'This collection should contain {{ limit }} element or more.|This collection should contain {{ limit }} elements or more.';
-    public string $maxMessage = 'This collection should contain {{ limit }} element or less.|This collection should contain {{ limit }} elements or less.';
-    public string $exactMessage = 'This collection should contain exactly {{ limit }} element.|This collection should contain exactly {{ limit }} elements.';
-    public string $divisibleByMessage = 'The number of elements in this collection should be a multiple of {{ compared_value }}.';
-    public ?int $min = null;
-    public ?int $max = null;
-    public ?int $divisibleBy = null;
+    public $minMessage = 'This collection should contain {{ limit }} element or more.|This collection should contain {{ limit }} elements or more.';
+    public $maxMessage = 'This collection should contain {{ limit }} element or less.|This collection should contain {{ limit }} elements or less.';
+    public $exactMessage = 'This collection should contain exactly {{ limit }} element.|This collection should contain exactly {{ limit }} elements.';
+    public $divisibleByMessage = 'The number of elements in this collection should be a multiple of {{ compared_value }}.';
+    public $min;
+    public $max;
+    public $divisibleBy;
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param int|array|null $exactly The expected exact count or a set of options
+     */
     public function __construct(
-        int|array|null $exactly = null,
+        $exactly = null,
         ?int $min = null,
         ?int $max = null,
         ?int $divisibleBy = null,
@@ -50,7 +58,7 @@ class Count extends Constraint
         ?string $maxMessage = null,
         ?string $divisibleByMessage = null,
         ?array $groups = null,
-        mixed $payload = null,
+        $payload = null,
         array $options = []
     ) {
         if (\is_array($exactly)) {
@@ -58,8 +66,8 @@ class Count extends Constraint
             $exactly = $options['value'] ?? null;
         }
 
-        $min ??= $options['min'] ?? null;
-        $max ??= $options['max'] ?? null;
+        $min = $min ?? $options['min'] ?? null;
+        $max = $max ?? $options['max'] ?? null;
 
         unset($options['value'], $options['min'], $options['max']);
 

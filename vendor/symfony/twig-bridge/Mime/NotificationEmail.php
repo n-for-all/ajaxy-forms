@@ -14,7 +14,6 @@ namespace Symfony\Bridge\Twig\Mime;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\Mime\Header\Headers;
 use Symfony\Component\Mime\Part\AbstractPart;
-use Symfony\Component\Mime\Part\DataPart;
 use Twig\Extra\CssInliner\CssInlinerExtension;
 use Twig\Extra\Inky\InkyExtension;
 use Twig\Extra\Markdown\MarkdownExtension;
@@ -29,8 +28,8 @@ class NotificationEmail extends TemplatedEmail
     public const IMPORTANCE_MEDIUM = 'medium';
     public const IMPORTANCE_LOW = 'low';
 
-    private string $theme = 'default';
-    private array $context = [
+    private $theme = 'default';
+    private $context = [
         'importance' => self::IMPORTANCE_LOW,
         'content' => '',
         'exception' => false,
@@ -38,11 +37,10 @@ class NotificationEmail extends TemplatedEmail
         'action_url' => null,
         'markdown' => false,
         'raw' => false,
-        'footer_text' => 'Notification email sent by Symfony',
+        'footer_text' => 'Notification e-mail sent by Symfony',
     ];
-    private bool $rendered = false;
 
-    public function __construct(?Headers $headers = null, ?AbstractPart $body = null)
+    public function __construct(Headers $headers = null, AbstractPart $body = null)
     {
         $missingPackages = [];
         if (!class_exists(CssInlinerExtension::class)) {
@@ -54,7 +52,7 @@ class NotificationEmail extends TemplatedEmail
         }
 
         if ($missingPackages) {
-            throw new \LogicException(sprintf('You cannot use "%s" if the "%s" Twig extension%s not available. Try running "%s".', static::class, implode('" and "', $missingPackages), \count($missingPackages) > 1 ? 's are' : ' is', 'composer require '.implode(' ', array_keys($missingPackages))));
+            throw new \LogicException(sprintf('You cannot use "%s" if the "%s" Twig extension%s not available; try running "%s".', static::class, implode('" and "', $missingPackages), \count($missingPackages) > 1 ? 's are' : ' is', 'composer require '.implode(' ', array_keys($missingPackages))));
         }
 
         parent::__construct($headers, $body);
@@ -63,7 +61,7 @@ class NotificationEmail extends TemplatedEmail
     /**
      * Creates a NotificationEmail instance that is appropriate to send to normal (non-admin) users.
      */
-    public static function asPublicEmail(?Headers $headers = null, ?AbstractPart $body = null): self
+    public static function asPublicEmail(Headers $headers = null, AbstractPart $body = null): self
     {
         $email = new static($headers, $body);
         $email->markAsPublic();
@@ -74,7 +72,7 @@ class NotificationEmail extends TemplatedEmail
     /**
      * @return $this
      */
-    public function markAsPublic(): static
+    public function markAsPublic(): self
     {
         $this->context['importance'] = null;
         $this->context['footer_text'] = null;
@@ -85,10 +83,10 @@ class NotificationEmail extends TemplatedEmail
     /**
      * @return $this
      */
-    public function markdown(string $content): static
+    public function markdown(string $content)
     {
         if (!class_exists(MarkdownExtension::class)) {
-            throw new \LogicException(sprintf('You cannot use "%s" if the Markdown Twig extension is not available. Try running "composer require twig/markdown-extra".', __METHOD__));
+            throw new \LogicException(sprintf('You cannot use "%s" if the Markdown Twig extension is not available; try running "composer require twig/markdown-extra".', __METHOD__));
         }
 
         $this->context['markdown'] = true;
@@ -99,7 +97,7 @@ class NotificationEmail extends TemplatedEmail
     /**
      * @return $this
      */
-    public function content(string $content, bool $raw = false): static
+    public function content(string $content, bool $raw = false)
     {
         $this->context['content'] = $content;
         $this->context['raw'] = $raw;
@@ -110,7 +108,7 @@ class NotificationEmail extends TemplatedEmail
     /**
      * @return $this
      */
-    public function action(string $text, string $url): static
+    public function action(string $text, string $url)
     {
         $this->context['action_text'] = $text;
         $this->context['action_url'] = $url;
@@ -121,7 +119,7 @@ class NotificationEmail extends TemplatedEmail
     /**
      * @return $this
      */
-    public function importance(string $importance): static
+    public function importance(string $importance)
     {
         $this->context['importance'] = $importance;
 
@@ -129,14 +127,20 @@ class NotificationEmail extends TemplatedEmail
     }
 
     /**
+     * @param \Throwable|FlattenException $exception
+     *
      * @return $this
      */
-    public function exception(\Throwable|FlattenException $exception): static
+    public function exception($exception)
     {
+        if (!$exception instanceof \Throwable && !$exception instanceof FlattenException) {
+            throw new \LogicException(sprintf('"%s" accepts "%s" or "%s" instances.', __METHOD__, \Throwable::class, FlattenException::class));
+        }
+
         $exceptionAsString = $this->getExceptionAsString($exception);
 
         $this->context['exception'] = true;
-        $this->addPart(new DataPart($exceptionAsString, 'exception.txt', 'text/plain'));
+        $this->attach($exceptionAsString, 'exception.txt', 'text/plain');
         $this->importance(self::IMPORTANCE_URGENT);
 
         if (!$this->getSubject()) {
@@ -149,7 +153,7 @@ class NotificationEmail extends TemplatedEmail
     /**
      * @return $this
      */
-    public function theme(string $theme): static
+    public function theme(string $theme)
     {
         $this->theme = $theme;
 
@@ -174,41 +178,9 @@ class NotificationEmail extends TemplatedEmail
         return '@email/'.$this->theme.'/notification/body.html.twig';
     }
 
-    /**
-     * @return $this
-     */
-    public function context(array $context): static
-    {
-        $parentContext = [];
-
-        foreach ($context as $key => $value) {
-            if (\array_key_exists($key, $this->context)) {
-                $this->context[$key] = $value;
-            } else {
-                $parentContext[$key] = $value;
-            }
-        }
-
-        parent::context($parentContext);
-
-        return $this;
-    }
-
     public function getContext(): array
     {
         return array_merge($this->context, parent::getContext());
-    }
-
-    public function isRendered(): bool
-    {
-        return $this->rendered;
-    }
-
-    public function markAsRendered(): void
-    {
-        parent::markAsRendered();
-
-        $this->rendered = true;
     }
 
     public function getPreparedHeaders(): Headers
@@ -226,15 +198,20 @@ class NotificationEmail extends TemplatedEmail
 
     private function determinePriority(string $importance): int
     {
-        return match ($importance) {
-            self::IMPORTANCE_URGENT => self::PRIORITY_HIGHEST,
-            self::IMPORTANCE_HIGH => self::PRIORITY_HIGH,
-            self::IMPORTANCE_MEDIUM => self::PRIORITY_NORMAL,
-            default => self::PRIORITY_LOW,
-        };
+        switch ($importance) {
+            case self::IMPORTANCE_URGENT:
+                return self::PRIORITY_HIGHEST;
+            case self::IMPORTANCE_HIGH:
+                return self::PRIORITY_HIGH;
+            case self::IMPORTANCE_MEDIUM:
+                return self::PRIORITY_NORMAL;
+            case self::IMPORTANCE_LOW:
+            default:
+                return self::PRIORITY_LOW;
+        }
     }
 
-    private function getExceptionAsString(\Throwable|FlattenException $exception): string
+    private function getExceptionAsString($exception): string
     {
         if (class_exists(FlattenException::class)) {
             $exception = $exception instanceof FlattenException ? $exception : FlattenException::createFromThrowable($exception);
@@ -242,7 +219,7 @@ class NotificationEmail extends TemplatedEmail
             return $exception->getAsString();
         }
 
-        $message = $exception::class;
+        $message = \get_class($exception);
         if ('' !== $exception->getMessage()) {
             $message .= ': '.$exception->getMessage();
         }
@@ -258,7 +235,7 @@ class NotificationEmail extends TemplatedEmail
      */
     public function __serialize(): array
     {
-        return [$this->context, $this->theme, $this->rendered, parent::__serialize()];
+        return [$this->context, $this->theme, parent::__serialize()];
     }
 
     /**
@@ -266,9 +243,7 @@ class NotificationEmail extends TemplatedEmail
      */
     public function __unserialize(array $data): void
     {
-        if (4 === \count($data)) {
-            [$this->context, $this->theme, $this->rendered, $parentData] = $data;
-        } elseif (3 === \count($data)) {
+        if (3 === \count($data)) {
             [$this->context, $this->theme, $parentData] = $data;
         } else {
             // Backwards compatibility for deserializing data structures that were serialized without the theme

@@ -28,9 +28,11 @@ interface FormFactoryInterface
      *
      * @param mixed $data The initial data
      *
+     * @return FormInterface
+     *
      * @throws InvalidOptionsException if any given option is not applicable to the given type
      */
-    public function create(string $type = FormType::class, mixed $data = null, array $options = []): FormInterface;
+    public function create(string $type = FormType::class, $data = null, array $options = []);
 
     /**
      * Returns a form.
@@ -39,9 +41,11 @@ interface FormFactoryInterface
      *
      * @param mixed $data The initial data
      *
+     * @return FormInterface
+     *
      * @throws InvalidOptionsException if any given option is not applicable to the given type
      */
-    public function createNamed(string $name, string $type = FormType::class, mixed $data = null, array $options = []): FormInterface;
+    public function createNamed(string $name, string $type = FormType::class, $data = null, array $options = []);
 
     /**
      * Returns a form for a property of a class.
@@ -52,27 +56,33 @@ interface FormFactoryInterface
      * @param string $property The name of the property to guess for
      * @param mixed  $data     The initial data
      *
+     * @return FormInterface
+     *
      * @throws InvalidOptionsException if any given option is not applicable to the form type
      */
-    public function createForProperty(string $class, string $property, mixed $data = null, array $options = []): FormInterface;
+    public function createForProperty(string $class, string $property, $data = null, array $options = []);
 
     /**
      * Returns a form builder.
      *
      * @param mixed $data The initial data
      *
+     * @return FormBuilderInterface
+     *
      * @throws InvalidOptionsException if any given option is not applicable to the given type
      */
-    public function createBuilder(string $type = FormType::class, mixed $data = null, array $options = []): FormBuilderInterface;
+    public function createBuilder(string $type = FormType::class, $data = null, array $options = []);
 
     /**
      * Returns a form builder.
      *
      * @param mixed $data The initial data
      *
+     * @return FormBuilderInterface
+     *
      * @throws InvalidOptionsException if any given option is not applicable to the given type
      */
-    public function createNamedBuilder(string $name, string $type = FormType::class, mixed $data = null, array $options = []): FormBuilderInterface;
+    public function createNamedBuilder(string $name, string $type = FormType::class, $data = null, array $options = []);
 
     /**
      * Returns a form builder for a property of a class.
@@ -84,7 +94,9 @@ interface FormFactoryInterface
      * @param string $property The name of the property to guess for
      * @param mixed  $data     The initial data
      *
+     * @return FormBuilderInterface
+     *
      * @throws InvalidOptionsException if any given option is not applicable to the form type
      */
-    public function createBuilderForProperty(string $class, string $property, mixed $data = null, array $options = []): FormBuilderInterface;
+    public function createBuilderForProperty(string $class, string $property, $data = null, array $options = []);
 }

@@ -28,12 +28,12 @@ interface UserCheckerInterface
      *
      * @throws AccountStatusException
      */
-    public function checkPreAuth(UserInterface $user): void;
+    public function checkPreAuth(UserInterface $user);
 
     /**
      * Checks the user account after authentication.
      *
      * @throws AccountStatusException
      */
-    public function checkPostAuth(UserInterface $user): void;
+    public function checkPostAuth(UserInterface $user);
 }

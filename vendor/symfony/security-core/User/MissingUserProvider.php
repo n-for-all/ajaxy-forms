@@ -18,8 +18,6 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  * when a firewall requires a user provider but none was defined.
  *
  * @internal
- *
- * @template-implements UserProviderInterface<never>
  */
 class MissingUserProvider implements UserProviderInterface
 {
@@ -31,6 +29,9 @@ class MissingUserProvider implements UserProviderInterface
         throw new InvalidConfigurationException(sprintf('"%s" firewall requires a user provider but none was defined.', $firewall));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function loadUserByUsername(string $username): UserInterface
     {
         throw new \BadMethodCallException();
@@ -41,11 +42,17 @@ class MissingUserProvider implements UserProviderInterface
         throw new \BadMethodCallException();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function refreshUser(UserInterface $user): UserInterface
     {
         throw new \BadMethodCallException();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supportsClass(string $class): bool
     {
         throw new \BadMethodCallException();

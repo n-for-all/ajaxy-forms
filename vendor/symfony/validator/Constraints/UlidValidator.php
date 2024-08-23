@@ -24,7 +24,10 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
  */
 class UlidValidator extends ConstraintValidator
 {
-    public function validate(mixed $value, Constraint $constraint): void
+    /**
+     * {@inheritdoc}
+     */
+    public function validate($value, Constraint $constraint)
     {
         if (!$constraint instanceof Ulid) {
             throw new UnexpectedTypeException($constraint, Ulid::class);
@@ -34,7 +37,7 @@ class UlidValidator extends ConstraintValidator
             return;
         }
 
-        if (!\is_scalar($value) && !$value instanceof \Stringable) {
+        if (!\is_scalar($value) && !(\is_object($value) && method_exists($value, '__toString'))) {
             throw new UnexpectedValueException($value, 'string');
         }
 

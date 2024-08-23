@@ -27,14 +27,16 @@ use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
  */
 class LazyChoiceList implements ChoiceListInterface
 {
-    private ChoiceLoaderInterface $loader;
+    private $loader;
 
     /**
      * The callable creating string values for each choice.
      *
      * If null, choices are cast to strings.
+     *
+     * @var callable|null
      */
-    private ?\Closure $value;
+    private $value;
 
     /**
      * Creates a lazily-loaded list using the given loader.
@@ -45,38 +47,56 @@ class LazyChoiceList implements ChoiceListInterface
      *
      * @param callable|null $value The callable generating the choice values
      */
-    public function __construct(ChoiceLoaderInterface $loader, ?callable $value = null)
+    public function __construct(ChoiceLoaderInterface $loader, callable $value = null)
     {
         $this->loader = $loader;
-        $this->value = null === $value ? null : $value(...);
+        $this->value = $value;
     }
 
-    public function getChoices(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getChoices()
     {
         return $this->loader->loadChoiceList($this->value)->getChoices();
     }
 
-    public function getValues(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getValues()
     {
         return $this->loader->loadChoiceList($this->value)->getValues();
     }
 
-    public function getStructuredValues(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getStructuredValues()
     {
         return $this->loader->loadChoiceList($this->value)->getStructuredValues();
     }
 
-    public function getOriginalKeys(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getOriginalKeys()
     {
         return $this->loader->loadChoiceList($this->value)->getOriginalKeys();
     }
 
-    public function getChoicesForValues(array $values): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getChoicesForValues(array $values)
     {
         return $this->loader->loadChoicesForValues($values, $this->value);
     }
 
-    public function getValuesForChoices(array $choices): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getValuesForChoices(array $choices)
     {
         return $this->loader->loadValuesForChoices($choices, $this->value);
     }

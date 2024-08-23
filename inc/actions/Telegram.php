@@ -59,7 +59,7 @@ class Telegram implements ActionInterface
                 throw new \Exception($response->get_error_message());
             }
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            throw new \Exception(\esc_html($e->getMessage()));
         }
     }
 

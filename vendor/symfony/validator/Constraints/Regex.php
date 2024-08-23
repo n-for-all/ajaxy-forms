@@ -15,6 +15,9 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
 /**
+ * @Annotation
+ * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
+ *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
@@ -22,25 +25,29 @@ class Regex extends Constraint
 {
     public const REGEX_FAILED_ERROR = 'de1e3db3-5ed4-4941-aae4-59f3667cc3a3';
 
-    protected const ERROR_NAMES = [
+    protected static $errorNames = [
         self::REGEX_FAILED_ERROR => 'REGEX_FAILED_ERROR',
     ];
 
-    public string $message = 'This value is not valid.';
-    public ?string $pattern = null;
-    public ?string $htmlPattern = null;
-    public bool $match = true;
-    /** @var callable|null */
+    public $message = 'This value is not valid.';
+    public $pattern;
+    public $htmlPattern;
+    public $match = true;
     public $normalizer;
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param string|array $pattern The pattern to evaluate or an array of options
+     */
     public function __construct(
-        string|array|null $pattern,
+        $pattern,
         ?string $message = null,
         ?string $htmlPattern = null,
         ?bool $match = null,
         ?callable $normalizer = null,
         ?array $groups = null,
-        mixed $payload = null,
+        $payload = null,
         array $options = []
     ) {
         if (\is_array($pattern)) {
@@ -61,12 +68,18 @@ class Regex extends Constraint
         }
     }
 
-    public function getDefaultOption(): ?string
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOption()
     {
         return 'pattern';
     }
 
-    public function getRequiredOptions(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequiredOptions()
     {
         return ['pattern'];
     }
@@ -77,8 +90,10 @@ class Regex extends Constraint
      * However, if options are specified, it cannot be converted.
      *
      * @see http://dev.w3.org/html5/spec/single-page.html#the-pattern-attribute
+     *
+     * @return string|null
      */
-    public function getHtmlPattern(): ?string
+    public function getHtmlPattern()
     {
         // If htmlPattern is specified, use it
         if (null !== $this->htmlPattern) {

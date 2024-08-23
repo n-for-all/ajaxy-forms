@@ -16,7 +16,10 @@ namespace Symfony\Component\Form;
  */
 class ResolvedFormTypeFactory implements ResolvedFormTypeFactoryInterface
 {
-    public function createResolvedType(FormTypeInterface $type, array $typeExtensions, ?ResolvedFormTypeInterface $parent = null): ResolvedFormTypeInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function createResolvedType(FormTypeInterface $type, array $typeExtensions, ResolvedFormTypeInterface $parent = null)
     {
         return new ResolvedFormType($type, $typeExtensions, $parent);
     }

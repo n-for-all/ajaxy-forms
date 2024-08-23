@@ -127,7 +127,7 @@ class JWT {
      * @throws \DomainException
      */
     public static function jsonEncode($input): string {
-        $json = \wp_json_encode($input);
+        $json = \json_encode($input);
         if (\function_exists('json_last_error') && $errno = \json_last_error()) {
             self::handleJsonError($errno);
         } else if ($json === 'null' && $input !== null) {

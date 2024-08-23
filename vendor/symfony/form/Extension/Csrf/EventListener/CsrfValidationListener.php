@@ -25,22 +25,22 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CsrfValidationListener implements EventSubscriberInterface
 {
-    private string $fieldName;
-    private CsrfTokenManagerInterface $tokenManager;
-    private string $tokenId;
-    private string $errorMessage;
-    private ?TranslatorInterface $translator;
-    private ?string $translationDomain;
-    private ServerParams $serverParams;
+    private $fieldName;
+    private $tokenManager;
+    private $tokenId;
+    private $errorMessage;
+    private $translator;
+    private $translationDomain;
+    private $serverParams;
 
-    public static function getSubscribedEvents(): array
+    public static function getSubscribedEvents()
     {
         return [
             FormEvents::PRE_SUBMIT => 'preSubmit',
         ];
     }
 
-    public function __construct(string $fieldName, CsrfTokenManagerInterface $tokenManager, string $tokenId, string $errorMessage, ?TranslatorInterface $translator = null, ?string $translationDomain = null, ?ServerParams $serverParams = null)
+    public function __construct(string $fieldName, CsrfTokenManagerInterface $tokenManager, string $tokenId, string $errorMessage, TranslatorInterface $translator = null, string $translationDomain = null, ServerParams $serverParams = null)
     {
         $this->fieldName = $fieldName;
         $this->tokenManager = $tokenManager;
@@ -51,7 +51,7 @@ class CsrfValidationListener implements EventSubscriberInterface
         $this->serverParams = $serverParams ?? new ServerParams();
     }
 
-    public function preSubmit(FormEvent $event): void
+    public function preSubmit(FormEvent $event)
     {
         $form = $event->getForm();
         $postRequestSizeExceeded = 'POST' === $form->getConfig()->getMethod() && $this->serverParams->hasPostMaxSizeBeenExceeded();

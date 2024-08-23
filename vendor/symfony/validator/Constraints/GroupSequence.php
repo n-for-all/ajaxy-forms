@@ -28,7 +28,9 @@ namespace Symfony\Component\Validator\Constraints;
  *
  * When adding metadata to a class, you can override the "Default" group of
  * that class with a group sequence:
- *     #[GroupSequence(['Address', 'Strict'])]
+ *     /**
+ *      * @GroupSequence({"Address", "Strict"})
+ *      *\/
  *     class Address
  *     {
  *         // ...
@@ -44,6 +46,9 @@ namespace Symfony\Component\Validator\Constraints;
  *
  *     $validator->validate($address, null, "Address")
  *
+ * @Annotation
+ * @Target({"CLASS", "ANNOTATION"})
+ *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
 #[\Attribute(\Attribute::TARGET_CLASS)]
@@ -54,7 +59,7 @@ class GroupSequence
      *
      * @var array<int, string|string[]|GroupSequence>
      */
-    public array $groups;
+    public $groups;
 
     /**
      * The group in which cascaded objects are validated when validating
@@ -67,8 +72,10 @@ class GroupSequence
      * "Default" group. When validating that class in the "Default" group, the
      * group sequence is used instead, but still the "Default" group should be
      * cascaded to other objects.
+     *
+     * @var string|GroupSequence
      */
-    public string|GroupSequence $cascadedGroup;
+    public $cascadedGroup;
 
     /**
      * Creates a new group sequence.
@@ -77,6 +84,7 @@ class GroupSequence
      */
     public function __construct(array $groups)
     {
+        // Support for Doctrine annotations
         $this->groups = $groups['value'] ?? $groups;
     }
 }

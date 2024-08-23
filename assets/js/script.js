@@ -30,6 +30,14 @@
             this.element.addEventListener("submit", function (e) {
                 var _a, _b;
                 e.preventDefault();
+                _this.element.dispatchEvent && _this.element.dispatchEvent(new CustomEvent("beforesubmit", {
+                    bubbles: true,
+                    cancelable: true,
+                    detail: {
+                        form: _this.element,
+                        submitButton: _this.submitButton,
+                    },
+                }));
                 _this.element.classList.remove("invalid");
                 if (_this.submitButton && _this.submitButton.classList.contains("loading"))
                     return;
@@ -52,7 +60,7 @@
                     var method = (_this.element.method ? _this.element.method : "POST").toUpperCase();
                     var fetchData = {
                         headers: headers,
-                        method: method
+                        method: method,
                     };
                     var action = _this.element.action;
                     if (method == "GET" || method == "HEAD") {
@@ -73,10 +81,12 @@
                             (_a = _this.submitButton) === null || _a === void 0 ? void 0 : _a.classList.remove("loading");
                             if (json) {
                                 if (json.status == "error") {
-                                    var fields = json.fields;
-                                    var names = Object.keys(fields);
-                                    for (var i = 0; i < names.length; i++) {
-                                        _this.addErrors(names[i], fields[names[i]]);
+                                    if (json.fields) {
+                                        var fields = json.fields;
+                                        var names = Object.keys(fields);
+                                        for (var i = 0; i < names.length; i++) {
+                                            _this.addErrors(names[i], fields[names[i]]);
+                                        }
                                     }
                                 }
                                 else {
@@ -95,14 +105,16 @@
                                     }
                                 }
                             }
-                        })["catch"](function (error) {
+                        })
+                            .catch(function (error) {
                             var _a;
                             _this.clearErrors();
                             _this.trigger("error", error);
                             (_a = _this.submitButton) === null || _a === void 0 ? void 0 : _a.classList.remove("loading");
                             _this.setMessage(error.message, "error");
                         });
-                    })["catch"](function (e) {
+                    })
+                        .catch(function (e) {
                         var _a;
                         _this.trigger("error", e);
                         (_a = _this.submitButton) === null || _a === void 0 ? void 0 : _a.classList.remove("loading");
@@ -198,6 +210,92 @@
         return Form;
     }());
 
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation.
+
+    Permission to use, copy, modify, and/or distribute this software for any
+    purpose with or without fee is hereby granted.
+
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+    AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+    PERFORMANCE OF THIS SOFTWARE.
+    ***************************************************************************** */
+    /* global Reflect, Promise */
+
+
+    var __assign = function() {
+        __assign = Object.assign || function __assign(t) {
+            for (var s, i = 1, n = arguments.length; i < n; i++) {
+                s = arguments[i];
+                for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+            }
+            return t;
+        };
+        return __assign.apply(this, arguments);
+    };
+
+    var AjaxyTermPostsManager = /** @class */ (function () {
+        function AjaxyTermPostsManager(termSelector, postsSelector, messages, dataSettings) {
+            this.termsEl = document.querySelector(termSelector);
+            this.postsEl = document.querySelector(postsSelector);
+            if (!this.termsEl || !this.postsEl) {
+                return;
+            }
+            this.dataSettings = dataSettings;
+            this.loadingMessage = messages['loading'];
+            this.noPostsMessage = messages['not_found'];
+            this.defaultMessage = messages['default_option'];
+            this.loadEvents();
+        }
+        AjaxyTermPostsManager.prototype.loadEvents = function () {
+            var _this = this;
+            this.termsEl.addEventListener("change", function () {
+                _this.loadPosts(_this.termsEl.value);
+            });
+            if (this.termsEl.value != "") {
+                this.termsEl.dispatchEvent(new Event("change"));
+            }
+        };
+        AjaxyTermPostsManager.prototype.loadPosts = function (termId) {
+            var _this = this;
+            if (!termId) {
+                this.postsEl.innerHTML = '<option value="">' + this.defaultMessage + "</option>";
+                return;
+            }
+            this.postsEl.innerHTML = '<option value="">' + this.loadingMessage + "</option>";
+            this.postsEl.style.transition = "opacity 0.3s ease";
+            this.postsEl.style.opacity = "0.5";
+            fetch(ajaxyFormsSettings.dataUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(__assign({ type: "posts_by_term", term_id: termId }, this.dataSettings)),
+            })
+                .then(function (response) { return response.json(); })
+                .then(function (response) {
+                _this.postsEl.style.opacity = "1";
+                if (response.status != "success") {
+                    console.error(response.message);
+                    return;
+                }
+                _this.postsEl.innerHTML = "";
+                if (response.data.length == 0) {
+                    _this.postsEl.innerHTML = '<option value="">' + _this.noPostsMessage + "</option>";
+                    return;
+                }
+                response.data.forEach(function (post) {
+                    _this.postsEl.innerHTML += "<option value=\"".concat(post.id, "\">").concat(post.title, "</option>");
+                });
+            });
+        };
+        return AjaxyTermPostsManager;
+    }());
+
     var AjaxyForms = /** @class */ (function () {
         function AjaxyForms() {
             var _this = this;
@@ -245,6 +343,7 @@
         };
         return AjaxyForms;
     }());
+    window["AjaxyTermPostsManager"] = AjaxyTermPostsManager;
     window["AjaxyForms"] = new AjaxyForms();
 
 })();

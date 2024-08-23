@@ -26,6 +26,8 @@ namespace Symfony\Component\Security\Core\User;
  *
  * @see UserProviderInterface
  *
+ * @method string getUserIdentifier() returns the identifier for this user (e.g. its username or email address)
+ *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 interface UserInterface
@@ -44,7 +46,30 @@ interface UserInterface
      *
      * @return string[]
      */
-    public function getRoles(): array;
+    public function getRoles();
+
+    /**
+     * Returns the password used to authenticate the user.
+     *
+     * This should be the hashed password. On authentication, a plain-text
+     * password will be hashed, and then compared to this value.
+     *
+     * This method is deprecated since Symfony 5.3, implement it from {@link PasswordAuthenticatedUserInterface} instead.
+     *
+     * @return string|null
+     */
+    public function getPassword();
+
+    /**
+     * Returns the salt that was originally used to hash the password.
+     *
+     * This can return null if the password was not hashed using a salt.
+     *
+     * This method is deprecated since Symfony 5.3, implement it from {@link LegacyPasswordAuthenticatedUserInterface} instead.
+     *
+     * @return string|null
+     */
+    public function getSalt();
 
     /**
      * Removes sensitive data from the user.
@@ -52,10 +77,12 @@ interface UserInterface
      * This is important if, at any given point, sensitive information like
      * the plain-text password is stored on this object.
      */
-    public function eraseCredentials(): void;
+    public function eraseCredentials();
 
     /**
-     * Returns the identifier for this user (e.g. username or email address).
+     * @return string
+     *
+     * @deprecated since Symfony 5.3, use getUserIdentifier() instead
      */
-    public function getUserIdentifier(): string;
+    public function getUsername();
 }

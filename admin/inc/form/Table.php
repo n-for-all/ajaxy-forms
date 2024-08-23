@@ -4,6 +4,7 @@
 namespace Ajaxy\Forms\Admin\Inc\Form;
 
 use Ajaxy\Forms\Inc\Data;
+use Ajaxy\Forms\Inc\Helper;
 
 if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
@@ -31,11 +32,11 @@ class Table extends \WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox" />',
-            'name' => __('Form', AJAXY_FORMS_TEXT_DOMAIN),
-            'shortcode' => __('Shortcode', AJAXY_FORMS_TEXT_DOMAIN),
-            'entries' => __('Entries', AJAXY_FORMS_TEXT_DOMAIN),
-            'metadata' => __('Metadata', AJAXY_FORMS_TEXT_DOMAIN),
-            'created' => __('Date', AJAXY_FORMS_TEXT_DOMAIN),
+            'name' => __('Form', "ajaxy-forms"),
+            'shortcode' => __('Shortcode', "ajaxy-forms"),
+            'entries' => __('Entries', "ajaxy-forms"),
+            'metadata' => __('Metadata', "ajaxy-forms"),
+            'created' => __('Date', "ajaxy-forms"),
         );
         return $columns;
     }
@@ -134,8 +135,8 @@ class Table extends \WP_List_Table
         );
 
         $actions = array(
-            'edit' => sprintf('<a href="%s">%s</a>', $edit_url, __('Edit', AJAXY_FORMS_TEXT_DOMAIN)),
-            'delete' => sprintf('<a href="%s">%s</a>', $delete_url, __('Delete', AJAXY_FORMS_TEXT_DOMAIN)),
+            'edit' => sprintf('<a href="%s">%s</a>', $edit_url, __('Edit', "ajaxy-forms")),
+            'delete' => sprintf('<a href="%s">%s</a>', $delete_url, __('Delete', "ajaxy-forms")),
         );
 
         return sprintf(
@@ -215,11 +216,11 @@ class Table extends \WP_List_Table
 
         $t_time = sprintf(
             /* translators: 1: date, 2: time */
-            __('%1$s at %2$s', \AJAXY_FORMS_TEXT_DOMAIN),
+            __('%1$s at %2$s', "ajaxy-forms"),
             /* translators: date format, see https://www.php.net/date */
-            $datetime->format(__('Y/m/d', \AJAXY_FORMS_TEXT_DOMAIN)),
+            $datetime->format(__('Y/m/d', "ajaxy-forms")),
             /* translators: time format, see https://www.php.net/date */
-            $datetime->format(__('g:i a', \AJAXY_FORMS_TEXT_DOMAIN))
+            $datetime->format(__('g:i a', "ajaxy-forms"))
         );
 
         return $output . $t_time;
@@ -274,12 +275,12 @@ class Table extends \WP_List_Table
             global $wpdb;
             add_action('admin_notices', function () {
                 $class = 'notice notice-error';
-                $message = __('An error has occurred.', \AJAXY_FORMS_TEXT_DOMAIN);
+                $message = __('An error has occurred.', "ajaxy-forms");
 
                 printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));
             });
 
-            \printf('<div id="message" class="notice notice-error"><p>Error: %s - %s</p></div>', $wpdb->last_error, 'Please activate and deactivate the plugin to reinstall the tables');
+            \printf('<div id="message" class="notice notice-error"><p>Error: %s - %s</p></div>', esc_html($wpdb->last_error), 'Please activate and deactivate the plugin to reinstall the tables');
         }
 
         // prepare query params, as usual current page, order by and order direction
@@ -335,24 +336,8 @@ class Table extends \WP_List_Table
 
     function create_tree_list($array, $class = "af-tree")
     {
-        $list = '<ul class="' . $class . '">';
-        foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $is_list = $this->is_list($value);
-                $list .= \sprintf('<li><span class="af-key">%s: </span><span class="af-start-tick">%s</span><span class="af-tick">...</span><span class="af-handle"></span></span>%s<span class="af-end-tick">%s</span></li>', $key, $is_list ? "[" : "{", $this->create_tree_list($value, ""), $is_list ? "]" : "}");
-            } else {
-                $list .= \sprintf('<li>%s: <span class="af-value">%s</span></li>', $key, $value);
-            }
-        }
-        $list .= '</ul>';
-        return $list;
+        return Helper::create_tree_list($array, $class);
     }
 
-    function is_list(array $arr)
-    {
-        if ($arr === []) {
-            return true;
-        }
-        return array_keys($arr) === range(0, count($arr) - 1);
-    }
+    
 }

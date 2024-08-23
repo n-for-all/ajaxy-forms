@@ -20,6 +20,8 @@ interface TokenGeneratorInterface
 {
     /**
      * Generates a CSRF token.
+     *
+     * @return string
      */
-    public function generateToken(): string;
+    public function generateToken();
 }

@@ -21,7 +21,10 @@ namespace Symfony\Component\Security\Core\Exception;
  */
 class AuthenticationExpiredException extends AccountStatusException
 {
-    public function getMessageKey(): string
+    /**
+     * {@inheritdoc}
+     */
+    public function getMessageKey()
     {
         return 'Authentication expired because your account information has changed.';
     }

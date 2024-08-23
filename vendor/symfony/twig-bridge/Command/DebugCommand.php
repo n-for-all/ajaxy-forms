@@ -11,7 +11,6 @@
 
 namespace Symfony\Bridge\Twig\Command;
 
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Completion\CompletionSuggestions;
@@ -22,8 +21,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\ErrorHandler\ErrorRenderer\FileLinkFormatter;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\Debug\FileLinkFormatter;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\FilesystemLoader;
@@ -33,22 +32,19 @@ use Twig\Loader\FilesystemLoader;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-#[AsCommand(name: 'debug:twig', description: 'Show a list of twig functions, filters, globals and tests')]
 class DebugCommand extends Command
 {
-    private Environment $twig;
-    private ?string $projectDir;
-    private array $bundlesMetadata;
-    private ?string $twigDefaultPath;
+    protected static $defaultName = 'debug:twig';
+    protected static $defaultDescription = 'Show a list of twig functions, filters, globals and tests';
 
-    /**
-     * @var FilesystemLoader[]
-     */
-    private array $filesystemLoaders;
+    private $twig;
+    private $projectDir;
+    private $bundlesMetadata;
+    private $twigDefaultPath;
+    private $filesystemLoaders;
+    private $fileLinkFormatter;
 
-    private ?FileLinkFormatter $fileLinkFormatter;
-
-    public function __construct(Environment $twig, ?string $projectDir = null, array $bundlesMetadata = [], ?string $twigDefaultPath = null, ?FileLinkFormatter $fileLinkFormatter = null)
+    public function __construct(Environment $twig, string $projectDir = null, array $bundlesMetadata = [], string $twigDefaultPath = null, FileLinkFormatter $fileLinkFormatter = null)
     {
         parent::__construct();
 
@@ -59,14 +55,15 @@ class DebugCommand extends Command
         $this->fileLinkFormatter = $fileLinkFormatter;
     }
 
-    protected function configure(): void
+    protected function configure()
     {
         $this
             ->setDefinition([
                 new InputArgument('name', InputArgument::OPTIONAL, 'The template name'),
                 new InputOption('filter', null, InputOption::VALUE_REQUIRED, 'Show details for all entries matching this filter'),
-                new InputOption('format', null, InputOption::VALUE_REQUIRED, sprintf('The output format ("%s")', implode('", "', $this->getAvailableFormatOptions())), 'text'),
+                new InputOption('format', null, InputOption::VALUE_REQUIRED, 'The output format (text or json)', 'text'),
             ])
+            ->setDescription(self::$defaultDescription)
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> command outputs a list of twig functions,
 filters, globals and tests.
@@ -91,7 +88,7 @@ EOF
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
         $name = $input->getArgument('name');
@@ -101,11 +98,16 @@ EOF
             throw new InvalidArgumentException(sprintf('Argument "name" not supported, it requires the Twig loader "%s".', FilesystemLoader::class));
         }
 
-        match ($input->getOption('format')) {
-            'text' => $name ? $this->displayPathsText($io, $name) : $this->displayGeneralText($io, $filter),
-            'json' => $name ? $this->displayPathsJson($io, $name) : $this->displayGeneralJson($io, $filter),
-            default => throw new InvalidArgumentException(sprintf('Supported formats are "%s".', implode('", "', $this->getAvailableFormatOptions()))),
-        };
+        switch ($input->getOption('format')) {
+            case 'text':
+                $name ? $this->displayPathsText($io, $name) : $this->displayGeneralText($io, $filter);
+                break;
+            case 'json':
+                $name ? $this->displayPathsJson($io, $name) : $this->displayGeneralJson($io, $filter);
+                break;
+            default:
+                throw new InvalidArgumentException(sprintf('The format "%s" is not supported.', $input->getOption('format')));
+        }
 
         return 0;
     }
@@ -117,11 +119,11 @@ EOF
         }
 
         if ($input->mustSuggestOptionValuesFor('format')) {
-            $suggestions->suggestValues($this->getAvailableFormatOptions());
+            $suggestions->suggestValues(['text', 'json']);
         }
     }
 
-    private function displayPathsText(SymfonyStyle $io, string $name): void
+    private function displayPathsText(SymfonyStyle $io, string $name)
     {
         $file = new \ArrayIterator($this->findTemplateFiles($name));
         $paths = $this->getLoaderPaths($name);
@@ -162,7 +164,9 @@ EOF
                 [$namespace, $shortname] = $this->parseTemplateName($name);
                 $alternatives = $this->findAlternatives($shortname, $shortnames);
                 if (FilesystemLoader::MAIN_NAMESPACE !== $namespace) {
-                    $alternatives = array_map(fn ($shortname) => '@'.$namespace.'/'.$shortname, $alternatives);
+                    $alternatives = array_map(function ($shortname) use ($namespace) {
+                        return '@'.$namespace.'/'.$shortname;
+                    }, $alternatives);
                 }
             }
 
@@ -196,7 +200,7 @@ EOF
         }
     }
 
-    private function displayPathsJson(SymfonyStyle $io, string $name): void
+    private function displayPathsJson(SymfonyStyle $io, string $name)
     {
         $files = $this->findTemplateFiles($name);
         $paths = $this->getLoaderPaths($name);
@@ -214,7 +218,7 @@ EOF
         $io->writeln(json_encode($data));
     }
 
-    private function displayGeneralText(SymfonyStyle $io, ?string $filter = null): void
+    private function displayGeneralText(SymfonyStyle $io, string $filter = null)
     {
         $decorated = $io->isDecorated();
         $types = ['functions', 'filters', 'tests', 'globals'];
@@ -248,7 +252,7 @@ EOF
         }
     }
 
-    private function displayGeneralJson(SymfonyStyle $io, ?string $filter): void
+    private function displayGeneralJson(SymfonyStyle $io, ?string $filter)
     {
         $decorated = $io->isDecorated();
         $types = ['functions', 'filters', 'tests', 'globals'];
@@ -276,7 +280,7 @@ EOF
         $io->writeln($decorated ? OutputFormatter::escape($data) : $data);
     }
 
-    private function getLoaderPaths(?string $name = null): array
+    private function getLoaderPaths(string $name = null): array
     {
         $loaderPaths = [];
         foreach ($this->getFilesystemLoaders() as $loader) {
@@ -287,7 +291,7 @@ EOF
             }
 
             foreach ($namespaces as $namespace) {
-                $paths = array_map($this->getRelativePath(...), $loader->getPaths($namespace));
+                $paths = array_map([$this, 'getRelativePath'], $loader->getPaths($namespace));
 
                 if (FilesystemLoader::MAIN_NAMESPACE === $namespace) {
                     $namespace = '(None)';
@@ -302,7 +306,7 @@ EOF
         return $loaderPaths;
     }
 
-    private function getMetadata(string $type, mixed $entity): mixed
+    private function getMetadata(string $type, $entity)
     {
         if ('globals' === $type) {
             return $entity;
@@ -360,7 +364,7 @@ EOF
         return null;
     }
 
-    private function getPrettyMetadata(string $type, mixed $entity, bool $decorated): ?string
+    private function getPrettyMetadata(string $type, $entity, bool $decorated): ?string
     {
         if ('tests' === $type) {
             return '';
@@ -377,7 +381,7 @@ EOF
 
         if ('globals' === $type) {
             if (\is_object($meta)) {
-                return ' = object('.$meta::class.')';
+                return ' = object('.\get_class($meta).')';
             }
 
             $description = substr(@json_encode($meta), 0, 50);
@@ -541,7 +545,7 @@ EOF
         }
 
         $threshold = 1e3;
-        $alternatives = array_filter($alternatives, fn ($lev) => $lev < 2 * $threshold);
+        $alternatives = array_filter($alternatives, function ($lev) use ($threshold) { return $lev < 2 * $threshold; });
         ksort($alternatives, \SORT_NATURAL | \SORT_FLAG_CASE);
 
         return array_keys($alternatives);
@@ -566,7 +570,7 @@ EOF
      */
     private function getFilesystemLoaders(): array
     {
-        if (isset($this->filesystemLoaders)) {
+        if (null !== $this->filesystemLoaders) {
             return $this->filesystemLoaders;
         }
         $this->filesystemLoaders = [];
@@ -592,10 +596,5 @@ EOF
         }
 
         return (string) $this->fileLinkFormatter->format($absolutePath, 1);
-    }
-
-    private function getAvailableFormatOptions(): array
-    {
-        return ['text', 'json'];
     }
 }

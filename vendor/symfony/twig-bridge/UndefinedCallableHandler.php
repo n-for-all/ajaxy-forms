@@ -24,9 +24,7 @@ class UndefinedCallableHandler
 {
     private const FILTER_COMPONENTS = [
         'humanize' => 'form',
-        'form_encode_currency' => 'form',
         'trans' => 'translation',
-        'sanitize_html' => 'html-sanitizer',
         'yaml_encode' => 'yaml',
         'yaml_dump' => 'yaml',
     ];
@@ -34,7 +32,6 @@ class UndefinedCallableHandler
     private const FUNCTION_COMPONENTS = [
         'asset' => 'asset',
         'asset_version' => 'asset',
-        'importmap' => 'asset-mapper',
         'dump' => 'debug-bundle',
         'encore_entry_link_tags' => 'webpack-encore-bundle',
         'encore_entry_script_tags' => 'webpack-encore-bundle',
@@ -49,13 +46,6 @@ class UndefinedCallableHandler
         'form_start' => 'form',
         'form_end' => 'form',
         'csrf_token' => 'form',
-        'form_parent' => 'form',
-        'field_name' => 'form',
-        'field_value' => 'form',
-        'field_label' => 'form',
-        'field_help' => 'form',
-        'field_errors' => 'form',
-        'field_choices' => 'form',
         'logout_url' => 'security-http',
         'logout_path' => 'security-http',
         'is_granted' => 'security-core',
@@ -67,15 +57,11 @@ class UndefinedCallableHandler
         'prerender' => 'web-link',
         'workflow_can' => 'workflow',
         'workflow_transitions' => 'workflow',
-        'workflow_transition' => 'workflow',
         'workflow_has_marked_place' => 'workflow',
         'workflow_marked_places' => 'workflow',
-        'workflow_metadata' => 'workflow',
-        'workflow_transition_blockers' => 'workflow',
     ];
 
     private const FULL_STACK_ENABLE = [
-        'html-sanitizer' => 'enable "framework.html_sanitizer"',
         'form' => 'enable "framework.form"',
         'security-core' => 'add the "SecurityBundle"',
         'security-http' => 'add the "SecurityBundle"',
@@ -83,7 +69,10 @@ class UndefinedCallableHandler
         'workflow' => 'enable "framework.workflows"',
     ];
 
-    public static function onUndefinedFilter(string $name): TwigFilter|false
+    /**
+     * @return TwigFilter|false
+     */
+    public static function onUndefinedFilter(string $name)
     {
         if (!isset(self::FILTER_COMPONENTS[$name])) {
             return false;
@@ -92,14 +81,17 @@ class UndefinedCallableHandler
         throw new SyntaxError(self::onUndefined($name, 'filter', self::FILTER_COMPONENTS[$name]));
     }
 
-    public static function onUndefinedFunction(string $name): TwigFunction|false
+    /**
+     * @return TwigFunction|false
+     */
+    public static function onUndefinedFunction(string $name)
     {
         if (!isset(self::FUNCTION_COMPONENTS[$name])) {
             return false;
         }
 
         if ('webpack-encore-bundle' === self::FUNCTION_COMPONENTS[$name]) {
-            return new TwigFunction($name, static fn () => '');
+            return new TwigFunction($name, static function () { return ''; });
         }
 
         throw new SyntaxError(self::onUndefined($name, 'function', self::FUNCTION_COMPONENTS[$name]));

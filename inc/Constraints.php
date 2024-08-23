@@ -1264,6 +1264,6 @@ class Constraints
         if (isset($this->constraints[$type])) {
             return new $this->constraints[$type]['class']($options, $message, $mode);
         }
-        throw new \Exception(sprintf('Constraint %s not found', $constraint));
+        throw new \Exception(\esc_html(sprintf('Constraint %s not found', $constraint)));
     }
 }

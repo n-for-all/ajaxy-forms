@@ -11,8 +11,6 @@
 
 namespace Symfony\Component\Security\Core\Authentication\Token;
 
-use Symfony\Component\Security\Core\User\UserInterface;
-
 /**
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
@@ -28,14 +26,26 @@ class NullToken implements TokenInterface
         return [];
     }
 
-    public function getUser(): ?UserInterface
+    public function getCredentials()
+    {
+        return '';
+    }
+
+    public function getUser()
     {
         return null;
     }
 
-    public function setUser(UserInterface $user): never
+    public function setUser($user)
     {
         throw new \BadMethodCallException('Cannot set user on a NullToken.');
+    }
+
+    public function getUsername()
+    {
+        trigger_deprecation('symfony/security-core', '5.3', 'Method "%s()" is deprecated, use getUserIdentifier() instead.', __METHOD__);
+
+        return '';
     }
 
     public function getUserIdentifier(): string
@@ -43,31 +53,51 @@ class NullToken implements TokenInterface
         return '';
     }
 
-    public function eraseCredentials(): void
+    /**
+     * @deprecated since Symfony 5.4
+     */
+    public function isAuthenticated()
+    {
+        if (0 === \func_num_args() || func_get_arg(0)) {
+            trigger_deprecation('symfony/security-core', '5.4', 'Method "%s()" is deprecated, return null from "getUser()" instead when a token is not authenticated.', __METHOD__);
+        }
+
+        return true;
+    }
+
+    /**
+     * @deprecated since Symfony 5.4
+     */
+    public function setAuthenticated(bool $isAuthenticated)
+    {
+        throw new \BadMethodCallException('Cannot change authentication state of NullToken.');
+    }
+
+    public function eraseCredentials()
     {
     }
 
-    public function getAttributes(): array
+    public function getAttributes()
     {
         return [];
     }
 
-    public function setAttributes(array $attributes): never
+    public function setAttributes(array $attributes)
     {
         throw new \BadMethodCallException('Cannot set attributes of NullToken.');
     }
 
-    public function hasAttribute(string $name): bool
+    public function hasAttribute(string $name)
     {
         return false;
     }
 
-    public function getAttribute(string $name): mixed
+    public function getAttribute(string $name)
     {
         return null;
     }
 
-    public function setAttribute(string $name, mixed $value): never
+    public function setAttribute(string $name, $value)
     {
         throw new \BadMethodCallException('Cannot add attribute to NullToken.');
     }
@@ -78,6 +108,29 @@ class NullToken implements TokenInterface
     }
 
     public function __unserialize(array $data): void
+    {
+    }
+
+    /**
+     * @return string
+     *
+     * @internal in 5.3
+     *
+     * @final in 5.3
+     */
+    public function serialize()
+    {
+        return '';
+    }
+
+    /**
+     * @return void
+     *
+     * @internal in 5.3
+     *
+     * @final in 5.3
+     */
+    public function unserialize($serialized)
     {
     }
 }

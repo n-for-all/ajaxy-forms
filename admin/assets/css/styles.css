@@ -127,6 +127,8 @@
 .af-form-wrap .af-header {
   border-bottom: 1px solid #dcdcde;
   margin-bottom: 0;
+  display: flex;
+  align-items: center;
 }
 .af-form-wrap .af-manage {
   border: 1px solid #c3c4c7;

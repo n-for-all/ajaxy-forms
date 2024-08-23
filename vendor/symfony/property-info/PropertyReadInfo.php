@@ -27,13 +27,23 @@ final class PropertyReadInfo
     public const VISIBILITY_PROTECTED = 'protected';
     public const VISIBILITY_PRIVATE = 'private';
 
-    public function __construct(
-        private readonly string $type,
-        private readonly string $name,
-        private readonly string $visibility,
-        private readonly bool $static,
-        private readonly bool $byRef,
-    ) {
+    private $type;
+
+    private $name;
+
+    private $visibility;
+
+    private $static;
+
+    private $byRef;
+
+    public function __construct(string $type, string $name, string $visibility, bool $static, bool $byRef)
+    {
+        $this->type = $type;
+        $this->name = $name;
+        $this->visibility = $visibility;
+        $this->static = $static;
+        $this->byRef = $byRef;
     }
 
     /**

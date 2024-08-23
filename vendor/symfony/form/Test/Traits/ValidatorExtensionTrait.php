@@ -19,7 +19,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 trait ValidatorExtensionTrait
 {
-    protected ValidatorInterface $validator;
+    /**
+     * @var ValidatorInterface|null
+     */
+    protected $validator;
 
     protected function getValidatorExtension(): ValidatorExtension
     {
@@ -32,7 +35,7 @@ trait ValidatorExtensionTrait
         }
 
         $this->validator = $this->createMock(ValidatorInterface::class);
-        $metadata = $this->getMockBuilder(ClassMetadata::class)->setConstructorArgs([''])->onlyMethods(['addPropertyConstraint'])->getMock();
+        $metadata = $this->getMockBuilder(ClassMetadata::class)->setConstructorArgs([''])->setMethods(['addPropertyConstraint'])->getMock();
         $this->validator->expects($this->any())->method('getMetadataFor')->will($this->returnValue($metadata));
         $this->validator->expects($this->any())->method('validate')->will($this->returnValue(new ConstraintViolationList()));
 

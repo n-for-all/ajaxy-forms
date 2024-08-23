@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    /******************************************************************************
+    /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -20,13 +20,11 @@
     var extendStatics = function(d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
 
     function __extends(d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -81,13 +79,32 @@
                 .attr("type", _field.type || "text")
                 .attr("name", _field.name ? "".concat(this.basename, "[").concat(this.field.name, "][").concat(index, "][").concat(_field.name, "]") : "".concat(this.basename, "[").concat(this.field.name, "][").concat(index, "]"))
                 .val(item ? item[_field.name] || "" : "");
-            if (_field.label) {
-                input.attr("placeholder", _field.label);
+            if (_field.type == "checkbox" || _field.type == "radio") {
+                input.prop("checked", item[_field.name] == 1);
             }
             input.on("change", function (e) {
-                item[_field.name] = jQuery(e.target).val();
+                if (_field.type == "checkbox" || _field.type == "radio") {
+                    if (e.target.checked) {
+                        item[_field.name] = 1;
+                    }
+                    else {
+                        delete item[_field.name];
+                    }
+                }
+                else {
+                    item[_field.name] = e.target.value;
+                }
             });
             inputDiv.append(input);
+            if (_field.label) {
+                if (_field.type == "checkbox" || _field.type == "radio") {
+                    inputDiv.append(jQuery("<label></label>").html(_field.label));
+                    input.val(1);
+                }
+                else {
+                    input.attr("placeholder", _field.label);
+                }
+            }
             if (_field.help) {
                 var small = jQuery("<small></small>").html(_field.help);
                 inputDiv.append(small);
@@ -171,11 +188,17 @@
                 this.$el.append(label);
             }
             var inputDiv = jQuery("<div></div>").addClass("af-field-input");
-            var select = jQuery("<select></select>").attr("name", "".concat(this.basename, "[").concat(this.field.name, "]")).addClass("widefat").val(this.value);
+            var select = jQuery("<select></select>").attr("name", "".concat(this.basename, "[").concat(this.field.name, "]")).addClass("widefat");
             Object.keys(this.field.options)
                 .map(function (key) {
                 var option = _this.field.options[key];
                 var optionEl = jQuery("<option></option>").attr("value", key).html(option);
+                if (key == _this.value) {
+                    optionEl.attr("selected", "selected");
+                }
+                else if (_this.value == '' && key == _this.field.default) {
+                    optionEl.attr("selected", "selected");
+                }
                 select.append(optionEl);
             })
                 .join("");
@@ -270,8 +293,9 @@
 
     var SettingsSectionFields = (function (_super) {
         __extends(SettingsSectionFields, _super);
-        function SettingsSectionFields(basename, fields, data) {
+        function SettingsSectionFields(fieldView, basename, fields, data) {
             var _this = _super.call(this) || this;
+            _this.fieldView = fieldView;
             _this.fields = fields;
             _this.basename = basename;
             _this.data = data;
@@ -291,7 +315,19 @@
                     case "textarea":
                         return new TextAreaField(_this.basename, _field, _this.data ? _this.data[_field.name] || "" : "");
                     default:
-                        return new TextField(_this.basename, _field, _this.data ? _this.data[_field.name] || "" : "");
+                        var textField = new TextField(_this.basename, _field, _this.data ? _this.data[_field.name] || "" : "");
+                        if (_field.name == 'label') {
+                            textField.$el.on("blur", "input", function (e) {
+                                var value = jQuery(e.target).val();
+                                if (!value || value === "") {
+                                    _this.fieldView.setTitle("No Label");
+                                    return;
+                                }
+                                _this.fieldView.setTitle(value);
+                            });
+                            _this.fieldView.setTitle(_this.data[_field.name] || "No Label");
+                        }
+                        return textField;
                 }
             });
             fieldMap.forEach(function (field) {
@@ -304,10 +340,11 @@
 
     var ConstraintsView = (function (_super) {
         __extends(ConstraintsView, _super);
-        function ConstraintsView(basename, data) {
+        function ConstraintsView(fieldView, basename, data) {
             var _this = _super.call(this) || this;
             _this.index = 0;
             _this.basename = "";
+            _this.fieldView = fieldView;
             _this.data = data || {};
             _this.basename = basename;
             return _this;
@@ -346,7 +383,7 @@
                 var value = $select.val().toString();
                 var constraint = ajaxyFormsBuilder.constraints[value];
                 fields.html("");
-                fields.append(new SettingsSectionFields("".concat(_this.basename, "[constraints][").concat(index, "]"), constraint.fields, constraintValue).render().el);
+                fields.append(new SettingsSectionFields(_this.fieldView, "".concat(_this.basename, "[constraints][").concat(index, "]"), constraint.fields, constraintValue).render().el);
                 if (value && ajaxyFormsBuilder.constraints[value] && ajaxyFormsBuilder.constraints[value].help) {
                     help.html(ajaxyFormsBuilder.constraints[value].help);
                     if (ajaxyFormsBuilder.constraints[value].docs) {
@@ -394,8 +431,9 @@
 
     var Settings = (function (_super) {
         __extends(Settings, _super);
-        function Settings(index, field, data, onRemove) {
+        function Settings(fieldView, index, field, data, onRemove) {
             var _this = _super.call(this) || this;
+            _this.fieldView = fieldView;
             _this.field = field;
             _this.data = data;
             _this.onRemove = onRemove;
@@ -405,7 +443,7 @@
         Settings.prototype.createBasicSettings = function () {
             var basicSettings = jQuery("<div></div>").addClass("basic-settings");
             var basicInnerSection = jQuery("<div></div>").addClass("section-inner");
-            basicInnerSection.append(new SettingsSectionFields("fields[".concat(this.index, "]"), this.field.properties.basic.fields, this.data).render().el);
+            basicInnerSection.append(new SettingsSectionFields(this.fieldView, "fields[".concat(this.index, "]"), this.field.properties.basic.fields, this.data).render().el);
             basicSettings.append(basicInnerSection);
             return basicSettings;
         };
@@ -415,8 +453,7 @@
                 settings.addClass("active");
             }
             var heading = jQuery("<h3></h3>").html("<span>".concat(data.label, "</span>"));
-            var toggle = jQuery("<a></a>").attr("href", "#").addClass("item-toggle")
-                .html("<svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                <path d=\"M6 12H12M12 12H18M12 12V18M12 12V6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n            </svg>");
+            var toggle = jQuery("<a></a>").attr("href", "#").addClass("item-toggle").html("<svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                <path d=\"M6 12H12M12 12H18M12 12V18M12 12V6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n            </svg>");
             toggle.on("click", function (e) {
                 e.preventDefault();
                 settings.toggleClass("active");
@@ -425,7 +462,7 @@
             settings.append(heading);
             var toggleInnerSection = jQuery("<div></div>").addClass("section-toggle");
             var innerSection = jQuery("<div></div>").addClass("section-inner");
-            innerSection.append(new SettingsSectionFields("fields[".concat(this.index, "]"), data.fields, this.data).render().el);
+            innerSection.append(new SettingsSectionFields(this.fieldView, "fields[".concat(this.index, "]"), data.fields, this.data).render().el);
             toggleInnerSection.append(innerSection);
             settings.append(toggleInnerSection);
             return settings;
@@ -436,8 +473,7 @@
                 settings.addClass("active");
             }
             var heading = jQuery("<h3></h3>").html("<span>".concat(data.label, "</span>"));
-            var toggle = jQuery("<a></a>").attr("href", "#").addClass("item-toggle")
-                .html("<svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                <path d=\"M6 12H12M12 12H18M12 12V18M12 12V6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n            </svg>");
+            var toggle = jQuery("<a></a>").attr("href", "#").addClass("item-toggle").html("<svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                <path d=\"M6 12H12M12 12H18M12 12V18M12 12V6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n            </svg>");
             toggle.on("click", function (e) {
                 e.preventDefault();
                 settings.toggleClass("active");
@@ -446,7 +482,7 @@
             settings.append(heading);
             var toggleInnerSection = jQuery("<div></div>").addClass("section-toggle");
             var innerSection = jQuery("<div></div>").addClass("section-inner");
-            innerSection.append(new ConstraintsView("fields[".concat(this.index, "]"), this.data.constraints || []).render().el);
+            innerSection.append(new ConstraintsView(this.fieldView, "fields[".concat(this.index, "]"), this.data.constraints || []).render().el);
             toggleInnerSection.append(innerSection);
             settings.append(toggleInnerSection);
             return settings;
@@ -457,10 +493,12 @@
             var innerSettings = jQuery("<div></div>").addClass("settings-inner");
             innerSettings.append(this.createSettings(this.field.properties.basic, "basic"));
             innerSettings.append(this.createSettings(this.field.properties.advanced, "advanced"));
-            innerSettings.append(this.createConstraintsSettings({
-                label: "Validation",
-                constraints: ajaxyFormsBuilder.constraints,
-            }));
+            if (!this.field.disable_constraints) {
+                innerSettings.append(this.createConstraintsSettings({
+                    label: "Validation",
+                    constraints: ajaxyFormsBuilder.constraints,
+                }));
+            }
             innerSettings.append(jQuery("<hr/>"));
             var settingsActions = jQuery("<div></div>").addClass(["af-item-actions", "description-wide", "submitbox"]);
             var settingsAction = jQuery("<a></a>")
@@ -524,32 +562,36 @@
             _this.data = data;
             _this.index = index;
             _this.sortIndex = sortIndex;
+            _this.field = ajaxyFormsBuilder.fields[_this.type];
+            if (!_this.field) {
+                console.error("Field type \"".concat(_this.type, "\" not found."), _this.data);
+                return _this;
+            }
+            _this.settings = _this.createSettings(_this.field);
+            _this.header = new SettingsHeader(_this.field, function () {
+                _this.settings.toggle();
+            });
             return _this;
         }
         FieldView.prototype.createSettings = function (field) {
             var _this = this;
-            return new Settings(this.index, field, this.data, function () {
+            return new Settings(this, this.index, field, this.data, function () {
                 _this.remove();
             });
         };
+        FieldView.prototype.setTitle = function (title) {
+            this.header.title.text(title);
+        };
         FieldView.prototype.render = function () {
             this.el.classList.add("form-item-".concat(this.index));
-            var field = ajaxyFormsBuilder.fields[this.type];
-            var settings = this.createSettings(field);
-            var header = new SettingsHeader(field, function () {
-                settings.toggle();
-            });
-            this.$el.append(header.render().el);
-            this.$el.append(settings.render().el);
+            if (!this.field) {
+                console.error("Field type \"".concat(this.type, "\" not found."), this.data);
+                return this;
+            }
+            this.$el.append(this.header.render().el);
+            this.$el.append(this.settings.render().el);
             this.$el.append("<input class=\"type-index\" name=\"fields[".concat(this.index, "][type]\" type=\"hidden\" value=\"").concat(this.type, "\">"));
             this.$el.append("<input class=\"sort-index\" name=\"fields[".concat(this.index, "][_sort]\" type=\"hidden\" value=\"").concat(this.sortIndex, "\">"));
-            this.$el.on("blur", '.expand-settings-basic input.af-input-label', function () {
-                if (!this.value || this.value === "") {
-                    header.title.text("No Label");
-                    return;
-                }
-                header.title.text(this.value);
-            });
             return this;
         };
         return FieldView;
@@ -581,8 +623,7 @@
                         jQuery(el).find(".sort-index").val(index);
                     });
                 },
-            })
-                .disableSelection();
+            });
         };
         DroppableView.prototype.render = function () {
             return this;
@@ -672,7 +713,7 @@
                 setTimeout(function () { return (toggleMore.querySelector("span").innerHTML = "Load More"); }, 500);
             }
         });
-        if (form_metadata) {
+        if (typeof form_metadata != undefined && form_metadata) {
             if (form_metadata.fields) {
                 form_metadata.fields.forEach(function (field, index) {
                     dropView.add(field.type, field, index);

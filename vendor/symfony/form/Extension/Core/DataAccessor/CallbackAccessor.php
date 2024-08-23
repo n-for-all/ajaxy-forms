@@ -22,7 +22,10 @@ use Symfony\Component\Form\FormInterface;
  */
 class CallbackAccessor implements DataAccessorInterface
 {
-    public function getValue(object|array $data, FormInterface $form): mixed
+    /**
+     * {@inheritdoc}
+     */
+    public function getValue($data, FormInterface $form)
     {
         if (null === $getter = $form->getConfig()->getOption('getter')) {
             throw new AccessException('Unable to read from the given form data as no getter is defined.');
@@ -31,7 +34,10 @@ class CallbackAccessor implements DataAccessorInterface
         return ($getter)($data, $form);
     }
 
-    public function setValue(object|array &$data, mixed $value, FormInterface $form): void
+    /**
+     * {@inheritdoc}
+     */
+    public function setValue(&$data, $value, FormInterface $form): void
     {
         if (null === $setter = $form->getConfig()->getOption('setter')) {
             throw new AccessException('Unable to write the given value as no setter is defined.');
@@ -40,12 +46,18 @@ class CallbackAccessor implements DataAccessorInterface
         ($setter)($data, $form->getData(), $form);
     }
 
-    public function isReadable(object|array $data, FormInterface $form): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function isReadable($data, FormInterface $form): bool
     {
         return null !== $form->getConfig()->getOption('getter');
     }
 
-    public function isWritable(object|array $data, FormInterface $form): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function isWritable($data, FormInterface $form): bool
     {
         return null !== $form->getConfig()->getOption('setter');
     }

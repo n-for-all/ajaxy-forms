@@ -21,13 +21,14 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
  */
 class UniqueValidator extends ConstraintValidator
 {
-    public function validate(mixed $value, Constraint $constraint): void
+    /**
+     * {@inheritdoc}
+     */
+    public function validate($value, Constraint $constraint)
     {
         if (!$constraint instanceof Unique) {
             throw new UnexpectedTypeException($constraint, Unique::class);
         }
-
-        $fields = (array) $constraint->fields;
 
         if (null === $value) {
             return;
@@ -42,13 +43,9 @@ class UniqueValidator extends ConstraintValidator
         foreach ($value as $element) {
             $element = $normalizer($element);
 
-            if ($fields && !$element = $this->reduceElementKeys($fields, $element)) {
-                continue;
-            }
-
             if (\in_array($element, $collectionElements, true)) {
                 $this->context->buildViolation($constraint->message)
-                    ->setParameter('{{ value }}', $this->formatValue($value))
+                    ->setParameter('{{ value }}', $this->formatValue($element))
                     ->setCode(Unique::IS_NOT_UNIQUE)
                     ->addViolation();
 
@@ -61,24 +58,11 @@ class UniqueValidator extends ConstraintValidator
     private function getNormalizer(Unique $unique): callable
     {
         if (null === $unique->normalizer) {
-            return static fn ($value) => $value;
+            return static function ($value) {
+                return $value;
+            };
         }
 
         return $unique->normalizer;
-    }
-
-    private function reduceElementKeys(array $fields, array $element): array
-    {
-        $output = [];
-        foreach ($fields as $field) {
-            if (!\is_string($field)) {
-                throw new UnexpectedTypeException($field, 'string');
-            }
-            if (\array_key_exists($field, $element)) {
-                $output[$field] = $element[$field];
-            }
-        }
-
-        return $output;
     }
 }

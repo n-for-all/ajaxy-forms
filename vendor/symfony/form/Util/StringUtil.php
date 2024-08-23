@@ -26,8 +26,10 @@ class StringUtil
 
     /**
      * Returns the trimmed data.
+     *
+     * @return string
      */
-    public static function trim(string $string): string
+    public static function trim(string $string)
     {
         if (null !== $result = @preg_replace('/^[\pZ\p{Cc}\p{Cf}]+|[\pZ\p{Cc}\p{Cf}]+$/u', '', $string)) {
             return $result;
@@ -40,8 +42,10 @@ class StringUtil
      * Converts a fully-qualified class name to a block prefix.
      *
      * @param string $fqcn The fully-qualified class name
+     *
+     * @return string|null
      */
-    public static function fqcnToBlockPrefix(string $fqcn): ?string
+    public static function fqcnToBlockPrefix(string $fqcn)
     {
         // Non-greedy ("+?") to match "type" suffix, if present
         if (preg_match('~([^\\\\]+?)(type)?$~i', $fqcn, $matches)) {

@@ -14,6 +14,9 @@ namespace Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 
 /**
+ * @Annotation
+ * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
+ *
  * @author Laurent Masforné <l.masforne@gmail.com>
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
@@ -26,15 +29,15 @@ class Isin extends Constraint
     public const INVALID_PATTERN_ERROR = '3d08ce0-ded9-a93d-9216-17ac21265b65e';
     public const INVALID_CHECKSUM_ERROR = '32089b-0ee1-93ba-399e-aa232e62f2d29d';
 
-    protected const ERROR_NAMES = [
+    protected static $errorNames = [
         self::INVALID_LENGTH_ERROR => 'INVALID_LENGTH_ERROR',
         self::INVALID_PATTERN_ERROR => 'INVALID_PATTERN_ERROR',
         self::INVALID_CHECKSUM_ERROR => 'INVALID_CHECKSUM_ERROR',
     ];
 
-    public string $message = 'This value is not a valid International Securities Identification Number (ISIN).';
+    public $message = 'This value is not a valid International Securities Identification Number (ISIN).';
 
-    public function __construct(?array $options = null, ?string $message = null, ?array $groups = null, mixed $payload = null)
+    public function __construct(?array $options = null, ?string $message = null, ?array $groups = null, $payload = null)
     {
         parent::__construct($options, $groups, $payload);
 

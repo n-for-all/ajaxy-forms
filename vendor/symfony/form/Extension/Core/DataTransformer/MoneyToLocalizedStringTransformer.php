@@ -21,9 +21,9 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
  */
 class MoneyToLocalizedStringTransformer extends NumberToLocalizedStringTransformer
 {
-    private int $divisor;
+    private $divisor;
 
-    public function __construct(?int $scale = 2, ?bool $grouping = true, ?int $roundingMode = \NumberFormatter::ROUND_HALFUP, ?int $divisor = 1, ?string $locale = null)
+    public function __construct(?int $scale = 2, ?bool $grouping = true, ?int $roundingMode = \NumberFormatter::ROUND_HALFUP, ?int $divisor = 1, string $locale = null)
     {
         parent::__construct($scale ?? 2, $grouping ?? true, $roundingMode, $locale);
 
@@ -35,10 +35,12 @@ class MoneyToLocalizedStringTransformer extends NumberToLocalizedStringTransform
      *
      * @param int|float|null $value Normalized number
      *
+     * @return string
+     *
      * @throws TransformationFailedException if the given value is not numeric or
      *                                       if the value cannot be transformed
      */
-    public function transform(mixed $value): string
+    public function transform($value)
     {
         if (null !== $value && 1 !== $this->divisor) {
             if (!is_numeric($value)) {
@@ -55,10 +57,12 @@ class MoneyToLocalizedStringTransformer extends NumberToLocalizedStringTransform
      *
      * @param string $value Localized money string
      *
+     * @return int|float|null
+     *
      * @throws TransformationFailedException if the given value is not a string
      *                                       or if the value cannot be transformed
      */
-    public function reverseTransform(mixed $value): int|float|null
+    public function reverseTransform($value)
     {
         $value = parent::reverseTransform($value);
         if (null !== $value && 1 !== $this->divisor) {

@@ -25,25 +25,29 @@ abstract class FormPerformanceTestCase extends FormIntegrationTestCase
 {
     use VersionAwareTest;
 
-    protected int $maxRunningTime = 0;
+    /**
+     * @var int
+     */
+    protected $maxRunningTime = 0;
 
-    protected function runTest(): mixed
+    /**
+     * {@inheritdoc}
+     */
+    protected function runTest()
     {
         $s = microtime(true);
-        $result = parent::runTest();
+        parent::runTest();
         $time = microtime(true) - $s;
 
         if (0 != $this->maxRunningTime && $time > $this->maxRunningTime) {
             $this->fail(sprintf('expected running time: <= %s but was: %s', $this->maxRunningTime, $time));
         }
-
-        return $result;
     }
 
     /**
      * @throws \InvalidArgumentException
      */
-    public function setMaxRunningTime(int $maxRunningTime): void
+    public function setMaxRunningTime(int $maxRunningTime)
     {
         if ($maxRunningTime < 0) {
             throw new \InvalidArgumentException();
@@ -52,7 +56,10 @@ abstract class FormPerformanceTestCase extends FormIntegrationTestCase
         $this->maxRunningTime = $maxRunningTime;
     }
 
-    public function getMaxRunningTime(): int
+    /**
+     * @return int
+     */
+    public function getMaxRunningTime()
     {
         return $this->maxRunningTime;
     }

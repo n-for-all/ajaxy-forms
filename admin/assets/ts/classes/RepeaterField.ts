@@ -19,21 +19,35 @@ class RepeaterField extends Backbone.View<any> {
 		let input = jQuery("<input></input>")
 			.addClass("widefat")
 			.attr("type", _field.type || "text")
-			.attr(
-				"name",
-				_field.name ? `${this.basename}[${this.field.name}][${index}][${_field.name}]` : `${this.basename}[${this.field.name}][${index}]`
-			)
+			.attr("name", _field.name ? `${this.basename}[${this.field.name}][${index}][${_field.name}]` : `${this.basename}[${this.field.name}][${index}]`)
 			.val(item ? item[_field.name] || "" : "");
 
-		if (_field.label) {
-			input.attr("placeholder", _field.label);
+		if (_field.type == "checkbox" || _field.type == "radio") {
+			input.prop("checked", item[_field.name] == 1);
 		}
-
-        input.on("change", (e) => {
-            item[_field.name] = jQuery(e.target).val();
-        });
+		input.on("change", (e) => {
+            if (_field.type == "checkbox" || _field.type == "radio") {
+                if((e.target as HTMLInputElement).checked) {
+                    item[_field.name] = 1;
+                } else {
+                    delete item[_field.name];
+                }
+            }else{
+                item[_field.name] = (e.target as HTMLInputElement).value;
+            }
+		});
 
 		inputDiv.append(input);
+
+		if (_field.label) {
+			if (_field.type == "checkbox" || _field.type == "radio") {
+				inputDiv.append(jQuery("<label></label>").html(_field.label));
+				input.val(1);
+			} else {
+				input.attr("placeholder", _field.label);
+			}
+		}
+
 		if (_field.help) {
 			let small = jQuery("<small></small>").html(_field.help);
 			inputDiv.append(small);
@@ -83,7 +97,7 @@ class RepeaterField extends Backbone.View<any> {
 	}
 
 	render(): this {
-        this.$el.empty();
+		this.$el.empty();
 		if (this.field.label) {
 			let heading = jQuery("<h4></h4>").html(this.field.label);
 			this.$el.append(heading);

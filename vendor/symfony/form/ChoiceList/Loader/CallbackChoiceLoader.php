@@ -18,14 +18,14 @@ namespace Symfony\Component\Form\ChoiceList\Loader;
  */
 class CallbackChoiceLoader extends AbstractChoiceLoader
 {
-    private \Closure $callback;
+    private $callback;
 
     /**
      * @param callable $callback The callable returning iterable choices
      */
     public function __construct(callable $callback)
     {
-        $this->callback = $callback(...);
+        $this->callback = $callback;
     }
 
     protected function loadChoices(): iterable

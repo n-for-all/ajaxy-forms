@@ -20,17 +20,19 @@ use Symfony\Component\Form\Exception\BadMethodCallException;
  */
 class FormError
 {
-    protected string $messageTemplate;
-    protected array $messageParameters;
-    protected ?int $messagePluralization;
+    protected $messageTemplate;
+    protected $messageParameters;
+    protected $messagePluralization;
 
-    private string $message;
-    private mixed $cause;
+    private $message;
+    private $cause;
 
     /**
      * The form that spawned this error.
+     *
+     * @var FormInterface
      */
-    private ?FormInterface $origin = null;
+    private $origin;
 
     /**
      * Any array key in $messageParameters will be used as a placeholder in
@@ -45,7 +47,7 @@ class FormError
      *
      * @see \Symfony\Component\Translation\Translator
      */
-    public function __construct(string $message, ?string $messageTemplate = null, array $messageParameters = [], ?int $messagePluralization = null, mixed $cause = null)
+    public function __construct(string $message, string $messageTemplate = null, array $messageParameters = [], int $messagePluralization = null, $cause = null)
     {
         $this->message = $message;
         $this->messageTemplate = $messageTemplate ?: $message;
@@ -56,40 +58,50 @@ class FormError
 
     /**
      * Returns the error message.
+     *
+     * @return string
      */
-    public function getMessage(): string
+    public function getMessage()
     {
         return $this->message;
     }
 
     /**
      * Returns the error message template.
+     *
+     * @return string
      */
-    public function getMessageTemplate(): string
+    public function getMessageTemplate()
     {
         return $this->messageTemplate;
     }
 
     /**
      * Returns the parameters to be inserted in the message template.
+     *
+     * @return array
      */
-    public function getMessageParameters(): array
+    public function getMessageParameters()
     {
         return $this->messageParameters;
     }
 
     /**
      * Returns the value for error message pluralization.
+     *
+     * @return int|null
      */
-    public function getMessagePluralization(): ?int
+    public function getMessagePluralization()
     {
         return $this->messagePluralization;
     }
 
     /**
      * Returns the cause of this error.
+     *
+     * @return mixed
      */
-    public function getCause(): mixed
+    public function getCause()
     {
         return $this->cause;
     }
@@ -101,7 +113,7 @@ class FormError
      *
      * @throws BadMethodCallException If the method is called more than once
      */
-    public function setOrigin(FormInterface $origin): void
+    public function setOrigin(FormInterface $origin)
     {
         if (null !== $this->origin) {
             throw new BadMethodCallException('setOrigin() must only be called once.');
@@ -112,8 +124,10 @@ class FormError
 
     /**
      * Returns the form that caused this error.
+     *
+     * @return FormInterface|null
      */
-    public function getOrigin(): ?FormInterface
+    public function getOrigin()
     {
         return $this->origin;
     }

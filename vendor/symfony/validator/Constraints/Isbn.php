@@ -14,6 +14,9 @@ namespace Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 
 /**
+ * @Annotation
+ * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
+ *
  * @author The Whole Life To Learn <thewholelifetolearn@gmail.com>
  * @author Manuel Reinhard <manu@sprain.ch>
  * @author Bernhard Schussek <bschussek@gmail.com>
@@ -30,7 +33,7 @@ class Isbn extends Constraint
     public const CHECKSUM_FAILED_ERROR = '2881c032-660f-46b6-8153-d352d9706640';
     public const TYPE_NOT_RECOGNIZED_ERROR = 'fa54a457-f042-441f-89c4-066ee5bdd3e1';
 
-    protected const ERROR_NAMES = [
+    protected static $errorNames = [
         self::TOO_SHORT_ERROR => 'TOO_SHORT_ERROR',
         self::TOO_LONG_ERROR => 'TOO_LONG_ERROR',
         self::INVALID_CHARACTERS_ERROR => 'INVALID_CHARACTERS_ERROR',
@@ -38,20 +41,25 @@ class Isbn extends Constraint
         self::TYPE_NOT_RECOGNIZED_ERROR => 'TYPE_NOT_RECOGNIZED_ERROR',
     ];
 
-    public string $isbn10Message = 'This value is not a valid ISBN-10.';
-    public string $isbn13Message = 'This value is not a valid ISBN-13.';
-    public string $bothIsbnMessage = 'This value is neither a valid ISBN-10 nor a valid ISBN-13.';
-    public ?string $type = null;
-    public ?string $message = null;
+    public $isbn10Message = 'This value is not a valid ISBN-10.';
+    public $isbn13Message = 'This value is not a valid ISBN-13.';
+    public $bothIsbnMessage = 'This value is neither a valid ISBN-10 nor a valid ISBN-13.';
+    public $type;
+    public $message;
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param string|array|null $type The ISBN standard to validate or a set of options
+     */
     public function __construct(
-        string|array|null $type = null,
+        $type = null,
         ?string $message = null,
         ?string $isbn10Message = null,
         ?string $isbn13Message = null,
         ?string $bothIsbnMessage = null,
         ?array $groups = null,
-        mixed $payload = null,
+        $payload = null,
         array $options = []
     ) {
         if (\is_array($type)) {
@@ -68,7 +76,10 @@ class Isbn extends Constraint
         $this->bothIsbnMessage = $bothIsbnMessage ?? $this->bothIsbnMessage;
     }
 
-    public function getDefaultOption(): ?string
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOption()
     {
         return 'type';
     }

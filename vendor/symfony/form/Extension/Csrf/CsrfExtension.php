@@ -22,18 +22,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CsrfExtension extends AbstractExtension
 {
-    private CsrfTokenManagerInterface $tokenManager;
-    private ?TranslatorInterface $translator;
-    private ?string $translationDomain;
+    private $tokenManager;
+    private $translator;
+    private $translationDomain;
 
-    public function __construct(CsrfTokenManagerInterface $tokenManager, ?TranslatorInterface $translator = null, ?string $translationDomain = null)
+    public function __construct(CsrfTokenManagerInterface $tokenManager, TranslatorInterface $translator = null, string $translationDomain = null)
     {
         $this->tokenManager = $tokenManager;
         $this->translator = $translator;
         $this->translationDomain = $translationDomain;
     }
 
-    protected function loadTypeExtensions(): array
+    /**
+     * {@inheritdoc}
+     */
+    protected function loadTypeExtensions()
     {
         return [
             new Type\FormTypeCsrfExtension($this->tokenManager, true, '_token', $this->translator, $this->translationDomain),

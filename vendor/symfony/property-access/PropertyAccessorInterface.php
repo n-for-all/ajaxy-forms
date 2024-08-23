@@ -39,13 +39,15 @@ interface PropertyAccessorInterface
      *
      * If neither is found, an exception is thrown.
      *
-     * @return void
+     * @param object|array                 $objectOrArray The object or array to modify
+     * @param string|PropertyPathInterface $propertyPath  The property path to modify
+     * @param mixed                        $value         The value to set at the end of the property path
      *
      * @throws Exception\InvalidArgumentException If the property path is invalid
      * @throws Exception\AccessException          If a property/index does not exist or is not public
      * @throws Exception\UnexpectedTypeException  If a value within the path is neither object nor array
      */
-    public function setValue(object|array &$objectOrArray, string|PropertyPathInterface $propertyPath, mixed $value): void;
+    public function setValue(&$objectOrArray, $propertyPath, $value);
 
     /**
      * Returns the value at the end of the property path of the object graph.
@@ -68,12 +70,17 @@ interface PropertyAccessorInterface
      *
      * If none of them are found, an exception is thrown.
      *
+     * @param object|array                 $objectOrArray The object or array to traverse
+     * @param string|PropertyPathInterface $propertyPath  The property path to read
+     *
+     * @return mixed
+     *
      * @throws Exception\InvalidArgumentException If the property path is invalid
      * @throws Exception\AccessException          If a property/index does not exist or is not public
      * @throws Exception\UnexpectedTypeException  If a value within the path is neither object
      *                                            nor array
      */
-    public function getValue(object|array $objectOrArray, string|PropertyPathInterface $propertyPath): mixed;
+    public function getValue($objectOrArray, $propertyPath);
 
     /**
      * Returns whether a value can be written at a given property path.
@@ -81,9 +88,14 @@ interface PropertyAccessorInterface
      * Whenever this method returns true, {@link setValue()} is guaranteed not
      * to throw an exception when called with the same arguments.
      *
+     * @param object|array                 $objectOrArray The object or array to check
+     * @param string|PropertyPathInterface $propertyPath  The property path to check
+     *
+     * @return bool
+     *
      * @throws Exception\InvalidArgumentException If the property path is invalid
      */
-    public function isWritable(object|array $objectOrArray, string|PropertyPathInterface $propertyPath): bool;
+    public function isWritable($objectOrArray, $propertyPath);
 
     /**
      * Returns whether a property path can be read from an object graph.
@@ -91,7 +103,12 @@ interface PropertyAccessorInterface
      * Whenever this method returns true, {@link getValue()} is guaranteed not
      * to throw an exception when called with the same arguments.
      *
+     * @param object|array                 $objectOrArray The object or array to check
+     * @param string|PropertyPathInterface $propertyPath  The property path to check
+     *
+     * @return bool
+     *
      * @throws Exception\InvalidArgumentException If the property path is invalid
      */
-    public function isReadable(object|array $objectOrArray, string|PropertyPathInterface $propertyPath): bool;
+    public function isReadable($objectOrArray, $propertyPath);
 }

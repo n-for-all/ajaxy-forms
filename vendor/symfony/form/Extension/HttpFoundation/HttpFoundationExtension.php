@@ -20,7 +20,7 @@ use Symfony\Component\Form\AbstractExtension;
  */
 class HttpFoundationExtension extends AbstractExtension
 {
-    protected function loadTypeExtensions(): array
+    protected function loadTypeExtensions()
     {
         return [
             new Type\FormTypeHttpFoundationExtension(),

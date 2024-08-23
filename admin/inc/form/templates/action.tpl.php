@@ -1,17 +1,17 @@
 <?php $action_values = $values[$action_name] ?? []; ?>
-<li class="af-form-item af-form-item-<?php echo $action_name; ?> <?php echo !empty($action_values['enabled'] ?? false) ? 'is-enabled' : ''; ?>">
-    <form method="post" action="<?php echo admin_url('admin-ajax.php?form_id=' . $select_id); ?>">
+<li class="af-form-item af-form-item-<?php echo esc_attr($action_name); ?> <?php echo esc_attr(!empty($action_values['enabled'] ?? false) ? 'is-enabled' : ''); ?>">
+    <form method="post" action="<?php echo esc_attr(admin_url('admin-ajax.php?form_id=' . $select_id)); ?>">
         <input type="hidden" name="action" value="ajaxy_forms_action" />
         <?php wp_nonce_field('ajaxy_forms_action_' . $action_name); ?>
-        <input type="hidden" name="name" value="<?php echo $action_name; ?>" />
+        <input type="hidden" name="name" value="<?php echo esc_attr($action_name); ?>" />
         <div class="af-item-bar">
             <div class="af-item-handle ui-sortable-handle">
                 <label class="item-title">
-                    <span class="af-item-title"><?php echo $action['label'] ?? $action['title'] ?? __('No Label', AJAXY_FORMS_TEXT_DOMAIN); ?></span>
+                    <span class="af-item-title"><?php echo esc_html($action['label'] ?? $action['title'] ?? __('No Label', "ajaxy-forms")); ?></span>
                 </label>
                 <div class="item-controls">
                     <?php if (isset($action['docs']) && $action['docs']) : ?>
-                        <a target="_blank" href="<?php echo $action['docs']; ?>" class="item-docs">
+                        <a target="_blank" href="<?php echo esc_attr($action['docs']); ?>" class="item-docs">
                             <span class="dashicons dashicons-editor-help"></span>
                         </a>
                     <?php endif; ?>
@@ -45,23 +45,23 @@
                         ]);
 
                 ?>
-                        <div class="af-form-field af-form-field-<?php echo $type; ?>">
+                        <div class="af-form-field af-form-field-<?php echo esc_attr($type); ?>">
                             <div class="af-form-field-inner">
                                 <?php if (isset($property['label'])) : ?>
-                                    <label class="af-title"><?php echo $property['label'] ?? __('No Label', AJAXY_FORMS_TEXT_DOMAIN); ?></label>
+                                    <label class="af-title"><?php echo esc_html($property['label'] ?? __('No Label', "ajaxy-forms")); ?></label>
                                 <?php endif; ?>
                                 <?php switch ($type):
                                     case "textarea": ?>
-                                        <textarea <?php echo $attributes; ?> class="large-text" rows="5"><?php echo $action_values[$basename] ?? $property['default'] ?? ''; ?></textarea>
+                                        <textarea <?php echo esc_html($attributes); ?> class="large-text" rows="5"><?php echo esc_textarea($action_values[$basename] ?? $property['default'] ?? ''); ?></textarea>
                                     <?php break;
                                     case "checkbox": ?>
-                                        <input <?php echo $attributes; ?> class="regular-text ltr" />
+                                        <input <?php echo esc_html($attributes); ?> class="regular-text ltr" />
                                     <?php break;
                                     case "radio": ?>
-                                        <input <?php echo $attributes; ?> class="regular-text ltr" />
+                                        <input <?php echo esc_html($attributes); ?> class="regular-text ltr" />
                                     <?php break;
                                     case "select": ?>
-                                        <select <?php echo $attributes; ?>>
+                                        <select <?php echo esc_html($attributes); ?>>
                                             <?php
                                             $options = $property['options'] ?? [];
                                             $default = $property['default'] ?? '';
@@ -69,29 +69,37 @@
                                             foreach ($options as $value => $label) :
                                                 $selected = $multiple ? in_array($value, (array)($action_values[$property['name']] ?? $property['default'] ?? [])) : $value == ($action_values[$property['name']] ?? $property['default'] ?? '');
                                             ?>
-                                                <option <?php selected($selected, true); ?> value="<?php echo $value; ?>"><?php echo $label; ?></option>
+                                                <option <?php selected($selected, true); ?> value="<?php esc_attr($value); ?>"><?php echo esc_html($label); ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     <?php break;
                                     default: ?>
-                                        <input <?php echo $attributes; ?> class="regular-text ltr" />
+                                        <input <?php echo esc_html($attributes); ?> class="regular-text ltr" />
                                         <?php break; ?>
                                 <?php endswitch; ?>
                             </div>
                             <?php if (isset($property['help'])) : ?>
-                                <p class="description"><?php echo $property['help']; ?></p>
+                                <p class="description"><?php echo esc_html($property['help']); ?></p>
                             <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                     <hr />
                     <div class="af-item-actions description-wide submitbox">
                         <button type="submit" name="save_actions" id="save_actions" class="button button-primary button-large form-actions-save">
-                            <?php echo __('Save Action', AJAXY_FORMS_TEXT_DOMAIN); ?>
+                            <?php esc_html_e('Save Action', "ajaxy-forms"); ?>
                         </button>
                     </div>
                 <?php
                 else :
-                    echo __('There are no properties to configure for this action', AJAXY_FORMS_TEXT_DOMAIN);
+                    esc_html_e('There are no properties to configure for this action', "ajaxy-forms");
+                ?>
+                    <hr />
+                    <div class="af-item-actions description-wide submitbox">
+                        <button type="submit" name="save_actions" id="save_actions" class="button button-primary button-large form-actions-save">
+                            <?php esc_html_e('Save Action', "ajaxy-forms"); ?>
+                        </button>
+                    </div>
+                <?php
                 endif
                 ?>
 

@@ -61,6 +61,22 @@ class PortingPortInList extends ListResource
 
 
     /**
+     * Constructs a PortingPortInContext
+     *
+     * @param string $portInRequestSid The SID of the Port In request. This is a unique identifier of the port in request.
+     */
+    public function getContext(
+        string $portInRequestSid
+        
+    ): PortingPortInContext
+    {
+        return new PortingPortInContext(
+            $this->version,
+            $portInRequestSid
+        );
+    }
+
+    /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation

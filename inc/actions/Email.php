@@ -56,16 +56,16 @@ class Email implements ActionInterface
         $this->headers[] = 'Content-Type: text/html; charset=UTF-8';
 
         $values = [
-            'data' => $data,
+            'data' => Helper::parse_submit_data($data, $form),
         ];
 
         $to = Helper::create_twig_template($this->to, $values);
         $subject = Helper::create_twig_template($this->subject, $values);
         $message = Helper::create_twig_template(
-            $this->message,
+            $this->message,  
             [
                 'data' => $data,
-                'table' => Helper::create_table($data, $form)
+                'table' => Helper::create_table($values['data'], $form)
             ]
         );
 

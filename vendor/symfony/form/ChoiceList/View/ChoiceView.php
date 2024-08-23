@@ -11,7 +11,7 @@
 
 namespace Symfony\Component\Form\ChoiceList\View;
 
-use Symfony\Contracts\Translation\TranslatableInterface;
+use Symfony\Component\Translation\TranslatableMessage;
 
 /**
  * Represents a choice in templates.
@@ -20,30 +20,30 @@ use Symfony\Contracts\Translation\TranslatableInterface;
  */
 class ChoiceView
 {
-    public string|TranslatableInterface|false $label;
-    public string $value;
-    public mixed $data;
+    public $label;
+    public $value;
+    public $data;
 
     /**
      * Additional attributes for the HTML tag.
      */
-    public array $attr;
+    public $attr;
 
     /**
      * Additional parameters used to translate the label.
      */
-    public array $labelTranslationParameters;
+    public $labelTranslationParameters;
 
     /**
      * Creates a new choice view.
      *
-     * @param mixed                              $data                       The original choice
-     * @param string                             $value                      The view representation of the choice
-     * @param string|TranslatableInterface|false $label                      The label displayed to humans; pass false to discard the label
-     * @param array                              $attr                       Additional attributes for the HTML tag
-     * @param array                              $labelTranslationParameters Additional parameters used to translate the label
+     * @param mixed                            $data                       The original choice
+     * @param string                           $value                      The view representation of the choice
+     * @param string|TranslatableMessage|false $label                      The label displayed to humans; pass false to discard the label
+     * @param array                            $attr                       Additional attributes for the HTML tag
+     * @param array                            $labelTranslationParameters Additional parameters used to translate the label
      */
-    public function __construct(mixed $data, string $value, string|TranslatableInterface|false $label, array $attr = [], array $labelTranslationParameters = [])
+    public function __construct($data, string $value, $label, array $attr = [], array $labelTranslationParameters = [])
     {
         $this->data = $data;
         $this->value = $value;

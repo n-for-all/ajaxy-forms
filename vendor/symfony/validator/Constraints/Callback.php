@@ -14,6 +14,9 @@ namespace Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 
 /**
+ * @Annotation
+ * @Target({"CLASS", "PROPERTY", "METHOD", "ANNOTATION"})
+ *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
@@ -24,9 +27,14 @@ class Callback extends Constraint
      */
     public $callback;
 
-    public function __construct(array|string|callable|null $callback = null, ?array $groups = null, mixed $payload = null, array $options = [])
+    /**
+     * {@inheritdoc}
+     *
+     * @param array|string|callable $callback The callback or a set of options
+     */
+    public function __construct($callback = null, ?array $groups = null, $payload = null, array $options = [])
     {
-        // Invocation through attributes with an array parameter only
+        // Invocation through annotations with an array parameter only
         if (\is_array($callback) && 1 === \count($callback) && isset($callback['value'])) {
             $callback = $callback['value'];
         }
@@ -40,12 +48,18 @@ class Callback extends Constraint
         parent::__construct($options, $groups, $payload);
     }
 
-    public function getDefaultOption(): ?string
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOption()
     {
         return 'callback';
     }
 
-    public function getTargets(): string|array
+    /**
+     * {@inheritdoc}
+     */
+    public function getTargets()
     {
         return [self::CLASS_CONSTRAINT, self::PROPERTY_CONSTRAINT];
     }

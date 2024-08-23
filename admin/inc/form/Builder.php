@@ -19,7 +19,7 @@ class Builder
 
     function admin_menu()
     {
-        add_submenu_page('ajaxy-forms', __('Form Builder', AJAXY_FORMS_TEXT_DOMAIN), __('New Form', AJAXY_FORMS_TEXT_DOMAIN), 'activate_plugins', 'ajaxy-form', [$this, "form_page_handler"]);
+        add_submenu_page('ajaxy-forms', __('Form Builder', "ajaxy-forms"), __('New Form', "ajaxy-forms"), 'activate_plugins', 'ajaxy-form', [$this, "form_page_handler"]);
     }
 
     function admin_init()
@@ -35,7 +35,7 @@ class Builder
             }
 
             Data::delete_form($select_id);
-            \wp_redirect(admin_url(sprintf('admin.php?page=ajaxy-forms&message=%s', urlencode(__('Form deleted successfully', AJAXY_FORMS_TEXT_DOMAIN)))));
+            \wp_redirect(admin_url(sprintf('admin.php?page=ajaxy-forms&message=%s', urlencode(__('Form deleted successfully', "ajaxy-forms")))));
             exit();
         }
 
@@ -44,10 +44,10 @@ class Builder
 
     function scripts()
     {
-        \wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . "-admin-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/builder.js', ['jquery', 'backbone', 'jquery-ui-draggable'], AJAXY_FORMS_VERSION, true);
-        // \wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . "-admin-actions-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/actions.js', ['jquery', 'backbone', 'jquery-ui-draggable'], AJAXY_FORMS_VERSION, true);
+        \wp_enqueue_script("ajaxy-forms-admin-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/builder.js', ['jquery', 'backbone', 'jquery-ui-draggable'], AJAXY_FORMS_VERSION, true);
+        // \wp_enqueue_script("ajaxy-forms" . "-admin-actions-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/actions.js', ['jquery', 'backbone', 'jquery-ui-draggable'], AJAXY_FORMS_VERSION, true);
         wp_localize_script(
-            AJAXY_FORMS_TEXT_DOMAIN . "-admin-script",
+            "ajaxy-forms-admin-script",
             'ajaxyFormsBuilder',
             array(
                 'fields' => \Ajaxy\Forms\Inc\Fields::getInstance()->get_all_properties(),
@@ -71,23 +71,23 @@ class Builder
     {
         $fields = \Ajaxy\Forms\Inc\Fields::getInstance()->get_fields();
         // $fields = \array_unique($fields);
-
         $commonFields = \array_filter($fields, function ($field) {
             return $field['common'];
         });
+
 ?>
         <ul class="af-fields">
             <?php foreach ($commonFields as $key => $field) :
                 $value = \explode('\\', trim($field['label']));
                 $nlabel = str_replace('Type', '', $value[count($value) - 1]);
             ?>
-                <li class="draggable" data-type="<?php echo $key; ?>">
-                    <span><?php echo $nlabel; ?></span>
-                    <a href="#">
+                <li class="draggable" data-type="<?php echo esc_attr($key); ?>">
+                    <span><?php echo \esc_html($nlabel); ?></span>
+                    <!-- <a href="#">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 12H12M12 12H18M12 12V18M12 12V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                         </svg>
-                    </a>
+                    </a> -->
                 </li>
             <?php endforeach; ?>
             <li>
@@ -97,18 +97,18 @@ class Builder
                         $value = \explode('\\', trim($field['label']));
                         $nlabel = str_replace('Type', '', $value[count($value) - 1]);
                     ?>
-                        <li class="draggable" data-type="<?php echo $key; ?>">
-                            <span><?php echo $nlabel; ?></span>
-                            <a href="#">
+                        <li class="draggable" data-type="<?php echo esc_attr($key); ?>">
+                            <span><?php echo \esc_html($nlabel); ?></span>
+                            <!-- <a href="#">
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M6 12H12M12 12H18M12 12V18M12 12V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                 </svg>
-                            </a>
+                            </a> -->
                         </li>
                     <?php endforeach; ?>
                 </ul>
             </li>
-            <li class="more"><span>Load More</span></li>
+            <li class="more"><span><?php \esc_html_e('Load More', 'ajaxy-forms'); ?></span></li>
         </ul>
     <?php
     }
@@ -125,7 +125,7 @@ class Builder
             }
 
             Data::delete_form($select_id);
-            \wp_redirect(admin_url(sprintf('admin.php?page=ajaxy-form&message=%s', urlencode(__('Form deleted successfully', AJAXY_FORMS_TEXT_DOMAIN)))));
+            \wp_redirect(admin_url(sprintf('admin.php?page=ajaxy-form&message=%s', urlencode(__('Form deleted successfully', "ajaxy-forms")))));
             exit();
         }
 
@@ -145,7 +145,8 @@ class Builder
 
             try {
                 $metadata = \json_decode($form['metadata'], true);
-                echo '<script>var form_metadata = ' . $form['metadata'] . '</script>';
+                // echo '<script>var form_metadata = ' . \esc($form['metadata']) . '</script>';
+                wp_add_inline_script('ajaxy-forms-admin-script', 'var form_metadata = ' . $form['metadata']);
                 $form['metadata'] = $metadata;
             } catch (\Exception $e) {
                 $metadata = null;
@@ -156,15 +157,16 @@ class Builder
 
         $nonce = 'save_form_' . ($select_id ? $select_id : 'new');
         if (isset($_POST['save_form'])) {
+            $post_vars = array_map('stripslashes_deep', $_POST);
             if (!wp_verify_nonce($_REQUEST['_wpnonce'] ?? '', $nonce)) {
                 $message = [
                     'type' => 'error',
-                    'message' => __('Nonce verification failed, Please try again.', AJAXY_FORMS_TEXT_DOMAIN),
+                    'message' => __('Nonce verification failed, Please try again.', "ajaxy-forms"),
                 ];
             } else {
                 $fields = [];
-                if (isset($_POST['fields'])) {
-                    $fields = $_POST['fields'];
+                if (isset($post_vars['fields'])) {
+                    $fields = $post_vars['fields'];
 
                     \usort($fields, function ($a, $b) {
                         return $a['_sort'] <=> $b['_sort'];
@@ -205,7 +207,7 @@ class Builder
                                     $default = $property['default'] ?? '';
                                     break;
                             }
-                            if (isset($field[$property['name']]) && ($field[$property['name']] === $default || intval($field[$property['name']]) === $default)) {
+                            if ($property['name'] != 'type' && isset($field[$property['name']]) && ($field[$property['name']] === $default || intval($field[$property['name']]) === $default)) {
                                 unset($field[$property['name']]);
                             }
                         }
@@ -216,11 +218,12 @@ class Builder
 
                 $metadata = [
                     'fields' =>  $fields,
-                    'options' => $_POST['options'] ?? [],
+                    'options' => $post_vars['options'] ?? [],
                     'initial_data' => [],
+                    'theme' => $post_vars['theme'] ?? '',
                 ];
 
-                $name = \sanitize_title($_POST['name'] ?? '');
+                $name = \sanitize_title($post_vars['name'] ?? '');
                 if (\trim($name) === '') {
                     $name = 'form_' . \uniqid();
                 } else {
@@ -236,41 +239,39 @@ class Builder
                     $select_id = Data::add_form($name, $metadata);
                 }
 
-                if(\is_wp_error($select_id)){
+                if (\is_wp_error($select_id)) {
                     $message = [
                         'type' => 'error',
                         'message' => $select_id->get_error_message(),
                     ];
-                }
-                else if ($select_id) {
+                } else if ($select_id) {
                     \wp_redirect(
                         add_query_arg(
                             array(
                                 'action' => 'edit',
                                 'tab'   => $tab,
                                 'form'   => $select_id,
-                                'message' => urlencode(__('Form saved successfully', AJAXY_FORMS_TEXT_DOMAIN)),
+                                'message' => urlencode(__('Form saved successfully', "ajaxy-forms")),
                             ),
                             admin_url('admin.php?page=ajaxy-form')
                         )
                     );
-                }else{
+                } else {
                     $message = [
                         'type' => 'error',
-                        'message' => __('Failed to save the form', AJAXY_FORMS_TEXT_DOMAIN)
+                        'message' => __('Failed to save the form', "ajaxy-forms")
                     ];
                 }
             }
         }
 
-
     ?>
         <div class="wrap af-form-wrap">
-            <h1 class="wp-heading-inline"><?php esc_html_e('Form'); ?></h1>
+            <h1 class="wp-heading-inline"><?php esc_html_e('Form', "ajaxy-forms"); ?></h1>
             <hr class="wp-header-end">
             <?php if ($message) : ?>
-                <div id="message" class="notice notice-<?php echo $message['type']; ?>">
-                    <p><?php echo $message['message']; ?></p>
+                <div id="message" class="notice notice-<?php echo esc_attr($message['type']); ?>">
+                    <p><?php echo \esc_html($message['message']); ?></p>
                 </div>
             <?php endif; ?>
             <nav class="nav-tab-wrapper wp-clearfix">
@@ -284,39 +285,89 @@ class Builder
                                     admin_url('admin.php?page=ajaxy-form')
                                 )
                             ); ?>" class="nav-tab<?php echo !$tab || $tab == 0 ? ' nav-tab-active' : ''; ?>"><?php esc_html_e('Edit Form'); ?></a>
+                <?php if ($form): ?>
+                    <a href="<?php echo esc_url(
+                                    add_query_arg(
+                                        array(
+                                            'tab' => '1',
+                                            'action' => $action,
+                                            'form'   => $select_id,
+                                        ),
+                                        admin_url('admin.php?page=ajaxy-form')
+                                    )
+                                ); ?>" class="nav-tab<?php echo $tab == 1 ? ' nav-tab-active' : ''; ?>"><?php esc_html_e('Actions'); ?></a>
 
-                <a href="<?php echo esc_url(
-                                add_query_arg(
-                                    array(
-                                        'tab' => '1',
-                                        'action' => $action,
-                                        'form'   => $select_id,
-                                    ),
-                                    admin_url('admin.php?page=ajaxy-form')
-                                )
-                            ); ?>" class="nav-tab<?php echo $tab == 1 ? ' nav-tab-active' : ''; ?>"><?php esc_html_e('Actions'); ?></a>
+                    <a href="<?php echo esc_url(
+                                    add_query_arg(
+                                        array(
+                                            'tab' => '2',
+                                            'action' => $action,
+                                            'form'   => $select_id,
+                                        ),
+                                        admin_url('admin.php?page=ajaxy-form')
+                                    )
+                                ); ?>" class="nav-tab<?php echo $tab == 2 ? ' nav-tab-active' : ''; ?>"><?php esc_html_e('Export/Import'); ?></a>
+                <?php endif; ?>
             </nav>
             <?php switch ($tab) {
                 case '1':
+                    if (!$form) {
+                        wp_die('Form not found.');
+                    }
                     include(AJAXY_FORMS_PLUGIN_DIR . '/admin/inc/form/templates/actions.tpl.php');
+                    break;
+                case '2':
+                    if (!$form) {
+                        wp_die('Form not found.');
+                    }
+                    $isPost = isset($_POST['af-import']);
+                    if ($isPost) {
+                        try {
+                            $json = stripslashes_deep($_POST['json']);
+                            $form_json = \json_decode($json, true);
+                            if (!$form_json || !is_array($form_json) || !$form_json['fields'] || !\is_array($form_json['fields'])) {
+                                throw new \Exception('Invalid JSON');
+                            }
+
+                            Data::update_form($select_id, $form['name'], $form_json);
+
+                            $message = [
+                                'type' => 'success',
+                                'message' => __('Form imported successfully', "ajaxy-forms"),
+                            ];
+                        } catch (\Exception $e) {
+                            $message = [
+                                'type' => 'error',
+                                'message' => sprintf(__('Failed to import the form. Please make sure the JSON is valid: %s', "ajaxy-forms"), $e->getMessage()),
+                            ];
+                        }
+
+                        if ($message) : ?>
+                            <div id="message" class="notice notice-<?php echo esc_attr($message['type']); ?>">
+                                <p><?php echo \esc_html($message['message']); ?></p>
+                            </div>
+                        <?php endif;
+                    }
+
+                    include(AJAXY_FORMS_PLUGIN_DIR . '/admin/inc/form/templates/export.tpl.php');
                     break;
                 default:
                     if ($action == 'edit') :
-            ?>
+                        ?>
                         <div class="af-manage">
                             <span>
                                 <?php
-                                printf(
-                                    __('Edit your form below, or <a href="%s">create a new form</a>. Do not forget to save your changes!'),
+                                echo wp_kses(sprintf(
+                                    __('Edit your form below, or <a href="%s">create a new form</a>. Do not forget to save your changes!', "ajaxy-forms"),
                                     esc_url(
-                                        admin_url('admin.php?page=ajaxy-form')
+                                        admin_url('admin.php?page=ajaxy-form&action=add')
                                     )
-                                );
+                                ), ['a' => ['href' => '']]);
                                 ?>
                                 <span class="screen-reader-text">
                                     <?php
                                     /* translators: Hidden accessibility text. */
-                                    _e('Click the Save Form button to save your changes.');
+                                    \esc_html_e('Click the Save Form button to save your changes.');
                                     ?>
                                 </span>
                             </span>
@@ -335,12 +386,13 @@ class Builder
 
     public function action_ajax_handler()
     {
-        $name = $_POST['name'] ?? '';
+        $post_vars = array_map('stripslashes_deep', $_POST);
+        $name = $post_vars['name'] ?? '';
 
         if (!$name) {
             wp_send_json([
                 'status' => 'error',
-                'message' => __('Invalid action name', AJAXY_FORMS_TEXT_DOMAIN),
+                'message' => __('Invalid action name', "ajaxy-forms"),
             ], 200);
             return;
         }
@@ -349,33 +401,31 @@ class Builder
         if (!$form) {
             wp_send_json([
                 'status' => 'error',
-                'message' => __('Form doesn\'t exist or haven\'t been saved yet', AJAXY_FORMS_TEXT_DOMAIN),
+                'message' => __('Form doesn\'t exist or haven\'t been saved yet', "ajaxy-forms"),
             ], 200);
             return;
         }
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'ajaxy_forms_action_' . $name)) {
+        if (!wp_verify_nonce($post_vars['_wpnonce'], 'ajaxy_forms_action_' . $name)) {
             wp_send_json([
                 'status' => 'error',
-                'message' => __('Nonce verification failed, Please try again.', AJAXY_FORMS_TEXT_DOMAIN),
+                'message' => __('Nonce verification failed, Please try again.', "ajaxy-forms"),
             ], 200);
             return;
         }
 
-        // Process your form data (e.g., save it to database, send an email)
-        $data = $_POST;  // Access form data
-        $saved = Data::update_form_action($form['id'], $name, $data['form_action'] ?? []);
+        $saved = Data::update_form_action($form['id'], $name, $post_vars['form_action'] ?? []);
         if ($saved === false) {
             wp_send_json([
                 'status' => 'error',
-                'message' => __('Failed to save the action', AJAXY_FORMS_TEXT_DOMAIN)
+                'message' => __('Failed to save the action', "ajaxy-forms")
             ], 200);
             return;
         }
-        // Return a response (optional)
+
         $response = [
             'status' => 'success',
-            'message' => \sprintf(__('Action "%s" is saved!', AJAXY_FORMS_TEXT_DOMAIN), $name),
+            'message' => \sprintf(__('Action "%s" is saved!', "ajaxy-forms"), $name),
         ];
         wp_send_json($response);
     }

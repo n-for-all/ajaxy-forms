@@ -16,15 +16,15 @@ use Symfony\Component\Form\Exception\BadMethodCallException;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  *
- * @implements \ArrayAccess<int|string, FormView>
- * @implements \IteratorAggregate<int|string, FormView>
+ * @implements \ArrayAccess<string, FormView>
+ * @implements \IteratorAggregate<string, FormView>
  */
 class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
      * The variables assigned to this view.
      */
-    public array $vars = [
+    public $vars = [
         'value' => null,
         'attr' => [],
     ];
@@ -32,14 +32,14 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * The parent view.
      */
-    public ?self $parent = null;
+    public $parent;
 
     /**
      * The child views.
      *
-     * @var array<int|string, FormView>
+     * @var array<string, FormView>
      */
-    public array $children = [];
+    public $children = [];
 
     /**
      * Is the form attached to this renderer rendered?
@@ -47,20 +47,24 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
      * Rendering happens when either the widget or the row method was called.
      * Row implicitly includes widget, however certain rendering mechanisms
      * have to skip widget rendering when a row is rendered.
+     *
+     * @var bool
      */
-    private bool $rendered = false;
+    private $rendered = false;
 
-    private bool $methodRendered = false;
+    private $methodRendered = false;
 
-    public function __construct(?self $parent = null)
+    public function __construct(self $parent = null)
     {
         $this->parent = $parent;
     }
 
     /**
      * Returns whether the view was already rendered.
+     *
+     * @return bool
      */
-    public function isRendered(): bool
+    public function isRendered()
     {
         if (true === $this->rendered || 0 === \count($this->children)) {
             return $this->rendered;
@@ -80,19 +84,22 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @return $this
      */
-    public function setRendered(): static
+    public function setRendered()
     {
         $this->rendered = true;
 
         return $this;
     }
 
-    public function isMethodRendered(): bool
+    /**
+     * @return bool
+     */
+    public function isMethodRendered()
     {
         return $this->methodRendered;
     }
 
-    public function setMethodRendered(): void
+    public function setMethodRendered()
     {
         $this->methodRendered = true;
     }
@@ -100,9 +107,12 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Returns a child by name (implements \ArrayAccess).
      *
-     * @param int|string $name The child name
+     * @param string $name The child name
+     *
+     * @return self
      */
-    public function offsetGet(mixed $name): self
+    #[\ReturnTypeWillChange]
+    public function offsetGet($name)
     {
         return $this->children[$name];
     }
@@ -110,9 +120,12 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Returns whether the given child exists (implements \ArrayAccess).
      *
-     * @param int|string $name The child name
+     * @param string $name The child name
+     *
+     * @return bool
      */
-    public function offsetExists(mixed $name): bool
+    #[\ReturnTypeWillChange]
+    public function offsetExists($name)
     {
         return isset($this->children[$name]);
     }
@@ -120,9 +133,12 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Implements \ArrayAccess.
      *
+     * @return void
+     *
      * @throws BadMethodCallException always as setting a child by name is not allowed
      */
-    public function offsetSet(mixed $name, mixed $value): void
+    #[\ReturnTypeWillChange]
+    public function offsetSet($name, $value)
     {
         throw new BadMethodCallException('Not supported.');
     }
@@ -130,9 +146,12 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Removes a child (implements \ArrayAccess).
      *
-     * @param int|string $name The child name
+     * @param string $name The child name
+     *
+     * @return void
      */
-    public function offsetUnset(mixed $name): void
+    #[\ReturnTypeWillChange]
+    public function offsetUnset($name)
     {
         unset($this->children[$name]);
     }
@@ -140,14 +159,21 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Returns an iterator to iterate over children (implements \IteratorAggregate).
      *
-     * @return \ArrayIterator<int|string, FormView>
+     * @return \ArrayIterator<string, FormView>
      */
-    public function getIterator(): \ArrayIterator
+    #[\ReturnTypeWillChange]
+    public function getIterator()
     {
         return new \ArrayIterator($this->children);
     }
 
-    public function count(): int
+    /**
+     * Implements \Countable.
+     *
+     * @return int
+     */
+    #[\ReturnTypeWillChange]
+    public function count()
     {
         return \count($this->children);
     }

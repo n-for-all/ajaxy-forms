@@ -17,18 +17,10 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
  * @author Franz Wilding <franz.wilding@me.com>
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Fred Cox <mcfedr@gmail.com>
- *
- * @extends BaseDateTimeTransformer<string>
  */
 class DateTimeToHtml5LocalDateTimeTransformer extends BaseDateTimeTransformer
 {
     public const HTML5_FORMAT = 'Y-m-d\\TH:i:s';
-    public const HTML5_FORMAT_NO_SECONDS = 'Y-m-d\\TH:i';
-
-    public function __construct(?string $inputTimezone = null, ?string $outputTimezone = null, private bool $withSeconds = false)
-    {
-        parent::__construct($inputTimezone, $outputTimezone);
-    }
 
     /**
      * Transforms a \DateTime into a local date and time string.
@@ -37,27 +29,32 @@ class DateTimeToHtml5LocalDateTimeTransformer extends BaseDateTimeTransformer
      * input is an RFC3339 date followed by 'T', followed by an RFC3339 time.
      * https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#valid-local-date-and-time-string
      *
-     * @param \DateTimeInterface $dateTime
+     * @param \DateTime|\DateTimeInterface $dateTime A DateTime object
+     *
+     * @return string
      *
      * @throws TransformationFailedException If the given value is not an
      *                                       instance of \DateTime or \DateTimeInterface
      */
-    public function transform(mixed $dateTime): string
+    public function transform($dateTime)
     {
         if (null === $dateTime) {
             return '';
         }
 
-        if (!$dateTime instanceof \DateTimeInterface) {
-            throw new TransformationFailedException('Expected a \DateTimeInterface.');
+        if (!$dateTime instanceof \DateTime && !$dateTime instanceof \DateTimeInterface) {
+            throw new TransformationFailedException('Expected a \DateTime or \DateTimeInterface.');
         }
 
         if ($this->inputTimezone !== $this->outputTimezone) {
-            $dateTime = \DateTimeImmutable::createFromInterface($dateTime);
+            if (!$dateTime instanceof \DateTimeImmutable) {
+                $dateTime = clone $dateTime;
+            }
+
             $dateTime = $dateTime->setTimezone(new \DateTimeZone($this->outputTimezone));
         }
 
-        return $dateTime->format($this->withSeconds ? self::HTML5_FORMAT : self::HTML5_FORMAT_NO_SECONDS);
+        return $dateTime->format(self::HTML5_FORMAT);
     }
 
     /**
@@ -69,10 +66,12 @@ class DateTimeToHtml5LocalDateTimeTransformer extends BaseDateTimeTransformer
      *
      * @param string $dateTimeLocal Formatted string
      *
+     * @return \DateTime|null
+     *
      * @throws TransformationFailedException If the given value is not a string,
      *                                       if the value could not be transformed
      */
-    public function reverseTransform(mixed $dateTimeLocal): ?\DateTime
+    public function reverseTransform($dateTimeLocal)
     {
         if (!\is_string($dateTimeLocal)) {
             throw new TransformationFailedException('Expected a string.');

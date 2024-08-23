@@ -25,18 +25,27 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class DataCollectorTypeExtension extends AbstractTypeExtension
 {
-    private DataCollectorListener $listener;
+    /**
+     * @var DataCollectorListener
+     */
+    private $listener;
 
     public function __construct(FormDataCollectorInterface $dataCollector)
     {
         $this->listener = new DataCollectorListener($dataCollector);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventSubscriber($this->listener);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getExtendedTypes(): iterable
     {
         return [FormType::class];

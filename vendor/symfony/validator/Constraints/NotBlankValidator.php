@@ -21,7 +21,10 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  */
 class NotBlankValidator extends ConstraintValidator
 {
-    public function validate(mixed $value, Constraint $constraint): void
+    /**
+     * {@inheritdoc}
+     */
+    public function validate($value, Constraint $constraint)
     {
         if (!$constraint instanceof NotBlank) {
             throw new UnexpectedTypeException($constraint, NotBlank::class);

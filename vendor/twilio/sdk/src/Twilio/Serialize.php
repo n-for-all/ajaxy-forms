@@ -68,7 +68,7 @@ class Serialize {
 
     public static function jsonObject($object) {
         if (\is_array($object)) {
-            return \wp_json_encode($object);
+            return \json_encode($object);
         }
         return $object;
     }

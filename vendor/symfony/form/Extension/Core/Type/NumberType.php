@@ -23,7 +23,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class NumberType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addViewTransformer(new NumberToLocalizedStringTransformer(
             $options['scale'],
@@ -37,20 +40,20 @@ class NumberType extends AbstractType
         }
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options): void
+    /**
+     * {@inheritdoc}
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         if ($options['html5']) {
             $view->vars['type'] = 'number';
-
-            if (!isset($view->vars['attr']['step'])) {
-                $view->vars['attr']['step'] = 'any';
-            }
-        } else {
-            $view->vars['attr']['inputmode'] = 0 === $options['scale'] ? 'numeric' : 'decimal';
         }
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             // default scale is locale specific (usually around 3)
@@ -60,7 +63,11 @@ class NumberType extends AbstractType
             'compound' => false,
             'input' => 'number',
             'html5' => false,
-            'invalid_message' => 'Please enter a number.',
+            'invalid_message' => function (Options $options, $previousValue) {
+                return ($options['legacy_error_messages'] ?? true)
+                    ? $previousValue
+                    : 'Please enter a number.';
+            },
         ]);
 
         $resolver->setAllowedValues('rounding_mode', [
@@ -76,7 +83,7 @@ class NumberType extends AbstractType
         $resolver->setAllowedTypes('scale', ['null', 'int']);
         $resolver->setAllowedTypes('html5', 'bool');
 
-        $resolver->setNormalizer('grouping', static function (Options $options, $value) {
+        $resolver->setNormalizer('grouping', function (Options $options, $value) {
             if (true === $value && $options['html5']) {
                 throw new LogicException('Cannot use the "grouping" option when the "html5" option is enabled.');
             }
@@ -85,7 +92,10 @@ class NumberType extends AbstractType
         });
     }
 
-    public function getBlockPrefix(): string
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return 'number';
     }

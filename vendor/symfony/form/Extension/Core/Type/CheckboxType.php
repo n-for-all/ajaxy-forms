@@ -16,11 +16,15 @@ use Symfony\Component\Form\Extension\Core\DataTransformer\BooleanToStringTransfo
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CheckboxType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // Unlike in other types, where the data is NULL by default, it
         // needs to be a Boolean here. setData(null) is not acceptable
@@ -32,7 +36,10 @@ class CheckboxType extends AbstractType
         $builder->addViewTransformer(new BooleanToStringTransformer($options['value'], $options['false_values']));
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options): void
+    /**
+     * {@inheritdoc}
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars = array_replace($view->vars, [
             'value' => $options['value'],
@@ -40,23 +47,37 @@ class CheckboxType extends AbstractType
         ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $emptyData = static fn (FormInterface $form, $viewData) => $viewData;
+        $emptyData = function (FormInterface $form, $viewData) {
+            return $viewData;
+        };
 
         $resolver->setDefaults([
             'value' => '1',
             'empty_data' => $emptyData,
             'compound' => false,
             'false_values' => [null],
-            'invalid_message' => 'The checkbox has an invalid value.',
-            'is_empty_callback' => static fn ($modelData): bool => false === $modelData,
+            'invalid_message' => function (Options $options, $previousValue) {
+                return ($options['legacy_error_messages'] ?? true)
+                    ? $previousValue
+                    : 'The checkbox has an invalid value.';
+            },
+            'is_empty_callback' => static function ($modelData): bool {
+                return false === $modelData;
+            },
         ]);
 
         $resolver->setAllowedTypes('false_values', 'array');
     }
 
-    public function getBlockPrefix(): string
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return 'checkbox';
     }

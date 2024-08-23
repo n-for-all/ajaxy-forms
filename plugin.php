@@ -1,13 +1,18 @@
 <?php
-
 /**
- * Plugin Name: Ajaxy Forms
- * Plugin URI: http://www.ajaxy.org
- * Description: Ajaxy Forms
- * Version: 1.0.0
- * Author: Naji Amer
- * Author URI: http://www.ajaxy.org
+ * @package Ajaxy
  */
+/*
+	Plugin Name: Ajaxy Forms
+	Plugin URI: https://ajaxy.org/product/ajaxy-forms
+	Description: Enhanced WordPress forms with advanced features and integrations
+	Version: 1.0.0
+	Author: Naji Amer (Ajaxy)
+	Author URI: https://www.ajaxy.org
+	License: GPLv2 or later
+    License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+    Requires PHP: 7.4
+*/
 
 
 namespace Ajaxy\Forms;
@@ -30,10 +35,9 @@ use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Bridge\Twig\Extension\FormExtension;
+use Symfony\Component\Form\CallbackTransformer;
+use WP_Error;
 
-
-
-define("AJAXY_FORMS_TEXT_DOMAIN", "ajaxy-forms");
 define("AJAXY_FORMS_PLUGIN_URL", plugins_url('', __FILE__));
 define("AJAXY_FORMS_PLUGIN_DIR", plugin_dir_path(__FILE__));
 define("AJAXY_FORMS_BASENAME", plugin_basename(__FILE__));
@@ -118,11 +122,14 @@ class Plugin
         } else {
             $form = Data::parse_form($name);
             if ($form) {
-                $form = $this->create_form($form, $form->get_initial_data());
-                $valid = $this->on_submit($name, $form);
-                return $this->render($name, $form);
+                $parsed_form = $this->create_form($form, $form->get_initial_data());
+                if (is_wp_error($parsed_form)) {
+                    return \sprintf(__('Error creating form for %1$s: %2$s', "ajaxy-forms"), $name, $parsed_form->get_error_message());
+                }
+                $this->on_submit($name, $parsed_form);
+                return $this->render($name, $parsed_form, $form->get_theme());
             } else {
-                return \sprintf(__('Form %s not found', AJAXY_FORMS_TEXT_DOMAIN), $name);
+                return \sprintf(__('Form %s not found', "ajaxy-forms"), $name);
             }
         }
     }
@@ -141,8 +148,8 @@ class Plugin
 
 
         $options = \array_replace([
-            'csrf_protection' => true,
-            'csrf_message' => __('It appears you\'ve already submitted this form, or it may have timed out. Please refresh the page and try again.', \AJAXY_FORMS_TEXT_DOMAIN),
+            'csrf_protection' => false,
+            'csrf_message' => __('It appears you\'ve already submitted this form, or it may have timed out. Please refresh the page and try again.', "ajaxy-forms"),
             'csrf_token_id'   => 'form_intention_' . $form->get_name(),
             'allow_extra_fields' => true,
             'required' => false,
@@ -161,10 +168,10 @@ class Plugin
 
         foreach ($form->get_fields() as $field) {
             $field_options = $field;
-            
+
             $field['constraints'] = $field['constraints'] ?? [];
-            if(isset($field['required']) && $field['required'] == "1"){
-                $field['constraints'][] = ['type' => 'not_blank'];
+            if (isset($field['required']) && $field['required'] == "1") {
+                $field['constraints'][] = ['type' => 'not_blank', 'message' => $field_options['invalid_message'] ?? __('This field is required.')];
             }
 
             if (!empty($field['constraints'])) {
@@ -181,6 +188,62 @@ class Plugin
                 $field_options['attr'] = $field['attr'] ?? $field['attributes'];
             }
 
+            if (isset($field_options['rounding_mode'])) {
+                $field_options['rounding_mode'] = intval($field_options['rounding_mode']);
+            }
+
+            if (isset($field_options['html5'])) {
+                $field_options['html5'] = \boolval($field_options['html5']);
+            }
+
+            if ($field['type'] == 'number') {
+                $field_options['input'] = 'string';
+                $field_options['data'] = '0';
+            }
+
+            if ($field['type'] == 'checkbox') {
+                if(isset($field_options['checked'])) {
+                    if($field_options['checked'] == "1") {
+                        $field_options['data'] = true;
+                    }
+                    unset($field_options['checked']);
+                }
+            }
+
+            if ($field['type'] == 'choice') {
+                if (isset($field_options['choices']) && is_array($field_options['choices'])) {
+                    array_walk($field_options['choices'], function (&$choice) {
+                        if ($choice['value'] == '') {
+                            $choice['value'] = \sanitize_text_field($choice['label']);
+                        }
+                    });
+
+                    $selected = array_values(\array_filter($field_options['choices'], function ($choice) {
+                        return $choice['selected'] ?? false;
+                    }));
+
+                    if(count($selected) > 0) {
+                        $field_options['data'] = $selected[0]['value'];
+                    }
+
+                    $field_options['choices'] = \array_combine(\array_column($field_options['choices'], 'value'), \array_column($field_options['choices'], 'label'));
+                }
+            }
+
+            if ($field['type'] == 'time') {
+                $field_options['input'] = 'array';
+                // $field_options['html5'] = false;
+            }
+
+            if ($field['type'] == 'date' || $field['type'] == 'time' || $field['type'] == 'datetime' || $field['type'] == 'birthday') {
+                if (!isset($field_options['widget']) || !$field_options['widget'] || $field_options['widget'] == 'single_text') {
+                    $field_options['input'] = 'string';
+                    $field_options['widget'] = 'single_text';
+                } else {
+                    $field_options['input'] = 'array';
+                }
+            }
+
             unset($field_options['name']);
             unset($field_options['type']);
 
@@ -189,13 +252,32 @@ class Plugin
                 unset($field_options['field_type']);
             }
 
-            $builder->add($field['name'], $this->get_field($field['type']), $field_options);
+            
+            try {
+                $builder->add($field['name'], $this->get_field($field['type']), $field_options);
+                if($field['type'] == 'checkbox') {
+                    $builder->get($field['name'])->addModelTransformer(new CallbackTransformer(
+                        function ($activeAsString) {
+                            return (bool)(int)$activeAsString;
+                        },
+                        function ($activeAsBoolean) {
+                            return (string)(int)$activeAsBoolean;
+                        }
+                   ));
+                }
+            } catch (\Throwable $e) {
+                \error_log($e->getMessage());
+            }
         }
         $builder->add('_message', $this->get_field('html'), [
             'html' => '<div class="form-message"></div>'
         ]);
-
-        return $builder->getForm();
+        try {
+            return $builder->getForm();
+        } catch (\Throwable $e) {
+            // \var_dump($e);
+            return new WP_Error('form_error', $e->getMessage());
+        }
     }
 
     /**
@@ -203,13 +285,16 @@ class Plugin
      *
      * @date 2024-04-11
      *
+     * @param string $name
      * @param \Symfony\Component\Form\Form $form
+     * @param string $theme
      *
      * @return void
      */
-    public function render($name, $form)
+    public function render($name, $form, $theme = null)
     {
 
+        // wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js', [], null, true);
         $twig = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array(
             AJAXY_FORMS_PLUGIN_DIR . 'inc/themes',
             AJAXY_FORMS_PLUGIN_DIR . 'vendor/symfony/twig-bridge/Resources/views/Form',
@@ -233,10 +318,12 @@ class Plugin
 
         $twig->addExtension(new \Twig\Extension\DebugExtension());
 
+        $theme = $theme ?? 'tailwind_2_layout.html.twig';
+
         $twig->addRuntimeLoader(new \Twig\RuntimeLoader\FactoryRuntimeLoader(
             array(
-                FormRenderer::class => function () use ($twig) {
-                    return new FormRenderer(new TwigRendererEngine(array('tailwind_2_layout.html.twig'), $twig));
+                FormRenderer::class => function () use ($twig, $theme) {
+                    return new FormRenderer(new TwigRendererEngine(array($theme), $twig));
                 }
             )
         ));
@@ -244,8 +331,8 @@ class Plugin
         if ($form->isSubmitted() && $form->isValid()) {
             $registered_form = Data::parse_form($name);
             $messages = array_replace([
-                'success' => __('Form submitted successfully', \AJAXY_FORMS_TEXT_DOMAIN),
-                'error' => __('Form failed to submit, Please try again', \AJAXY_FORMS_TEXT_DOMAIN),
+                'success' => __('Form submitted successfully', "ajaxy-forms"),
+                'error' => __('Form failed to submit, Please try again', "ajaxy-forms"),
             ], $registered_form->get_option('messages', []));
             return sprintf('<div class="ajaxy-form"><div class="form-message success">%s</div></div>', $messages['success'] ?? '');
         }
@@ -296,7 +383,7 @@ class Plugin
         $settings_link = sprintf(
             '<a href="%s">%s</a>',
             menu_page_url('ajaxy-forms-settings', false),
-            __('Settings', AJAXY_FORMS_TEXT_DOMAIN)
+            __('Settings', "ajaxy-forms")
         );
 
         array_unshift($links, $settings_link);
@@ -312,10 +399,15 @@ class Plugin
     public function actions()
     {
         add_action('rest_api_init', function () {
-            register_rest_route(AJAXY_FORMS_TEXT_DOMAIN . '/v1', '/form/(?P<name>.+)', array(
+            register_rest_route("ajaxy-forms" . '/v1', '/form/(?P<name>.+)', array(
                 'methods' => 'GET,POST',
                 'permission_callback' => '__return_true',
                 'callback' => [$this, 'submit'],
+            ));
+            register_rest_route("ajaxy-forms" . '/v1', '/form-data/', array(
+                'methods' => 'GET,POST',
+                'permission_callback' => '__return_true',
+                'callback' => [$this, 'get_data'],
             ));
         });
 
@@ -324,10 +416,11 @@ class Plugin
 
     public function scripts()
     {
-        wp_enqueue_style(AJAXY_FORMS_TEXT_DOMAIN . "-style", AJAXY_FORMS_PLUGIN_URL . '/assets/css/styles.css');
-        wp_enqueue_script(AJAXY_FORMS_TEXT_DOMAIN . '-script',  AJAXY_FORMS_PLUGIN_URL  . '/assets/js/script.js', array(), 1.0, true);
-        wp_localize_script(AJAXY_FORMS_TEXT_DOMAIN . '-script', 'ajaxyFormsSettings', array(
-            'nonce' => wp_create_nonce('wp_rest')
+        wp_enqueue_style("ajaxy-forms" . "-style", AJAXY_FORMS_PLUGIN_URL . '/assets/css/styles.css', [], "1.0");
+        wp_enqueue_script("ajaxy-forms" . '-script',  AJAXY_FORMS_PLUGIN_URL  . '/assets/js/script.js', array(), 1.0, true);
+        wp_localize_script("ajaxy-forms" . '-script', 'ajaxyFormsSettings', array(
+            'nonce' => wp_create_nonce('wp_rest'),
+            'dataUrl' => get_rest_url(null, sprintf('ajaxy-forms/v1/form-data/'))
         ));
     }
 
@@ -373,25 +466,79 @@ class Plugin
         Inc\Actions::getInstance()->register($type, $options);
     }
 
+    public function get_data(\WP_REST_Request $request)
+    {
+        $type = $request->get_param('type') ?? null;
+        switch ($type) {
+            case 'posts_by_term':
+                $term_id = $request->get_param('term_id') ?? null;
+                $taxonomy = $request->get_param('taxonomy') ?? 'category';
+                $post_type = $request->get_param('post_type') ?? 'post';
+                $orderby = $request->get_param('orderby') ?? 'date';
+                $order = $request->get_param('order') ?? 'DESC';
+                $meta_key = $request->get_param('meta_key') ?? '';
+                $meta_value = $request->get_param('meta_value') ?? '';
+                $exclude = $request->get_param('exclude') ?? '';
+                $include = $request->get_param('include') ?? '';
+                $posts = get_posts(array(
+                    'post_type' => $post_type,
+                    'order' => $order,
+                    'orderby' => $orderby,
+                    'meta_key' => $meta_key,
+                    'meta_value' => $meta_value,
+                    'exclude' => array_filter(explode(',', $exclude)),
+                    'include' => array_filter(explode(',', $include)),
+                    'posts_status' => 'publish',
+                    'posts_per_page' => -1,
+                    'tax_query' => array(
+                        array(
+                            'taxonomy' => $taxonomy,
+                            'field' => 'id',
+                            'terms' => $term_id,
+                        ),
+                    ),
+                ));
+                $response = array_map(function ($post) {
+                    return array(
+                        'id' => $post->ID,
+                        'title' => $post->post_title
+                    );
+                }, $posts);
+                return new \WP_REST_Response([
+                    'data' => $response,
+                    'status' => 'success'
+                ]);
+            default:
+                return new \WP_REST_Response(['status' => 'error', 'message' => 'Unsupported data type']);
+        }
+    }
     public function submit(\WP_REST_Request $request)
     {
         $form_name = $request->get_param('name') ?? null;
         if (!$form_name || trim($form_name) == "") {
             return new \WP_REST_Response(['status' => 'error', 'message' => 'Form not found']);
         }
-        
+
         $form = Data::parse_form($form_name);
         if (!$form) {
             return new \WP_REST_Response(['status' => 'error', 'message' => 'Form not found']);
         }
         $data = $request->get_body_params()[$form_name] ?? [];
         $submitted_form = $this->create_form($form, $data);
+        if (\is_wp_error($submitted_form)) {
+            return new \WP_REST_Response([
+                'status' => 'error',
+                'message' => \sprintf(__('Error submitting form: %s', "ajaxy-forms"), $submitted_form->get_error_message()),
+                '_token' => $this->csrf_token_manager->getToken('form_intention_' . $form->get_name())->getValue()
+            ]);
+        }
         $valid = $this->on_submit($form_name, $submitted_form);
         if ($valid) {
             $message = $form->get_message('success');
 
             return new \WP_REST_Response([
-                'status' => 'success', 'message' => $message ? $message : __('Form submitted successfully', \AJAXY_FORMS_TEXT_DOMAIN),
+                'status' => 'success',
+                'message' => $message ? $message : __('Form submitted successfully', "ajaxy-forms"),
                 '_token' => $this->csrf_token_manager->getToken('form_intention_' . $form->get_name())->getValue()
             ]);
         }
@@ -400,7 +547,7 @@ class Plugin
         if (count($errors) > 0) {
             $message .= implode('<br>', $errors);
         }
-        return new \WP_REST_Response(['status' => 'error', 'message' => $message ? $message : __('Form failed to submit, Please try again', \AJAXY_FORMS_TEXT_DOMAIN), 'fields' => $this->get_fields_error_messages($submitted_form)]);
+        return new \WP_REST_Response(['status' => 'error', 'message' => $message ? $message : __('Form failed to submit, Please try again', "ajaxy-forms"), 'fields' => $this->get_fields_error_messages($submitted_form)]);
     }
 
     private function get_fields_error_messages(\Symfony\Component\Form\FormInterface $form)
@@ -420,6 +567,7 @@ class Plugin
     {
         $errors = array();
         foreach ($form->getErrors() as $key => $error) {
+
             $template = $error->getMessageTemplate();
             $parameters = $error->getMessageParameters();
 
@@ -429,6 +577,7 @@ class Plugin
 
             $errors[] = $template;
         }
+
         return $errors;
     }
 
@@ -447,10 +596,17 @@ register_activation_hook(__FILE__, function () {
 
 \register_form_field('html', [
     "label" => "HTML",
-    "class" => Inc\Fields\HtmlType::class,
+    "class" => Inc\Types\HtmlType::class,
     "docs" => false,
     "inherited" => [],
     "properties" => [[
+        "section" => "basic",
+        "order" => 1,
+        "label" => "Label",
+        "type" => "text",
+        "name" => "label",
+        "help" => "Enter the label for the field, keep empty to hide it",
+    ], [
         "section" => "basic",
         "order" => 1,
         "label" => "Html",

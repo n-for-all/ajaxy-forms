@@ -16,34 +16,49 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class FormFactory implements FormFactoryInterface
 {
-    private FormRegistryInterface $registry;
+    private $registry;
 
     public function __construct(FormRegistryInterface $registry)
     {
         $this->registry = $registry;
     }
 
-    public function create(string $type = FormType::class, mixed $data = null, array $options = []): FormInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function create(string $type = FormType::class, $data = null, array $options = [])
     {
         return $this->createBuilder($type, $data, $options)->getForm();
     }
 
-    public function createNamed(string $name, string $type = FormType::class, mixed $data = null, array $options = []): FormInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function createNamed(string $name, string $type = FormType::class, $data = null, array $options = [])
     {
         return $this->createNamedBuilder($name, $type, $data, $options)->getForm();
     }
 
-    public function createForProperty(string $class, string $property, mixed $data = null, array $options = []): FormInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function createForProperty(string $class, string $property, $data = null, array $options = [])
     {
         return $this->createBuilderForProperty($class, $property, $data, $options)->getForm();
     }
 
-    public function createBuilder(string $type = FormType::class, mixed $data = null, array $options = []): FormBuilderInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function createBuilder(string $type = FormType::class, $data = null, array $options = [])
     {
         return $this->createNamedBuilder($this->registry->getType($type)->getBlockPrefix(), $type, $data, $options);
     }
 
-    public function createNamedBuilder(string $name, string $type = FormType::class, mixed $data = null, array $options = []): FormBuilderInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function createNamedBuilder(string $name, string $type = FormType::class, $data = null, array $options = [])
     {
         if (null !== $data && !\array_key_exists('data', $options)) {
             $options['data'] = $data;
@@ -60,7 +75,10 @@ class FormFactory implements FormFactoryInterface
         return $builder;
     }
 
-    public function createBuilderForProperty(string $class, string $property, mixed $data = null, array $options = []): FormBuilderInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function createBuilderForProperty(string $class, string $property, $data = null, array $options = [])
     {
         if (null === $guesser = $this->registry->getTypeGuesser()) {
             return $this->createNamedBuilder($property, TextType::class, $data, $options);
@@ -73,8 +91,8 @@ class FormFactory implements FormFactoryInterface
 
         $type = $typeGuess ? $typeGuess->getType() : TextType::class;
 
-        $maxLength = $maxLengthGuess?->getValue();
-        $pattern = $patternGuess?->getValue();
+        $maxLength = $maxLengthGuess ? $maxLengthGuess->getValue() : null;
+        $pattern = $patternGuess ? $patternGuess->getValue() : null;
 
         if (null !== $pattern) {
             $options = array_replace_recursive(['attr' => ['pattern' => $pattern]], $options);

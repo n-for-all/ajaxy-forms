@@ -27,9 +27,12 @@ class FormValidator extends ConstraintValidator
     /**
      * @var \SplObjectStorage<FormInterface, array<int, string|string[]|GroupSequence>>
      */
-    private \SplObjectStorage $resolvedGroups;
+    private $resolvedGroups;
 
-    public function validate(mixed $form, Constraint $formConstraint): void
+    /**
+     * {@inheritdoc}
+     */
+    public function validate($form, Constraint $formConstraint)
     {
         if (!$formConstraint instanceof Form) {
             throw new UnexpectedTypeException($formConstraint, Form::class);
@@ -110,7 +113,7 @@ class FormValidator extends ConstraintValidator
                 foreach ($constraints as $constraint) {
                     // For the "Valid" constraint, validate the data in all groups
                     if ($constraint instanceof Valid) {
-                        if (\is_object($data) || \is_array($data)) {
+                        if (\is_object($data)) {
                             $validator->atPath('data')->validate($data, $constraint, $groups);
                         }
 
@@ -168,7 +171,7 @@ class FormValidator extends ConstraintValidator
             // child.
             // See also https://github.com/symfony/symfony/issues/4359
             if ($childrenSynchronized) {
-                $clientDataAsString = \is_scalar($form->getViewData())
+                $clientDataAsString = is_scalar($form->getViewData())
                     ? (string) $form->getViewData()
                     : get_debug_type($form->getViewData());
 
@@ -205,7 +208,7 @@ class FormValidator extends ConstraintValidator
      *
      * @return string|GroupSequence|array<string|GroupSequence>
      */
-    private function getValidationGroups(FormInterface $form): string|GroupSequence|array
+    private function getValidationGroups(FormInterface $form)
     {
         // Determine the clicked button of the complete form tree
         $clickedButton = null;
@@ -246,7 +249,7 @@ class FormValidator extends ConstraintValidator
      *
      * @return GroupSequence|array<string|GroupSequence>
      */
-    private static function resolveValidationGroups(string|GroupSequence|array|callable $groups, FormInterface $form): GroupSequence|array
+    private static function resolveValidationGroups($groups, FormInterface $form)
     {
         if (!\is_string($groups) && \is_callable($groups)) {
             $groups = $groups($form);
@@ -259,7 +262,7 @@ class FormValidator extends ConstraintValidator
         return (array) $groups;
     }
 
-    private static function getConstraintsInGroups(array $constraints, string|array $group): array
+    private static function getConstraintsInGroups($constraints, $group)
     {
         $groups = (array) $group;
 

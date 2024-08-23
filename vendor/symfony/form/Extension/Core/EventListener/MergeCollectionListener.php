@@ -21,8 +21,8 @@ use Symfony\Component\Form\FormEvents;
  */
 class MergeCollectionListener implements EventSubscriberInterface
 {
-    private bool $allowAdd;
-    private bool $allowDelete;
+    private $allowAdd;
+    private $allowDelete;
 
     /**
      * @param bool $allowAdd    Whether values might be added to the collection
@@ -34,17 +34,21 @@ class MergeCollectionListener implements EventSubscriberInterface
         $this->allowDelete = $allowDelete;
     }
 
-    public static function getSubscribedEvents(): array
+    public static function getSubscribedEvents()
     {
         return [
             FormEvents::SUBMIT => 'onSubmit',
         ];
     }
 
-    public function onSubmit(FormEvent $event): void
+    public function onSubmit(FormEvent $event)
     {
         $dataToMergeInto = $event->getForm()->getNormData();
-        $data = $event->getData() ?? [];
+        $data = $event->getData();
+
+        if (null === $data) {
+            $data = [];
+        }
 
         if (!\is_array($data) && !($data instanceof \Traversable && $data instanceof \ArrayAccess)) {
             throw new UnexpectedTypeException($data, 'array or (\Traversable and \ArrayAccess)');

@@ -24,25 +24,28 @@ use Symfony\Component\Form\FormInterface;
  */
 class ResizeFormListener implements EventSubscriberInterface
 {
-    protected string $type;
-    protected array $options;
-    protected array $prototypeOptions;
-    protected bool $allowAdd;
-    protected bool $allowDelete;
+    protected $type;
+    protected $options;
+    protected $allowAdd;
+    protected $allowDelete;
 
-    private \Closure|bool $deleteEmpty;
+    private $deleteEmpty;
 
-    public function __construct(string $type, array $options = [], bool $allowAdd = false, bool $allowDelete = false, bool|callable $deleteEmpty = false, ?array $prototypeOptions = null)
+    /**
+     * @param bool          $allowAdd    Whether children could be added to the group
+     * @param bool          $allowDelete Whether children could be removed from the group
+     * @param bool|callable $deleteEmpty
+     */
+    public function __construct(string $type, array $options = [], bool $allowAdd = false, bool $allowDelete = false, $deleteEmpty = false)
     {
         $this->type = $type;
         $this->allowAdd = $allowAdd;
         $this->allowDelete = $allowDelete;
         $this->options = $options;
-        $this->deleteEmpty = \is_bool($deleteEmpty) ? $deleteEmpty : $deleteEmpty(...);
-        $this->prototypeOptions = $prototypeOptions ?? $options;
+        $this->deleteEmpty = $deleteEmpty;
     }
 
-    public static function getSubscribedEvents(): array
+    public static function getSubscribedEvents()
     {
         return [
             FormEvents::PRE_SET_DATA => 'preSetData',
@@ -52,10 +55,14 @@ class ResizeFormListener implements EventSubscriberInterface
         ];
     }
 
-    public function preSetData(FormEvent $event): void
+    public function preSetData(FormEvent $event)
     {
         $form = $event->getForm();
-        $data = $event->getData() ?? [];
+        $data = $event->getData();
+
+        if (null === $data) {
+            $data = [];
+        }
 
         if (!\is_array($data) && !($data instanceof \Traversable && $data instanceof \ArrayAccess)) {
             throw new UnexpectedTypeException($data, 'array or (\Traversable and \ArrayAccess)');
@@ -74,7 +81,7 @@ class ResizeFormListener implements EventSubscriberInterface
         }
     }
 
-    public function preSubmit(FormEvent $event): void
+    public function preSubmit(FormEvent $event)
     {
         $form = $event->getForm();
         $data = $event->getData();
@@ -98,20 +105,24 @@ class ResizeFormListener implements EventSubscriberInterface
                 if (!$form->has($name)) {
                     $form->add($name, $this->type, array_replace([
                         'property_path' => '['.$name.']',
-                    ], $this->prototypeOptions));
+                    ], $this->options));
                 }
             }
         }
     }
 
-    public function onSubmit(FormEvent $event): void
+    public function onSubmit(FormEvent $event)
     {
         $form = $event->getForm();
-        $data = $event->getData() ?? [];
+        $data = $event->getData();
 
         // At this point, $data is an array or an array-like object that already contains the
         // new entries, which were added by the data mapper. The data mapper ignores existing
         // entries, so we need to manually unset removed entries in the collection.
+
+        if (null === $data) {
+            $data = [];
+        }
 
         if (!\is_array($data) && !($data instanceof \Traversable && $data instanceof \ArrayAccess)) {
             throw new UnexpectedTypeException($data, 'array or (\Traversable and \ArrayAccess)');

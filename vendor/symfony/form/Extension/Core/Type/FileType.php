@@ -12,14 +12,12 @@
 namespace Symfony\Component\Form\Extension\Core\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\FileUploadError;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -35,18 +33,20 @@ class FileType extends AbstractType
         self::MIB_BYTES => 'MiB',
     ];
 
-    private ?TranslatorInterface $translator;
+    private $translator;
 
-    public function __construct(?TranslatorInterface $translator = null)
+    public function __construct(TranslatorInterface $translator = null)
     {
         $this->translator = $translator;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // Ensure that submitted data is always an uploaded file or an array of some
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($options) {
-            /** @var PreSubmitEvent $event */
             $form = $event->getForm();
             $requestHandler = $form->getConfig()->getRequestHandler();
 
@@ -84,7 +84,10 @@ class FileType extends AbstractType
         });
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options): void
+    /**
+     * {@inheritdoc}
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         if ($options['multiple']) {
             $view->vars['full_name'] .= '[]';
@@ -97,19 +100,29 @@ class FileType extends AbstractType
         ]);
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options): void
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['multipart'] = true;
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $dataClass = null;
-        if (class_exists(File::class)) {
-            $dataClass = static fn (Options $options) => $options['multiple'] ? null : File::class;
+        if (class_exists(\Symfony\Component\HttpFoundation\File\File::class)) {
+            $dataClass = function (Options $options) {
+                return $options['multiple'] ? null : 'Symfony\Component\HttpFoundation\File\File';
+            };
         }
 
-        $emptyData = static fn (Options $options) => $options['multiple'] ? [] : null;
+        $emptyData = function (Options $options) {
+            return $options['multiple'] ? [] : null;
+        };
 
         $resolver->setDefaults([
             'compound' => false,
@@ -117,16 +130,23 @@ class FileType extends AbstractType
             'empty_data' => $emptyData,
             'multiple' => false,
             'allow_file_upload' => true,
-            'invalid_message' => 'Please select a valid file.',
+            'invalid_message' => function (Options $options, $previousValue) {
+                return ($options['legacy_error_messages'] ?? true)
+                    ? $previousValue
+                    : 'Please select a valid file.';
+            },
         ]);
     }
 
-    public function getBlockPrefix(): string
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return 'file';
     }
 
-    private function getFileUploadError(int $errorCode): FileUploadError
+    private function getFileUploadError(int $errorCode)
     {
         $messageParameters = [];
 
@@ -156,10 +176,12 @@ class FileType extends AbstractType
      * Returns the maximum size of an uploaded file as configured in php.ini.
      *
      * This method should be kept in sync with Symfony\Component\HttpFoundation\File\UploadedFile::getMaxFilesize().
+     *
+     * @return int|float The maximum size of an uploaded file in bytes (returns float if size > PHP_INT_MAX)
      */
-    private static function getMaxFilesize(): int|float
+    private static function getMaxFilesize()
     {
-        $iniMax = strtolower(\ini_get('upload_max_filesize'));
+        $iniMax = strtolower(ini_get('upload_max_filesize'));
 
         if ('' === $iniMax) {
             return \PHP_INT_MAX;
@@ -176,11 +198,11 @@ class FileType extends AbstractType
 
         switch (substr($iniMax, -1)) {
             case 't': $max *= 1024;
-                // no break
+            // no break
             case 'g': $max *= 1024;
-                // no break
+            // no break
             case 'm': $max *= 1024;
-                // no break
+            // no break
             case 'k': $max *= 1024;
         }
 
@@ -192,8 +214,10 @@ class FileType extends AbstractType
      * (i.e. try "MB", then "kB", then "bytes").
      *
      * This method should be kept in sync with Symfony\Component\Validator\Constraints\FileValidator::factorizeSizes().
+     *
+     * @param int|float $limit
      */
-    private function factorizeSizes(int $size, int|float $limit): array
+    private function factorizeSizes(int $size, $limit)
     {
         $coef = self::MIB_BYTES;
         $coefFactor = self::KIB_BYTES;

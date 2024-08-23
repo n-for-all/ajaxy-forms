@@ -79,14 +79,10 @@ class Data
     {
         global $wpdb;
         $table_name = self::get_table_name();
-        if ($wpdb->insert(
-            $table_name,
-            array(
-                'name' => $name,
-                'metadata' => \wp_json_encode($metadata),
-                'created' => current_time('mysql'),
-            )
-        )) {
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+        $success = $wpdb->insert($table_name, array('name' => $name, 'metadata' => \wp_json_encode($metadata), 'created' => current_time('mysql'),));
+        if ($success) {
             return $wpdb->insert_id;
         }
 
@@ -108,6 +104,7 @@ class Data
     {
         global $wpdb;
         $table_name = self::get_table_name();
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->update(
             $table_name,
             array(
@@ -132,6 +129,8 @@ class Data
     {
         global $wpdb;
         $table_name = self::get_table_name();
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->update(
             $table_name,
             array(
@@ -178,6 +177,8 @@ class Data
     {
         global $wpdb;
         $table_name = self::get_table_name();
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->delete(
             $table_name,
             array('id' => $id)
@@ -195,6 +196,8 @@ class Data
     {
         global $wpdb;
         $table_name = self::get_table_name();
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->get_results(
             $wpdb->prepare(
                 // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
@@ -227,6 +230,8 @@ class Data
     {
         global $wpdb;
         $table_name = self::get_table_name();
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->get_row($wpdb->prepare("SELECT * FROM %i WHERE name = %s", $table_name, $name), ARRAY_A);
     }
 
@@ -243,6 +248,8 @@ class Data
     {
         global $wpdb;
         $table_name = self::get_table_name();
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->get_row($wpdb->prepare("SELECT * FROM %i WHERE id = %s", $table_name, absint($id)), ARRAY_A);
     }
 
@@ -266,7 +273,7 @@ class Data
             $metadata = isset($form['metadata']) ? \json_decode($form['metadata'], true) : [];
             $actions = isset($form['actions']) ? \json_decode($form['actions'], true) : [];
 
-            self::$forms[$name] = new Form($name, $metadata['fields'] ?? [], $metadata['options'] ?? [], $actions, null);
+            self::$forms[$name] = new Form($name, $metadata['fields'] ?? [], $metadata['options'] ?? [], $actions, null, $metadata['theme'] ?? null);
         }
         return self::$forms[$name];
     }
@@ -313,6 +320,8 @@ class Data
         }
 
         $entries_table_name = self::get_entries_table_name();
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->insert(
             $entries_table_name,
             array(
@@ -337,6 +346,8 @@ class Data
     {
         global $wpdb;
         $entries_table_name = self::get_entries_table_name();
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->update(
             $entries_table_name,
             array(
@@ -359,6 +370,8 @@ class Data
     {
         global $wpdb;
         $entries_table_name = self::get_entries_table_name();
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->delete(
             $entries_table_name,
             array('id' => $id)
@@ -378,6 +391,8 @@ class Data
     {
         global $wpdb;
         $entries_table_name = self::get_entries_table_name();
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->get_row($wpdb->prepare("SELECT * FROM %i WHERE id = %s", $entries_table_name, absint($id)), ARRAY_A);
     }
 
@@ -395,6 +410,8 @@ class Data
         global $wpdb;
         $ids = implode(',', array_map('absint', (array)$ids));
         $entries_table_name = self::get_entries_table_name();
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->query($wpdb->prepare("DELETE FROM %i WHERE ID IN (%s)", $entries_table_name, $ids));
     }
 
@@ -404,6 +421,8 @@ class Data
         global $wpdb;
         $ids = implode(',', array_map('absint', (array)$ids));
         $table_name = self::get_table_name();
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->query($wpdb->prepare("DELETE FROM %i WHERE ID IN (%s)", $table_name, $ids));
     }
 
@@ -437,17 +456,21 @@ class Data
      */
     public static function get_entries($form = null, $page = 1, $order_by = 'created', $order = 'desc', $per_page = 10)
     {
+        if ($page <= 0) {
+            $page = 1;
+        }
         global $wpdb;
         $entries_table_name = self::get_entries_table_name();
         if ($form) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
             return $wpdb->get_results(
                 $wpdb->prepare(
                     // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
                     "SELECT * FROM %i WHERE name = %s ORDER BY %i %1s LIMIT %d OFFSET %d",
                     $entries_table_name,
+                    $form,
                     $order_by,
                     $order,
-                    $form,
                     $per_page,
                     max(0, intval($page - 1) * $per_page)
                 ),
@@ -455,6 +478,7 @@ class Data
             );
         }
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->get_results(
             $wpdb->prepare(
                 // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
@@ -484,8 +508,11 @@ class Data
         global $wpdb;
         $entries_table_name = self::get_entries_table_name();
         if ($form) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
             return $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM %i WHERE name = %s", $entries_table_name, $form));
         }
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         return $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM %i", $entries_table_name));
     }
 
@@ -500,10 +527,15 @@ class Data
      */
     public static function export($form)
     {
-        $entries = self::get_entries($form, 0, 'created', 'desc', 100000);
+        $entries = self::get_entries($form, 1, 'created', 'desc', 100000);
+        $headers = [
+            '_name' => 'Name',
+            '_metadata' => 'Metadata',
+            '_created' => 'Date',
+        ];
         $data = [];
         foreach ($entries as $entry) {
-            $array = self::flatten(isset($entry['data']) ? \json_decode($entry['data'], true) : []);
+            $array = isset($entry['data']) ? \json_decode($entry['data'], true) : [];
             $output = '';
             foreach ($array as $key => $value) {
                 $output .= $key . ': ' . $value . "\n";
@@ -514,17 +546,25 @@ class Data
             foreach ($metarray as $key => $value) {
                 $metadata .= $key . ': ' . $value . "\n";
             }
-            $data[] = [
+
+            $values = [];
+            foreach ($array as $name => $field) {
+                if (!is_array($field)) {
+                    $values[$name] = $field;
+                    $headers[$name] = $headers[$name] ?? $name;
+                    continue;
+                }
+                $values[$name] = is_array($field['value_label']) ? implode(', ', $field['value_label']) : $field['value_label'];
+                $headers[$name] = $headers[$name] ?? $field['label'];
+            }
+            $data[] = array_merge([
                 'name' => $entry['name'],
-                'data' => $output,
                 'metadata' => $metadata,
                 'created' => $entry['created'],
-            ];
+            ], $values);
         }
 
-        $csv = new Export\Csv([
-            'Name', 'Data', 'Metadata', 'Date'
-        ], $data, sprintf('%s-form-entries-%s.csv', $form, \gmdate('Y-m-d')));
+        $csv = new Export\Csv($headers, $data, sprintf('%s-form-entries-%s.csv', $form ? $form : 'all', \gmdate('Y-m-d')));
         return $csv->download();
     }
 

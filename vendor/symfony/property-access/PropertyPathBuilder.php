@@ -18,10 +18,16 @@ use Symfony\Component\PropertyAccess\Exception\OutOfBoundsException;
  */
 class PropertyPathBuilder
 {
-    private array $elements = [];
-    private array $isIndex = [];
+    private $elements = [];
+    private $isIndex = [];
 
-    public function __construct(PropertyPathInterface|string|null $path = null)
+    /**
+     * Creates a new property path builder.
+     *
+     * @param PropertyPathInterface|string|null $path The path to initially store
+     *                                                in the builder. Optional.
+     */
+    public function __construct($path = null)
     {
         if (null !== $path) {
             $this->append($path);
@@ -31,10 +37,13 @@ class PropertyPathBuilder
     /**
      * Appends a (sub-) path to the current path.
      *
-     * @param int $offset The offset where the appended piece starts in $path
-     * @param int $length The length of the appended piece; if 0, the full path is appended
+     * @param PropertyPathInterface|string $path   The path to append
+     * @param int                          $offset The offset where the appended
+     *                                             piece starts in $path
+     * @param int                          $length The length of the appended piece
+     *                                             If 0, the full path is appended
      */
-    public function append(PropertyPathInterface|string $path, int $offset = 0, int $length = 0): void
+    public function append($path, int $offset = 0, int $length = 0)
     {
         if (\is_string($path)) {
             $path = new PropertyPath($path);
@@ -55,7 +64,7 @@ class PropertyPathBuilder
     /**
      * Appends an index element to the current path.
      */
-    public function appendIndex(string $name): void
+    public function appendIndex(string $name)
     {
         $this->elements[] = $name;
         $this->isIndex[] = true;
@@ -64,7 +73,7 @@ class PropertyPathBuilder
     /**
      * Appends a property element to the current path.
      */
-    public function appendProperty(string $name): void
+    public function appendProperty(string $name)
     {
         $this->elements[] = $name;
         $this->isIndex[] = false;
@@ -75,7 +84,7 @@ class PropertyPathBuilder
      *
      * @throws OutOfBoundsException if offset is invalid
      */
-    public function remove(int $offset, int $length = 1): void
+    public function remove(int $offset, int $length = 1)
     {
         if (!isset($this->elements[$offset])) {
             throw new OutOfBoundsException(sprintf('The offset "%s" is not within the property path.', $offset));
@@ -87,12 +96,17 @@ class PropertyPathBuilder
     /**
      * Replaces a sub-path by a different (sub-) path.
      *
-     * @param int $pathOffset The offset where the inserted piece starts in $path
-     * @param int $pathLength The length of the inserted piece; if 0, the full path is inserted
+     * @param int                          $offset     The offset at which to replace
+     * @param int                          $length     The length of the piece to replace
+     * @param PropertyPathInterface|string $path       The path to insert
+     * @param int                          $pathOffset The offset where the inserted piece
+     *                                                 starts in $path
+     * @param int                          $pathLength The length of the inserted piece
+     *                                                 If 0, the full path is inserted
      *
      * @throws OutOfBoundsException If the offset is invalid
      */
-    public function replace(int $offset, int $length, PropertyPathInterface|string $path, int $pathOffset = 0, int $pathLength = 0): void
+    public function replace(int $offset, int $length, $path, int $pathOffset = 0, int $pathLength = 0)
     {
         if (\is_string($path)) {
             $path = new PropertyPath($path);
@@ -122,7 +136,7 @@ class PropertyPathBuilder
      *
      * @throws OutOfBoundsException If the offset is invalid
      */
-    public function replaceByIndex(int $offset, ?string $name = null): void
+    public function replaceByIndex(int $offset, ?string $name = null)
     {
         if (!isset($this->elements[$offset])) {
             throw new OutOfBoundsException(sprintf('The offset "%s" is not within the property path.', $offset));
@@ -140,7 +154,7 @@ class PropertyPathBuilder
      *
      * @throws OutOfBoundsException If the offset is invalid
      */
-    public function replaceByProperty(int $offset, ?string $name = null): void
+    public function replaceByProperty(int $offset, ?string $name = null)
     {
         if (!isset($this->elements[$offset])) {
             throw new OutOfBoundsException(sprintf('The offset "%s" is not within the property path.', $offset));
@@ -155,16 +169,20 @@ class PropertyPathBuilder
 
     /**
      * Returns the length of the current path.
+     *
+     * @return int
      */
-    public function getLength(): int
+    public function getLength()
     {
         return \count($this->elements);
     }
 
     /**
      * Returns the current property path.
+     *
+     * @return PropertyPathInterface|null
      */
-    public function getPropertyPath(): ?PropertyPathInterface
+    public function getPropertyPath()
     {
         $pathAsString = $this->__toString();
 
@@ -173,8 +191,10 @@ class PropertyPathBuilder
 
     /**
      * Returns the current property path as string.
+     *
+     * @return string
      */
-    public function __toString(): string
+    public function __toString()
     {
         $string = '';
 
@@ -196,7 +216,7 @@ class PropertyPathBuilder
      * removed at $offset and another chunk of length $insertionLength
      * can be inserted.
      */
-    private function resize(int $offset, int $cutLength, int $insertionLength): void
+    private function resize(int $offset, int $cutLength, int $insertionLength)
     {
         // Nothing else to do in this case
         if ($insertionLength === $cutLength) {

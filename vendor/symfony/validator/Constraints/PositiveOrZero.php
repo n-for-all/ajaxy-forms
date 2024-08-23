@@ -12,6 +12,9 @@
 namespace Symfony\Component\Validator\Constraints;
 
 /**
+ * @Annotation
+ * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
+ *
  * @author Jan Schädlich <jan.schaedlich@sensiolabs.de>
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
@@ -19,5 +22,5 @@ class PositiveOrZero extends GreaterThanOrEqual
 {
     use ZeroComparisonConstraintTrait;
 
-    public string $message = 'This value should be either positive or zero.';
+    public $message = 'This value should be either positive or zero.';
 }

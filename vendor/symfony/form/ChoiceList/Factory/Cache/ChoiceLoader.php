@@ -26,17 +26,26 @@ use Symfony\Component\Form\FormTypeInterface;
  */
 final class ChoiceLoader extends AbstractStaticOption implements ChoiceLoaderInterface
 {
-    public function loadChoiceList(?callable $value = null): ChoiceListInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function loadChoiceList(callable $value = null): ChoiceListInterface
     {
         return $this->getOption()->loadChoiceList($value);
     }
 
-    public function loadChoicesForValues(array $values, ?callable $value = null): array
+    /**
+     * {@inheritdoc}
+     */
+    public function loadChoicesForValues(array $values, callable $value = null): array
     {
         return $this->getOption()->loadChoicesForValues($values, $value);
     }
 
-    public function loadValuesForChoices(array $choices, ?callable $value = null): array
+    /**
+     * {@inheritdoc}
+     */
+    public function loadValuesForChoices(array $choices, callable $value = null): array
     {
         return $this->getOption()->loadValuesForChoices($choices, $value);
     }

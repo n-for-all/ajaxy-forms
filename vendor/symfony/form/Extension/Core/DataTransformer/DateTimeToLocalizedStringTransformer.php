@@ -19,15 +19,13 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Florian Eckerstorfer <florian@eckerstorfer.org>
- *
- * @extends BaseDateTimeTransformer<string>
  */
 class DateTimeToLocalizedStringTransformer extends BaseDateTimeTransformer
 {
-    private int $dateFormat;
-    private int $timeFormat;
-    private ?string $pattern;
-    private int $calendar;
+    private $dateFormat;
+    private $timeFormat;
+    private $pattern;
+    private $calendar;
 
     /**
      * @see BaseDateTimeTransformer::formats for available format options
@@ -41,12 +39,17 @@ class DateTimeToLocalizedStringTransformer extends BaseDateTimeTransformer
      *
      * @throws UnexpectedTypeException If a format is not supported or if a timezone is not a string
      */
-    public function __construct(?string $inputTimezone = null, ?string $outputTimezone = null, ?int $dateFormat = null, ?int $timeFormat = null, int $calendar = \IntlDateFormatter::GREGORIAN, ?string $pattern = null)
+    public function __construct(string $inputTimezone = null, string $outputTimezone = null, int $dateFormat = null, int $timeFormat = null, int $calendar = \IntlDateFormatter::GREGORIAN, string $pattern = null)
     {
         parent::__construct($inputTimezone, $outputTimezone);
 
-        $dateFormat ??= \IntlDateFormatter::MEDIUM;
-        $timeFormat ??= \IntlDateFormatter::SHORT;
+        if (null === $dateFormat) {
+            $dateFormat = \IntlDateFormatter::MEDIUM;
+        }
+
+        if (null === $timeFormat) {
+            $timeFormat = \IntlDateFormatter::SHORT;
+        }
 
         if (!\in_array($dateFormat, self::$formats, true)) {
             throw new UnexpectedTypeException($dateFormat, implode('", "', self::$formats));
@@ -67,10 +70,12 @@ class DateTimeToLocalizedStringTransformer extends BaseDateTimeTransformer
      *
      * @param \DateTimeInterface $dateTime A DateTimeInterface object
      *
+     * @return string
+     *
      * @throws TransformationFailedException if the given value is not a \DateTimeInterface
      *                                       or if the date could not be transformed
      */
-    public function transform(mixed $dateTime): string
+    public function transform($dateTime)
     {
         if (null === $dateTime) {
             return '';
@@ -92,12 +97,14 @@ class DateTimeToLocalizedStringTransformer extends BaseDateTimeTransformer
     /**
      * Transforms a localized date string/array into a normalized date.
      *
-     * @param string $value Localized date string
+     * @param string|array $value Localized date string/array
+     *
+     * @return \DateTime|null
      *
      * @throws TransformationFailedException if the given value is not a string,
      *                                       if the date could not be parsed
      */
-    public function reverseTransform(mixed $value): ?\DateTime
+    public function reverseTransform($value)
     {
         if (!\is_string($value)) {
             throw new TransformationFailedException('Expected a string.');
@@ -156,9 +163,11 @@ class DateTimeToLocalizedStringTransformer extends BaseDateTimeTransformer
      *
      * @param bool $ignoreTimezone Use UTC regardless of the configured timezone
      *
+     * @return \IntlDateFormatter
+     *
      * @throws TransformationFailedException in case the date formatter cannot be constructed
      */
-    protected function getIntlDateFormatter(bool $ignoreTimezone = false): \IntlDateFormatter
+    protected function getIntlDateFormatter(bool $ignoreTimezone = false)
     {
         $dateFormat = $this->dateFormat;
         $timeFormat = $this->timeFormat;
@@ -181,8 +190,10 @@ class DateTimeToLocalizedStringTransformer extends BaseDateTimeTransformer
 
     /**
      * Checks if the pattern contains only a date.
+     *
+     * @return bool
      */
-    protected function isPatternDateOnly(): bool
+    protected function isPatternDateOnly()
     {
         if (null === $this->pattern) {
             return false;

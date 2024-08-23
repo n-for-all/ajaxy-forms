@@ -12,7 +12,6 @@
 namespace Symfony\Component\Form;
 
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
-use Symfony\Component\Form\Util\FormUtil;
 use Symfony\Component\Form\Util\ServerParams;
 
 /**
@@ -22,7 +21,7 @@ use Symfony\Component\Form\Util\ServerParams;
  */
 class NativeRequestHandler implements RequestHandlerInterface
 {
-    private ServerParams $serverParams;
+    private $serverParams;
 
     /**
      * The allowed keys of the $_FILES array.
@@ -35,15 +34,17 @@ class NativeRequestHandler implements RequestHandlerInterface
         'type',
     ];
 
-    public function __construct(?ServerParams $params = null)
+    public function __construct(ServerParams $params = null)
     {
         $this->serverParams = $params ?? new ServerParams();
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @throws Exception\UnexpectedTypeException If the $request is not null
      */
-    public function handleRequest(FormInterface $form, mixed $request = null): void
+    public function handleRequest(FormInterface $form, $request = null)
     {
         if (null !== $request) {
             throw new UnexpectedTypeException($request, 'null');
@@ -105,7 +106,7 @@ class NativeRequestHandler implements RequestHandlerInterface
             }
 
             if (\is_array($params) && \is_array($files)) {
-                $data = FormUtil::mergeParamsAndFiles($params, $files);
+                $data = array_replace_recursive($params, $files);
             } else {
                 $data = $params ?: $files;
             }
@@ -123,7 +124,10 @@ class NativeRequestHandler implements RequestHandlerInterface
         $form->submit($data, 'PATCH' !== $method);
     }
 
-    public function isFileUpload(mixed $data): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function isFileUpload($data)
     {
         // POST data will always be strings or arrays of strings. Thus, we can be sure
         // that the submitted data is a file upload if the "error" value is an integer
@@ -131,7 +135,10 @@ class NativeRequestHandler implements RequestHandlerInterface
         return \is_array($data) && isset($data['error']) && \is_int($data['error']);
     }
 
-    public function getUploadFileError(mixed $data): ?int
+    /**
+     * @return int|null
+     */
+    public function getUploadFileError($data)
     {
         if (!\is_array($data)) {
             return null;
@@ -152,6 +159,9 @@ class NativeRequestHandler implements RequestHandlerInterface
         return $data['error'];
     }
 
+    /**
+     * Returns the method used to submit the request to the server.
+     */
     private static function getRequestMethod(): string
     {
         $method = isset($_SERVER['REQUEST_METHOD'])
@@ -179,15 +189,15 @@ class NativeRequestHandler implements RequestHandlerInterface
      *
      * This method is identical to {@link \Symfony\Component\HttpFoundation\FileBag::fixPhpFilesArray}
      * and should be kept as such in order to port fixes quickly and easily.
+     *
+     * @return mixed
      */
-    private static function fixPhpFilesArray(mixed $data): mixed
+    private static function fixPhpFilesArray($data)
     {
         if (!\is_array($data)) {
             return $data;
         }
 
-        // Remove extra key added by PHP 8.1.
-        unset($data['full_path']);
         $keys = array_keys($data);
         sort($keys);
 
@@ -213,7 +223,12 @@ class NativeRequestHandler implements RequestHandlerInterface
         return $files;
     }
 
-    private static function stripEmptyFiles(mixed $data): mixed
+    /**
+     * Sets empty uploaded files to NULL in the given uploaded files array.
+     *
+     * @return mixed
+     */
+    private static function stripEmptyFiles($data)
     {
         if (!\is_array($data)) {
             return $data;

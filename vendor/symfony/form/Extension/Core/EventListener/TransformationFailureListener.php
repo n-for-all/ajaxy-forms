@@ -22,21 +22,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TransformationFailureListener implements EventSubscriberInterface
 {
-    private ?TranslatorInterface $translator;
+    private $translator;
 
-    public function __construct(?TranslatorInterface $translator = null)
+    public function __construct(TranslatorInterface $translator = null)
     {
         $this->translator = $translator;
     }
 
-    public static function getSubscribedEvents(): array
+    public static function getSubscribedEvents()
     {
         return [
             FormEvents::POST_SUBMIT => ['convertTransformationFailureToFormError', -1024],
         ];
     }
 
-    public function convertTransformationFailureToFormError(FormEvent $event): void
+    public function convertTransformationFailureToFormError(FormEvent $event)
     {
         $form = $event->getForm();
 
@@ -50,7 +50,7 @@ class TransformationFailureListener implements EventSubscriberInterface
             }
         }
 
-        $clientDataAsString = \is_scalar($form->getViewData()) ? (string) $form->getViewData() : get_debug_type($form->getViewData());
+        $clientDataAsString = is_scalar($form->getViewData()) ? (string) $form->getViewData() : get_debug_type($form->getViewData());
         $messageTemplate = $form->getConfig()->getOption('invalid_message', 'The value {{ value }} is not valid.');
         $messageParameters = array_replace(['{{ value }}' => $clientDataAsString], $form->getConfig()->getOption('invalid_message_parameters', []));
 

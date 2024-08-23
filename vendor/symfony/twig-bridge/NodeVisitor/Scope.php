@@ -16,27 +16,31 @@ namespace Symfony\Bridge\Twig\NodeVisitor;
  */
 class Scope
 {
-    private ?self $parent;
-    private array $data = [];
-    private bool $left = false;
+    private $parent;
+    private $data = [];
+    private $left = false;
 
-    public function __construct(?self $parent = null)
+    public function __construct(self $parent = null)
     {
         $this->parent = $parent;
     }
 
     /**
      * Opens a new child scope.
+     *
+     * @return self
      */
-    public function enter(): self
+    public function enter()
     {
         return new self($this);
     }
 
     /**
      * Closes current scope and returns parent one.
+     *
+     * @return self|null
      */
-    public function leave(): ?self
+    public function leave()
     {
         $this->left = true;
 
@@ -50,7 +54,7 @@ class Scope
      *
      * @throws \LogicException
      */
-    public function set(string $key, mixed $value): static
+    public function set(string $key, $value)
     {
         if ($this->left) {
             throw new \LogicException('Left scope is not mutable.');
@@ -63,8 +67,10 @@ class Scope
 
     /**
      * Tests if a data is visible from current scope.
+     *
+     * @return bool
      */
-    public function has(string $key): bool
+    public function has(string $key)
     {
         if (\array_key_exists($key, $this->data)) {
             return true;
@@ -79,8 +85,10 @@ class Scope
 
     /**
      * Returns data visible from current scope.
+     *
+     * @return mixed
      */
-    public function get(string $key, mixed $default = null): mixed
+    public function get(string $key, $default = null)
     {
         if (\array_key_exists($key, $this->data)) {
             return $this->data[$key];

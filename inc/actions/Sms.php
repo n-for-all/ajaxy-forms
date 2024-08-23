@@ -64,7 +64,7 @@ class Sms implements ActionInterface
             );
         } catch (\Twilio\Exceptions\TwilioException $e) {
             \error_log(\sprintf('SMS/Whatsapp action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage()));
-            throw new \Exception(\sprintf('SMS/Whatsapp action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage()));
+            throw new \Exception(\esc_html(\sprintf('SMS/Whatsapp action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage())));
         }
     }
 

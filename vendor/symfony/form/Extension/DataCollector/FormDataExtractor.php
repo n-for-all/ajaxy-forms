@@ -22,12 +22,15 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
  */
 class FormDataExtractor implements FormDataExtractorInterface
 {
-    public function extractConfiguration(FormInterface $form): array
+    /**
+     * {@inheritdoc}
+     */
+    public function extractConfiguration(FormInterface $form)
     {
         $data = [
             'id' => $this->buildId($form),
             'name' => $form->getName(),
-            'type_class' => $form->getConfig()->getType()->getInnerType()::class,
+            'type_class' => \get_class($form->getConfig()->getType()->getInnerType()),
             'synchronized' => $form->isSynchronized(),
             'passed_options' => [],
             'resolved_options' => [],
@@ -47,7 +50,10 @@ class FormDataExtractor implements FormDataExtractorInterface
         return $data;
     }
 
-    public function extractDefaultData(FormInterface $form): array
+    /**
+     * {@inheritdoc}
+     */
+    public function extractDefaultData(FormInterface $form)
     {
         $data = [
             'default_data' => [
@@ -67,7 +73,10 @@ class FormDataExtractor implements FormDataExtractorInterface
         return $data;
     }
 
-    public function extractSubmittedData(FormInterface $form): array
+    /**
+     * {@inheritdoc}
+     */
+    public function extractSubmittedData(FormInterface $form)
     {
         $data = [
             'submitted_data' => [
@@ -123,7 +132,10 @@ class FormDataExtractor implements FormDataExtractorInterface
         return $data;
     }
 
-    public function extractViewVariables(FormView $view): array
+    /**
+     * {@inheritdoc}
+     */
+    public function extractViewVariables(FormView $view)
     {
         $data = [
             'id' => $view->vars['id'] ?? null,

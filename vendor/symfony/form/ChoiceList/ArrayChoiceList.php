@@ -15,7 +15,7 @@ namespace Symfony\Component\Form\ChoiceList;
  * A list of choices with arbitrary data types.
  *
  * The user of this class is responsible for assigning string values to the
- * choices and for their uniqueness.
+ * choices annd for their uniqueness.
  * Both the choices and their values are passed to the constructor.
  * Each choice must have a corresponding value (with the same key) in
  * the values array.
@@ -24,18 +24,27 @@ namespace Symfony\Component\Form\ChoiceList;
  */
 class ArrayChoiceList implements ChoiceListInterface
 {
-    protected array $choices;
+    /**
+     * The choices in the list.
+     *
+     * @var array
+     */
+    protected $choices;
 
     /**
      * The values indexed by the original keys.
+     *
+     * @var array
      */
-    protected array $structuredValues;
+    protected $structuredValues;
 
     /**
      * The original keys of the choices array.
+     *
+     * @var int[]|string[]
      */
-    protected array $originalKeys;
-    protected ?\Closure $valueCallback = null;
+    protected $originalKeys;
+    protected $valueCallback;
 
     /**
      * Creates a list with the given choices and values.
@@ -48,24 +57,25 @@ class ArrayChoiceList implements ChoiceListInterface
      *                               incrementing integers are used as
      *                               values
      */
-    public function __construct(iterable $choices, ?callable $value = null)
+    public function __construct(iterable $choices, callable $value = null)
     {
         if ($choices instanceof \Traversable) {
             $choices = iterator_to_array($choices);
         }
 
         if (null === $value && $this->castableToString($choices)) {
-            $value = static fn ($choice) => false === $choice ? '0' : (string) $choice;
+            $value = function ($choice) {
+                return false === $choice ? '0' : (string) $choice;
+            };
         }
 
         if (null !== $value) {
             // If a deterministic value generator was passed, use it later
-            $this->valueCallback = $value(...);
+            $this->valueCallback = $value;
         } else {
             // Otherwise generate incrementing integers as values
-            $value = static function () {
-                static $i = 0;
-
+            $i = 0;
+            $value = function () use (&$i) {
                 return $i++;
             };
         }
@@ -80,27 +90,42 @@ class ArrayChoiceList implements ChoiceListInterface
         $this->structuredValues = $structuredValues;
     }
 
-    public function getChoices(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getChoices()
     {
         return $this->choices;
     }
 
-    public function getValues(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getValues()
     {
         return array_map('strval', array_keys($this->choices));
     }
 
-    public function getStructuredValues(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getStructuredValues()
     {
         return $this->structuredValues;
     }
 
-    public function getOriginalKeys(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getOriginalKeys()
     {
         return $this->originalKeys;
     }
 
-    public function getChoicesForValues(array $values): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getChoicesForValues(array $values)
     {
         $choices = [];
 
@@ -113,7 +138,10 @@ class ArrayChoiceList implements ChoiceListInterface
         return $choices;
     }
 
-    public function getValuesForChoices(array $choices): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getValuesForChoices(array $choices)
     {
         $values = [];
 
@@ -154,7 +182,7 @@ class ArrayChoiceList implements ChoiceListInterface
      *
      * @internal
      */
-    protected function flatten(array $choices, callable $value, ?array &$choicesByValues, ?array &$keysByValues, ?array &$structuredValues): void
+    protected function flatten(array $choices, callable $value, ?array &$choicesByValues, ?array &$keysByValues, ?array &$structuredValues)
     {
         if (null === $choicesByValues) {
             $choicesByValues = [];
@@ -191,7 +219,7 @@ class ArrayChoiceList implements ChoiceListInterface
                 }
 
                 continue;
-            } elseif (!\is_scalar($choice)) {
+            } elseif (!is_scalar($choice)) {
                 return false;
             }
 

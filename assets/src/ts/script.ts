@@ -1,5 +1,6 @@
 import "whatwg-fetch";
 import { Form } from "./form";
+import AjaxyTermPostsManager from "./term_posts";
 
 class AjaxyForms {
 	forms: { [x: string]: Form } = {};
@@ -58,4 +59,5 @@ class AjaxyForms {
 	}
 }
 
+window["AjaxyTermPostsManager"] = AjaxyTermPostsManager;
 window["AjaxyForms"] = new AjaxyForms();

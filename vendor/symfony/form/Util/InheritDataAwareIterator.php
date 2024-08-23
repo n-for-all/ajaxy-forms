@@ -25,12 +25,22 @@ namespace Symfony\Component\Form\Util;
  */
 class InheritDataAwareIterator extends \IteratorIterator implements \RecursiveIterator
 {
-    public function getChildren(): static
+    /**
+     * {@inheritdoc}
+     *
+     * @return static
+     */
+    #[\ReturnTypeWillChange]
+    public function getChildren()
     {
         return new static($this->current());
     }
 
-    public function hasChildren(): bool
+    /**
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function hasChildren()
     {
         return (bool) $this->current()->getConfig()->getInheritData();
     }

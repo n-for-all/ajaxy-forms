@@ -18,13 +18,13 @@ namespace Symfony\Component\Form\ChoiceList\Loader;
  */
 class FilterChoiceLoaderDecorator extends AbstractChoiceLoader
 {
-    private ChoiceLoaderInterface $decoratedLoader;
-    private \Closure $filter;
+    private $decoratedLoader;
+    private $filter;
 
     public function __construct(ChoiceLoaderInterface $loader, callable $filter)
     {
         $this->decoratedLoader = $loader;
-        $this->filter = $filter(...);
+        $this->filter = $filter;
     }
 
     protected function loadChoices(): iterable
@@ -36,28 +36,27 @@ class FilterChoiceLoaderDecorator extends AbstractChoiceLoader
         }
 
         foreach ($structuredValues as $group => $values) {
-            if (\is_array($values)) {
-                if ($values && $filtered = array_filter($list->getChoicesForValues($values), $this->filter)) {
-                    $choices[$group] = $filtered;
-                }
-                continue;
-                // filter empty groups
+            if ($values && $filtered = array_filter($list->getChoicesForValues($values), $this->filter)) {
+                $choices[$group] = $filtered;
             }
-
-            if ($filtered = array_filter($list->getChoicesForValues([$values]), $this->filter)) {
-                $choices[$group] = $filtered[0];
-            }
+            // filter empty groups
         }
 
         return $choices ?? [];
     }
 
-    public function loadChoicesForValues(array $values, ?callable $value = null): array
+    /**
+     * {@inheritdoc}
+     */
+    public function loadChoicesForValues(array $values, callable $value = null): array
     {
         return array_filter($this->decoratedLoader->loadChoicesForValues($values, $value), $this->filter);
     }
 
-    public function loadValuesForChoices(array $choices, ?callable $value = null): array
+    /**
+     * {@inheritdoc}
+     */
+    public function loadValuesForChoices(array $choices, callable $value = null): array
     {
         return $this->decoratedLoader->loadValuesForChoices(array_filter($choices, $this->filter), $value);
     }

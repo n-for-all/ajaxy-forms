@@ -33,7 +33,7 @@ class DroppableView extends Backbone.View<DraggableModel> {
 					});
 				},
 			})
-			.disableSelection();
+			// .disableSelection();
 	}
 
 	render() {

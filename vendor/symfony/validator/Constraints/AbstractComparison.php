@@ -24,11 +24,16 @@ use Symfony\Component\Validator\Exception\LogicException;
  */
 abstract class AbstractComparison extends Constraint
 {
-    public string $message;
-    public mixed $value = null;
-    public ?string $propertyPath = null;
+    public $message;
+    public $value;
+    public $propertyPath;
 
-    public function __construct(mixed $value = null, ?string $propertyPath = null, ?string $message = null, ?array $groups = null, mixed $payload = null, array $options = [])
+    /**
+     * {@inheritdoc}
+     *
+     * @param mixed $value the value to compare or a set of options
+     */
+    public function __construct($value = null, $propertyPath = null, ?string $message = null, ?array $groups = null, $payload = null, array $options = [])
     {
         if (\is_array($value)) {
             $options = array_merge($value, $options);
@@ -50,11 +55,14 @@ abstract class AbstractComparison extends Constraint
         }
 
         if (null !== $this->propertyPath && !class_exists(PropertyAccess::class)) {
-            throw new LogicException(sprintf('The "%s" constraint requires the Symfony PropertyAccess component to use the "propertyPath" option. Try running "composer require symfony/property-access".', static::class));
+            throw new LogicException(sprintf('The "%s" constraint requires the Symfony PropertyAccess component to use the "propertyPath" option.', static::class));
         }
     }
 
-    public function getDefaultOption(): ?string
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOption()
     {
         return 'value';
     }

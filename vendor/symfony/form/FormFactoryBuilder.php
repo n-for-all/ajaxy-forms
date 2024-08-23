@@ -20,64 +20,82 @@ use Symfony\Component\Form\Extension\Core\CoreExtension;
  */
 class FormFactoryBuilder implements FormFactoryBuilderInterface
 {
-    private bool $forceCoreExtension;
+    private $forceCoreExtension;
 
-    private ResolvedFormTypeFactoryInterface $resolvedTypeFactory;
+    /**
+     * @var ResolvedFormTypeFactoryInterface
+     */
+    private $resolvedTypeFactory;
 
     /**
      * @var FormExtensionInterface[]
      */
-    private array $extensions = [];
+    private $extensions = [];
 
     /**
      * @var FormTypeInterface[]
      */
-    private array $types = [];
+    private $types = [];
 
     /**
      * @var FormTypeExtensionInterface[][]
      */
-    private array $typeExtensions = [];
+    private $typeExtensions = [];
 
     /**
      * @var FormTypeGuesserInterface[]
      */
-    private array $typeGuessers = [];
+    private $typeGuessers = [];
 
     public function __construct(bool $forceCoreExtension = false)
     {
         $this->forceCoreExtension = $forceCoreExtension;
     }
 
-    public function setResolvedTypeFactory(ResolvedFormTypeFactoryInterface $resolvedTypeFactory): static
+    /**
+     * {@inheritdoc}
+     */
+    public function setResolvedTypeFactory(ResolvedFormTypeFactoryInterface $resolvedTypeFactory)
     {
         $this->resolvedTypeFactory = $resolvedTypeFactory;
 
         return $this;
     }
 
-    public function addExtension(FormExtensionInterface $extension): static
+    /**
+     * {@inheritdoc}
+     */
+    public function addExtension(FormExtensionInterface $extension)
     {
         $this->extensions[] = $extension;
 
         return $this;
     }
 
-    public function addExtensions(array $extensions): static
+    /**
+     * {@inheritdoc}
+     */
+    public function addExtensions(array $extensions)
     {
         $this->extensions = array_merge($this->extensions, $extensions);
 
         return $this;
     }
 
-    public function addType(FormTypeInterface $type): static
+    /**
+     * {@inheritdoc}
+     */
+    public function addType(FormTypeInterface $type)
     {
         $this->types[] = $type;
 
         return $this;
     }
 
-    public function addTypes(array $types): static
+    /**
+     * {@inheritdoc}
+     */
+    public function addTypes(array $types)
     {
         foreach ($types as $type) {
             $this->types[] = $type;
@@ -86,7 +104,10 @@ class FormFactoryBuilder implements FormFactoryBuilderInterface
         return $this;
     }
 
-    public function addTypeExtension(FormTypeExtensionInterface $typeExtension): static
+    /**
+     * {@inheritdoc}
+     */
+    public function addTypeExtension(FormTypeExtensionInterface $typeExtension)
     {
         foreach ($typeExtension::getExtendedTypes() as $extendedType) {
             $this->typeExtensions[$extendedType][] = $typeExtension;
@@ -95,7 +116,10 @@ class FormFactoryBuilder implements FormFactoryBuilderInterface
         return $this;
     }
 
-    public function addTypeExtensions(array $typeExtensions): static
+    /**
+     * {@inheritdoc}
+     */
+    public function addTypeExtensions(array $typeExtensions)
     {
         foreach ($typeExtensions as $typeExtension) {
             $this->addTypeExtension($typeExtension);
@@ -104,21 +128,30 @@ class FormFactoryBuilder implements FormFactoryBuilderInterface
         return $this;
     }
 
-    public function addTypeGuesser(FormTypeGuesserInterface $typeGuesser): static
+    /**
+     * {@inheritdoc}
+     */
+    public function addTypeGuesser(FormTypeGuesserInterface $typeGuesser)
     {
         $this->typeGuessers[] = $typeGuesser;
 
         return $this;
     }
 
-    public function addTypeGuessers(array $typeGuessers): static
+    /**
+     * {@inheritdoc}
+     */
+    public function addTypeGuessers(array $typeGuessers)
     {
         $this->typeGuessers = array_merge($this->typeGuessers, $typeGuessers);
 
         return $this;
     }
 
-    public function getFormFactory(): FormFactoryInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function getFormFactory()
     {
         $extensions = $this->extensions;
 

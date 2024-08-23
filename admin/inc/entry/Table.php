@@ -29,10 +29,10 @@ class Table extends \WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox" />',
-            'name' => __('Form', AJAXY_FORMS_TEXT_DOMAIN),
-            'data' => __('Data', AJAXY_FORMS_TEXT_DOMAIN),
-            // 'metadata' => __('Metadata', AJAXY_FORMS_TEXT_DOMAIN),
-            'created' => __('Date', AJAXY_FORMS_TEXT_DOMAIN),
+            'name' => __('Form', "ajaxy-forms"),
+            'data' => __('Data', "ajaxy-forms"),
+            // 'metadata' => __('Metadata', "ajaxy-forms"),
+            'created' => __('Date', "ajaxy-forms"),
         );
         return $columns;
     }
@@ -60,7 +60,7 @@ class Table extends \WP_List_Table
 ?>
                 <div class="alignleft actions">
                     <select name="form" id="filter-by-form">
-                        <option<?php selected($selected, 0); ?> value=""><?php _e('Select a Form'); ?></option>
+                        <option <?php selected($selected, 0); ?> value=""><?php esc_html_e('Select a Form', 'ajaxy-forms'); ?></option>
                             <?php
                             if ($forms) {
                             ?>
@@ -70,8 +70,8 @@ class Table extends \WP_List_Table
                                         printf(
                                             "<option %s value='%s'>%s</option>\n",
                                             selected($selected, $form['name'], false),
-                                            $form['name'],
-                                            \ucwords($form['name'])
+                                            esc_attr($form['name']),
+                                            esc_html(\ucwords($form['name']))
                                         );
                                     }
                                     ?>
@@ -88,8 +88,8 @@ class Table extends \WP_List_Table
                                         printf(
                                             "<option %s value='%s'>%s</option>\n",
                                             selected($selected, $form, false),
-                                            $form,
-                                            \ucwords($form)
+                                            esc_attr($form),
+                                            \esc_html(\ucwords($form))
                                         );
                                     }
                                     ?>
@@ -98,10 +98,10 @@ class Table extends \WP_List_Table
                             }
                             ?>
                     </select>
-                    <button class="button" type="submit"><?php _e('Filter', AJAXY_FORMS_TEXT_DOMAIN); ?></button>
+                    <button class="button" type="submit"><?php esc_html_e('Filter', 'ajaxy-forms'); ?></button>
                     <?php
                     if ($this->has_items()) {
-                        echo \sprintf('<a href="%s" target="_blank" class="button apply">%s</a>', esc_url(add_query_arg('export_action', 1)), __('Export to Excel'));
+                        echo \sprintf('<a href="%s" target="_blank" class="button apply">%s</a>', esc_url(add_query_arg('export_action', $_GET['form'] ?? 'all')), esc_html(__('Export to Excel', 'ajaxy-forms')));
                     }
                     ?>
                 </div>
@@ -160,8 +160,8 @@ class Table extends \WP_List_Table
     function column_name($item)
     {
         $actions = array(
-            'view' => sprintf('<a href="?page=ajaxy-forms-entry&id=%s">%s</a>', $item['id'], __('View', AJAXY_FORMS_TEXT_DOMAIN)),
-            'delete' => sprintf('<a href="?page=%s&action=delete&id=%s">%s</a>', $_REQUEST['page'], $item['id'], __('Delete', AJAXY_FORMS_TEXT_DOMAIN)),
+            'view' => sprintf('<a href="?page=ajaxy-forms-entry&id=%s">%s</a>', $item['id'], __('View', "ajaxy-forms")),
+            'delete' => sprintf('<a href="?page=%s&action=delete&id=%s">%s</a>', $_REQUEST['page'], $item['id'], __('Delete', "ajaxy-forms")),
         );
 
         return sprintf(
@@ -182,7 +182,7 @@ class Table extends \WP_List_Table
             return '';
         }
 
-        return self::convert_to_table(json_decode($item['data'], true));
+        return self::convert_to_fields_table(json_decode($item['data'], true));
     }
 
     function column_metadata($item)
@@ -238,11 +238,11 @@ class Table extends \WP_List_Table
 
         $t_time = sprintf(
             /* translators: 1: date, 2: time */
-            __('%1$s at %2$s', \AJAXY_FORMS_TEXT_DOMAIN),
+            __('%1$s at %2$s', "ajaxy-forms"),
             /* translators: date format, see https://www.php.net/date */
-            $datetime->format(__('Y/m/d', \AJAXY_FORMS_TEXT_DOMAIN)),
+            $datetime->format(__('Y/m/d', "ajaxy-forms")),
             /* translators: time format, see https://www.php.net/date */
-            $datetime->format(__('g:i a', \AJAXY_FORMS_TEXT_DOMAIN))
+            $datetime->format(__('g:i a', "ajaxy-forms"))
         );
 
         return $output . $t_time;
@@ -289,27 +289,28 @@ class Table extends \WP_List_Table
         $this->_column_headers = array($columns, $hidden, $sortable);
         $this->process_bulk_action();
 
+        $form = isset($_REQUEST['form']) ? \sanitize_text_field($_REQUEST['form']) : null;
         // will be used in pagination settings
-        $total_items = Data::count_entries();
+        $total_items = Data::count_entries($form);
         if ($total_items === null || \is_wp_error($total_items)) {
             global $wpdb;
             add_action('admin_notices', function () {
                 $class = 'notice notice-error';
-                $message = __('An error has occurred.', \AJAXY_FORMS_TEXT_DOMAIN);
+                $message = __('An error has occurred.', "ajaxy-forms");
 
                 printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));
             });
 
-            \printf('<div id="message" class="notice notice-error"><p>Error: %s - %s</p></div>', $wpdb->last_error, 'Please activate and deactivate the plugin to reinstall the tables');
+            \printf('<div id="message" class="notice notice-error"><p>Error: %s - %s</p></div>', esc_html($wpdb->last_error), 'Please activate and deactivate the plugin to reinstall the tables');
         }
 
         // prepare query params, as usual current page, order by and order direction
         $paged = isset($_REQUEST['paged']) ? intval($_REQUEST['paged']) : 1;
         $orderby = (isset($_REQUEST['orderby']) && in_array($_REQUEST['orderby'], array_keys($this->get_sortable_columns()))) ? $_REQUEST['orderby'] : 'created';
         $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array('asc', 'desc'))) ? $_REQUEST['order'] : 'desc';
-        $form = isset($_REQUEST['form']) ? $_REQUEST['form'] : null;
+        
+        
         $this->items = Data::get_entries($form, $paged, $orderby, $order, $per_page);
-
         $this->set_pagination_args(array(
             'total_items' => intval($total_items), // total items defined above
             'per_page' => $per_page, // per page constant defined at top of method
@@ -322,38 +323,45 @@ class Table extends \WP_List_Table
         if (!$data) {
             return '';
         }
-        $table = '
-    <table class="fixed widefat striped ajaxy-data-table">
-    ';
+        $table = '<table class="fixed widefat striped ajaxy-data-table">';
         foreach ($data as $key => $value) {
-            $table .= '
-        <tr valign="top">
-        ';
+            $table .= '<tr valign="top">';
             if (!is_numeric($key)) {
-                $table .= '
-            <td>
-                <strong>' . $key . ':</strong>
-            </td>
-            <td>
-            ';
+                $table .= '<td><strong>' . $key . ':</strong></td><td>';
             } else {
-                $table .= '
-            <td colspan="2">
-            ';
+                $table .= '<td colspan="2">';
             }
             if (is_object($value) || is_array($value)) {
                 $table .= self::convert_to_table($value);
             } else {
                 $table .= $value;
             }
-            $table .= '
-            </td>
-        </tr>
-        ';
+            $table .= '</td></tr>';
         }
-        $table .= '
-    </table>
-    ';
+        $table .= '</table>';
+        return $table;
+    }
+
+    public static function convert_to_fields_table($data)
+    {
+        if (!$data) {
+            return '';
+        }
+
+        $table = '<table class="fixed widefat striped ajaxy-data-table">';
+        foreach ($data as $key => $field) {
+            $table .= '<tr valign="top">';
+            $table .= '<td><strong>' . (!is_array($field) ? $key : $field['label']) . ':</strong></td>';
+            if (!is_array($field)) {
+                $table .= '<td>' . $field . '</td>';
+            } elseif (is_object($field['value_label']) || is_array($field['value_label'])) {
+                $table .= sprintf('<td>%s</td>', \implode(', ', $field['value_label']));
+            } else {
+                $table .=  sprintf('<td>%s</td>', $field['value_label']);
+            }
+            $table .= '</tr>';
+        }
+        $table .= '</table>';
         return $table;
     }
 

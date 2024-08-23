@@ -14,12 +14,15 @@ namespace Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 
 /**
+ * @Annotation
+ * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
+ *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Valid extends Constraint
 {
-    public bool $traverse = true;
+    public $traverse = true;
 
     public function __construct(?array $options = null, ?array $groups = null, $payload = null, ?bool $traverse = null)
     {
@@ -28,7 +31,7 @@ class Valid extends Constraint
         $this->traverse = $traverse ?? $this->traverse;
     }
 
-    public function __get(string $option): mixed
+    public function __get(string $option)
     {
         if ('groups' === $option) {
             // when this is reached, no groups have been configured
@@ -38,7 +41,10 @@ class Valid extends Constraint
         return parent::__get($option);
     }
 
-    public function addImplicitGroupName(string $group): void
+    /**
+     * {@inheritdoc}
+     */
+    public function addImplicitGroupName(string $group)
     {
         if (null !== $this->groups) {
             parent::addImplicitGroupName($group);

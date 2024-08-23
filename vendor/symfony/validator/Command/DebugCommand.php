@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\Validator\Command;
 
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Dumper;
 use Symfony\Component\Console\Helper\Table;
@@ -35,10 +34,12 @@ use Symfony\Component\Validator\Mapping\TraversalStrategy;
  *
  * @author Loïc Frémont <lc.fremont@gmail.com>
  */
-#[AsCommand(name: 'debug:validator', description: 'Display validation constraints for classes')]
 class DebugCommand extends Command
 {
-    private MetadataFactoryInterface $validator;
+    protected static $defaultName = 'debug:validator';
+    protected static $defaultDescription = 'Display validation constraints for classes';
+
+    private $validator;
 
     public function __construct(MetadataFactoryInterface $validator)
     {
@@ -47,11 +48,12 @@ class DebugCommand extends Command
         $this->validator = $validator;
     }
 
-    protected function configure(): void
+    protected function configure()
     {
         $this
             ->addArgument('class', InputArgument::REQUIRED, 'A fully qualified class name or a path')
             ->addOption('show-all', null, InputOption::VALUE_NONE, 'Show all classes even if they have no validation constraints')
+            ->setDescription(self::$defaultDescription)
             ->setHelp(<<<'EOF'
 The <info>%command.name% 'App\Entity\Dummy'</info> command dumps the validators for the dummy class.
 
@@ -75,7 +77,7 @@ EOF
             foreach ($this->getResourcesByPath($class) as $class) {
                 $this->dumpValidatorsForClass($input, $output, $class);
             }
-        } catch (DirectoryNotFoundException) {
+        } catch (DirectoryNotFoundException $exception) {
             $io = new SymfonyStyle($input, $output);
             $io->error(sprintf('Neither class nor path were found with "%s" argument.', $input->getArgument('class')));
 
@@ -139,7 +141,7 @@ EOF
     {
         foreach ($classMetadata->getConstraints() as $constraint) {
             yield [
-                'class' => $constraint::class,
+                'class' => \get_class($constraint),
                 'groups' => $constraint->groups,
                 'options' => $this->getConstraintOptions($constraint),
             ];
@@ -165,11 +167,11 @@ EOF
         foreach ($propertyMetadata as $metadata) {
             $autoMapingStrategy = 'Not supported';
             if ($metadata instanceof GenericMetadata) {
-                $autoMapingStrategy = match ($metadata->getAutoMappingStrategy()) {
-                    AutoMappingStrategy::ENABLED => 'Enabled',
-                    AutoMappingStrategy::DISABLED => 'Disabled',
-                    AutoMappingStrategy::NONE => 'None',
-                };
+                switch ($metadata->getAutoMappingStrategy()) {
+                    case AutoMappingStrategy::ENABLED: $autoMapingStrategy = 'Enabled'; break;
+                    case AutoMappingStrategy::DISABLED: $autoMapingStrategy = 'Disabled'; break;
+                    case AutoMappingStrategy::NONE: $autoMapingStrategy = 'None'; break;
+                }
             }
             $traversalStrategy = 'None';
             if (TraversalStrategy::TRAVERSE === $metadata->getTraversalStrategy()) {
@@ -190,7 +192,7 @@ EOF
             ];
             foreach ($metadata->getConstraints() as $constraint) {
                 $data[] = [
-                    'class' => $constraint::class,
+                    'class' => \get_class($constraint),
                     'groups' => $constraint->groups,
                     'options' => $this->getConstraintOptions($constraint),
                 ];

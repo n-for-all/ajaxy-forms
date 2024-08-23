@@ -18,15 +18,15 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Florian Eckerstorfer <florian@eckerstorfer.org>
- *
- * @extends BaseDateTimeTransformer<string>
  */
 class DateTimeToStringTransformer extends BaseDateTimeTransformer
 {
     /**
      * Format used for generating strings.
+     *
+     * @var string
      */
-    private string $generateFormat;
+    private $generateFormat;
 
     /**
      * Format used for parsing strings.
@@ -34,8 +34,10 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
      * Different than the {@link $generateFormat} because formats for parsing
      * support additional characters in PHP that are not supported for
      * generating strings.
+     *
+     * @var string
      */
-    private string $parseFormat;
+    private $parseFormat;
 
     /**
      * Transforms a \DateTime instance to a string.
@@ -45,14 +47,12 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
      * @param string|null $inputTimezone  The name of the input timezone
      * @param string|null $outputTimezone The name of the output timezone
      * @param string      $format         The date format
-     * @param string|null $parseFormat    The parse format when different from $format
      */
-    public function __construct(?string $inputTimezone = null, ?string $outputTimezone = null, string $format = 'Y-m-d H:i:s', ?string $parseFormat = null)
+    public function __construct(string $inputTimezone = null, string $outputTimezone = null, string $format = 'Y-m-d H:i:s')
     {
         parent::__construct($inputTimezone, $outputTimezone);
 
-        $this->generateFormat = $format;
-        $this->parseFormat = $parseFormat ?? $format;
+        $this->generateFormat = $this->parseFormat = $format;
 
         // See https://php.net/datetime.createfromformat
         // The character "|" in the format makes sure that the parts of a date
@@ -73,9 +73,11 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
      *
      * @param \DateTimeInterface $dateTime A DateTimeInterface object
      *
+     * @return string
+     *
      * @throws TransformationFailedException If the given value is not a \DateTimeInterface
      */
-    public function transform(mixed $dateTime): string
+    public function transform($dateTime)
     {
         if (null === $dateTime) {
             return '';
@@ -85,7 +87,10 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
             throw new TransformationFailedException('Expected a \DateTimeInterface.');
         }
 
-        $dateTime = \DateTimeImmutable::createFromInterface($dateTime);
+        if (!$dateTime instanceof \DateTimeImmutable) {
+            $dateTime = clone $dateTime;
+        }
+
         $dateTime = $dateTime->setTimezone(new \DateTimeZone($this->outputTimezone));
 
         return $dateTime->format($this->generateFormat);
@@ -96,10 +101,12 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
      *
      * @param string $value A value as produced by PHP's date() function
      *
+     * @return \DateTime|null
+     *
      * @throws TransformationFailedException If the given value is not a string,
      *                                       or could not be transformed
      */
-    public function reverseTransform(mixed $value): ?\DateTime
+    public function reverseTransform($value)
     {
         if (empty($value)) {
             return null;
@@ -109,14 +116,10 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
             throw new TransformationFailedException('Expected a string.');
         }
 
-        if (str_contains($value, "\0")) {
-            throw new TransformationFailedException('Null bytes not allowed');
-        }
-
         $outputTz = new \DateTimeZone($this->outputTimezone);
         $dateTime = \DateTime::createFromFormat($this->parseFormat, $value, $outputTz);
 
-        $lastErrors = \DateTime::getLastErrors() ?: ['error_count' => 0, 'warning_count' => 0];
+        $lastErrors = \DateTime::getLastErrors();
 
         if (0 < $lastErrors['warning_count'] || 0 < $lastErrors['error_count']) {
             throw new TransformationFailedException(implode(', ', array_merge(array_values($lastErrors['warnings']), array_values($lastErrors['errors']))));

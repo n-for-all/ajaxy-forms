@@ -13,7 +13,7 @@ namespace Symfony\Component\Validator\Exception;
 
 class InvalidOptionsException extends ValidatorException
 {
-    private array $options;
+    private $options;
 
     public function __construct(string $message, array $options)
     {
@@ -22,7 +22,7 @@ class InvalidOptionsException extends ValidatorException
         $this->options = $options;
     }
 
-    public function getOptions(): array
+    public function getOptions()
     {
         return $this->options;
     }

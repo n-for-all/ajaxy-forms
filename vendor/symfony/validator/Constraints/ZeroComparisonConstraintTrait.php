@@ -21,9 +21,11 @@ use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
  */
 trait ZeroComparisonConstraintTrait
 {
-    public function __construct(?array $options = null, ?string $message = null, ?array $groups = null, mixed $payload = null)
+    public function __construct(?array $options = null, ?string $message = null, ?array $groups = null, $payload = null)
     {
-        $options ??= [];
+        if (null === $options) {
+            $options = [];
+        }
 
         if (isset($options['propertyPath'])) {
             throw new ConstraintDefinitionException(sprintf('The "propertyPath" option of the "%s" constraint cannot be set.', static::class));

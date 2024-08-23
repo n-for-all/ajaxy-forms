@@ -19,13 +19,16 @@ namespace Symfony\Component\Security\Core\Exception;
  */
 class TooManyLoginAttemptsAuthenticationException extends AuthenticationException
 {
-    private ?int $threshold;
+    private $threshold;
 
     public function __construct(?int $threshold = null)
     {
         $this->threshold = $threshold;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMessageData(): array
     {
         return [
@@ -34,16 +37,25 @@ class TooManyLoginAttemptsAuthenticationException extends AuthenticationExceptio
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMessageKey(): string
     {
         return 'Too many failed login attempts, please try again '.($this->threshold ? 'in %minutes% minute'.($this->threshold > 1 ? 's' : '').'.' : 'later.');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __serialize(): array
     {
         return [$this->threshold, parent::__serialize()];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __unserialize(array $data): void
     {
         [$this->threshold, $parentData] = $data;

@@ -20,6 +20,8 @@ interface ClickableInterface
 {
     /**
      * Returns whether this element was clicked.
+     *
+     * @return bool
      */
-    public function isClicked(): bool;
+    public function isClicked();
 }

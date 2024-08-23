@@ -123,6 +123,11 @@
     {%- endif -%}
 {%- endblock date_widget -%}
 
+{% block recaptcha_row %}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <div id="{{ id }}" class="g-recaptcha" data-sitekey="{{ key }}"></div>
+{% endblock %}
+
 {%- block time_widget -%}
     {%- if widget == 'single_text' -%}
         {{ block('form_widget_simple') }}

@@ -20,7 +20,10 @@ use Symfony\Component\Form\Forms;
  */
 abstract class FormIntegrationTestCase extends TestCase
 {
-    protected FormFactoryInterface $factory;
+    /**
+     * @var FormFactoryInterface
+     */
+    protected $factory;
 
     protected function setUp(): void
     {

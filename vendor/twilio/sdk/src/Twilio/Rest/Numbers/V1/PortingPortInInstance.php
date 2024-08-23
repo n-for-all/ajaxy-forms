@@ -21,11 +21,21 @@ use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceResource;
 use Twilio\Values;
 use Twilio\Version;
+use Twilio\Deserialize;
 
 
 /**
  * @property string|null $portInRequestSid
  * @property string|null $url
+ * @property string|null $accountSid
+ * @property string[]|null $notificationEmails
+ * @property \DateTime|null $targetPortInDate
+ * @property string|null $targetPortInTimeRangeStart
+ * @property string|null $targetPortInTimeRangeEnd
+ * @property string|null $portInRequestStatus
+ * @property array|null $losingCarrierInformation
+ * @property array[]|null $phoneNumbers
+ * @property string[]|null $documents
  */
 class PortingPortInInstance extends InstanceResource
 {
@@ -34,8 +44,9 @@ class PortingPortInInstance extends InstanceResource
      *
      * @param Version $version Version that contains the resource
      * @param mixed[] $payload The response payload
+     * @param string $portInRequestSid The SID of the Port In request. This is a unique identifier of the port in request.
      */
-    public function __construct(Version $version, array $payload)
+    public function __construct(Version $version, array $payload, string $portInRequestSid = null)
     {
         parent::__construct($version);
 
@@ -43,9 +54,60 @@ class PortingPortInInstance extends InstanceResource
         $this->properties = [
             'portInRequestSid' => Values::array_get($payload, 'port_in_request_sid'),
             'url' => Values::array_get($payload, 'url'),
+            'accountSid' => Values::array_get($payload, 'account_sid'),
+            'notificationEmails' => Values::array_get($payload, 'notification_emails'),
+            'targetPortInDate' => Deserialize::dateTime(Values::array_get($payload, 'target_port_in_date')),
+            'targetPortInTimeRangeStart' => Values::array_get($payload, 'target_port_in_time_range_start'),
+            'targetPortInTimeRangeEnd' => Values::array_get($payload, 'target_port_in_time_range_end'),
+            'portInRequestStatus' => Values::array_get($payload, 'port_in_request_status'),
+            'losingCarrierInformation' => Values::array_get($payload, 'losing_carrier_information'),
+            'phoneNumbers' => Values::array_get($payload, 'phone_numbers'),
+            'documents' => Values::array_get($payload, 'documents'),
         ];
 
-        $this->solution = [];
+        $this->solution = ['portInRequestSid' => $portInRequestSid ?: $this->properties['portInRequestSid'], ];
+    }
+
+    /**
+     * Generate an instance context for the instance, the context is capable of
+     * performing various actions.  All instance actions are proxied to the context
+     *
+     * @return PortingPortInContext Context for this PortingPortInInstance
+     */
+    protected function proxy(): PortingPortInContext
+    {
+        if (!$this->context) {
+            $this->context = new PortingPortInContext(
+                $this->version,
+                $this->solution['portInRequestSid']
+            );
+        }
+
+        return $this->context;
+    }
+
+    /**
+     * Delete the PortingPortInInstance
+     *
+     * @return bool True if delete succeeds, false otherwise
+     * @throws TwilioException When an HTTP error occurs.
+     */
+    public function delete(): bool
+    {
+
+        return $this->proxy()->delete();
+    }
+
+    /**
+     * Fetch the PortingPortInInstance
+     *
+     * @return PortingPortInInstance Fetched PortingPortInInstance
+     * @throws TwilioException When an HTTP error occurs.
+     */
+    public function fetch(): PortingPortInInstance
+    {
+
+        return $this->proxy()->fetch();
     }
 
     /**
@@ -76,7 +138,11 @@ class PortingPortInInstance extends InstanceResource
      */
     public function __toString(): string
     {
-        return '[Twilio.Numbers.V1.PortingPortInInstance]';
+        $context = [];
+        foreach ($this->solution as $key => $value) {
+            $context[] = "$key=$value";
+        }
+        return '[Twilio.Numbers.V1.PortingPortInInstance ' . \implode(' ', $context) . ']';
     }
 }
 

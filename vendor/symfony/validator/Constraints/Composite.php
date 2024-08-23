@@ -29,6 +29,8 @@ use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 abstract class Composite extends Constraint
 {
     /**
+     * {@inheritdoc}
+     *
      * The groups of the composite and its nested constraints are made
      * consistent using the following strategy:
      *
@@ -49,7 +51,7 @@ abstract class Composite extends Constraint
      * cached. When constraints are loaded from the cache, no more group
      * checks need to be done.
      */
-    public function __construct(mixed $options = null, ?array $groups = null, mixed $payload = null)
+    public function __construct($options = null, ?array $groups = null, $payload = null)
     {
         parent::__construct($options, $groups, $payload);
 
@@ -66,7 +68,7 @@ abstract class Composite extends Constraint
         foreach ($nestedConstraints as $constraint) {
             if (!$constraint instanceof Constraint) {
                 if (\is_object($constraint)) {
-                    $constraint = $constraint::class;
+                    $constraint = \get_class($constraint);
                 }
 
                 throw new ConstraintDefinitionException(sprintf('The value "%s" is not an instance of Constraint in constraint "%s".', $constraint, static::class));
@@ -109,9 +111,11 @@ abstract class Composite extends Constraint
     }
 
     /**
+     * {@inheritdoc}
+     *
      * Implicit group names are forwarded to nested constraints.
      */
-    public function addImplicitGroupName(string $group): void
+    public function addImplicitGroupName(string $group)
     {
         parent::addImplicitGroupName($group);
 
@@ -125,15 +129,17 @@ abstract class Composite extends Constraint
 
     /**
      * Returns the name of the property that contains the nested constraints.
+     *
+     * @return string
      */
-    abstract protected function getCompositeOption(): string;
+    abstract protected function getCompositeOption();
 
     /**
      * @internal Used by metadata
      *
      * @return Constraint[]
      */
-    public function getNestedConstraints(): array
+    public function getNestedConstraints()
     {
         /* @var Constraint[] $nestedConstraints */
         return $this->{$this->getCompositeOption()};
@@ -147,7 +153,7 @@ abstract class Composite extends Constraint
      *
      * @see Collection::initializeNestedConstraints()
      */
-    protected function initializeNestedConstraints(): void
+    protected function initializeNestedConstraints()
     {
     }
 }

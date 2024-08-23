@@ -18,7 +18,7 @@ namespace Symfony\Component\Config\Exception;
  */
 class FileLocatorFileNotFoundException extends \InvalidArgumentException
 {
-    private array $paths;
+    private $paths;
 
     public function __construct(string $message = '', int $code = 0, ?\Throwable $previous = null, array $paths = [])
     {
@@ -27,7 +27,7 @@ class FileLocatorFileNotFoundException extends \InvalidArgumentException
         $this->paths = $paths;
     }
 
-    public function getPaths(): array
+    public function getPaths()
     {
         return $this->paths;
     }

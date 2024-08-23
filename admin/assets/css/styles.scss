@@ -167,6 +167,8 @@
     .af-header {
         border-bottom: 1px solid #dcdcde;
         margin-bottom: 0;
+        display: flex; 
+        align-items: center;
     }
 
     .af-manage {

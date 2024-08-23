@@ -8,6 +8,7 @@ class Form
     private $fields;
     private $actions;
     private $options;
+    private $theme;
     private $initial_data;
     private $ajax = false;
 
@@ -22,13 +23,14 @@ class Form
      * @param array  $actions
      * @param array $initial_data
      */
-    public function __construct($name, $fields, $options = [], $actions = [], $initial_data = null)
+    public function __construct($name, $fields, $options = [], $actions = [], $initial_data = null, $theme = null)
     {
         $this->set_name($name);
         $this->set_fields($fields);
         $this->set_options($options);
         $this->set_actions($actions);
         $this->set_initial_data($initial_data);
+        $this->set_theme($theme);
     }
 
     /**
@@ -157,19 +159,19 @@ class Form
             $this->actions[$action_name] =  function ($data, $form) use ($action_name, $optionsOrCallable) {
                 $action = Actions::getInstance()->get($action_name);
                 if (!$action) {
-                    throw new \Exception(sprintf('Action %s not found', $action_name));
+                    throw new \Exception(\esc_html(sprintf('Action %s not found', $action_name)));
                 }
                 $class = $action['class'];
                 if (\is_string($class)) {
                     if ((!class_exists($class) || !\is_subclass_of($class, Actions\ActionInterface::class))) {
-                        throw new \Exception(sprintf('Action %s class must be a callable function or a class that implements the __invoke() method, you can pass the class name as string', $action_name));
+                        throw new \Exception(\esc_html(sprintf('Action %s class must be a callable function or a class that implements the __invoke() method, you can pass the class name as string', $action_name)));
                     }
 
                     $instance = new $class($optionsOrCallable);
                     $instance->execute($data, $form);
                 } else {
                     if (!\is_callable($class)) {
-                        throw new \Exception(sprintf('Action %s class must be a callable function or a class that implements the __invoke() method', $action_name));
+                        throw new \Exception(\esc_html(sprintf('Action %s class must be a callable function or a class that implements the __invoke() method', $action_name)));
                     }
 
                     \call_user_func($class, $data, $form, $optionsOrCallable);
@@ -290,5 +292,31 @@ class Form
     {
         $messages = $this->get_option('messages', []);
         return $messages[$name] ?? null;
+    }
+
+    /**
+     * Get form theme
+     *
+     * @date 2024-05-24
+     *
+     * @return string|null
+     * */
+    public function get_theme()
+    {
+        return $this->theme;
+    }
+
+    /**
+     * Set form theme
+     *
+     * @date 2024-05-24
+     *
+     * @param string $theme
+     *
+     * @return void
+     */
+    public function set_theme($theme)
+    {
+        $this->theme = $theme;
     }
 }

@@ -26,16 +26,24 @@ class FormRegistry implements FormRegistryInterface
     /**
      * @var FormExtensionInterface[]
      */
-    private array $extensions = [];
+    private $extensions = [];
 
     /**
      * @var ResolvedFormTypeInterface[]
      */
-    private array $types = [];
+    private $types = [];
 
-    private FormTypeGuesserInterface|null|false $guesser = false;
-    private ResolvedFormTypeFactoryInterface $resolvedTypeFactory;
-    private array $checkedTypes = [];
+    /**
+     * @var FormTypeGuesserInterface|false|null
+     */
+    private $guesser = false;
+
+    /**
+     * @var ResolvedFormTypeFactoryInterface
+     */
+    private $resolvedTypeFactory;
+
+    private $checkedTypes = [];
 
     /**
      * @param FormExtensionInterface[] $extensions
@@ -54,7 +62,10 @@ class FormRegistry implements FormRegistryInterface
         $this->resolvedTypeFactory = $resolvedTypeFactory;
     }
 
-    public function getType(string $name): ResolvedFormTypeInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function getType(string $name)
     {
         if (!isset($this->types[$name])) {
             $type = null;
@@ -90,7 +101,7 @@ class FormRegistry implements FormRegistryInterface
     private function resolveType(FormTypeInterface $type): ResolvedFormTypeInterface
     {
         $parentType = $type->getParent();
-        $fqcn = $type::class;
+        $fqcn = \get_class($type);
 
         if (isset($this->checkedTypes[$fqcn])) {
             $types = implode(' > ', array_merge(array_keys($this->checkedTypes), [$fqcn]));
@@ -115,7 +126,10 @@ class FormRegistry implements FormRegistryInterface
         }
     }
 
-    public function hasType(string $name): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function hasType(string $name)
     {
         if (isset($this->types[$name])) {
             return true;
@@ -123,14 +137,17 @@ class FormRegistry implements FormRegistryInterface
 
         try {
             $this->getType($name);
-        } catch (ExceptionInterface) {
+        } catch (ExceptionInterface $e) {
             return false;
         }
 
         return true;
     }
 
-    public function getTypeGuesser(): ?FormTypeGuesserInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeGuesser()
     {
         if (false === $this->guesser) {
             $guessers = [];
@@ -143,13 +160,16 @@ class FormRegistry implements FormRegistryInterface
                 }
             }
 
-            $this->guesser = $guessers ? new FormTypeGuesserChain($guessers) : null;
+            $this->guesser = !empty($guessers) ? new FormTypeGuesserChain($guessers) : null;
         }
 
         return $this->guesser;
     }
 
-    public function getExtensions(): array
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions()
     {
         return $this->extensions;
     }

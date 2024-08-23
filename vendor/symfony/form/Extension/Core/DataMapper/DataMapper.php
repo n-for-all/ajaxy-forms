@@ -25,9 +25,9 @@ use Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor;
  */
 class DataMapper implements DataMapperInterface
 {
-    private DataAccessorInterface $dataAccessor;
+    private $dataAccessor;
 
-    public function __construct(?DataAccessorInterface $dataAccessor = null)
+    public function __construct(DataAccessorInterface $dataAccessor = null)
     {
         $this->dataAccessor = $dataAccessor ?? new ChainAccessor([
             new CallbackAccessor(),
@@ -35,8 +35,15 @@ class DataMapper implements DataMapperInterface
         ]);
     }
 
-    public function mapDataToForms(mixed $data, \Traversable $forms): void
+    /**
+     * {@inheritdoc}
+     */
+    public function mapDataToForms($data, iterable $forms): void
     {
+        if (\is_array($forms)) {
+            trigger_deprecation('symfony/form', '5.3', 'Passing an array as the second argument of the "%s()" method is deprecated, pass "\Traversable" instead.', __METHOD__);
+        }
+
         $empty = null === $data || [] === $data;
 
         if (!$empty && !\is_array($data) && !\is_object($data)) {
@@ -54,8 +61,15 @@ class DataMapper implements DataMapperInterface
         }
     }
 
-    public function mapFormsToData(\Traversable $forms, mixed &$data): void
+    /**
+     * {@inheritdoc}
+     */
+    public function mapFormsToData(iterable $forms, &$data): void
     {
+        if (\is_array($forms)) {
+            trigger_deprecation('symfony/form', '5.3', 'Passing an array as the first argument of the "%s()" method is deprecated, pass "\Traversable" instead.', __METHOD__);
+        }
+
         if (null === $data) {
             return;
         }

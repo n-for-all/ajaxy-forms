@@ -19,8 +19,6 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
  * Transforms between a normalized date interval and an interval string/array.
  *
  * @author Steffen Roßkamp <steffen.rosskamp@gimmickmedia.de>
- *
- * @implements DataTransformerInterface<\DateInterval, array>
  */
 class DateIntervalToArrayTransformer implements DataTransformerInterface
 {
@@ -41,14 +39,14 @@ class DateIntervalToArrayTransformer implements DataTransformerInterface
         self::SECONDS => 's',
         self::INVERT => 'r',
     ];
-    private array $fields;
-    private bool $pad;
+    private $fields;
+    private $pad;
 
     /**
      * @param string[]|null $fields The date fields
      * @param bool          $pad    Whether to use padding
      */
-    public function __construct(?array $fields = null, bool $pad = false)
+    public function __construct(array $fields = null, bool $pad = false)
     {
         $this->fields = $fields ?? ['years', 'months', 'days', 'hours', 'minutes', 'seconds', 'invert'];
         $this->pad = $pad;
@@ -59,9 +57,11 @@ class DateIntervalToArrayTransformer implements DataTransformerInterface
      *
      * @param \DateInterval $dateInterval Normalized date interval
      *
+     * @return array
+     *
      * @throws UnexpectedTypeException if the given value is not a \DateInterval instance
      */
-    public function transform(mixed $dateInterval): array
+    public function transform($dateInterval)
     {
         if (null === $dateInterval) {
             return array_intersect_key(
@@ -103,10 +103,12 @@ class DateIntervalToArrayTransformer implements DataTransformerInterface
      *
      * @param array $value Interval array
      *
+     * @return \DateInterval|null
+     *
      * @throws UnexpectedTypeException       if the given value is not an array
      * @throws TransformationFailedException if the value could not be transformed
      */
-    public function reverseTransform(mixed $value): ?\DateInterval
+    public function reverseTransform($value)
     {
         if (null === $value) {
             return null;

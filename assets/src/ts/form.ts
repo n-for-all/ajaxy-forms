@@ -9,12 +9,7 @@ class Form {
 	errorElms: NodeListOf<Element>;
 	messageElm: any;
 
-	constructor(
-		element: HTMLFormElement,
-		submitButton?: HTMLButtonElement | null,
-		validate?: (element: HTMLFormElement) => boolean,
-		_normalSubmit?: boolean
-	) {
+	constructor(element: HTMLFormElement, submitButton?: HTMLButtonElement | null, validate?: (element: HTMLFormElement) => boolean, _normalSubmit?: boolean) {
 		if (!element || element.tagName != "FORM") {
 			console.warn("The element you passed to the form is invalid", element);
 			return;
@@ -30,6 +25,14 @@ class Form {
 		}
 		this.element.addEventListener("submit", (e) => {
 			e.preventDefault();
+            this.element.dispatchEvent && this.element.dispatchEvent(new CustomEvent("beforesubmit", {
+                bubbles: true,
+                cancelable: true,
+                detail: {
+                    form: this.element,
+                    submitButton: this.submitButton,
+                },
+            }));
 			this.element.classList.remove("invalid");
 			if (this.submitButton && this.submitButton.classList.contains("loading")) return;
 			else this.submitButton?.classList.add("loading");
@@ -73,10 +76,12 @@ class Form {
 								this.submitButton?.classList.remove("loading");
 								if (json) {
 									if (json.status == "error") {
-										let fields = json.fields;
-										let names = Object.keys(fields);
-										for (let i = 0; i < names.length; i++) {
-											this.addErrors(names[i], fields[names[i]]);
+										if (json.fields) {
+											let fields = json.fields;
+											let names = Object.keys(fields);
+											for (let i = 0; i < names.length; i++) {
+												this.addErrors(names[i], fields[names[i]]);
+											}
 										}
 									} else {
 										if (json.status == "success") {
@@ -88,7 +93,7 @@ class Form {
 										this.setMessage(json.message, json.status);
 									}
 									if (json._token) {
-										var token: HTMLInputElement = this.element.querySelector('[name*="[_token]"]');
+										let token: HTMLInputElement | null = this.element.querySelector('[name*="[_token]"]');
 										if (token) {
 											token.value = json._token;
 										}
@@ -130,12 +135,11 @@ class Form {
 		const result: Array<string> = [];
 		Array.prototype.slice.call(this.element.elements).forEach(function (control: HTMLSelectElement | HTMLInputElement) {
 			if (control.name && !control.disabled && ["file", "reset", "submit", "button"].indexOf(control.type) === -1)
-				if (control.type === "select-multiple")
+				if (control.type === "select-multiple") 
 					Array.prototype.slice.call((control as HTMLSelectElement).options).forEach(function (option: HTMLOptionElement) {
 						if (option.selected) result.push(encodeURIComponent(control.name) + "=" + encodeURIComponent(option.value));
 					});
-				else if (["checkbox", "radio"].indexOf(control.type) === -1 || (control as HTMLInputElement).checked)
-					result.push(encodeURIComponent(control.name) + "=" + encodeURIComponent(control.value));
+				else if (["checkbox", "radio"].indexOf(control.type) === -1 || (control as HTMLInputElement).checked) result.push(encodeURIComponent(control.name) + "=" + encodeURIComponent(control.value));
 				else if (control.value != "") result.push(encodeURIComponent(control.name) + "=" + encodeURIComponent(control.value));
 		});
 		return result.join("&").replace(/%20/g, "+");
@@ -180,12 +184,12 @@ class Form {
 				return;
 			} else if (typeof errors == "string") {
 				errors = [errors];
-			} 
-            if (Array.isArray(errors)) {
+			}
+			if (Array.isArray(errors)) {
 				this.errorElms.forEach((elm) => {
 					if (elm.classList.contains("field-" + field)) {
 						let ul = document.createElement("ul");
-                        //@ts-ignore
+						//@ts-ignore
 						errors.forEach((error) => {
 							let li = document.createElement("li");
 							li.innerHTML = error;

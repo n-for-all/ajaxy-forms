@@ -16,20 +16,20 @@ class Settings
 
     function admin_menu()
     {
-        add_submenu_page('ajaxy-forms', __('Entries', AJAXY_FORMS_TEXT_DOMAIN), __('Entries', AJAXY_FORMS_TEXT_DOMAIN), 'activate_plugins', 'ajaxy-form-entries', [$this, "page_handler"]);
-        add_submenu_page('ajaxy-forms-entry', __('Entries', AJAXY_FORMS_TEXT_DOMAIN), __('Entries', AJAXY_FORMS_TEXT_DOMAIN), 'activate_plugins', 'ajaxy-forms-entry', [$this, "form_page_handler"]);
+        add_submenu_page('ajaxy-forms', __('Entries', "ajaxy-forms"), __('Entries', "ajaxy-forms"), 'activate_plugins', 'ajaxy-form-entries', [$this, "page_handler"]);
+        add_submenu_page('ajaxy-forms-entry', __('Entries', "ajaxy-forms"), __('Entries', "ajaxy-forms"), 'activate_plugins', 'ajaxy-forms-entry', [$this, "form_page_handler"]);
     }
 
     function admin_init()
     {
         if (isset($_REQUEST['export_action'])) {
-            \Ajaxy\Forms\Inc\Data::export('contact');
+            \Ajaxy\Forms\Inc\Data::export($_REQUEST['export_action'] == 'all' ? null : $_REQUEST['export_action']);
         }
     }
 
     function scripts()
     {
-        wp_enqueue_style(AJAXY_FORMS_TEXT_DOMAIN . "-admin-style", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/css/styles.css');
+        wp_enqueue_style("ajaxy-forms" . "-admin-style", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/css/styles.css', [], "1.0");
     }
 
     function page_handler()
@@ -39,15 +39,15 @@ class Settings
 
         $message = '';
         if ('delete' === $table->current_action()) {
-            $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Forms deleted: %d', AJAXY_FORMS_TEXT_DOMAIN), count((array)$_REQUEST['id'])) . '</p></div>';
+            $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Forms deleted: %d', "ajaxy-forms"), count((array)$_REQUEST['id'])) . '</p></div>';
         }
 ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1 class="wp-heading-inline"><?php _e('Entries', AJAXY_FORMS_TEXT_DOMAIN) ?></h1>
-            <?php echo $message; ?>
+            <h1 class="wp-heading-inline"><?php esc_html_e('Entries', 'ajaxy-forms') ?></h1>
+            <?php echo wp_kses($message, ['div' => ['id' => [], 'class' => []], 'p' => [], 'a' => []]); ?>
             <form id="ajaxy-forms-table" method="GET">
-                <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
+                <input type="hidden" name="page" value="<?php echo esc_attr($_REQUEST['page']) ?>" />
                 <?php $table->display() ?>
             </form>
 
@@ -80,19 +80,23 @@ class Settings
             $item_valid = $this->validate($item);
             if ($item_valid === true) {
                 if ($item['id'] == 0) {
+
+                    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
                     $result = $wpdb->insert($table_name, $item);
                     $item['id'] = $wpdb->insert_id;
                     if ($result) {
-                        $message = __('Item was successfully saved', AJAXY_FORMS_TEXT_DOMAIN);
+                        $message = __('Item was successfully saved', "ajaxy-forms");
                     } else {
-                        $notice = __('There was an error while saving item', AJAXY_FORMS_TEXT_DOMAIN);
+                        $notice = __('There was an error while saving item', "ajaxy-forms");
                     }
                 } else {
+
+                    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
                     $result = $wpdb->update($table_name, $item, array('id' => $item['id']));
                     if ($result) {
-                        $message = __('Item was successfully updated', AJAXY_FORMS_TEXT_DOMAIN);
+                        $message = __('Item was successfully updated', "ajaxy-forms");
                     } else {
-                        $notice = __('There was an error while updating item', AJAXY_FORMS_TEXT_DOMAIN);
+                        $notice = __('There was an error while updating item', "ajaxy-forms");
                     }
                 }
             } else {
@@ -103,10 +107,12 @@ class Settings
             // if this is not post back we load item to edit or give new one to create
             $item = $default;
             if (isset($_REQUEST['id'])) {
-                $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM %s WHERE id = %d", $table_name, $_REQUEST['id']), ARRAY_A);
+
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+                $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM %i WHERE id = %s", $table_name, $_REQUEST['id']), ARRAY_A);
                 if (!$item) {
                     $item = $default;
-                    $notice = __('Item not found', AJAXY_FORMS_TEXT_DOMAIN);
+                    $notice = __('Item not found', "ajaxy-forms");
                 }
             }
         }
@@ -117,30 +123,30 @@ class Settings
     ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1 class="wp-heading-inline"><?php _e('Entry', AJAXY_FORMS_TEXT_DOMAIN) ?></h1>
+            <h1 class="wp-heading-inline"><?php esc_html_e('Entry', 'ajaxy-forms') ?></h1>
 
             <?php if (!empty($notice)) : ?>
                 <div id="notice" class="error">
-                    <p><?php echo $notice ?></p>
+                    <p><?php echo esc_html($notice) ?></p>
                 </div>
             <?php endif; ?>
             <?php if (!empty($message)) : ?>
                 <div id="message" class="updated">
-                    <p><?php echo $message ?></p>
+                    <p><?php echo esc_html($message) ?></p>
                 </div>
             <?php endif; ?>
 
             <form id="form" method="POST">
-                <input type="hidden" name="nonce" value="<?php echo wp_create_nonce(basename(__FILE__)) ?>" />
+                <input type="hidden" name="nonce" value="<?php echo esc_attr(wp_create_nonce(basename(__FILE__))) ?>" />
                 <?php /* NOTICE: here we storing id to determine will be item added or updated */ ?>
-                <input type="hidden" name="id" value="<?php echo $item['id'] ?>" />
+                <input type="hidden" name="id" value="<?php echo esc_attr($item['id']) ?>" />
 
                 <div class="metabox-holder" id="poststuff">
                     <div id="post-body">
                         <div id="post-body-content">
                             <?php /* And here we call our custom meta box */ ?>
                             <?php do_meta_boxes('ajaxy_form_entry', 'normal', $item); ?>
-                            <!-- <input type="submit" value="<?php _e('Save', AJAXY_FORMS_TEXT_DOMAIN) ?>" id="submit" class="button-primary" name="submit"> -->
+                            <!-- <input type="submit" value="<?php esc_html_e('Save', 'ajaxy-forms') ?>" id="submit" class="button-primary" name="submit"> -->
                         </div>
                     </div>
                 </div>
@@ -154,12 +160,9 @@ class Settings
     {
         $messages = array();
 
-        if (empty($item['name'])) $messages[] = __('Name is required', AJAXY_FORMS_TEXT_DOMAIN);
-        if (!empty($item['email']) && !is_email($item['email'])) $messages[] = __('E-Mail is in wrong format', AJAXY_FORMS_TEXT_DOMAIN);
-        if (!ctype_digit($item['age'])) $messages[] = __('Age in wrong format', AJAXY_FORMS_TEXT_DOMAIN);
-        //if(!empty($item['age']) && !absint(intval($item['age'])))  $messages[] = __('Age can not be less than zero');
-        //if(!empty($item['age']) && !preg_match('/[0-9]+/', $item['age'])) $messages[] = __('Age must be number');
-        //...
+        // if (empty($item['name'])) $messages[] = __('Name is required', "ajaxy-forms");
+        // if (!empty($item['email']) && !is_email($item['email'])) $messages[] = __('E-Mail is in wrong format', "ajaxy-forms");
+        // if (!ctype_digit($item['age'])) $messages[] = __('Age in wrong format', "ajaxy-forms");
 
         if (empty($messages)) return true;
         return implode('<br />', $messages);
@@ -174,26 +177,32 @@ class Settings
             <tbody>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="name"><?php _e('Form', AJAXY_FORMS_TEXT_DOMAIN) ?></label>
+                        <label for="name"><?php esc_html_e('Form', 'ajaxy-forms') ?></label>
                     </th>
                     <td>
-                        <?php echo ucwords($item['name'] ?? '') ?>
+                        <?php esc_html(ucwords($item['name'] ?? '')) ?>
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="email"><?php _e('Data', AJAXY_FORMS_TEXT_DOMAIN) ?></label>
+                        <label for="email"><?php esc_html_e('Data', 'ajaxy-forms') ?></label>
                     </th>
                     <td>
-                        <?php echo isset($item['data']) ? Table::convert_to_table(json_decode($item['data'], true)) : ''; ?>
+                        <?php
+                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        echo isset($item['data']) ? Table::convert_to_fields_table(json_decode($item['data'], true)) : '';
+                        ?>
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="age"><?php _e('Meta Data', AJAXY_FORMS_TEXT_DOMAIN) ?></label>
+                        <label for="age"><?php esc_html_e('Meta Data', 'ajaxy-forms') ?></label>
                     </th>
                     <td>
-                        <?php echo isset($item['metadata']) ? Table::convert_to_table(json_decode($item['metadata'], true)) : ''; ?>
+                        <?php
+                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        echo isset($item['metadata']) ? Table::convert_to_table(json_decode($item['metadata'], true)) : '';
+                        ?>
                     </td>
                 </tr>
             </tbody>

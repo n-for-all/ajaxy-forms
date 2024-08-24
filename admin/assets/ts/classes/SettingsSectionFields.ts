@@ -35,13 +35,13 @@ class SettingsSectionFields extends Backbone.View<any> {
                         textField.$el.on("blur",  "input", (e) => {
                             let value = jQuery(e.target).val();
                             if (!value || value === "") {
-                                this.fieldView.setTitle("No Label");
+                                this.fieldView.setTitle("");
                                 return;
                             }
                             this.fieldView.setTitle(value);
                         });
 
-                        this.fieldView.setTitle(this.data[_field.name] || "No Label");
+                        this.fieldView.setTitle(this.data[_field.name] || "");
                     }
 					return textField; 
 			}

@@ -7,7 +7,7 @@
 
 {% block form_widget_simple -%}
     {%- if type is not defined or type != 'hidden' %}
-        {%- set default_class = ' rounded-sm border-0 text-gray-900 placeholder:text-gray-400 sm:text-sm field-' ~type %}
+        {%- set default_class = ' rounded-sm border-0 text-gray-900 placeholder:text-gray-400 sm:text-sm' %}
         {%- if type|default('') == 'color' -%}
             {%- set default_class = default_class ~ ' ' -%}
         {%- elseif type|default('') == 'range' -%}

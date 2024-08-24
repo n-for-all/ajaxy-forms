@@ -77,6 +77,7 @@ class Form {
 								if (json) {
 									if (json.status == "error") {
 										if (json.fields) {
+                                            this.errorElms = this.element.querySelectorAll(".field-error");
 											let fields = json.fields;
 											let names = Object.keys(fields);
 											for (let i = 0; i < names.length; i++) {

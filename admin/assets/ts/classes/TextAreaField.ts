@@ -1,13 +1,13 @@
 class TextAreaField extends Backbone.View<any> {
 	field: any;
 	basename: string;
-    value: string;
-	constructor(basename, field, value:string) {
+	value: string;
+	constructor(basename, field, value: string) {
 		super();
 
 		this.field = field;
-        this.basename = basename;
-        this.value = value;
+		this.basename = basename;
+		this.value = value;
 	}
 
 	createField() {
@@ -18,7 +18,7 @@ class TextAreaField extends Backbone.View<any> {
 			this.$el.append(label);
 		}
 
-		let inputDiv = jQuery("<div></div>").addClass("af-field-input");
+		let inputDiv = jQuery("<div></div>").addClass(["af-field-input", "af-field-input-" + this.field.type, "af-field-input-" + this.field.name]);
 		let input = jQuery("<textarea></textarea>").attr("name", `${this.basename}[${this.field.name}]`).addClass("widefat").val(this.value);
 		inputDiv.append(input);
 

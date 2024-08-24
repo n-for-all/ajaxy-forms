@@ -191,7 +191,7 @@ class Settings
                         <?php
                         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         echo isset($item['data']) ? Table::convert_to_fields_table(json_decode($item['data'], true)) : '';
-                        ?>
+                        ?> 
                     </td>
                 </tr>
                 <tr class="form-field">

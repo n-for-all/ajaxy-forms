@@ -1,15 +1,23 @@
 import "whatwg-fetch";
 import { Form } from "./form";
 import AjaxyTermPostsManager from "./term_posts";
+import AjaxyRepeater from "./repeater";
 
 class AjaxyForms {
 	forms: { [x: string]: Form } = {};
+	repeaters: { [x: string]: AjaxyRepeater } = {};
 	constructor() {
 		this.ready(() => {
 			let forms = document.querySelectorAll("form.ajaxy-form.is-ajax");
 			if (forms.length > 0) {
 				[].forEach.call(forms, (form) => {
 					this.forms[form.name] = new Form(form);
+                    let repeaters = form.querySelectorAll(`.repeater`);
+                    if(repeaters.length > 0){
+                        [].forEach.call(repeaters, (repeater) => {
+                            this.repeaters[repeater.id] = new AjaxyRepeater(repeater);
+                        });
+                    }
 				});
 			}
 		});

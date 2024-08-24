@@ -76,39 +76,29 @@ class Builder
         });
 
 ?>
+        <input class="widefat af-search" type="text" placeholder="<?php \esc_html_e('Find a field...', 'ajaxy-forms'); ?>" />
         <ul class="af-fields">
             <?php foreach ($commonFields as $key => $field) :
                 $value = \explode('\\', trim($field['label']));
-                $nlabel = str_replace('Type', '', $value[count($value) - 1]);
+                $label = str_replace('Type', '', $value[count($value) - 1]);
+                $keywords = $field['label'] . ',' . $field['keywords'];
             ?>
-                <li class="draggable" data-type="<?php echo esc_attr($key); ?>">
-                    <span><?php echo \esc_html($nlabel); ?></span>
-                    <!-- <a href="#">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 12H12M12 12H18M12 12V18M12 12V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>
-                    </a> -->
+                <li class="draggable" data-group="common" data-type="<?php echo esc_attr($key); ?>" data-keywords="<?php echo esc_attr($keywords); ?>">
+                    <span><?php echo \esc_html($label); ?></span>
                 </li>
             <?php endforeach; ?>
-            <li>
-                <ul class="af-all-fields">
-                    <?php foreach ($fields as $key => $field) :
-                        if ($field['common']) continue;
-                        $value = \explode('\\', trim($field['label']));
-                        $nlabel = str_replace('Type', '', $value[count($value) - 1]);
-                    ?>
-                        <li class="draggable" data-type="<?php echo esc_attr($key); ?>">
-                            <span><?php echo \esc_html($nlabel); ?></span>
-                            <!-- <a href="#">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 12H12M12 12H18M12 12V18M12 12V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </svg>
-                            </a> -->
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </li>
-            <li class="more"><span><?php \esc_html_e('Load More', 'ajaxy-forms'); ?></span></li>
+            <li class="more"><span><?php \esc_html_e('Show Advanced Fields', 'ajaxy-forms'); ?></span></li>
+            <?php foreach ($fields as $key => $field) :
+                if ($field['common']) continue;
+                $value = \explode('\\', trim($field['label']));
+                $label = str_replace('Type', '', $value[count($value) - 1]);
+                $keywords = $field['label'] . ',' . $field['keywords'];
+            ?>
+                <li class="draggable" style="display: none" data-group="advanced" data-type="<?php echo esc_attr($key); ?>" data-keywords="<?php echo esc_attr($keywords); ?>">
+                    <span><?php echo \esc_html($label); ?></span>
+                </li>
+            <?php endforeach; ?>
+
         </ul>
     <?php
     }

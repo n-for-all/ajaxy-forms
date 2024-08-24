@@ -66,6 +66,8 @@
             color: green;
         }
     }
+
+    @import "_fields/rating.scss";
 }
 
 @keyframes rotation {

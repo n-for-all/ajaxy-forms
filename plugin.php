@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Ajaxy
  */
@@ -166,6 +167,8 @@ class Plugin
         $options['action'] = $form->is_ajax() ? get_rest_url(null, sprintf('ajaxy-forms/v1/form/%s', $form->get_name())) : '';
         $builder = $formFactory->createNamedBuilder($form->get_name(), Type\FormType::class, $initial_data, $options);
 
+        $start_repeater = '';
+        $repeater = [];
         foreach ($form->get_fields() as $field) {
             $field_options = $field;
 
@@ -202,8 +205,8 @@ class Plugin
             }
 
             if ($field['type'] == 'checkbox') {
-                if(isset($field_options['checked'])) {
-                    if($field_options['checked'] == "1") {
+                if (isset($field_options['checked'])) {
+                    if ($field_options['checked'] == "1") {
                         $field_options['data'] = true;
                     }
                     unset($field_options['checked']);
@@ -222,7 +225,7 @@ class Plugin
                         return $choice['selected'] ?? false;
                     }));
 
-                    if(count($selected) > 0) {
+                    if (count($selected) > 0) {
                         $field_options['data'] = $selected[0]['value'];
                     }
 
@@ -252,10 +255,34 @@ class Plugin
                 unset($field_options['field_type']);
             }
 
-            
+
             try {
+                if ($field['type'] == 'repeater_start') {
+                    $builder->add($field['name'] . '-start', $this->get_field('repeater_start'), $field_options);
+                    $start_repeater = $field['name'];
+                    continue;
+                }
+                if ($start_repeater && $start_repeater != '') {
+                    if ($field['type'] == 'repeater_end') {
+                        $builder->add($start_repeater, $this->get_field('repeater_end'), $field_options + [
+                            'name' => $start_repeater,
+                            'fields' => $repeater
+                        ]);
+                        $start_repeater = '';
+                        $repeater = [];
+                    } else {
+                        $repeater[] = [
+                            'name' => $field['name'],
+                            'type' => $field['type'],
+                            'class' => $this->get_field($field['type']),
+                            'options' => $field_options
+                        ];
+                    }
+
+                    continue;
+                }
                 $builder->add($field['name'], $this->get_field($field['type']), $field_options);
-                if($field['type'] == 'checkbox') {
+                if ($field['type'] == 'checkbox' || $field['type'] == 'radio') {
                     $builder->get($field['name'])->addModelTransformer(new CallbackTransformer(
                         function ($activeAsString) {
                             return (bool)(int)$activeAsString;
@@ -263,7 +290,7 @@ class Plugin
                         function ($activeAsBoolean) {
                             return (string)(int)$activeAsBoolean;
                         }
-                   ));
+                    ));
                 }
             } catch (\Throwable $e) {
                 \error_log($e->getMessage());
@@ -523,12 +550,19 @@ class Plugin
         if (!$form) {
             return new \WP_REST_Response(['status' => 'error', 'message' => 'Form not found']);
         }
+
+        $messages = array_replace([
+            'success' => __('Form submitted successfully', "ajaxy-forms"),
+            'error' => __('Form failed to submit, Please try again', "ajaxy-forms"),
+            'wp_error' => __('Error submitting form: %s', "ajaxy-forms"),
+        ], $form->get_option('messages', []));
+
         $data = $request->get_body_params()[$form_name] ?? [];
         $submitted_form = $this->create_form($form, $data);
         if (\is_wp_error($submitted_form)) {
             return new \WP_REST_Response([
                 'status' => 'error',
-                'message' => \sprintf(__('Error submitting form: %s', "ajaxy-forms"), $submitted_form->get_error_message()),
+                'message' => \sprintf($messages['wp_error'], $submitted_form->get_error_message()),
                 '_token' => $this->csrf_token_manager->getToken('form_intention_' . $form->get_name())->getValue()
             ]);
         }
@@ -538,7 +572,7 @@ class Plugin
 
             return new \WP_REST_Response([
                 'status' => 'success',
-                'message' => $message ? $message : __('Form submitted successfully', "ajaxy-forms"),
+                'message' => $message ? $message : $messages['success'],
                 '_token' => $this->csrf_token_manager->getToken('form_intention_' . $form->get_name())->getValue()
             ]);
         }
@@ -547,16 +581,34 @@ class Plugin
         if (count($errors) > 0) {
             $message .= implode('<br>', $errors);
         }
-        return new \WP_REST_Response(['status' => 'error', 'message' => $message ? $message : __('Form failed to submit, Please try again', "ajaxy-forms"), 'fields' => $this->get_fields_error_messages($submitted_form)]);
+
+        return new \WP_REST_Response([
+            'status' => 'error',
+            'message' => $message ? $message : $messages['error'],
+            'fields' => $this->get_fields_error_messages($submitted_form)
+        ]);
     }
 
     private function get_fields_error_messages(\Symfony\Component\Form\FormInterface $form)
     {
         $errors = array();
         if ($form->count() && $form->isSubmitted()) {
+            /** @var \Symfony\Component\Form\Form */
             foreach ($form as $child) {
                 if (!$child->isValid()) {
-                    $errors[$child->getName()] = implode(', ', $this->get_form_error_messages($child));
+                    $children = $child->all();
+                    $subError = false;
+                    if (\count($children) > 0) {
+                        foreach ($children as $sub_child) {
+                            if (!$sub_child->isValid()) {
+                                $errors[$child->getName()][$sub_child->getName()] = $this->get_form_error_messages($sub_child);
+                                $subError = true;
+                            }
+                        }
+                    }
+                    if (!$subError) {
+                        $errors[$child->getName()] = implode(', ', $this->get_form_error_messages($child));
+                    }
                 }
             }
         }
@@ -598,6 +650,7 @@ register_activation_hook(__FILE__, function () {
     "label" => "HTML",
     "class" => Inc\Types\HtmlType::class,
     "docs" => false,
+    "disable_constraints" => true,
     "inherited" => [],
     "properties" => [[
         "section" => "basic",

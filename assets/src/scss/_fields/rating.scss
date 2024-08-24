@@ -1,0 +1,32 @@
+.rating {
+    border: none;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+
+.rating>label {
+    color: #cdcdcd;
+    padding-right: 0.3rem;
+
+    >svg {
+        height: 1rem;
+    }
+}
+
+.rating>input {
+    display: none;
+}
+
+.rating>input:checked~label,
+.rating:not(:checked)>label:hover,
+.rating:not(:checked)>label:hover~label {
+    color: #FDCC0D;
+}
+
+.rating>input:checked+label:hover,
+.rating>input:checked~label:hover,
+.rating>label:hover~input:checked~label,
+.rating>input:checked~label:hover~label {
+    color: #FFDF00;
+}

@@ -16,7 +16,7 @@ class SettingsHeader extends Backbone.View<any> {
 		let innerHeader = jQuery("<div></div>").addClass(["af-item-handle", "ui-sortable-handle"]);
 		let headerTitle = jQuery("<label></label>").addClass("item-title");
 
-		this.title = jQuery("<span></span>").addClass("af-item-title").html("No Label");
+		this.title = jQuery("<span></span>").addClass("af-item-title").html("");
 
 		headerTitle.append(this.title);
 		innerHeader.append(headerTitle);

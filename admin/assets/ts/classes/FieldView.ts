@@ -45,7 +45,7 @@ class FieldView extends Backbone.View<DraggableModel> {
         this.header.title.text(title);
     }
 	render() {
-		this.el.classList.add(`form-item-${this.index}`);
+		this.el.classList.add(`form-item-${this.index}`, `form-type-${this.type}`);
 		
         if(!this.field){
             console.error(`Field type "${this.type}" not found.`, this.data);

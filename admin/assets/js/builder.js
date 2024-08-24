@@ -231,7 +231,7 @@
                 var label = jQuery("<label></label>").html(this.field.label);
                 this.$el.append(label);
             }
-            var inputDiv = jQuery("<div></div>").addClass("af-field-input");
+            var inputDiv = jQuery("<div></div>").addClass(["af-field-input", "af-field-input-" + this.field.type, "af-field-input-" + this.field.name]);
             var input = jQuery("<textarea></textarea>").attr("name", "".concat(this.basename, "[").concat(this.field.name, "]")).addClass("widefat").val(this.value);
             inputDiv.append(input);
             if (this.field.help) {
@@ -320,12 +320,12 @@
                             textField.$el.on("blur", "input", function (e) {
                                 var value = jQuery(e.target).val();
                                 if (!value || value === "") {
-                                    _this.fieldView.setTitle("No Label");
+                                    _this.fieldView.setTitle("");
                                     return;
                                 }
                                 _this.fieldView.setTitle(value);
                             });
-                            _this.fieldView.setTitle(_this.data[_field.name] || "No Label");
+                            _this.fieldView.setTitle(_this.data[_field.name] || "");
                         }
                         return textField;
                 }
@@ -491,8 +491,12 @@
             var _this = this;
             this.el.classList.add("wrap-settings", "wp-clearfix");
             var innerSettings = jQuery("<div></div>").addClass("settings-inner");
-            innerSettings.append(this.createSettings(this.field.properties.basic, "basic"));
-            innerSettings.append(this.createSettings(this.field.properties.advanced, "advanced"));
+            if (this.field.properties.basic && this.field.properties.basic.fields.length) {
+                innerSettings.append(this.createSettings(this.field.properties.basic, "basic"));
+            }
+            if (this.field.properties.advanced && this.field.properties.advanced.fields.length) {
+                innerSettings.append(this.createSettings(this.field.properties.advanced, "advanced"));
+            }
             if (!this.field.disable_constraints) {
                 innerSettings.append(this.createConstraintsSettings({
                     label: "Validation",
@@ -533,7 +537,7 @@
             this.$el.addClass("af-item-bar");
             var innerHeader = jQuery("<div></div>").addClass(["af-item-handle", "ui-sortable-handle"]);
             var headerTitle = jQuery("<label></label>").addClass("item-title");
-            this.title = jQuery("<span></span>").addClass("af-item-title").html("No Label");
+            this.title = jQuery("<span></span>").addClass("af-item-title").html("");
             headerTitle.append(this.title);
             innerHeader.append(headerTitle);
             var itemControls = jQuery("<div></div>").addClass("item-controls");
@@ -583,7 +587,7 @@
             this.header.title.text(title);
         };
         FieldView.prototype.render = function () {
-            this.el.classList.add("form-item-".concat(this.index));
+            this.el.classList.add("form-item-".concat(this.index), "form-type-".concat(this.type));
             if (!this.field) {
                 console.error("Field type \"".concat(this.type, "\" not found."), this.data);
                 return this;
@@ -704,14 +708,10 @@
         var toggleMore = document.querySelector(".af-fields li.more");
         toggleMore === null || toggleMore === void 0 ? void 0 : toggleMore.addEventListener("click", function (e) {
             e.preventDefault();
-            var more = document.querySelector(".af-fields .af-all-fields");
-            more.classList.toggle("active");
-            if (more.classList.contains("active")) {
-                setTimeout(function () { return (toggleMore.querySelector("span").innerHTML = "Load Less"); }, 500);
-            }
-            else {
-                setTimeout(function () { return (toggleMore.querySelector("span").innerHTML = "Load More"); }, 500);
-            }
+            var more = document.querySelectorAll('.af-fields li[data-group="advanced"]');
+            [].forEach.call(more, function (moreItem) {
+                moreItem.style.display = moreItem.style.display === "none" ? "" : "none";
+            });
         });
         if (typeof form_metadata != undefined && form_metadata) {
             if (form_metadata.fields) {
@@ -721,6 +721,30 @@
             }
         }
         window.dropCollection = dropCollection;
+        var searchList = document.querySelectorAll(".af-fields li");
+        var searchInput = document.querySelector("input.af-search");
+        searchInput.addEventListener("input", function () {
+            var text = searchInput.value.toString().toLowerCase();
+            [].forEach.call(searchList, function (li) {
+                var keywords = li.getAttribute("data-keywords");
+                if (!text || text.trim() == "") {
+                    li.style.display = "";
+                    return;
+                }
+                if (!keywords) {
+                    li.style.display = "none";
+                    return;
+                }
+                var keywordArray = keywords.toLowerCase().split(",");
+                var found = keywordArray.some(function (keyword) {
+                    if (keyword.toLowerCase().indexOf(text.toLowerCase()) > -1) {
+                        return true;
+                    }
+                    return false;
+                });
+                li.style.display = found ? "" : "none";
+            });
+        });
     });
 
 })();

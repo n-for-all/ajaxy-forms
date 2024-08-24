@@ -56,6 +56,33 @@
   border-color: rgba(0, 255, 0, 0.231372549);
   color: green;
 }
+.ajaxy-form .rating {
+  border: none;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+.ajaxy-form .rating > label {
+  color: #cdcdcd;
+  padding-right: 0.3rem;
+}
+.ajaxy-form .rating > label > svg {
+  height: 1rem;
+}
+.ajaxy-form .rating > input {
+  display: none;
+}
+.ajaxy-form .rating > input:checked ~ label,
+.ajaxy-form .rating:not(:checked) > label:hover,
+.ajaxy-form .rating:not(:checked) > label:hover ~ label {
+  color: #FDCC0D;
+}
+.ajaxy-form .rating > input:checked + label:hover,
+.ajaxy-form .rating > input:checked ~ label:hover,
+.ajaxy-form .rating > label:hover ~ input:checked ~ label,
+.ajaxy-form .rating > input:checked ~ label:hover ~ label {
+  color: #FFDF00;
+}
 
 @keyframes rotation {
   0% {

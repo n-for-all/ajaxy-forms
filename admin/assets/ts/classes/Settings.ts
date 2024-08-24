@@ -90,9 +90,12 @@ class Settings extends Backbone.View<any> {
 		this.el.classList.add("wrap-settings", "wp-clearfix");
 
 		let innerSettings = jQuery("<div></div>").addClass("settings-inner");
-
-		innerSettings.append(this.createSettings(this.field.properties.basic, "basic"));
-		innerSettings.append(this.createSettings(this.field.properties.advanced, "advanced"));
+		if (this.field.properties.basic && this.field.properties.basic.fields.length) {
+			innerSettings.append(this.createSettings(this.field.properties.basic, "basic"));
+		}
+		if (this.field.properties.advanced && this.field.properties.advanced.fields.length) {
+			innerSettings.append(this.createSettings(this.field.properties.advanced, "advanced"));
+		}
 		if (!this.field.disable_constraints) {
 			innerSettings.append(
 				this.createConstraintsSettings({

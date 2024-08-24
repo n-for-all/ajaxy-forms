@@ -82,6 +82,7 @@
                             if (json) {
                                 if (json.status == "error") {
                                     if (json.fields) {
+                                        _this.errorElms = _this.element.querySelectorAll(".field-error");
                                         var fields = json.fields;
                                         var names = Object.keys(fields);
                                         for (var i = 0; i < names.length; i++) {
@@ -296,15 +297,86 @@
         return AjaxyTermPostsManager;
     }());
 
+    var AjaxyRepeater = /** @class */ (function () {
+        function AjaxyRepeater(element) {
+            var _this = this;
+            var _a, _b;
+            this.index = 0;
+            try {
+                console.log(element.getAttribute("data-settings"));
+                this.settings = JSON.parse(element.getAttribute("data-settings"));
+            }
+            catch (e) {
+                console.error("Invalid settings", element);
+                return;
+            }
+            if (!this.settings) {
+                return;
+            }
+            this.element = element;
+            this.id = element.getAttribute("id");
+            this.template = (_a = document.querySelector("#template-".concat(this.id))) === null || _a === void 0 ? void 0 : _a.innerHTML;
+            this.items = element.querySelector(".repeater-items");
+            if (this.settings.allowAdd) {
+                this.btnAdd = element.querySelector('[data-action="add"]');
+                (_b = this.btnAdd) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () {
+                    _this.add();
+                    _this.index++;
+                });
+            }
+            if (this.settings.min > 0) {
+                for (var i = 0; i < this.settings.min; i++) {
+                    this.add();
+                    this.index++;
+                }
+            }
+        }
+        AjaxyRepeater.prototype.isMax = function () {
+            var _a;
+            return ((_a = this.items) === null || _a === void 0 ? void 0 : _a.childElementCount) >= this.settings.max && this.settings.max > 0;
+        };
+        AjaxyRepeater.prototype.add = function () {
+            var _this = this;
+            var _a;
+            if (this.isMax()) {
+                return;
+            }
+            var newItem = document.createElement("div");
+            newItem.classList.add("repeater-item");
+            newItem.innerHTML = (_a = this.template) === null || _a === void 0 ? void 0 : _a.replace(/--index/g, "--".concat(this.index));
+            this.items.appendChild(newItem);
+            if (this.settings.allowDelete) {
+                var btnRemove = newItem.querySelector('[data-action="remove"]');
+                btnRemove === null || btnRemove === void 0 ? void 0 : btnRemove.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    if (_this.btnAdd)
+                        _this.btnAdd.disabled = false;
+                    newItem.remove();
+                });
+            }
+            if (this.isMax() && this.btnAdd) {
+                this.btnAdd.disabled = true;
+            }
+        };
+        return AjaxyRepeater;
+    }());
+
     var AjaxyForms = /** @class */ (function () {
         function AjaxyForms() {
             var _this = this;
             this.forms = {};
+            this.repeaters = {};
             this.ready(function () {
                 var forms = document.querySelectorAll("form.ajaxy-form.is-ajax");
                 if (forms.length > 0) {
                     [].forEach.call(forms, function (form) {
                         _this.forms[form.name] = new Form(form);
+                        var repeaters = form.querySelectorAll(".repeater");
+                        if (repeaters.length > 0) {
+                            [].forEach.call(repeaters, function (repeater) {
+                                _this.repeaters[repeater.id] = new AjaxyRepeater(repeater);
+                            });
+                        }
                     });
                 }
             });

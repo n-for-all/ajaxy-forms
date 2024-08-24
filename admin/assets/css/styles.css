@@ -6,6 +6,15 @@
   line-height: 1em;
 }
 
+.af-form-wrap .af-search {
+  margin-bottom: 1rem;
+  border-color: #d4d4d4;
+  border-radius: 3px;
+}
+.af-form-wrap .accordion-section-content {
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .af-form-wrap .major-publishing-actions {
   padding: 10px 0;
   display: flex;
@@ -187,9 +196,10 @@
   position: absolute;
   right: -20px;
   top: 0;
-  display: block;
+  display: flex;
   width: 30px;
-  height: 40px;
+  height: 100%;
+  align-items: center;
   outline: 0;
 }
 .af-form-wrap .item-edit:focus {
@@ -197,7 +207,6 @@
 }
 .af-form-wrap .item-edit:before,
 .af-form-wrap .item-toggle:before {
-  margin-top: 10px;
   margin-left: 4px;
   width: 20px;
   border-radius: 50%;
@@ -272,6 +281,29 @@
 .af-form-wrap .af-field.af-field-checkbox input[type=radio], .af-form-wrap .af-field.af-field-radio input[type=checkbox],
 .af-form-wrap .af-field.af-field-radio input[type=radio] {
   margin-top: 0px;
+}
+.af-form-wrap li.form-type-html .af-item-handle {
+  max-width: 402px;
+  background: rgba(246, 247, 247, 0.4);
+  padding: 6px 15px;
+  opacity: 0.7;
+}
+.af-form-wrap li.form-type-html .wrap-settings {
+  max-width: 434px;
+}
+.af-form-wrap li.form-type-html .wrap-settings .settings-inner {
+  border: 1px solid #e6e6e8;
+}
+.af-form-wrap li.form-type-repeater_start .af-item-handle, .af-form-wrap li.form-type-repeater_end .af-item-handle {
+  max-width: 412px;
+  background: #ececec;
+  padding: 6px 15px;
+}
+.af-form-wrap li.form-type-repeater_start .wrap-settings, .af-form-wrap li.form-type-repeater_end .wrap-settings {
+  max-width: 444px;
+}
+.af-form-wrap li.form-type-repeater_start .wrap-settings .settings-inner, .af-form-wrap li.form-type-repeater_end .wrap-settings .settings-inner {
+  border: 1px solid #e6e6e8;
 }
 .af-form-wrap .af-item-handle {
   border: 1px solid #dcdcde;
@@ -387,6 +419,10 @@
 .af-form-wrap .af-repeater .af-repeater-remove:hover {
   opacity: 1;
 }
+.af-form-wrap .af-field-input-html > textarea {
+  font-size: 12px;
+  min-height: 120px;
+}
 .af-form-wrap .constraints-settings .expand-settings > h3 {
   background-color: #fff;
 }
@@ -405,16 +441,22 @@
   color: #fff;
   border-radius: 2px;
 }
+.af-form-wrap .item-controls {
+  display: flex;
+  height: 100%;
+}
 .af-form-wrap .item-docs,
 .af-form-wrap .item-type {
   display: inline-block;
-  padding: 12px 16px;
+  padding: 0px 16px;
   color: #646970;
   font-size: 12px;
   line-height: 1.5;
+  display: flex;
+  align-items: center;
 }
 .af-form-wrap .item-docs {
-  padding: 12px 5px;
+  padding: 0px 5px;
 }
 .af-form-wrap .item-docs:hover {
   color: #2271b1;

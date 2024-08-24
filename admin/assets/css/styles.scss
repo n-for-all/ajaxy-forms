@@ -13,6 +13,17 @@
 
 
 .af-form-wrap {
+    .af-search {
+        margin-bottom: 1rem;
+        border-color: #d4d4d4;
+        border-radius: 3px;
+    }
+
+    .accordion-section-content {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
     .major-publishing-actions {
         padding: 10px 0;
         display: flex;
@@ -167,7 +178,7 @@
     .af-header {
         border-bottom: 1px solid #dcdcde;
         margin-bottom: 0;
-        display: flex; 
+        display: flex;
         align-items: center;
     }
 
@@ -242,9 +253,10 @@
         position: absolute;
         right: -20px;
         top: 0;
-        display: block;
+        display: flex;
         width: 30px;
-        height: 40px;
+        height: 100%;
+        align-items: center;
         outline: 0;
 
         &:focus {
@@ -254,7 +266,6 @@
 
     .item-edit:before,
     .item-toggle:before {
-        margin-top: 10px;
         margin-left: 4px;
         width: 20px;
         border-radius: 50%;
@@ -354,6 +365,39 @@
             input[type=checkbox],
             input[type=radio] {
                 margin-top: 0px;
+            }
+        }
+    }
+
+    li.form-type-html{
+        .af-item-handle {
+            max-width: 402px;
+            background: #f6f7f766;
+            padding: 6px 15px;
+            opacity: 0.7;
+        }
+
+        .wrap-settings {
+            max-width: 434px;
+
+            .settings-inner {
+                border: 1px solid #e6e6e8;
+            }
+        }
+    }
+
+    li.form-type-repeater_start, li.form-type-repeater_end{
+        .af-item-handle {
+            max-width: 412px;
+            background: #ececec;
+            padding: 6px 15px;
+        }
+
+        .wrap-settings {
+            max-width: 444px;
+
+            .settings-inner {
+                border: 1px solid #e6e6e8;
             }
         }
     }
@@ -495,6 +539,13 @@
 
     }
 
+    .af-field-input-html {
+        >textarea {
+            font-size: 12px;
+            min-height: 120px;
+        }
+    }
+
     .constraints-settings {
         .expand-settings {
             >h3 {
@@ -521,17 +572,24 @@
         border-radius: 2px;
     }
 
+    .item-controls {
+        display: flex;
+        height: 100%;
+    }
+
     .item-docs,
     .item-type {
         display: inline-block;
-        padding: 12px 16px;
+        padding: 0px 16px;
         color: #646970;
         font-size: 12px;
         line-height: 1.5;
+        display: flex;
+        align-items: center;
     }
 
     .item-docs {
-        padding: 12px 5px;
+        padding: 0px 5px;
 
         &:hover {
             color: #2271b1;

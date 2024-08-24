@@ -53,17 +53,13 @@ jQuery(() => {
 	const toggleMore = document.querySelector(".af-fields li.more");
 	toggleMore?.addEventListener("click", (e) => {
 		e.preventDefault();
-		const more = document.querySelector(".af-fields .af-all-fields");
-		more.classList.toggle("active");
-
-		if (more.classList.contains("active")) {
-			setTimeout(() => (toggleMore.querySelector("span").innerHTML = "Load Less"), 500);
-		} else {
-			setTimeout(() => (toggleMore.querySelector("span").innerHTML = "Load More"), 500);
-		}
+		const more = document.querySelectorAll('.af-fields li[data-group="advanced"]');
+		[].forEach.call(more, (moreItem) => {
+			moreItem.style.display = moreItem.style.display === "none" ? "" : "none";
+		});
 	});
 
-    if (typeof form_metadata != undefined && form_metadata) {
+	if (typeof form_metadata != undefined && form_metadata) {
 		if (form_metadata.fields) {
 			form_metadata.fields.forEach((field, index) => {
 				dropView.add(field.type, field, index);
@@ -72,4 +68,31 @@ jQuery(() => {
 	}
 
 	(window as any).dropCollection = dropCollection;
+
+	let searchList = document.querySelectorAll(".af-fields li");
+	let searchInput: HTMLInputElement = document.querySelector("input.af-search");
+	searchInput.addEventListener("input", function () {
+		let text = searchInput.value.toString().toLowerCase();
+		[].forEach.call(searchList, (li) => {
+			let keywords = li.getAttribute("data-keywords");
+			if (!text || text.trim() == "") {
+				li.style.display = "";
+				return;
+			}
+			if (!keywords) {
+				li.style.display = "none";
+				return;
+			}
+
+			let keywordArray = keywords.toLowerCase().split(",");
+			let found = keywordArray.some((keyword) => {
+				if (keyword.toLowerCase().indexOf(text.toLowerCase()) > -1) {
+					return true;
+				}
+				return false;
+			});
+
+			li.style.display = found ? "" : "none";
+		});
+	});
 });

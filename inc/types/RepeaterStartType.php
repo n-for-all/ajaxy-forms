@@ -43,9 +43,6 @@ class RepeaterStartType extends AbstractType
 
      */
     public function buildView(FormView $view, FormInterface $form, array $options) {
-
-
-
         parent::buildView($view, $form, $options);
     }
 

@@ -9,12 +9,14 @@ use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormBuilder;
 
 class RepeaterEndType extends AbstractType
 {
@@ -22,6 +24,7 @@ class RepeaterEndType extends AbstractType
     {
         $resolver->setDefaults([
             'name' => '',
+            'compound' => true,
             'mapped' => false,
             'allow_extra_fields' => true,
             'fields' => [],
@@ -31,6 +34,8 @@ class RepeaterEndType extends AbstractType
             'delete_label' => 'Delete',
             'min' => '0',
             'max' => '-1',
+            'min_message' => 'You must have at least {{value}} items',
+            'max_message' => 'You cannot have more than {{value}} items',
             'invalid_message' => 'Please select a valid option.',
         ]);
         $resolver->setAllowedTypes('name', 'string');
@@ -40,6 +45,8 @@ class RepeaterEndType extends AbstractType
         $resolver->setAllowedTypes('delete_label', 'string');
         $resolver->setAllowedTypes('min', 'string');
         $resolver->setAllowedTypes('max', 'string');
+        $resolver->setAllowedTypes('min_message', 'string');
+        $resolver->setAllowedTypes('max_message', 'string');
         $resolver->setAllowedTypes('invalid_message', 'string');
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -49,6 +56,7 @@ class RepeaterEndType extends AbstractType
 
             //remove the constraints on template fields
             $nOptions['constraints'] = [];
+            $nOptions['required'] = '';
             $builder->add($field['name'] . '--index', $field['class'], $nOptions);
         }
 
@@ -59,9 +67,6 @@ class RepeaterEndType extends AbstractType
                 $form = $event->getForm();
 
                 $fields = $options['fields'];
-                // $name = $options['name'];
-
-                $nData = [];
 
                 $indexes = [];
                 foreach ($data as $key => $value) {
@@ -73,51 +78,18 @@ class RepeaterEndType extends AbstractType
                     foreach ($indexes as $index => $key) {
                         $fieldName = $field['name'] . '--' . $index;
                         $form->add($fieldName, $field['class'], $field['options'] ?? []);
-                        // if ($field['type'] == 'checkbox') {
-                        //     $form->get($key)->addModelTransformer(new CallbackTransformer(
-                        //         function ($activeAsString) {
-                        //             return (bool)(int)$activeAsString;
-                        //         },
-                        //         function ($activeAsBoolean) {
-                        //             return (string)(int)$activeAsBoolean;
-                        //         }
-                        //     ));
-                        // }
                     }
                 }
-                // foreach ($data as $key => $value) {
-                //     $fieldName = preg_replace('/--\d+$/', '', $key);
-                //     foreach ($fields as $field) {
-                //         if ($field['name'] == $fieldName) {
-                //             $form->add($key, $field['class'], $field['options'] ?? []);
-                //             if ($field['type'] == 'checkbox') {
-                //                 $form->get($key)->addModelTransformer(new CallbackTransformer(
-                //                     function ($activeAsString) {
-                //                         return (bool)(int)$activeAsString;
-                //                     },
-                //                     function ($activeAsBoolean) {
-                //                         return (string)(int)$activeAsBoolean;
-                //                     }
-                //                 ));
-                //             }
-                //             continue 2; // skip to next field
-                //         }
-                //     }
 
-                //     $form->addError($key, 'Field not found');
-                //     echo $key;
-                //     $form->add($key, $field['class'], $field['options'] ?? []);
-                //     if ($field['type'] == 'checkbox') {
-                //         $form->get($key)->addModelTransformer(new CallbackTransformer(
-                //             function ($activeAsString) {
-                //                 return (bool)(int)$activeAsString;
-                //             },
-                //             function ($activeAsBoolean) {
-                //                 return (string)(int)$activeAsBoolean;
-                //             }
-                //         ));
-                //     }
-                // }
+                $min = (int)$options['min'];
+                $max = (int)$options['max'];
+                if($min > 0 && count($indexes) < $min) {
+                    $form->addError(new FormError(\str_replace('{{value}}', $min, $options['min_message'])));
+                }
+
+                if($max > 0 && count($indexes) > $max) {
+                    $form->addError(new FormError(\str_replace('{{value}}', $max, $options['max_message'])));
+                }
             }
         );
     }
@@ -144,7 +116,7 @@ class RepeaterEndType extends AbstractType
             'max' => (int)$options['max'],
         ];
 
-        // parent::buildView($view, $form, $options);
+        parent::buildView($view, $form, $options);
     }
 
     /**

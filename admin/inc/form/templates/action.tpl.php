@@ -52,16 +52,16 @@
                                 <?php endif; ?>
                                 <?php switch ($type):
                                     case "textarea": ?>
-                                        <textarea <?php echo esc_html($attributes); ?> class="large-text" rows="5"><?php echo esc_textarea($action_values[$basename] ?? $property['default'] ?? ''); ?></textarea>
+                                        <textarea <?php echo $attributes; ?> class="large-text" rows="5"><?php echo esc_textarea($action_values[$basename] ?? $property['default'] ?? ''); ?></textarea>
                                     <?php break;
                                     case "checkbox": ?>
-                                        <input <?php echo esc_html($attributes); ?> class="regular-text ltr" />
+                                        <input <?php echo $attributes; ?> class="regular-text ltr" />
                                     <?php break;
                                     case "radio": ?>
-                                        <input <?php echo esc_html($attributes); ?> class="regular-text ltr" />
+                                        <input <?php echo $attributes; ?> class="regular-text ltr" />
                                     <?php break;
                                     case "select": ?>
-                                        <select <?php echo esc_html($attributes); ?>>
+                                        <select <?php echo $attributes; ?>>
                                             <?php
                                             $options = $property['options'] ?? [];
                                             $default = $property['default'] ?? '';
@@ -74,7 +74,7 @@
                                         </select>
                                     <?php break;
                                     default: ?>
-                                        <input <?php echo esc_html($attributes); ?> class="regular-text ltr" />
+                                        <input <?php echo $attributes; ?> class="regular-text ltr" />
                                         <?php break; ?>
                                 <?php endswitch; ?>
                             </div>

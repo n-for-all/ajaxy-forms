@@ -136,24 +136,29 @@
 
 {%- block repeater_end_row -%}
     <div id="{{ id }}" class="repeater" data-settings="{{ settings | json_encode }}">
-        <div class="repeater-items">
-            <script type="text/template" id="template-{{ id }}" class="repeater">
+        <script type="text/template" id="template-{{ id }}" class="repeater">
+            {% set repeaterWidget %}
                 {{ form_widget(form) }}
                 {% if form.vars.allow_delete %}
                     <button type="button" class="repeater-remove" data-action="remove">{{form.vars.delete_label}}</button>
                 {% endif %}
-            </script>
-        </div>    
-        {% if form.vars.allow_add or form.vars.allow_delete %}
+            {% endset %}
+            {{ repeaterWidget|escape }}
+        </script>
+        <div class="repeater-items"></div>    
+        {% if form.vars.allow_add %}
         <div class="repeater-controls">
-            {% if form.vars.allow_add %}
             <button type="button" class="repeater-add" data-action="add">{{form.vars.add_label}}</button>
-            {% endif %}
-            
         </div>
         {% endif %}
     </div>
 {%- endblock repeater_end_row -%}
+
+{%- block term_posts_widget -%}
+    <div {{ block('widget_container_attributes') }}>
+        {{ form_widget(form.children.terms) }}{{ form_widget(form.children.posts) }}
+    </div>
+{%- endblock term_posts_widget -%}
 
 {%- block rating_widget -%}
     <div {{ block('widget_container_attributes') }}>

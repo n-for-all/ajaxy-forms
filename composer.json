@@ -10,7 +10,9 @@
         "egulias/email-validator": "^3.0",
         "symfony/intl": "^5.0",
         "twilio/sdk": "8.1.0",
-        "fivetwo/remove-symfony-polyfill": "^8.1"
+        "fivetwo/remove-symfony-polyfill": "^8.1",
+        "symfony/mime": "5.0.0",
+        "symfony/http-foundation": "5.4.0"
     },
     "autoload": {
         "psr-4": {

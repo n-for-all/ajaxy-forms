@@ -167,11 +167,6 @@
     <div {{ block('widget_container_attributes') }}>
         <div class="flex items-center space-x-3">
             {{ form_widget(form.children.terms) }}{{ form_widget(form.children.posts) }}
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    new AjaxyTermPostsManager('#{{ form.children.terms.vars.id }}', '#{{ form.children.posts.vars.id }}', {{ form.vars.messages|json_encode|raw }}, {{ form.vars.post|json_encode|raw }});
-                });
-            </script>
         </div>
     </div>
 {%- endblock term_posts_widget -%}

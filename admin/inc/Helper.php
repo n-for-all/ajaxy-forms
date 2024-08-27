@@ -72,7 +72,7 @@ class Helper
                 $value = $value ? $key : ''; // Set empty string for true booleans
             }
             // Escape special characters for security
-            $escapedValue = htmlspecialchars((string)$value, ENT_QUOTES);
+            $escapedValue = esc_attr((string)$value);
 
             $htmlAttributes[] = "$key=\"$escapedValue\"";
         }

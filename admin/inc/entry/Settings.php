@@ -2,6 +2,8 @@
 
 namespace Ajaxy\Forms\Admin\Inc\Entry;
 
+use Ajaxy\Forms\Inc\Helper;
+
 class Settings
 {
     /**
@@ -180,7 +182,7 @@ class Settings
                         <label for="name"><?php esc_html_e('Form', 'ajaxy-forms') ?></label>
                     </th>
                     <td>
-                        <?php esc_html(ucwords($item['name'] ?? '')) ?>
+                        <?php echo esc_html($item['name'] ?? '') ?>
                     </td>
                 </tr>
                 <tr class="form-field">
@@ -190,7 +192,7 @@ class Settings
                     <td>
                         <?php
                         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                        echo isset($item['data']) ? Table::convert_to_fields_table(json_decode($item['data'], true)) : '';
+                        echo isset($item['data']) ? Helper::convert_to_fields_table(json_decode($item['data'], true)) : '';
                         ?> 
                     </td>
                 </tr>

@@ -62,6 +62,7 @@ class TermPostsType extends AbstractType
             'post_type'        => 'post',
             'multiple'        => '',
             'post_status'        => 'publish',
+            // 'required'        => '',
         ]);
 
         $resolver->setAllowedTypes('taxonomy', 'string');
@@ -81,6 +82,7 @@ class TermPostsType extends AbstractType
         $resolver->setAllowedTypes('default_option', 'string');
         $resolver->setAllowedTypes('invalid_message', 'string');
         $resolver->setAllowedTypes('multiple', 'string');
+        // $resolver->setAllowedTypes('required', 'string');
     }
 
     public function getBlockPrefix()
@@ -123,8 +125,6 @@ class TermPostsType extends AbstractType
             $builder->addEventListener(FormEvents::POST_SUBMIT, static function (FormEvent $event) use ($options) {
                 $form = $event->getForm();
                 $data = $event->getData();
-
-
                 $term = $data['terms'] ?? null;
                 if (!$term || trim($term) === '') {
                     $form->addError(new FormError($options['invalid_message']));
@@ -148,21 +148,35 @@ class TermPostsType extends AbstractType
     {
         $postFields = [
             'taxonomy' => $options['taxonomy'],
-            'orderby' => $options['post_orderby'],
-            'order' => $options['post_order'],
-            'include' => $options['post_include'],
-            'exclude' => $options['post_exclude'],
-            'meta_key' => $options['post_meta_key'],
-            'meta_value' => $options['post_meta_value'],
             'post_type' => $options['post_type'],
             // 'post_status' => $options['post_status'],
         ];
 
-        $view->vars['post'] = $postFields;
-        $view->vars['messages'] = [
+        if (isset($options['post_orderby']) && $options['post_orderby'] != '') {
+            $postFields['orderby'] = $options['post_orderby'];
+            $postFields['order'] = $options['post_order'] ?? 'DESC';
+        }
+
+        if (isset($options['post_include']) && $options['post_include'] != '') {
+            $postFields['include'] = $options['post_include'];
+        }
+        if (isset($options['post_exclude']) && $options['post_exclude'] != '') {
+            $postFields['exclude'] = $options['post_exclude'];
+        }
+
+        if (isset($options['post_meta_key']) && $options['post_meta_key'] != '') {
+            $postFields['meta_key'] = $options['post_meta_key'];
+            $postFields['meta_value'] = $options['post_meta_value'];
+        }
+
+        $messages = [
             'loading' => $options['loading_message'],
             'not_found' => $options['not_found_message'],
             'default_option' => $options['post_placeholder'],
         ];
+        $view->vars['attr']['data-term-posts'] = json_encode($postFields);
+        $view->vars['attr']['data-messages'] = json_encode($messages);
+        $view->vars['post'] = $postFields;
+        $view->vars['messages'] = $messages;
     }
 }

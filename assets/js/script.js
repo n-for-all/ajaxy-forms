@@ -240,17 +240,24 @@
     };
 
     var AjaxyTermPostsManager = /** @class */ (function () {
-        function AjaxyTermPostsManager(termSelector, postsSelector, messages, dataSettings) {
-            this.termsEl = document.querySelector(termSelector);
-            this.postsEl = document.querySelector(postsSelector);
+        function AjaxyTermPostsManager(form, container) {
+            var _this = this;
+            var dataSettings = JSON.parse(container.getAttribute("data-term-posts"));
+            var messages = JSON.parse(container.getAttribute("data-messages"));
+            this.form = form;
+            this.termsEl = container.querySelector("#".concat(container.id, "_terms"));
+            this.postsEl = container.querySelector("#".concat(container.id, "_posts"));
             if (!this.termsEl || !this.postsEl) {
                 return;
             }
             this.dataSettings = dataSettings;
-            this.loadingMessage = messages['loading'];
-            this.noPostsMessage = messages['not_found'];
-            this.defaultMessage = messages['default_option'];
+            this.loadingMessage = messages["loading"];
+            this.noPostsMessage = messages["not_found"];
+            this.defaultMessage = messages["default_option"];
             this.loadEvents();
+            this.form.element.addEventListener("reset", function () {
+                _this.postsEl.innerHTML = '<option value="">' + _this.defaultMessage + "</option>";
+            });
         }
         AjaxyTermPostsManager.prototype.loadEvents = function () {
             var _this = this;
@@ -298,10 +305,11 @@
     }());
 
     var AjaxyRepeater = /** @class */ (function () {
-        function AjaxyRepeater(element) {
+        function AjaxyRepeater(element, form) {
             var _this = this;
             var _a, _b;
             this.index = 0;
+            this.btnRemove = [];
             try {
                 console.log(element.getAttribute("data-settings"));
                 this.settings = JSON.parse(element.getAttribute("data-settings"));
@@ -313,9 +321,10 @@
             if (!this.settings) {
                 return;
             }
+            this.form = form;
             this.element = element;
             this.id = element.getAttribute("id");
-            this.template = (_a = document.querySelector("#template-".concat(this.id))) === null || _a === void 0 ? void 0 : _a.innerHTML;
+            this.template = this.unescapeHTML((_a = document.querySelector("#template-".concat(this.id))) === null || _a === void 0 ? void 0 : _a.innerHTML);
             this.items = element.querySelector(".repeater-items");
             if (this.settings.allowAdd) {
                 this.btnAdd = element.querySelector('[data-action="add"]');
@@ -330,10 +339,26 @@
                     this.index++;
                 }
             }
+            this.form.element.addEventListener("reset", function () {
+                _this.items.innerHTML = "";
+                _this.index = 0;
+                _this.btnRemove.map(function (btn) {
+                    btn.disabled = true;
+                    btn.style.display = "none";
+                });
+            });
         }
         AjaxyRepeater.prototype.isMax = function () {
             var _a;
             return ((_a = this.items) === null || _a === void 0 ? void 0 : _a.childElementCount) >= this.settings.max && this.settings.max > 0;
+        };
+        AjaxyRepeater.prototype.unescapeHTML = function (string) {
+            var elt = document.createElement("span");
+            elt.innerHTML = string;
+            var txt = elt.innerText;
+            elt.remove();
+            console.log(txt);
+            return txt;
         };
         AjaxyRepeater.prototype.add = function () {
             var _this = this;
@@ -341,22 +366,44 @@
             if (this.isMax()) {
                 return;
             }
+            this.btnRemove.map(function (btn) {
+                btn.disabled = false;
+                btn.style.display = "";
+            });
             var newItem = document.createElement("div");
             newItem.classList.add("repeater-item");
             newItem.innerHTML = (_a = this.template) === null || _a === void 0 ? void 0 : _a.replace(/--index/g, "--".concat(this.index));
             this.items.appendChild(newItem);
             if (this.settings.allowDelete) {
                 var btnRemove = newItem.querySelector('[data-action="remove"]');
-                btnRemove === null || btnRemove === void 0 ? void 0 : btnRemove.addEventListener("click", function (e) {
-                    e.preventDefault();
-                    if (_this.btnAdd)
-                        _this.btnAdd.disabled = false;
-                    newItem.remove();
-                });
+                if (btnRemove) {
+                    if (this.settings.min > 0 && this.items.childElementCount <= this.settings.min) {
+                        btnRemove.disabled = true;
+                        btnRemove.style.display = "none";
+                    }
+                    btnRemove.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        if (_this.btnAdd)
+                            _this.btnAdd.disabled = false;
+                        if ((_this.settings.min > 0 && _this.items.childElementCount > _this.settings.min) || _this.settings.min <= 0) {
+                            newItem.remove();
+                            if (_this.settings.min <= 0)
+                                return;
+                            if (_this.items.childElementCount <= _this.settings.min) {
+                                _this.btnRemove.map(function (btn) {
+                                    btn.disabled = true;
+                                    btn.style.display = "none";
+                                });
+                            }
+                        }
+                    });
+                    this.btnRemove.push(btnRemove);
+                }
             }
             if (this.isMax() && this.btnAdd) {
                 this.btnAdd.disabled = true;
             }
+            this.form.trigger("item-added", [newItem]);
         };
         return AjaxyRepeater;
     }());
@@ -366,15 +413,31 @@
             var _this = this;
             this.forms = {};
             this.repeaters = {};
+            this.term_posts = {};
             this.ready(function () {
                 var forms = document.querySelectorAll("form.ajaxy-form.is-ajax");
                 if (forms.length > 0) {
                     [].forEach.call(forms, function (form) {
                         _this.forms[form.name] = new Form(form);
+                        _this.forms[form.name].addListener("item-added", function (_a) {
+                            var elm = _a[0];
+                            var nTermPosts = elm.querySelectorAll("[data-term-posts]");
+                            if (nTermPosts.length) {
+                                nTermPosts.forEach(function (nTermPost) {
+                                    _this.term_posts[nTermPost.id] = new AjaxyTermPostsManager(_this.forms[form.name], nTermPost);
+                                });
+                            }
+                        });
+                        var term_posts = form.querySelectorAll("[data-term-posts]");
+                        if (term_posts.length > 0) {
+                            [].forEach.call(term_posts, function (term_post) {
+                                _this.term_posts[term_post.id] = new AjaxyTermPostsManager(_this.forms[form.name], term_post);
+                            });
+                        }
                         var repeaters = form.querySelectorAll(".repeater");
                         if (repeaters.length > 0) {
                             [].forEach.call(repeaters, function (repeater) {
-                                _this.repeaters[repeater.id] = new AjaxyRepeater(repeater);
+                                _this.repeaters[repeater.id] = new AjaxyRepeater(repeater, _this.forms[form.name]);
                             });
                         }
                     });

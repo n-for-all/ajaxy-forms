@@ -102,14 +102,14 @@ class Email implements ActionInterface
                 "type" => "text",
                 "name" => "subject",
                 "required" => true,
-                "help" => "Enter the subject of the email: you can use {{data.FIELD_NAME}} to display the field data",
+                "help" => "Enter the subject of the email: you can use {{data[FIELD_NAME].value}} to display the field value data or {{data[FIELD_NAME].value_label}} to display the field data label",
             ],
             [
                 "order" => 3,
                 "label" => "Message",
                 "type" => "textarea",
                 "name" => "message",
-                "help" => "Enter the message of the email: use {{table}} or {{data.FIELD_NAME}} to display the data",
+                "help" => "Enter the message of the email: use {{table}} or {{data[FIELD_NAME].value}} to display the field value data or {{data[FIELD_NAME].value_label}} to display the field data label, you can also use {{data[FIELD_NAME].type}} or {{data[FIELD_NAME].label}} to display the field type and label, supports twig language",
             ],
             [
                 "order" => 4,

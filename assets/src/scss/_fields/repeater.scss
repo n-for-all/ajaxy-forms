@@ -1,0 +1,15 @@
+.repeater {
+    margin-bottom: 1rem;
+
+    .repeater-items {
+        display: flex;
+        flex-direction: column;
+
+        .repeater-item {
+            padding: 1rem;
+            border: 1px solid #00000021;
+            margin-bottom: 1rem;
+            background-color: #ffffff91;
+        }
+    }
+}

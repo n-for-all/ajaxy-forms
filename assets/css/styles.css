@@ -83,6 +83,19 @@
 .ajaxy-form .rating > input:checked ~ label:hover ~ label {
   color: #FFDF00;
 }
+.ajaxy-form .repeater {
+  margin-bottom: 1rem;
+}
+.ajaxy-form .repeater .repeater-items {
+  display: flex;
+  flex-direction: column;
+}
+.ajaxy-form .repeater .repeater-items .repeater-item {
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1294117647);
+  margin-bottom: 1rem;
+  background-color: rgba(255, 255, 255, 0.568627451);
+}
 
 @keyframes rotation {
   0% {

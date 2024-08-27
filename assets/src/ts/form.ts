@@ -127,7 +127,7 @@ class Form {
 		this.listeners[name] = callback;
 	};
 
-	public trigger(name: string, params?: [HTMLFormElement, () => void]): void {
+	public trigger(name: string, params?: [HTMLFormElement, () => void] | any): void {
 		if (this.listeners[name]) {
 			this.listeners[name].call(this, params);
 		}

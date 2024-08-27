@@ -6,18 +6,35 @@ import AjaxyRepeater from "./repeater";
 class AjaxyForms {
 	forms: { [x: string]: Form } = {};
 	repeaters: { [x: string]: AjaxyRepeater } = {};
+	term_posts: { [x: string]: AjaxyTermPostsManager } = {};
 	constructor() {
 		this.ready(() => {
 			let forms = document.querySelectorAll("form.ajaxy-form.is-ajax");
 			if (forms.length > 0) {
 				[].forEach.call(forms, (form) => {
 					this.forms[form.name] = new Form(form);
+                    this.forms[form.name].addListener("item-added", ([elm]) => {
+						let nTermPosts = elm.querySelectorAll("[data-term-posts]");
+						if (nTermPosts.length) {
+							nTermPosts.forEach((nTermPost) => {
+								this.term_posts[nTermPost.id] = new AjaxyTermPostsManager(this.forms[form.name], nTermPost);
+							});
+						}
+					});
+
+					let term_posts = form.querySelectorAll(`[data-term-posts]`);
+					if (term_posts.length > 0) {
+						[].forEach.call(term_posts, (term_post) => {
+							this.term_posts[term_post.id] = new AjaxyTermPostsManager(this.forms[form.name], term_post);
+						});
+					}
+
                     let repeaters = form.querySelectorAll(`.repeater`);
-                    if(repeaters.length > 0){
-                        [].forEach.call(repeaters, (repeater) => {
-                            this.repeaters[repeater.id] = new AjaxyRepeater(repeater);
-                        });
-                    }
+					if (repeaters.length > 0) {
+						[].forEach.call(repeaters, (repeater) => {
+							this.repeaters[repeater.id] = new AjaxyRepeater(repeater, this.forms[form.name]);
+						});
+					}
 				});
 			}
 		});

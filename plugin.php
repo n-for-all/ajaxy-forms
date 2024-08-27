@@ -24,6 +24,8 @@ require 'functions.php';
 use Ajaxy\Forms\Inc\Constraints;
 use Ajaxy\Forms\Inc\Data;
 use Ajaxy\Forms\Inc\Form;
+use Ajaxy\Forms\Inc\Helper;
+use Ajaxy\Forms\Inc\Types\Transformer\UploadedFileTransformer;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Validation;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
@@ -37,6 +39,8 @@ use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\File;
 use WP_Error;
 
 define("AJAXY_FORMS_PLUGIN_URL", plugins_url('', __FILE__));
@@ -175,6 +179,7 @@ class Plugin
             $field['constraints'] = $field['constraints'] ?? [];
             if (isset($field['required']) && $field['required'] == "1") {
                 $field['constraints'][] = ['type' => 'not_blank', 'message' => $field_options['invalid_message'] ?? __('This field is required.')];
+                $field['required'] = '';
             }
 
             if (!empty($field['constraints'])) {
@@ -278,7 +283,10 @@ class Plugin
                             'options' => $field_options
                         ];
                     }
-
+                    continue;
+                }
+                if ($field['type'] == 'file') {
+                    Helper::create_file_field($builder, $field, $field_options);
                     continue;
                 }
                 $builder->add($field['name'], $this->get_field($field['type']), $field_options);
@@ -320,15 +328,12 @@ class Plugin
      */
     public function render($name, $form, $theme = null)
     {
-
-        // wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js', [], null, true);
         $twig = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array(
             AJAXY_FORMS_PLUGIN_DIR . 'inc/themes',
             AJAXY_FORMS_PLUGIN_DIR . 'vendor/symfony/twig-bridge/Resources/views/Form',
         )), [
             'debug' => true
         ]);
-
 
         // Set up the Translation component
         $translator = new Translator('en');
@@ -382,6 +387,7 @@ class Plugin
         $form->handleRequest();
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+            $data = Helper::handle_files($data);
 
             $registered_form = Data::parse_form($form_name);
             $actions = $registered_form->get_actions();

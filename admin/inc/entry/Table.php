@@ -4,6 +4,7 @@
 namespace Ajaxy\Forms\Admin\Inc\Entry;
 
 use Ajaxy\Forms\Inc\Data;
+use Ajaxy\Forms\Inc\Helper;
 
 if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
@@ -182,7 +183,7 @@ class Table extends \WP_List_Table
             return '';
         }
 
-        return self::convert_to_fields_table(json_decode($item['data'], true));
+        return Helper::convert_to_fields_table(json_decode($item['data'], true));
     }
 
     function column_metadata($item)
@@ -337,29 +338,6 @@ class Table extends \WP_List_Table
                 $table .= $value;
             }
             $table .= '</td></tr>';
-        }
-        $table .= '</table>';
-        return $table;
-    }
-
-    public static function convert_to_fields_table($data)
-    {
-        if (!$data) {
-            return '';
-        }
-
-        $table = '<table class="fixed widefat striped ajaxy-data-table">';
-        foreach ($data as $key => $field) {
-            $table .= '<tr valign="top">';
-            $table .= '<td><strong>' . (!is_array($field) ? $key : $field['label']) . ':</strong></td>';
-            if (!is_array($field)) {
-                $table .= '<td>' . $field . '</td>';
-            } elseif (is_object($field['value_label']) || is_array($field['value_label'])) {
-                $table .= sprintf('<td>%s</td>', \implode(', ', $field['value_label']));
-            } else {
-                $table .=  sprintf('<td>%s</td>', $field['value_label']);
-            }
-            $table .= '</tr>';
         }
         $table .= '</table>';
         return $table;

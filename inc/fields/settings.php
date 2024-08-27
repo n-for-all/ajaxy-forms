@@ -1540,8 +1540,142 @@ return [
                 "name" => "multiple",
                 "label" => "Multiple",
                 "help" => "Whether the file allows multiple uploads",
+            ],
+            [
+                "section" => "basic",
+                "order" => 6,
+                "name" => "extensions",
+                "label" => "Extensions",
+                "type" => "repeater",
+                "fields" => [
+                    [
+                        "name" => "value",
+                        "label" => "Extension",
+                        "type" => "text",
+                    ]
+                ]
+            ],
+            [
+                "section" => "basic",
+                "order" => 6,
+                "name" => "mime_types",
+                "label" => "Mime Types",
+                "type" => "repeater",
+                "fields" => [
+                    [
+                        "name" => "value",
+                        "label" => "Mime Type",
+                        "type" => "text"
+                    ]
+                ],
+                "help" => "This option allows you to validate a custom mime type<br/>Default: keep empty to use only extension"
+            ],
+            [
+                "section" => "basic",
+                "order" => 7,
+                "name" => "extensions_message",
+                "label" => "Extensions Message",
+                "type" => "text",
+                "help" => "The message displayed if the extension of the file is not a valid extension per the extensions option.<br/>Default: The extension of the file is invalid ({{ extension }}). Allowed extensions are {{ extensions }}"
+            ],
+            [
+                "section" => "basic",
+                "order" => 8,
+                "name" => "mime_types_message",
+                "label" => "Mime Types Message",
+                "type" => "text",
+                "help" => "The message displayed if the mimetype of the file is not a valid.<br/>Default: The mime type of the file is invalid ({{ type }}). Allowed mime types are {{ types }}."
+            ],
+            [
+                "section" => "advanced",
+                "order" => 6,
+                "name" => "upload_error_message",
+                "label" => "Upload Error Message",
+                "type" => "text",
+                "help" => "The message that is displayed if the uploaded file could not be uploaded for some unknown reason.<br/>Default: The file could not be uploaded."
+            ],
+            [
+                "section" => "advanced",
+                "order" => 7,
+                "name" => "max_size",
+                "label" => "Max Size",
+                "type" => "text",
+                "help" => "If set, the size of the underlying file must be below this file size in order to be valid. <br/>Default: Configured by system"
+            ],
+            [
+                "section" => "advanced",
+                "order" => 8,
+                "name" => "max_size_message",
+                "label" => "Max Size Message",
+                "type" => "text",
+                "help" => "The message displayed if the file is larger than the maxSize option."
+            ],
+            [
+                "section" => "advanced",
+                "order" => 11,
+                "name" => "not_found_message",
+                "label" => "Not Found Message",
+                "type" => "text",
+                "help" => "The message displayed if no file can be found at the given path.<br/>Default: The file could not be found."
+            ],
+            [
+                "section" => "advanced",
+                "order" => 12,
+                "name" => "not_readable_message",
+                "label" => "Not Readable Message",
+                "type" => "text",
+                "help" => "The message displayed if the file is not readable.<br/>Default: The file is not readable."
+            ],
+            [
+                "section" => "advanced",
+                "order" => 13,
+                "name" => "upload_cant_write_error_message",
+                "label" => "Upload Can't Write Error Message",
+                "type" => "text",
+                "help" => "The message that is displayed if the uploaded file can't be stored in the temporary folder.<br/>Default: Cannot write temporary file to disk."
+            ],
+            [
+                "section" => "advanced",
+                "order" => 14,
+                "name" => "disallow_empty_message",
+                "label" => "Disallow Empty Message",
+                "type" => "text",
+                "help" => "This constraint checks if the uploaded file is empty (i.e. 0 bytes). If it is, this message is displayed<br/>Default: An empty file is not allowed"
+            ],
+            [
+                "section" => "advanced",
+                "order" => 15,
+                "name" => "upload_form_size_error_message",
+                "label" => "Upload Form Size Error Message",
+                "type" => "text",
+                "help" => "The message that is displayed if the uploaded file is larger than allowed by the HTML file input field.<br/>Default: The file is too large"
+            ],
+            [
+                "section" => "advanced",
+                "order" => 16,
+                "name" => "upload_ini_size_error_message",
+                "label" => "Upload Ini Size Error Message",
+                "type" => "text",
+                "help" => "The message that is displayed if the uploaded file is larger than the upload_max_filesize php.ini setting.<br/>Default: The file is too large. Allowed maximum size is {{ limit }} {{ suffix }}."
+            ],
+            [
+                "section" => "advanced",
+                "order" => 17,
+                "name" => "upload_no_file_error_message",
+                "label" => "Upload No File Error Message",
+                "type" => "text",
+                "help" => "The message that is displayed if no file was uploaded.<br/>Default: No file was uploaded."
+            ],
+            [
+                "section" => "advanced",
+                "order" => 18,
+                "name" => "upload_partial_error_message",
+                "label" => "Upload Partial Error Message",
+                "type" => "text",
+                "help" => "The message that is displayed if the uploaded file was only partially uploaded.<br/>Default: The uploaded file was only partially uploaded."
             ]
         ],
+        "disable_constraints" => true,
         "order" => 7,
         "keywords" => "file",
         "common" => true
@@ -1622,7 +1756,8 @@ return [
                 "label" => "Allow Add",
                 "default" => false,
                 "help" => 'If checked, new items can be added to the repeater.',
-            ],[
+            ],
+            [
                 "section" => "basic",
                 "order" => 2,
                 "type" => "text",
@@ -1648,7 +1783,8 @@ return [
                 "label" => "Delete Label",
                 "default" => "Delete",
                 "help" => 'The label for the delete button.',
-            ],[
+            ],
+            [
                 "section" => "basic",
                 "order" => 5,
                 "type" => "number",
@@ -1666,7 +1802,25 @@ return [
                 "default" => "-1",
                 "help" => 'The maximum number of items that can be added to the repeater, (-1 for unlimited).',
             ],
-            
+            [
+                "section" => "advanced",
+                "order" => 2,
+                "type" => "text",
+                "name" => "min_message",
+                "label" => "Minimum Message",
+                "default" => 'You must have at least {{value}} items',
+                "help" => 'The message to display when the minimum number of items is not met.',
+            ],
+            [
+                "section" => "advanced",
+                "order" => 3,
+                "type" => "text",
+                "name" => "max_message",
+                "label" => "Maximum Message",
+                "default" => 'You can only have {{value}} items',
+                "help" => 'The message to display when the maximum number of items is exceeded.',
+            ],
+
         ],
         "disable_constraints" => true,
     ],

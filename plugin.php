@@ -360,7 +360,7 @@ class Plugin
             )
         ));
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->on_submit($name, $form)) {
             $registered_form = Data::parse_form($name);
             $messages = array_replace([
                 'success' => __('Form submitted successfully', "ajaxy-forms"),
@@ -387,6 +387,7 @@ class Plugin
         $form->handleRequest();
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+
             $data = Helper::handle_files($data);
 
             $registered_form = Data::parse_form($form_name);

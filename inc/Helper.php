@@ -310,8 +310,7 @@ class Helper
         return $nData;
     }
 
-    public static function create_file_field($builder, $field, $field_options)
-    {
+    public static function parse_file_field_options($field_options, $validation = true){
         $mime_types = [];
         if (isset($field_options['mime_types']) && !empty($field_options['mime_types'])) {
             $mime_types = \array_map(function ($mime_type) {
@@ -320,42 +319,66 @@ class Helper
         } else {
             $mime_types = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif'];
         }
-
-        $extensions = $field_options['extensions'] ?? null;
-        $extensions_message = $field_options['extensions_message'] ?? null;
-        $constraint = new File(
-            [],
-            $field_options['max_size'] ? $field_options['max_size'] : null,
-            null,
-            $mime_types,
-            $field_options['not_found_message'] ?? null,
-            $field_options['not_readable_message'] ?? null,
-            $field_options['max_size_message'] ?? null,
-            $field_options['mime_types_message'] ?? null,
-            null,
-            $field_options['upload_ini_size_error_message'] ?? null,
-            $field_options['upload_form_size_error_message'] ?? null,
-            $field_options['upload_partial_error_message'] ?? null,
-            $field_options['upload_no_file_error_message'] ?? null,
-            null,
-            $field_options['upload_cant_write_error_message'] ?? null,
-            null,
-            $field_options['upload_error_message'] ?? null
-
-        );
+        
 
         $field_options = array_filter($field_options, function ($key) {
             return !in_array($key, ['max_size', 'max_size_message', 'extensions', 'extensions_message', 'not_found_message', 'not_readable_message', 'upload_cant_write_error_message', 'upload_error_message', 'upload_form_size_error_message', 'upload_ini_size_error_message', 'upload_no_file_error_message', 'upload_partial_error_message', 'mime_types', 'mime_types_message']);
         }, ARRAY_FILTER_USE_KEY);
 
         $multiple = $field_options['multiple'] ?? false;
-        if ($multiple) {
-            $field_options['constraints'][] = $constraint;
-            $field_options['constraints'] = new All($field_options['constraints']);
-        } else {
-            $field_options['constraints'] = $constraint;
-        }
 
+        if ($validation) {
+            $constraint = new File(
+                [],
+                $field_options['max_size'] ? $field_options['max_size'] : null,
+                null,
+                $mime_types,
+                $field_options['not_found_message'] ?? null,
+                $field_options['not_readable_message'] ?? null,
+                $field_options['max_size_message'] ?? null,
+                $field_options['mime_types_message'] ?? null,
+                null,
+                $field_options['upload_ini_size_error_message'] ?? null,
+                $field_options['upload_form_size_error_message'] ?? null,
+                $field_options['upload_partial_error_message'] ?? null,
+                $field_options['upload_no_file_error_message'] ?? null,
+                null,
+                $field_options['upload_cant_write_error_message'] ?? null,
+                null,
+                $field_options['upload_error_message'] ?? null
+    
+            );
+            if ($multiple) {
+                $field_options['constraints'][] = $constraint;
+                $field_options['constraints'] = new All($field_options['constraints']);
+            } else {
+                $field_options['constraints'] = $constraint;
+            }
+        }else{
+            unset($field_options['constraints']);
+            unset($field_options['required']);
+        }
+        return $field_options;
+    }
+    public static function validate_upload($form, $file, $extensions, $extensions_message, $invalid_message, $required = true){
+        if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+            if ($extensions && \count($extensions) > 0) {
+                if (!in_array(strtolower($file->getClientOriginalExtension()), $extensions)) {
+                    $message = \str_replace(['{{ extension }}', '{{ extensions }}'], [$file->getClientOriginalExtension(), implode(', ', $extensions)], $extensions_message ? $extensions_message : 'The extension of the file is invalid ({{ extension }}). Allowed extensions are {{ extensions }}');
+                    $form->addError(new \Symfony\Component\Form\FormError($message));
+                }
+            }
+        } else if ($required) {
+            $form->addError(new \Symfony\Component\Form\FormError($invalid_message));
+        }
+    }
+    public static function create_file_field($builder, $field, $field_options, $validation = true)
+    {
+        $field_options = self::parse_file_field_options($field_options, $validation);
+
+        $extensions = $field_options['extensions'] ?? null;
+        $extensions_message = $field_options['extensions_message'] ?? null;
+        $multiple = $field_options['multiple'] ?? false;
         $required = $field_options['required'] ?? false;
 
         $invalid_message = $field_options['invalid_message'] ?? __('The file is invalid.', 'ajaxy-forms');
@@ -372,16 +395,7 @@ class Helper
                 }
                 if ($data && !empty($data)) {
                     foreach ($data as $file) {
-                        if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
-                            if ($extensions) {
-                                if (!in_array(strtolower($file->getClientOriginalExtension()), $extensions)) {
-                                    $message = \str_replace(['{{ extension }}', '{{ extensions }}'], [$file->getClientOriginalExtension(), implode(', ', $extensions)], $extensions_message ? $extensions_message : 'The extension of the file is invalid ({{ extension }}). Allowed extensions are {{ extensions }}');
-                                    $form->addError(new \Symfony\Component\Form\FormError($message));
-                                }
-                            }
-                        } else if ($required) {
-                            $form->addError(new \Symfony\Component\Form\FormError($invalid_message));
-                        }
+                        self::validate_upload($form, $file, $extensions, $extensions_message, $invalid_message, $required);
                     }
                 } else if ($required) {
                     $form->addError(new \Symfony\Component\Form\FormError($invalid_message));
@@ -392,19 +406,8 @@ class Helper
             $builder->get($field['name'])->addEventListener(FormEvents::POST_SUBMIT, function ($event) use ($extensions, $extensions_message, $invalid_message, $required) {
                 $form = $event->getForm();
                 $data = $form->getData();
-                if ($data instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
-                    if ($extensions) {
-                        $extensions = \array_map(function ($ext) {
-                            return trim(strtolower($ext['value']));
-                        }, (array)$extensions);
-                        if (!in_array(strtolower($data->getClientOriginalExtension()), $extensions)) {
-                            $message = \str_replace(['{{ extension }}', '{{ extensions }}'], [$data->getClientOriginalExtension(), implode(', ', $extensions)], $extensions_message ? $extensions_message : 'The extension of the file is invalid ({{ extension }}). Allowed extensions are {{ extensions }}');
-                            $form->addError(new \Symfony\Component\Form\FormError($message));
-                        }
-                    }
-                } else if ($required) {
-                    $form->addError(new \Symfony\Component\Form\FormError($invalid_message));
-                }
+                
+                self::validate_upload($form, $data, $extensions, $extensions_message, $invalid_message, $required);
             });
         }
     }

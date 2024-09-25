@@ -3,7 +3,7 @@ name: Deploy to WordPress.org Repository
 
 # Here we can define the events "on" which the action should be triggered.
 on:
-
+  workflow_dispatch:
   # Since we want to publish new versions of our plugin, we only want this action to
   # run when publishing a new release.
   #

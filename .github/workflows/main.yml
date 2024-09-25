@@ -62,7 +62,7 @@ jobs:
       id: deploy
 
       # The use statement lets us pull in the work done by 10up to deploy the plugin to the WordPress repository.
-      uses: 10up/action-wordpress-plugin-deploy@latest
+      uses: 10up/action-wordpress-plugin-deploy@stable
 
       # Steps can also provide arguments, so this configures 10up's action to also generate a zip file.
       with:

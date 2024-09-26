@@ -3,7 +3,7 @@
         'name' => 'n_for_all/ajaxy-forms',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '862b848f0186ce0c343b2b1c5a1aff9b28e08e9c',
+        'reference' => '4f8bd724619361d2ac50d57f89921d2d46d4a55a',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -49,7 +49,7 @@
         'n_for_all/ajaxy-forms' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '862b848f0186ce0c343b2b1c5a1aff9b28e08e9c',
+            'reference' => '4f8bd724619361d2ac50d57f89921d2d46d4a55a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

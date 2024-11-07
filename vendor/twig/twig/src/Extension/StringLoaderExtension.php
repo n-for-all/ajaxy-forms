@@ -8,22 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Extension;
 
-namespace Twig\Extension;
-
-use Twig\Environment;
-use Twig\TemplateWrapper;
-use Twig\TwigFunction;
-
+use Isolated\Twig\Environment;
+use Isolated\Twig\TemplateWrapper;
+use Isolated\Twig\TwigFunction;
 final class StringLoaderExtension extends AbstractExtension
 {
-    public function getFunctions(): array
+    public function getFunctions() : array
     {
-        return [
-            new TwigFunction('template_from_string', [self::class, 'templateFromString'], ['needs_environment' => true]),
-        ];
+        return [new TwigFunction('template_from_string', [self::class, 'templateFromString'], ['needs_environment' => \true])];
     }
-
     /**
      * Loads a template from a string.
      *
@@ -34,7 +29,7 @@ final class StringLoaderExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function templateFromString(Environment $env, $template, ?string $name = null): TemplateWrapper
+    public static function templateFromString(Environment $env, $template, ?string $name = null) : TemplateWrapper
     {
         return $env->createTemplate((string) $template, $name);
     }

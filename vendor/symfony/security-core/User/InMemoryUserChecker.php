@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\User;
 
-namespace Symfony\Component\Security\Core\User;
-
-use Symfony\Component\Security\Core\Exception\AccountExpiredException;
-use Symfony\Component\Security\Core\Exception\CredentialsExpiredException;
-use Symfony\Component\Security\Core\Exception\DisabledException;
-use Symfony\Component\Security\Core\Exception\LockedException;
-
+use Isolated\Symfony\Component\Security\Core\Exception\AccountExpiredException;
+use Isolated\Symfony\Component\Security\Core\Exception\CredentialsExpiredException;
+use Isolated\Symfony\Component\Security\Core\Exception\DisabledException;
+use Isolated\Symfony\Component\Security\Core\Exception\LockedException;
 /**
  * Checks the state of the in-memory user account.
  *
@@ -30,13 +28,11 @@ class InMemoryUserChecker implements UserCheckerInterface
         if (!$user instanceof InMemoryUser && !$user instanceof User) {
             return;
         }
-
         if (!$user->isEnabled()) {
             $ex = new DisabledException('User account is disabled.');
             $ex->setUser($user);
             throw $ex;
         }
-
         // @deprecated since Symfony 5.3
         if (User::class === \get_class($user)) {
             if (!$user->isAccountNonLocked()) {
@@ -44,7 +40,6 @@ class InMemoryUserChecker implements UserCheckerInterface
                 $ex->setUser($user);
                 throw $ex;
             }
-
             if (!$user->isAccountNonExpired()) {
                 $ex = new AccountExpiredException('User account has expired.');
                 $ex->setUser($user);
@@ -52,14 +47,12 @@ class InMemoryUserChecker implements UserCheckerInterface
             }
         }
     }
-
     public function checkPostAuth(UserInterface $user)
     {
         // @deprecated since Symfony 5.3, noop in 6.0
         if (User::class !== \get_class($user)) {
             return;
         }
-
         if (!$user->isCredentialsNonExpired()) {
             $ex = new CredentialsExpiredException('User credentials have expired.');
             $ex->setUser($user);
@@ -67,7 +60,6 @@ class InMemoryUserChecker implements UserCheckerInterface
         }
     }
 }
-
-if (!class_exists(UserChecker::class, false)) {
-    class_alias(InMemoryUserChecker::class, UserChecker::class);
+if (!\class_exists(UserChecker::class, \false)) {
+    \class_alias(InMemoryUserChecker::class, UserChecker::class);
 }

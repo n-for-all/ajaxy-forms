@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'CNY' => [
-            '¥',
-            'CNY',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['CNY' => ['¥', 'CNY']]];

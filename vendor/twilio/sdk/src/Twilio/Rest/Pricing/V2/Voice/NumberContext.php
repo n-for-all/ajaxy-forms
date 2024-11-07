@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Pricing\V2\Voice;
 
-
-namespace Twilio\Rest\Pricing\V2\Voice;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class NumberContext extends InstanceContext
-    {
+{
     /**
      * Initialize the NumberContext
      *
      * @param Version $version Version that contains the resource
      * @param string $destinationNumber The destination phone number, in [E.164](https://www.twilio.com/docs/glossary/what-e164) format, for which to fetch the origin-based voice pricing information. E.164 format consists of a + followed by the country code and subscriber number.
      */
-    public function __construct(
-        Version $version,
-        $destinationNumber
-    ) {
+    public function __construct(Version $version, $destinationNumber)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'destinationNumber' =>
-            $destinationNumber,
-        ];
-
-        $this->uri = '/Voice/Numbers/' . \rawurlencode($destinationNumber)
-        .'';
+        $this->solution = ['destinationNumber' => $destinationNumber];
+        $this->uri = '/Voice/Numbers/' . \rawurlencode($destinationNumber) . '';
     }
-
     /**
      * Fetch the NumberInstance
      *
@@ -55,36 +42,23 @@ class NumberContext extends InstanceContext
      * @return NumberInstance Fetched NumberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): NumberInstance
+    public function fetch(array $options = []) : NumberInstance
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'OriginationNumber' =>
-                $options['originationNumber'],
-        ]);
-
+        $params = Values::of(['OriginationNumber' => $options['originationNumber']]);
         $payload = $this->version->fetch('GET', $this->uri, $params, []);
-
-        return new NumberInstance(
-            $this->version,
-            $payload,
-            $this->solution['destinationNumber']
-        );
+        return new NumberInstance($this->version, $payload, $this->solution['destinationNumber']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Pricing.V2.NumberContext ' . \implode(' ', $context) . ']';
     }

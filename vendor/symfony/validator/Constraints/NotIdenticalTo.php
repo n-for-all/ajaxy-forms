@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Constraints;
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
 /**
  * @Annotation
@@ -22,10 +21,6 @@ namespace Symfony\Component\Validator\Constraints;
 class NotIdenticalTo extends AbstractComparison
 {
     public const IS_IDENTICAL_ERROR = '4aaac518-0dda-4129-a6d9-e216b9b454a0';
-
-    protected static $errorNames = [
-        self::IS_IDENTICAL_ERROR => 'IS_IDENTICAL_ERROR',
-    ];
-
+    protected static $errorNames = [self::IS_IDENTICAL_ERROR => 'IS_IDENTICAL_ERROR'];
     public $message = 'This value should not be identical to {{ compared_value_type }} {{ compared_value }}.';
 }

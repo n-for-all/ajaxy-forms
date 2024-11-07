@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry;
 
-
-namespace Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Base\PhoneNumberCapabilities;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Base\PhoneNumberCapabilities;
 /**
  * @property string|null $friendlyName
  * @property string|null $phoneNumber
@@ -53,27 +49,10 @@ class TollFreeInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $accountSid, string $countryCode)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'phoneNumber' => Values::array_get($payload, 'phone_number'),
-            'lata' => Values::array_get($payload, 'lata'),
-            'locality' => Values::array_get($payload, 'locality'),
-            'rateCenter' => Values::array_get($payload, 'rate_center'),
-            'latitude' => Values::array_get($payload, 'latitude'),
-            'longitude' => Values::array_get($payload, 'longitude'),
-            'region' => Values::array_get($payload, 'region'),
-            'postalCode' => Values::array_get($payload, 'postal_code'),
-            'isoCountry' => Values::array_get($payload, 'iso_country'),
-            'addressRequirements' => Values::array_get($payload, 'address_requirements'),
-            'beta' => Values::array_get($payload, 'beta'),
-            'capabilities' => Deserialize::phoneNumberCapabilities(Values::array_get($payload, 'capabilities')),
-        ];
-
-        $this->solution = ['accountSid' => $accountSid, 'countryCode' => $countryCode, ];
+        $this->properties = ['friendlyName' => Values::array_get($payload, 'friendly_name'), 'phoneNumber' => Values::array_get($payload, 'phone_number'), 'lata' => Values::array_get($payload, 'lata'), 'locality' => Values::array_get($payload, 'locality'), 'rateCenter' => Values::array_get($payload, 'rate_center'), 'latitude' => Values::array_get($payload, 'latitude'), 'longitude' => Values::array_get($payload, 'longitude'), 'region' => Values::array_get($payload, 'region'), 'postalCode' => Values::array_get($payload, 'postal_code'), 'isoCountry' => Values::array_get($payload, 'iso_country'), 'addressRequirements' => Values::array_get($payload, 'address_requirements'), 'beta' => Values::array_get($payload, 'beta'), 'capabilities' => Deserialize::phoneNumberCapabilities(Values::array_get($payload, 'capabilities'))];
+        $this->solution = ['accountSid' => $accountSid, 'countryCode' => $countryCode];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -86,23 +65,19 @@ class TollFreeInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.TollFreeInstance]';
     }
 }
-

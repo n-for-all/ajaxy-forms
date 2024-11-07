@@ -13,43 +13,30 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service;
 
-namespace Twilio\Rest\Verify\V2\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class WebhookList extends ListResource
-    {
+{
     /**
      * Construct the WebhookList
      *
      * @param Version $version Version that contains the resource
      * @param string $serviceSid The unique SID identifier of the Service.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid
-    ) {
+    public function __construct(Version $version, string $serviceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Webhooks';
+        $this->solution = ['serviceSid' => $serviceSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Webhooks';
     }
-
     /**
      * Create the WebhookInstance
      *
@@ -60,34 +47,15 @@ class WebhookList extends ListResource
      * @return WebhookInstance Created WebhookInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $friendlyName, array $eventTypes, string $webhookUrl, array $options = []): WebhookInstance
+    public function create(string $friendlyName, array $eventTypes, string $webhookUrl, array $options = []) : WebhookInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $friendlyName,
-            'EventTypes' =>
-                Serialize::map($eventTypes,function ($e) { return $e; }),
-            'WebhookUrl' =>
-                $webhookUrl,
-            'Status' =>
-                $options['status'],
-            'Version' =>
-                $options['version'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $friendlyName, 'EventTypes' => Serialize::map($eventTypes, function ($e) {
+            return $e;
+        }), 'WebhookUrl' => $webhookUrl, 'Status' => $options['status'], 'Version' => $options['version']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new WebhookInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid']
-        );
+        return new WebhookInstance($this->version, $payload, $this->solution['serviceSid']);
     }
-
-
     /**
      * Reads WebhookInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -103,11 +71,10 @@ class WebhookList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return WebhookInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams WebhookInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -126,15 +93,12 @@ class WebhookList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of WebhookInstance records from the API.
      * Request is executed immediately
@@ -144,24 +108,12 @@ class WebhookList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return WebhookPage Page of WebhookInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): WebhookPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : WebhookPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new WebhookPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of WebhookInstance records from the API.
      * Request is executed immediately
@@ -169,40 +121,26 @@ class WebhookList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return WebhookPage Page of WebhookInstance
      */
-    public function getPage(string $targetUrl): WebhookPage
+    public function getPage(string $targetUrl) : WebhookPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new WebhookPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a WebhookContext
      *
      * @param string $sid The Twilio-provided string that uniquely identifies the Webhook resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): WebhookContext
+    public function getContext(string $sid) : WebhookContext
     {
-        return new WebhookContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $sid
-        );
+        return new WebhookContext($this->version, $this->solution['serviceSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Verify.V2.WebhookList]';
     }

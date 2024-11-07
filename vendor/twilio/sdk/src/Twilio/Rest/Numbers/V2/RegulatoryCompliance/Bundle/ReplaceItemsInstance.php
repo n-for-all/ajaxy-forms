@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle;
 
-
-namespace Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -48,24 +44,10 @@ class ReplaceItemsInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $bundleSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'regulationSid' => Values::array_get($payload, 'regulation_sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'status' => Values::array_get($payload, 'status'),
-            'validUntil' => Deserialize::dateTime(Values::array_get($payload, 'valid_until')),
-            'email' => Values::array_get($payload, 'email'),
-            'statusCallback' => Values::array_get($payload, 'status_callback'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-        ];
-
-        $this->solution = ['bundleSid' => $bundleSid, ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'regulationSid' => Values::array_get($payload, 'regulation_sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'status' => Values::array_get($payload, 'status'), 'validUntil' => Deserialize::dateTime(Values::array_get($payload, 'valid_until')), 'email' => Values::array_get($payload, 'email'), 'statusCallback' => Values::array_get($payload, 'status_callback'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated'))];
+        $this->solution = ['bundleSid' => $bundleSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -78,23 +60,19 @@ class ReplaceItemsInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V2.ReplaceItemsInstance]';
     }
 }
-

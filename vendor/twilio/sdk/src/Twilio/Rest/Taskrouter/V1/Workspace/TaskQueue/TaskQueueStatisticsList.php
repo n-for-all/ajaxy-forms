@@ -13,15 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue;
 
-namespace Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class TaskQueueStatisticsList extends ListResource
-    {
+{
     /**
      * Construct the TaskQueueStatisticsList
      *
@@ -29,44 +26,25 @@ class TaskQueueStatisticsList extends ListResource
      * @param string $workspaceSid The SID of the Workspace with the TaskQueue to fetch.
      * @param string $taskQueueSid The SID of the TaskQueue for which to fetch statistics.
      */
-    public function __construct(
-        Version $version,
-        string $workspaceSid,
-        string $taskQueueSid
-    ) {
+    public function __construct(Version $version, string $workspaceSid, string $taskQueueSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'workspaceSid' =>
-            $workspaceSid,
-        
-        'taskQueueSid' =>
-            $taskQueueSid,
-        
-        ];
+        $this->solution = ['workspaceSid' => $workspaceSid, 'taskQueueSid' => $taskQueueSid];
     }
-
     /**
      * Constructs a TaskQueueStatisticsContext
      */
-    public function getContext(
-        
-    ): TaskQueueStatisticsContext
+    public function getContext() : TaskQueueStatisticsContext
     {
-        return new TaskQueueStatisticsContext(
-            $this->version,
-            $this->solution['workspaceSid'],
-            $this->solution['taskQueueSid']
-        );
+        return new TaskQueueStatisticsContext($this->version, $this->solution['workspaceSid'], $this->solution['taskQueueSid']);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Taskrouter.V1.TaskQueueStatisticsList]';
     }

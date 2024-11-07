@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2;
 
-
-namespace Twilio\Rest\Verify\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $sid
  * @property string|null $phoneNumber
@@ -40,59 +36,43 @@ class SafelistInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $phoneNumber = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'phoneNumber' => Values::array_get($payload, 'phone_number'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['phoneNumber' => $phoneNumber ?: $this->properties['phoneNumber'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'phoneNumber' => Values::array_get($payload, 'phone_number'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['phoneNumber' => $phoneNumber ?: $this->properties['phoneNumber']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return SafelistContext Context for this SafelistInstance
      */
-    protected function proxy(): SafelistContext
+    protected function proxy() : SafelistContext
     {
         if (!$this->context) {
-            $this->context = new SafelistContext(
-                $this->version,
-                $this->solution['phoneNumber']
-            );
+            $this->context = new SafelistContext($this->version, $this->solution['phoneNumber']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the SafelistInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the SafelistInstance
      *
      * @return SafelistInstance Fetched SafelistInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SafelistInstance
+    public function fetch() : SafelistInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -105,27 +85,23 @@ class SafelistInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Verify.V2.SafelistInstance ' . \implode(' ', $context) . ']';
     }
 }
-

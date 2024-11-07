@@ -13,20 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Video\V1;
 
-
-namespace Twilio\Rest\Video\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Video\V1\Room\RecordingRulesList;
-use Twilio\Rest\Video\V1\Room\ParticipantList;
-use Twilio\Rest\Video\V1\Room\RoomRecordingList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Video\V1\Room\RecordingRulesList;
+use Isolated\Twilio\Rest\Video\V1\Room\ParticipantList;
+use Isolated\Twilio\Rest\Video\V1\Room\RoomRecordingList;
 /**
  * @property string|null $sid
  * @property string $status
@@ -58,7 +54,6 @@ class RoomInstance extends InstanceResource
     protected $_recordingRules;
     protected $_participants;
     protected $_recordings;
-
     /**
      * Initialize the RoomInstance
      *
@@ -69,68 +64,33 @@ class RoomInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'status' => Values::array_get($payload, 'status'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'enableTurn' => Values::array_get($payload, 'enable_turn'),
-            'uniqueName' => Values::array_get($payload, 'unique_name'),
-            'statusCallback' => Values::array_get($payload, 'status_callback'),
-            'statusCallbackMethod' => Values::array_get($payload, 'status_callback_method'),
-            'endTime' => Deserialize::dateTime(Values::array_get($payload, 'end_time')),
-            'duration' => Values::array_get($payload, 'duration'),
-            'type' => Values::array_get($payload, 'type'),
-            'maxParticipants' => Values::array_get($payload, 'max_participants'),
-            'maxParticipantDuration' => Values::array_get($payload, 'max_participant_duration'),
-            'maxConcurrentPublishedTracks' => Values::array_get($payload, 'max_concurrent_published_tracks'),
-            'recordParticipantsOnConnect' => Values::array_get($payload, 'record_participants_on_connect'),
-            'videoCodecs' => Values::array_get($payload, 'video_codecs'),
-            'mediaRegion' => Values::array_get($payload, 'media_region'),
-            'audioOnly' => Values::array_get($payload, 'audio_only'),
-            'emptyRoomTimeout' => Values::array_get($payload, 'empty_room_timeout'),
-            'unusedRoomTimeout' => Values::array_get($payload, 'unused_room_timeout'),
-            'largeRoom' => Values::array_get($payload, 'large_room'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'status' => Values::array_get($payload, 'status'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'accountSid' => Values::array_get($payload, 'account_sid'), 'enableTurn' => Values::array_get($payload, 'enable_turn'), 'uniqueName' => Values::array_get($payload, 'unique_name'), 'statusCallback' => Values::array_get($payload, 'status_callback'), 'statusCallbackMethod' => Values::array_get($payload, 'status_callback_method'), 'endTime' => Deserialize::dateTime(Values::array_get($payload, 'end_time')), 'duration' => Values::array_get($payload, 'duration'), 'type' => Values::array_get($payload, 'type'), 'maxParticipants' => Values::array_get($payload, 'max_participants'), 'maxParticipantDuration' => Values::array_get($payload, 'max_participant_duration'), 'maxConcurrentPublishedTracks' => Values::array_get($payload, 'max_concurrent_published_tracks'), 'recordParticipantsOnConnect' => Values::array_get($payload, 'record_participants_on_connect'), 'videoCodecs' => Values::array_get($payload, 'video_codecs'), 'mediaRegion' => Values::array_get($payload, 'media_region'), 'audioOnly' => Values::array_get($payload, 'audio_only'), 'emptyRoomTimeout' => Values::array_get($payload, 'empty_room_timeout'), 'unusedRoomTimeout' => Values::array_get($payload, 'unused_room_timeout'), 'largeRoom' => Values::array_get($payload, 'large_room'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return RoomContext Context for this RoomInstance
      */
-    protected function proxy(): RoomContext
+    protected function proxy() : RoomContext
     {
         if (!$this->context) {
-            $this->context = new RoomContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new RoomContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the RoomInstance
      *
      * @return RoomInstance Fetched RoomInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): RoomInstance
+    public function fetch() : RoomInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the RoomInstance
      *
@@ -138,36 +98,31 @@ class RoomInstance extends InstanceResource
      * @return RoomInstance Updated RoomInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $status): RoomInstance
+    public function update(string $status) : RoomInstance
     {
-
         return $this->proxy()->update($status);
     }
-
     /**
      * Access the recordingRules
      */
-    protected function getRecordingRules(): RecordingRulesList
+    protected function getRecordingRules() : RecordingRulesList
     {
         return $this->proxy()->recordingRules;
     }
-
     /**
      * Access the participants
      */
-    protected function getParticipants(): ParticipantList
+    protected function getParticipants() : ParticipantList
     {
         return $this->proxy()->participants;
     }
-
     /**
      * Access the recordings
      */
-    protected function getRecordings(): RoomRecordingList
+    protected function getRecordings() : RoomRecordingList
     {
         return $this->proxy()->recordings;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -180,27 +135,23 @@ class RoomInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Video.V1.RoomInstance ' . \implode(' ', $context) . ']';
     }
 }
-

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form;
+namespace Isolated\Symfony\Component\Form;
 
 /**
  * Writes and reads values to/from an object or array bound to a form.
@@ -29,7 +28,6 @@ interface DataAccessorInterface
      * @throws Exception\AccessException If unable to read from the given form data
      */
     public function getValue($viewData, FormInterface $form);
-
     /**
      * Sets the value at the end of the property of the object graph.
      *
@@ -39,8 +37,7 @@ interface DataAccessorInterface
      *
      * @throws Exception\AccessException If unable to write the given value
      */
-    public function setValue(&$viewData, $value, FormInterface $form): void;
-
+    public function setValue(&$viewData, $value, FormInterface $form) : void;
     /**
      * Returns whether a value can be read from an object graph.
      *
@@ -52,8 +49,7 @@ interface DataAccessorInterface
      *
      * @return bool
      */
-    public function isReadable($viewData, FormInterface $form): bool;
-
+    public function isReadable($viewData, FormInterface $form) : bool;
     /**
      * Returns whether a value can be written at a given object graph.
      *
@@ -65,5 +61,5 @@ interface DataAccessorInterface
      *
      * @return bool
      */
-    public function isWritable($viewData, FormInterface $form): bool;
+    public function isWritable($viewData, FormInterface $form) : bool;
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class EmptyReason implements Reason
 {
@@ -8,7 +8,6 @@ class EmptyReason implements Reason
     {
         return 0;
     }
-
     public function description() : string
     {
         return 'Empty reason';

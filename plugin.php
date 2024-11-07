@@ -7,7 +7,7 @@
 	Plugin Name: Ajaxy Forms
 	Plugin URI: https://ajaxy.org/product/ajaxy-forms
 	Description: Enhanced WordPress forms with advanced features and integrations
-	Version: 1.0.1
+	Version: 1.0.2
 	Author: Naji Amer (Ajaxy)
 	Author URI: https://www.ajaxy.org
 	License: GPLv2 or later
@@ -25,22 +25,20 @@ use Ajaxy\Forms\Inc\Constraints;
 use Ajaxy\Forms\Inc\Data;
 use Ajaxy\Forms\Inc\Form;
 use Ajaxy\Forms\Inc\Helper;
-use Ajaxy\Forms\Inc\Types\Transformer\UploadedFileTransformer;
-use Symfony\Component\Form\Extension\Core\Type;
-use Symfony\Component\Validator\Validation;
-use Symfony\Bridge\Twig\Form\TwigRendererEngine;
-use Symfony\Component\Form\FormRenderer;
-use Symfony\Component\Form\Forms;
-use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
-use Symfony\Component\Form\Extension\Csrf\CsrfExtension;
-use Symfony\Component\Security\Csrf\CsrfTokenManager;
-use Symfony\Component\Translation\Translator;
-use Symfony\Component\Translation\Loader\XliffFileLoader;
-use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Symfony\Bridge\Twig\Extension\FormExtension;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Validator\Constraints\All;
-use Symfony\Component\Validator\Constraints\File;
+use Isolated\Symfony\Component\Form\Extension\Core\Type;
+use Isolated\Symfony\Component\Validator\Validation;
+use Isolated\Symfony\Bridge\Twig\Form\TwigRendererEngine;
+use Isolated\Symfony\Component\Form\FormRenderer;
+use Isolated\Symfony\Component\Form\Forms;
+use Isolated\Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Isolated\Symfony\Component\Form\Extension\Csrf\CsrfExtension;
+use Isolated\Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Isolated\Symfony\Component\Translation\Translator;
+use Isolated\Symfony\Component\Translation\Loader\XliffFileLoader;
+use Isolated\Symfony\Bridge\Twig\Extension\TranslationExtension;
+use Isolated\Symfony\Bridge\Twig\Extension\FormExtension;
+use Isolated\Symfony\Component\Form\CallbackTransformer;
+use Isolated\Symfony\Component\Form\FormInterface;
 use WP_Error;
 
 define("AJAXY_FORMS_PLUGIN_URL", plugins_url('', __FILE__));
@@ -321,18 +319,19 @@ class Plugin
      * @date 2024-04-11
      *
      * @param string $name
-     * @param \Symfony\Component\Form\Form $form
+     * @param \Isolated\Symfony\Component\Form\Form $form
      * @param string $theme
      *
      * @return void
      */
     public function render($name, $form, $theme = null)
     {
-        $twig = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array(
+        $twig = new \Isolated\Twig\Environment(new \Isolated\Twig\Loader\FilesystemLoader(array(
             AJAXY_FORMS_PLUGIN_DIR . 'inc/themes',
             AJAXY_FORMS_PLUGIN_DIR . 'vendor/symfony/twig-bridge/Resources/views/Form',
         )), [
-            'debug' => true
+            'debug' => WP_DEBUG,
+            'cache' => false
         ]);
 
         // Set up the Translation component
@@ -348,11 +347,11 @@ class Plugin
             new FormExtension($translator)
         );
 
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
+        $twig->addExtension(new \Isolated\Twig\Extension\DebugExtension());
 
         $theme = $theme ?? 'tailwind_2_layout.html.twig';
 
-        $twig->addRuntimeLoader(new \Twig\RuntimeLoader\FactoryRuntimeLoader(
+        $twig->addRuntimeLoader(new \Isolated\Twig\RuntimeLoader\FactoryRuntimeLoader(
             array(
                 FormRenderer::class => function () use ($twig, $theme) {
                     return new FormRenderer(new TwigRendererEngine(array($theme), $twig));
@@ -378,7 +377,7 @@ class Plugin
      *
      * @date 2024-04-10
      *
-     * @param \Symfony\Component\Form\FormInterface $form
+     * @param \Isolated\Symfony\Component\Form\FormInterface $form
      *
      * @return void
      */
@@ -596,11 +595,11 @@ class Plugin
         ]);
     }
 
-    private function get_fields_error_messages(\Symfony\Component\Form\FormInterface $form)
+    private function get_fields_error_messages(FormInterface $form)
     {
         $errors = array();
         if ($form->count() && $form->isSubmitted()) {
-            /** @var \Symfony\Component\Form\Form */
+            /** @var \Isolated\Symfony\Component\Form\Form */
             foreach ($form as $child) {
                 if (!$child->isValid()) {
                     $children = $child->all();
@@ -622,7 +621,7 @@ class Plugin
         return $errors;
     }
 
-    private function get_form_error_messages(\Symfony\Component\Form\FormInterface $form)
+    private function get_form_error_messages(FormInterface $form)
     {
         $errors = array();
         foreach ($form->getErrors() as $key => $error) {

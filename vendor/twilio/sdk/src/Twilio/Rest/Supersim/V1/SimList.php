@@ -13,36 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Supersim\V1;
 
-namespace Twilio\Rest\Supersim\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class SimList extends ListResource
-    {
+{
     /**
      * Construct the SimList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Sims';
     }
-
     /**
      * Create the SimInstance
      *
@@ -51,25 +43,12 @@ class SimList extends ListResource
      * @return SimInstance Created SimInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $iccid, string $registrationCode): SimInstance
+    public function create(string $iccid, string $registrationCode) : SimInstance
     {
-
-        $data = Values::of([
-            'Iccid' =>
-                $iccid,
-            'RegistrationCode' =>
-                $registrationCode,
-        ]);
-
+        $data = Values::of(['Iccid' => $iccid, 'RegistrationCode' => $registrationCode]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new SimInstance(
-            $this->version,
-            $payload
-        );
+        return new SimInstance($this->version, $payload);
     }
-
-
     /**
      * Reads SimInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -86,11 +65,10 @@ class SimList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return SimInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams SimInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -110,15 +88,12 @@ class SimList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of SimInstance records from the API.
      * Request is executed immediately
@@ -128,32 +103,13 @@ class SimList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return SimPage Page of SimInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): SimPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : SimPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Status' =>
-                $options['status'],
-            'Fleet' =>
-                $options['fleet'],
-            'Iccid' =>
-                $options['iccid'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Status' => $options['status'], 'Fleet' => $options['fleet'], 'Iccid' => $options['iccid'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new SimPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of SimInstance records from the API.
      * Request is executed immediately
@@ -161,39 +117,26 @@ class SimList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return SimPage Page of SimInstance
      */
-    public function getPage(string $targetUrl): SimPage
+    public function getPage(string $targetUrl) : SimPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new SimPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a SimContext
      *
      * @param string $sid The SID of the Sim resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): SimContext
+    public function getContext(string $sid) : SimContext
     {
-        return new SimContext(
-            $this->version,
-            $sid
-        );
+        return new SimContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Supersim.V1.SimList]';
     }

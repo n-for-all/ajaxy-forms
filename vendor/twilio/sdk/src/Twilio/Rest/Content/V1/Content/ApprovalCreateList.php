@@ -13,39 +13,26 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Content\V1\Content;
 
-namespace Twilio\Rest\Content\V1\Content;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class ApprovalCreateList extends ListResource
-    {
+{
     /**
      * Construct the ApprovalCreateList
      *
      * @param Version $version Version that contains the resource
      * @param string $contentSid 
      */
-    public function __construct(
-        Version $version,
-        string $contentSid
-    ) {
+    public function __construct(Version $version, string $contentSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'contentSid' =>
-            $contentSid,
-        
-        ];
-
-        $this->uri = '/Content/' . \rawurlencode($contentSid)
-        .'/ApprovalRequests/whatsapp';
+        $this->solution = ['contentSid' => $contentSid];
+        $this->uri = '/Content/' . \rawurlencode($contentSid) . '/ApprovalRequests/whatsapp';
     }
-
     /**
      * Create the ApprovalCreateInstance
      *
@@ -53,27 +40,19 @@ class ApprovalCreateList extends ListResource
      * @return ApprovalCreateInstance Created ApprovalCreateInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(ContentApprovalRequest $contentApprovalRequest): ApprovalCreateInstance
+    public function create(ContentApprovalRequest $contentApprovalRequest) : ApprovalCreateInstance
     {
-
         $data = $contentApprovalRequest->toArray();
         $headers['Content-Type'] = 'application/json';
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new ApprovalCreateInstance(
-            $this->version,
-            $payload,
-            $this->solution['contentSid']
-        );
+        return new ApprovalCreateInstance($this->version, $payload, $this->solution['contentSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Content.V1.ApprovalCreateList]';
     }

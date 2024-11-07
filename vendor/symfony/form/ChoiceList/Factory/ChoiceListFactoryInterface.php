@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\ChoiceList\Factory;
 
-namespace Symfony\Component\Form\ChoiceList\Factory;
-
-use Symfony\Component\Form\ChoiceList\ChoiceListInterface;
-use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
-use Symfony\Component\Form\ChoiceList\View\ChoiceListView;
-
+use Isolated\Symfony\Component\Form\ChoiceList\ChoiceListInterface;
+use Isolated\Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
+use Isolated\Symfony\Component\Form\ChoiceList\View\ChoiceListView;
 /**
  * Creates {@link ChoiceListInterface} instances.
  *
@@ -35,8 +33,7 @@ interface ChoiceListFactoryInterface
      *
      * @return ChoiceListInterface
      */
-    public function createListFromChoices(iterable $choices, callable $value = null/*, callable $filter = null*/);
-
+    public function createListFromChoices(iterable $choices, callable $value = null);
     /**
      * Creates a choice list that is loaded with the given loader.
      *
@@ -48,8 +45,7 @@ interface ChoiceListFactoryInterface
      *
      * @return ChoiceListInterface
      */
-    public function createListFromLoader(ChoiceLoaderInterface $loader, callable $value = null/*, callable $filter = null*/);
-
+    public function createListFromLoader(ChoiceLoaderInterface $loader, callable $value = null);
     /**
      * Creates a view for the given choice list.
      *
@@ -84,5 +80,5 @@ interface ChoiceListFactoryInterface
      *
      * @return ChoiceListView
      */
-    public function createView(ChoiceListInterface $list, $preferredChoices = null, $label = null, callable $index = null, callable $groupBy = null, $attr = null/*, $labelTranslationParameters = []*/);
+    public function createView(ChoiceListInterface $list, $preferredChoices = null, $label = null, callable $index = null, callable $groupBy = null, $attr = null);
 }

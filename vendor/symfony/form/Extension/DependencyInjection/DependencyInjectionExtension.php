@@ -8,22 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\DependencyInjection;
 
-namespace Symfony\Component\Form\Extension\DependencyInjection;
-
-use Psr\Container\ContainerInterface;
-use Symfony\Component\Form\Exception\InvalidArgumentException;
-use Symfony\Component\Form\FormExtensionInterface;
-use Symfony\Component\Form\FormTypeGuesserChain;
-
+use Isolated\Psr\Container\ContainerInterface;
+use Isolated\Symfony\Component\Form\Exception\InvalidArgumentException;
+use Isolated\Symfony\Component\Form\FormExtensionInterface;
+use Isolated\Symfony\Component\Form\FormTypeGuesserChain;
 class DependencyInjectionExtension implements FormExtensionInterface
 {
     private $guesser;
-    private $guesserLoaded = false;
+    private $guesserLoaded = \false;
     private $typeContainer;
     private $typeExtensionServices;
     private $guesserServices;
-
     /**
      * @param iterable[] $typeExtensionServices
      */
@@ -33,19 +30,16 @@ class DependencyInjectionExtension implements FormExtensionInterface
         $this->typeExtensionServices = $typeExtensionServices;
         $this->guesserServices = $guesserServices;
     }
-
     /**
      * {@inheritdoc}
      */
     public function getType(string $name)
     {
         if (!$this->typeContainer->has($name)) {
-            throw new InvalidArgumentException(sprintf('The field type "%s" is not registered in the service container.', $name));
+            throw new InvalidArgumentException(\sprintf('The field type "%s" is not registered in the service container.', $name));
         }
-
         return $this->typeContainer->get($name);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -53,33 +47,27 @@ class DependencyInjectionExtension implements FormExtensionInterface
     {
         return $this->typeContainer->has($name);
     }
-
     /**
      * {@inheritdoc}
      */
     public function getTypeExtensions(string $name)
     {
         $extensions = [];
-
         if (isset($this->typeExtensionServices[$name])) {
             foreach ($this->typeExtensionServices[$name] as $extension) {
                 $extensions[] = $extension;
-
                 $extendedTypes = [];
                 foreach ($extension::getExtendedTypes() as $extendedType) {
                     $extendedTypes[] = $extendedType;
                 }
-
                 // validate the result of getExtendedTypes() to ensure it is consistent with the service definition
-                if (!\in_array($name, $extendedTypes, true)) {
-                    throw new InvalidArgumentException(sprintf('The extended type "%s" specified for the type extension class "%s" does not match any of the actual extended types (["%s"]).', $name, \get_class($extension), implode('", "', $extendedTypes)));
+                if (!\in_array($name, $extendedTypes, \true)) {
+                    throw new InvalidArgumentException(\sprintf('The extended type "%s" specified for the type extension class "%s" does not match any of the actual extended types (["%s"]).', $name, \get_class($extension), \implode('", "', $extendedTypes)));
                 }
             }
         }
-
         return $extensions;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -87,25 +75,21 @@ class DependencyInjectionExtension implements FormExtensionInterface
     {
         return isset($this->typeExtensionServices[$name]);
     }
-
     /**
      * {@inheritdoc}
      */
     public function getTypeGuesser()
     {
         if (!$this->guesserLoaded) {
-            $this->guesserLoaded = true;
+            $this->guesserLoaded = \true;
             $guessers = [];
-
             foreach ($this->guesserServices as $serviceId => $service) {
                 $guessers[] = $service;
             }
-
             if ($guessers) {
                 $this->guesser = new FormTypeGuesserChain($guessers);
             }
         }
-
         return $this->guesser;
     }
 }

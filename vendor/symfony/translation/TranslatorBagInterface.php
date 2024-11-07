@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Translation;
 
-namespace Symfony\Component\Translation;
-
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
-
+use Isolated\Symfony\Component\Translation\Exception\InvalidArgumentException;
 /**
  * TranslatorBagInterface.
  *

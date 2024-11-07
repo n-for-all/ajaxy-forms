@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Intl\Data\Bundle\Writer;
+namespace Isolated\Symfony\Component\Intl\Data\Bundle\Writer;
 
 /**
  * Writes .json resource bundles.
@@ -26,17 +25,14 @@ class JsonBundleWriter implements BundleWriterInterface
     public function write(string $path, string $locale, $data)
     {
         if ($data instanceof \Traversable) {
-            $data = iterator_to_array($data);
+            $data = \iterator_to_array($data);
         }
-
-        array_walk_recursive($data, function (&$value) {
+        \array_walk_recursive($data, function (&$value) {
             if ($value instanceof \Traversable) {
-                $value = iterator_to_array($value);
+                $value = \iterator_to_array($value);
             }
         });
-
-        $contents = json_encode($data, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE)."\n";
-
-        file_put_contents($path.'/'.$locale.'.json', $contents);
+        $contents = \json_encode($data, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE) . "\n";
+        \file_put_contents($path . '/' . $locale . '.json', $contents);
     }
 }

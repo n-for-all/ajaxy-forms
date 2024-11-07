@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Studio\V1\Flow\Execution\ExecutionStep;
 
-
-namespace Twilio\Rest\Studio\V1\Flow\Execution\ExecutionStep;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ExecutionStepContextContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ExecutionStepContextContext
      *
@@ -32,61 +28,34 @@ class ExecutionStepContextContext extends InstanceContext
      * @param string $executionSid The SID of the Execution resource with the Step to fetch.
      * @param string $stepSid The SID of the Step to fetch.
      */
-    public function __construct(
-        Version $version,
-        $flowSid,
-        $executionSid,
-        $stepSid
-    ) {
+    public function __construct(Version $version, $flowSid, $executionSid, $stepSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'flowSid' =>
-            $flowSid,
-        'executionSid' =>
-            $executionSid,
-        'stepSid' =>
-            $stepSid,
-        ];
-
-        $this->uri = '/Flows/' . \rawurlencode($flowSid)
-        .'/Executions/' . \rawurlencode($executionSid)
-        .'/Steps/' . \rawurlencode($stepSid)
-        .'/Context';
+        $this->solution = ['flowSid' => $flowSid, 'executionSid' => $executionSid, 'stepSid' => $stepSid];
+        $this->uri = '/Flows/' . \rawurlencode($flowSid) . '/Executions/' . \rawurlencode($executionSid) . '/Steps/' . \rawurlencode($stepSid) . '/Context';
     }
-
     /**
      * Fetch the ExecutionStepContextInstance
      *
      * @return ExecutionStepContextInstance Fetched ExecutionStepContextInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ExecutionStepContextInstance
+    public function fetch() : ExecutionStepContextInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ExecutionStepContextInstance(
-            $this->version,
-            $payload,
-            $this->solution['flowSid'],
-            $this->solution['executionSid'],
-            $this->solution['stepSid']
-        );
+        return new ExecutionStepContextInstance($this->version, $payload, $this->solution['flowSid'], $this->solution['executionSid'], $this->solution['stepSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Studio.V1.ExecutionStepContextContext ' . \implode(' ', $context) . ']';
     }

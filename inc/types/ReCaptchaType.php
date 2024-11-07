@@ -3,11 +3,11 @@
 namespace Ajaxy\Forms\Inc\Types;
 
 use ReCaptcha\ReCaptcha;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Isolated\Symfony\Component\Form\AbstractType;
+use Isolated\Symfony\Component\Form\FormBuilderInterface;
+use Isolated\Symfony\Component\Form\FormInterface;
+use Isolated\Symfony\Component\Form\FormView;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ReCaptchaType.

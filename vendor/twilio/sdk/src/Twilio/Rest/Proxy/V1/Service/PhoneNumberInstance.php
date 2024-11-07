@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Proxy\V1\Service;
 
-
-namespace Twilio\Rest\Proxy\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Base\PhoneNumberCapabilities;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Base\PhoneNumberCapabilities;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -53,69 +49,43 @@ class PhoneNumberInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'phoneNumber' => Values::array_get($payload, 'phone_number'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'isoCountry' => Values::array_get($payload, 'iso_country'),
-            'capabilities' => Deserialize::phoneNumberCapabilities(Values::array_get($payload, 'capabilities')),
-            'url' => Values::array_get($payload, 'url'),
-            'isReserved' => Values::array_get($payload, 'is_reserved'),
-            'inUse' => Values::array_get($payload, 'in_use'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'phoneNumber' => Values::array_get($payload, 'phone_number'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'isoCountry' => Values::array_get($payload, 'iso_country'), 'capabilities' => Deserialize::phoneNumberCapabilities(Values::array_get($payload, 'capabilities')), 'url' => Values::array_get($payload, 'url'), 'isReserved' => Values::array_get($payload, 'is_reserved'), 'inUse' => Values::array_get($payload, 'in_use')];
+        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return PhoneNumberContext Context for this PhoneNumberInstance
      */
-    protected function proxy(): PhoneNumberContext
+    protected function proxy() : PhoneNumberContext
     {
         if (!$this->context) {
-            $this->context = new PhoneNumberContext(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['sid']
-            );
+            $this->context = new PhoneNumberContext($this->version, $this->solution['serviceSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the PhoneNumberInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the PhoneNumberInstance
      *
      * @return PhoneNumberInstance Fetched PhoneNumberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): PhoneNumberInstance
+    public function fetch() : PhoneNumberInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the PhoneNumberInstance
      *
@@ -123,12 +93,10 @@ class PhoneNumberInstance extends InstanceResource
      * @return PhoneNumberInstance Updated PhoneNumberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): PhoneNumberInstance
+    public function update(array $options = []) : PhoneNumberInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -141,27 +109,23 @@ class PhoneNumberInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Proxy.V1.PhoneNumberInstance ' . \implode(' ', $context) . ']';
     }
 }
-

@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service;
 
-
-namespace Twilio\Rest\Verify\V2\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class AccessTokenContext extends InstanceContext
-    {
+{
     /**
      * Initialize the AccessTokenContext
      *
@@ -31,56 +27,34 @@ class AccessTokenContext extends InstanceContext
      * @param string $serviceSid The unique SID identifier of the Service.
      * @param string $sid A 34 character string that uniquely identifies this Access Token.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $serviceSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/AccessTokens/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/AccessTokens/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the AccessTokenInstance
      *
      * @return AccessTokenInstance Fetched AccessTokenInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): AccessTokenInstance
+    public function fetch() : AccessTokenInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new AccessTokenInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['sid']
-        );
+        return new AccessTokenInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Verify.V2.AccessTokenContext ' . \implode(' ', $context) . ']';
     }

@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Supersim\V1;
 
-
-namespace Twilio\Rest\Supersim\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Supersim\V1\NetworkAccessProfile\NetworkAccessProfileNetworkList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Supersim\V1\NetworkAccessProfile\NetworkAccessProfileNetworkList;
 /**
  * @property string|null $sid
  * @property string|null $uniqueName
@@ -38,7 +34,6 @@ use Twilio\Rest\Supersim\V1\NetworkAccessProfile\NetworkAccessProfileNetworkList
 class NetworkAccessProfileInstance extends InstanceResource
 {
     protected $_networks;
-
     /**
      * Initialize the NetworkAccessProfileInstance
      *
@@ -49,51 +44,33 @@ class NetworkAccessProfileInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'uniqueName' => Values::array_get($payload, 'unique_name'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'uniqueName' => Values::array_get($payload, 'unique_name'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return NetworkAccessProfileContext Context for this NetworkAccessProfileInstance
      */
-    protected function proxy(): NetworkAccessProfileContext
+    protected function proxy() : NetworkAccessProfileContext
     {
         if (!$this->context) {
-            $this->context = new NetworkAccessProfileContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new NetworkAccessProfileContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the NetworkAccessProfileInstance
      *
      * @return NetworkAccessProfileInstance Fetched NetworkAccessProfileInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): NetworkAccessProfileInstance
+    public function fetch() : NetworkAccessProfileInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the NetworkAccessProfileInstance
      *
@@ -101,20 +78,17 @@ class NetworkAccessProfileInstance extends InstanceResource
      * @return NetworkAccessProfileInstance Updated NetworkAccessProfileInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): NetworkAccessProfileInstance
+    public function update(array $options = []) : NetworkAccessProfileInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the networks
      */
-    protected function getNetworks(): NetworkAccessProfileNetworkList
+    protected function getNetworks() : NetworkAccessProfileNetworkList
     {
         return $this->proxy()->networks;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -127,27 +101,23 @@ class NetworkAccessProfileInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Supersim.V1.NetworkAccessProfileInstance ' . \implode(' ', $context) . ']';
     }
 }
-

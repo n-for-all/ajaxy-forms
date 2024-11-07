@@ -13,36 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Voice\V1;
 
-namespace Twilio\Rest\Voice\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class ConnectionPolicyList extends ListResource
-    {
+{
     /**
      * Construct the ConnectionPolicyList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/ConnectionPolicies';
     }
-
     /**
      * Create the ConnectionPolicyInstance
      *
@@ -50,25 +42,13 @@ class ConnectionPolicyList extends ListResource
      * @return ConnectionPolicyInstance Created ConnectionPolicyInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): ConnectionPolicyInstance
+    public function create(array $options = []) : ConnectionPolicyInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new ConnectionPolicyInstance(
-            $this->version,
-            $payload
-        );
+        return new ConnectionPolicyInstance($this->version, $payload);
     }
-
-
     /**
      * Reads ConnectionPolicyInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -84,11 +64,10 @@ class ConnectionPolicyList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return ConnectionPolicyInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams ConnectionPolicyInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -107,15 +86,12 @@ class ConnectionPolicyList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of ConnectionPolicyInstance records from the API.
      * Request is executed immediately
@@ -125,24 +101,12 @@ class ConnectionPolicyList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return ConnectionPolicyPage Page of ConnectionPolicyInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): ConnectionPolicyPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : ConnectionPolicyPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new ConnectionPolicyPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of ConnectionPolicyInstance records from the API.
      * Request is executed immediately
@@ -150,39 +114,26 @@ class ConnectionPolicyList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return ConnectionPolicyPage Page of ConnectionPolicyInstance
      */
-    public function getPage(string $targetUrl): ConnectionPolicyPage
+    public function getPage(string $targetUrl) : ConnectionPolicyPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new ConnectionPolicyPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a ConnectionPolicyContext
      *
      * @param string $sid The unique string that we created to identify the Connection Policy resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): ConnectionPolicyContext
+    public function getContext(string $sid) : ConnectionPolicyContext
     {
-        return new ConnectionPolicyContext(
-            $this->version,
-            $sid
-        );
+        return new ConnectionPolicyContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Voice.V1.ConnectionPolicyList]';
     }

@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\DataMapper;
 
-namespace Symfony\Component\Form\Extension\Core\DataMapper;
-
-use Symfony\Component\Form\DataMapperInterface;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
-
+use Isolated\Symfony\Component\Form\DataMapperInterface;
+use Isolated\Symfony\Component\Form\Exception\UnexpectedTypeException;
 /**
  * Maps choices to/from radio forms.
  *
@@ -31,42 +29,34 @@ class RadioListMapper implements DataMapperInterface
     public function mapDataToForms($choice, iterable $radios)
     {
         if (\is_array($radios)) {
-            trigger_deprecation('symfony/form', '5.3', 'Passing an array as the second argument of the "%s()" method is deprecated, pass "\Traversable" instead.', __METHOD__);
+            trigger_deprecation('symfony/form', '5.3', 'Passing an array as the second argument of the "%s()" method is deprecated, pass "\\Traversable" instead.', __METHOD__);
         }
-
         if (!\is_string($choice)) {
             throw new UnexpectedTypeException($choice, 'string');
         }
-
         foreach ($radios as $radio) {
             $value = $radio->getConfig()->getOption('value');
             $radio->setData($choice === $value);
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function mapFormsToData(iterable $radios, &$choice)
     {
         if (\is_array($radios)) {
-            trigger_deprecation('symfony/form', '5.3', 'Passing an array as the first argument of the "%s()" method is deprecated, pass "\Traversable" instead.', __METHOD__);
+            trigger_deprecation('symfony/form', '5.3', 'Passing an array as the first argument of the "%s()" method is deprecated, pass "\\Traversable" instead.', __METHOD__);
         }
-
         if (null !== $choice && !\is_string($choice)) {
             throw new UnexpectedTypeException($choice, 'null or string');
         }
-
         $choice = null;
-
         foreach ($radios as $radio) {
             if ($radio->getData()) {
                 if ('placeholder' === $radio->getName()) {
                     return;
                 }
-
                 $choice = $radio->getConfig()->getOption('value');
-
                 return;
             }
         }

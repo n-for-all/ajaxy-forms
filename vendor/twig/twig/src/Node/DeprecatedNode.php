@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node;
 
-namespace Twig\Node;
-
-use Twig\Attribute\YieldReady;
-use Twig\Compiler;
-use Twig\Node\Expression\AbstractExpression;
-use Twig\Node\Expression\ConstantExpression;
-
+use Isolated\Twig\Attribute\YieldReady;
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Expression\AbstractExpression;
+use Isolated\Twig\Node\Expression\ConstantExpression;
 /**
  * Represents a deprecated node.
  *
@@ -28,22 +26,14 @@ class DeprecatedNode extends Node
     {
         parent::__construct(['expr' => $expr], [], $lineno, $tag);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
         $compiler->addDebugInfo($this);
-
         $expr = $this->getNode('expr');
-
         if (!$expr instanceof ConstantExpression) {
             $varName = $compiler->getVarName();
-            $compiler
-                ->write(\sprintf('$%s = ', $varName))
-                ->subcompile($expr)
-                ->raw(";\n")
-            ;
+            $compiler->write(\sprintf('$%s = ', $varName))->subcompile($expr)->raw(";\n");
         }
-
         $compiler->write('trigger_deprecation(');
         if ($this->hasNode('package')) {
             $compiler->subcompile($this->getNode('package'));
@@ -57,17 +47,11 @@ class DeprecatedNode extends Node
             $compiler->raw("''");
         }
         $compiler->raw(', ');
-
         if ($expr instanceof ConstantExpression) {
             $compiler->subcompile($expr);
         } else {
             $compiler->write(\sprintf('$%s', $varName));
         }
-
-        $compiler
-            ->raw(".")
-            ->string(\sprintf(' in "%s" at line %d.', $this->getTemplateName(), $this->getTemplateLine()))
-            ->raw(");\n")
-        ;
+        $compiler->raw(".")->string(\sprintf(' in "%s" at line %d.', $this->getTemplateName(), $this->getTemplateLine()))->raw(");\n");
     }
 }

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\DataTransformer;
 
-namespace Symfony\Component\Form\Extension\Core\DataTransformer;
-
-use Symfony\Component\Form\Exception\TransformationFailedException;
-
+use Isolated\Symfony\Component\Form\Exception\TransformationFailedException;
 /**
  * Transforms between a normalized format and a localized money string.
  *
@@ -22,14 +20,11 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 class MoneyToLocalizedStringTransformer extends NumberToLocalizedStringTransformer
 {
     private $divisor;
-
-    public function __construct(?int $scale = 2, ?bool $grouping = true, ?int $roundingMode = \NumberFormatter::ROUND_HALFUP, ?int $divisor = 1, string $locale = null)
+    public function __construct(?int $scale = 2, ?bool $grouping = \true, ?int $roundingMode = \NumberFormatter::ROUND_HALFUP, ?int $divisor = 1, string $locale = null)
     {
-        parent::__construct($scale ?? 2, $grouping ?? true, $roundingMode, $locale);
-
+        parent::__construct($scale ?? 2, $grouping ?? \true, $roundingMode, $locale);
         $this->divisor = $divisor ?? 1;
     }
-
     /**
      * Transforms a normalized format into a localized money string.
      *
@@ -43,15 +38,13 @@ class MoneyToLocalizedStringTransformer extends NumberToLocalizedStringTransform
     public function transform($value)
     {
         if (null !== $value && 1 !== $this->divisor) {
-            if (!is_numeric($value)) {
+            if (!\is_numeric($value)) {
                 throw new TransformationFailedException('Expected a numeric.');
             }
             $value /= $this->divisor;
         }
-
         return parent::transform($value);
     }
-
     /**
      * Transforms a localized money string into a normalized format.
      *
@@ -68,7 +61,6 @@ class MoneyToLocalizedStringTransformer extends NumberToLocalizedStringTransform
         if (null !== $value && 1 !== $this->divisor) {
             $value = (float) (string) ($value * $this->divisor);
         }
-
         return $value;
     }
 }

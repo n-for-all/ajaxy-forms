@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl\Locale;
 
-namespace Symfony\Component\Intl\Locale;
-
-use Symfony\Component\Intl\Exception\MethodNotImplementedException;
-
+use Isolated\Symfony\Component\Intl\Exception\MethodNotImplementedException;
 /**
  * Replacement for PHP's native {@link \Locale} class.
  *
@@ -29,11 +27,9 @@ use Symfony\Component\Intl\Exception\MethodNotImplementedException;
 abstract class Locale
 {
     public const DEFAULT_LOCALE = null;
-
     /* Locale method constants */
     public const ACTUAL_LOCALE = 0;
     public const VALID_LOCALE = 1;
-
     /* Language tags constants */
     public const LANG_TAG = 'language';
     public const EXTLANG_TAG = 'extlang';
@@ -42,7 +38,6 @@ abstract class Locale
     public const VARIANT_TAG = 'variant';
     public const GRANDFATHERED_LANG_TAG = 'grandfathered';
     public const PRIVATE_TAG = 'private';
-
     /**
      * Not supported. Returns the best available locale based on HTTP "Accept-Language" header according to RFC 2616.
      *
@@ -58,7 +53,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Returns a canonicalized locale string.
      *
@@ -72,22 +66,17 @@ abstract class Locale
         if ('' === $locale || '.' === $locale[0]) {
             return self::getDefault();
         }
-
-        if (!preg_match('/^([a-z]{2})[-_]([a-z]{2})(?:([a-z]{2})(?:[-_]([a-z]{2}))?)?(?:\..*)?$/i', $locale, $m)) {
+        if (!\preg_match('/^([a-z]{2})[-_]([a-z]{2})(?:([a-z]{2})(?:[-_]([a-z]{2}))?)?(?:\\..*)?$/i', $locale, $m)) {
             return $locale;
         }
-
         if (!empty($m[4])) {
-            return strtolower($m[1]).'_'.ucfirst(strtolower($m[2].$m[3])).'_'.strtoupper($m[4]);
+            return \strtolower($m[1]) . '_' . \ucfirst(\strtolower($m[2] . $m[3])) . '_' . \strtoupper($m[4]);
         }
-
         if (!empty($m[3])) {
-            return strtolower($m[1]).'_'.ucfirst(strtolower($m[2].$m[3]));
+            return \strtolower($m[1]) . '_' . \ucfirst(\strtolower($m[2] . $m[3]));
         }
-
-        return strtolower($m[1]).'_'.strtoupper($m[2]);
+        return \strtolower($m[1]) . '_' . \strtoupper($m[2]);
     }
-
     /**
      * Not supported. Returns a correctly ordered and delimited locale code.
      *
@@ -103,7 +92,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Checks if a language tag filter matches with locale.
      *
@@ -116,11 +104,10 @@ abstract class Locale
      *
      * @throws MethodNotImplementedException
      */
-    public static function filterMatches(string $langtag, string $locale, bool $canonicalize = false)
+    public static function filterMatches(string $langtag, string $locale, bool $canonicalize = \false)
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Returns the variants for the input locale.
      *
@@ -136,7 +123,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Returns the default locale, which is always "en".
      *
@@ -148,7 +134,6 @@ abstract class Locale
     {
         return 'en';
     }
-
     /**
      * Not supported. Returns the localized display name for the locale language.
      *
@@ -165,7 +150,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Returns the localized display name for the locale.
      *
@@ -182,7 +166,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Returns the localized display name for the locale region.
      *
@@ -199,7 +182,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Returns the localized display name for the locale script.
      *
@@ -216,7 +198,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Returns the localized display name for the locale variant.
      *
@@ -233,7 +214,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Returns the keywords for the locale.
      *
@@ -249,7 +229,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Returns the primary language for the locale.
      *
@@ -265,7 +244,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Returns the region for the locale.
      *
@@ -281,7 +259,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Returns the script for the locale.
      *
@@ -297,7 +274,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Returns the closest language tag for the locale.
      *
@@ -310,11 +286,10 @@ abstract class Locale
      *
      * @throws MethodNotImplementedException
      */
-    public static function lookup(array $langtag, string $locale, bool $canonicalize = false, ?string $default = null)
+    public static function lookup(array $langtag, string $locale, bool $canonicalize = \false, ?string $default = null)
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Returns an associative array of locale identifier subtags.
      *
@@ -330,7 +305,6 @@ abstract class Locale
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Sets the default runtime locale.
      *
@@ -345,7 +319,6 @@ abstract class Locale
         if ('en' !== $locale) {
             throw new MethodNotImplementedException(__METHOD__);
         }
-
-        return true;
+        return \true;
     }
 }

@@ -8,18 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Authentication\Provider;
 
-namespace Symfony\Component\Security\Core\Authentication\Provider;
-
-use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Symfony\Component\Security\Core\User\UserCheckerInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-
+use Isolated\Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
+use Isolated\Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Isolated\Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Isolated\Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Isolated\Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Isolated\Symfony\Component\Security\Core\User\UserProviderInterface;
 trigger_deprecation('symfony/security-core', '5.3', 'The "%s" class is deprecated, use the new authenticator system instead.', PreAuthenticatedAuthenticationProvider::class);
-
 /**
  * Processes a pre-authenticated authentication request.
  *
@@ -37,14 +34,12 @@ class PreAuthenticatedAuthenticationProvider implements AuthenticationProviderIn
     private $userProvider;
     private $userChecker;
     private $providerKey;
-
     public function __construct(UserProviderInterface $userProvider, UserCheckerInterface $userChecker, string $providerKey)
     {
         $this->userProvider = $userProvider;
         $this->userChecker = $userChecker;
         $this->providerKey = $providerKey;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -53,29 +48,22 @@ class PreAuthenticatedAuthenticationProvider implements AuthenticationProviderIn
         if (!$this->supports($token)) {
             throw new AuthenticationException('The token is not supported by this authentication provider.');
         }
-
-        if (!$user = $token->getUser()) {
+        if (!($user = $token->getUser())) {
             throw new BadCredentialsException('No pre-authenticated principal found in request.');
         }
-
-        $userIdentifier = method_exists($token, 'getUserIdentifier') ? $token->getUserIdentifier() : $token->getUsername();
+        $userIdentifier = \method_exists($token, 'getUserIdentifier') ? $token->getUserIdentifier() : $token->getUsername();
         // @deprecated since Symfony 5.3, change to $this->userProvider->loadUserByIdentifier() in 6.0
-        if (method_exists($this->userProvider, 'loadUserByIdentifier')) {
+        if (\method_exists($this->userProvider, 'loadUserByIdentifier')) {
             $user = $this->userProvider->loadUserByIdentifier($userIdentifier);
         } else {
-            trigger_deprecation('symfony/security-core', '5.3', 'Not implementing method "loadUserByIdentifier()" in user provider "%s" is deprecated. This method will replace "loadUserByUsername()" in Symfony 6.0.', get_debug_type($this->userProvider));
-
+            trigger_deprecation('symfony/security-core', '5.3', 'Not implementing method "loadUserByIdentifier()" in user provider "%s" is deprecated. This method will replace "loadUserByUsername()" in Symfony 6.0.', \get_debug_type($this->userProvider));
             $user = $this->userProvider->loadUserByUsername($userIdentifier);
         }
-
         $this->userChecker->checkPostAuth($user);
-
         $authenticatedToken = new PreAuthenticatedToken($user, $token->getCredentials(), $this->providerKey, $user->getRoles());
         $authenticatedToken->setAttributes($token->getAttributes());
-
         return $authenticatedToken;
     }
-
     /**
      * {@inheritdoc}
      */

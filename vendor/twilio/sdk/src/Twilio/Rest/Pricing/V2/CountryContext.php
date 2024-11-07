@@ -13,68 +13,47 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Pricing\V2;
 
-
-namespace Twilio\Rest\Pricing\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class CountryContext extends InstanceContext
-    {
+{
     /**
      * Initialize the CountryContext
      *
      * @param Version $version Version that contains the resource
      * @param string $isoCountry The [ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) of the origin-based voice pricing information to fetch.
      */
-    public function __construct(
-        Version $version,
-        $isoCountry
-    ) {
+    public function __construct(Version $version, $isoCountry)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'isoCountry' =>
-            $isoCountry,
-        ];
-
-        $this->uri = '/Trunking/Countries/' . \rawurlencode($isoCountry)
-        .'';
+        $this->solution = ['isoCountry' => $isoCountry];
+        $this->uri = '/Trunking/Countries/' . \rawurlencode($isoCountry) . '';
     }
-
     /**
      * Fetch the CountryInstance
      *
      * @return CountryInstance Fetched CountryInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): CountryInstance
+    public function fetch() : CountryInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new CountryInstance(
-            $this->version,
-            $payload,
-            $this->solution['isoCountry']
-        );
+        return new CountryInstance($this->version, $payload, $this->solution['isoCountry']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Pricing.V2.CountryContext ' . \implode(' ', $context) . ']';
     }

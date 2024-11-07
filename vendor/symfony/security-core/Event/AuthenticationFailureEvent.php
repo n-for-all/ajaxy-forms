@@ -8,15 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Event;
 
-namespace Symfony\Component\Security\Core\Event;
-
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Http\Event\LoginFailureEvent;
-
+use Isolated\Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Isolated\Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Isolated\Symfony\Component\Security\Http\Event\LoginFailureEvent;
 trigger_deprecation('symfony/security-core', '5.3', 'The "%s" class is deprecated, use "%s" with the new authenticator system instead.', AuthenticationFailureEvent::class, LoginFailureEvent::class);
-
 /**
  * This event is dispatched on authentication failure.
  *
@@ -27,15 +24,12 @@ trigger_deprecation('symfony/security-core', '5.3', 'The "%s" class is deprecate
 final class AuthenticationFailureEvent extends AuthenticationEvent
 {
     private $authenticationException;
-
     public function __construct(TokenInterface $token, AuthenticationException $ex)
     {
         parent::__construct($token);
-
         $this->authenticationException = $ex;
     }
-
-    public function getAuthenticationException(): AuthenticationException
+    public function getAuthenticationException() : AuthenticationException
     {
         return $this->authenticationException;
     }

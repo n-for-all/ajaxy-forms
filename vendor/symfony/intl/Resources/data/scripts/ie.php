@@ -1,5 +1,5 @@
 <?php
 
-return [
-    'Names' => [],
-];
+namespace Isolated;
+
+return ['Names' => []];

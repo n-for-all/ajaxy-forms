@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Csrf\TokenStorage;
 
-namespace Symfony\Component\Security\Csrf\TokenStorage;
-
-use Symfony\Component\Security\Csrf\Exception\TokenNotFoundException;
-
+use Isolated\Symfony\Component\Security\Csrf\Exception\TokenNotFoundException;
 /**
  * Token storage that uses PHP's native session handling.
  *
@@ -24,10 +22,8 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
      * The namespace used to store values in the session.
      */
     public const SESSION_NAMESPACE = '_csrf';
-
-    private $sessionStarted = false;
+    private $sessionStarted = \false;
     private $namespace;
-
     /**
      * Initializes the storage with a session namespace.
      *
@@ -37,7 +33,6 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
     {
         $this->namespace = $namespace;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -46,14 +41,11 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
         if (!$this->sessionStarted) {
             $this->startSession();
         }
-
         if (!isset($_SESSION[$this->namespace][$tokenId])) {
-            throw new TokenNotFoundException('The CSRF token with ID '.$tokenId.' does not exist.');
+            throw new TokenNotFoundException('The CSRF token with ID ' . $tokenId . ' does not exist.');
         }
-
         return (string) $_SESSION[$this->namespace][$tokenId];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -62,10 +54,8 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
         if (!$this->sessionStarted) {
             $this->startSession();
         }
-
         $_SESSION[$this->namespace][$tokenId] = $token;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -74,10 +64,8 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
         if (!$this->sessionStarted) {
             $this->startSession();
         }
-
         return isset($_SESSION[$this->namespace][$tokenId]);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -86,22 +74,16 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
         if (!$this->sessionStarted) {
             $this->startSession();
         }
-
         if (!isset($_SESSION[$this->namespace][$tokenId])) {
             return null;
         }
-
         $token = (string) $_SESSION[$this->namespace][$tokenId];
-
         unset($_SESSION[$this->namespace][$tokenId]);
-
         if (!$_SESSION[$this->namespace]) {
             unset($_SESSION[$this->namespace]);
         }
-
         return $token;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -109,13 +91,11 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
     {
         unset($_SESSION[$this->namespace]);
     }
-
     private function startSession()
     {
-        if (\PHP_SESSION_NONE === session_status()) {
-            session_start();
+        if (\PHP_SESSION_NONE === \session_status()) {
+            \session_start();
         }
-
-        $this->sessionStarted = true;
+        $this->sessionStarted = \true;
     }
 }

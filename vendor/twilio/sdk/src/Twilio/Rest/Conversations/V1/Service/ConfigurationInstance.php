@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1\Service;
 
-
-namespace Twilio\Rest\Conversations\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $chatServiceSid
  * @property string|null $defaultConversationCreatorRoleSid
@@ -45,51 +41,33 @@ class ConfigurationInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $chatServiceSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'chatServiceSid' => Values::array_get($payload, 'chat_service_sid'),
-            'defaultConversationCreatorRoleSid' => Values::array_get($payload, 'default_conversation_creator_role_sid'),
-            'defaultConversationRoleSid' => Values::array_get($payload, 'default_conversation_role_sid'),
-            'defaultChatServiceRoleSid' => Values::array_get($payload, 'default_chat_service_role_sid'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-            'reachabilityEnabled' => Values::array_get($payload, 'reachability_enabled'),
-        ];
-
-        $this->solution = ['chatServiceSid' => $chatServiceSid, ];
+        $this->properties = ['chatServiceSid' => Values::array_get($payload, 'chat_service_sid'), 'defaultConversationCreatorRoleSid' => Values::array_get($payload, 'default_conversation_creator_role_sid'), 'defaultConversationRoleSid' => Values::array_get($payload, 'default_conversation_role_sid'), 'defaultChatServiceRoleSid' => Values::array_get($payload, 'default_chat_service_role_sid'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links'), 'reachabilityEnabled' => Values::array_get($payload, 'reachability_enabled')];
+        $this->solution = ['chatServiceSid' => $chatServiceSid];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ConfigurationContext Context for this ConfigurationInstance
      */
-    protected function proxy(): ConfigurationContext
+    protected function proxy() : ConfigurationContext
     {
         if (!$this->context) {
-            $this->context = new ConfigurationContext(
-                $this->version,
-                $this->solution['chatServiceSid']
-            );
+            $this->context = new ConfigurationContext($this->version, $this->solution['chatServiceSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the ConfigurationInstance
      *
      * @return ConfigurationInstance Fetched ConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ConfigurationInstance
+    public function fetch() : ConfigurationInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the ConfigurationInstance
      *
@@ -97,12 +75,10 @@ class ConfigurationInstance extends InstanceResource
      * @return ConfigurationInstance Updated ConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ConfigurationInstance
+    public function update(array $options = []) : ConfigurationInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -115,27 +91,23 @@ class ConfigurationInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Conversations.V1.ConfigurationInstance ' . \implode(' ', $context) . ']';
     }
 }
-

@@ -13,81 +13,57 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ChannelContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ChannelContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The SID of the Flex chat channel resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Channels/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Channels/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the ChannelInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the ChannelInstance
      *
      * @return ChannelInstance Fetched ChannelInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ChannelInstance
+    public function fetch() : ChannelInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ChannelInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new ChannelInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.ChannelContext ' . \implode(' ', $context) . ']';
     }

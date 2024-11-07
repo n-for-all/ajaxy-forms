@@ -13,20 +13,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Sync\V1\Service\SyncMap;
 
-namespace Twilio\Rest\Sync\V1\Service\SyncMap;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class SyncMapItemList extends ListResource
-    {
+{
     /**
      * Construct the SyncMapItemList
      *
@@ -34,28 +31,13 @@ class SyncMapItemList extends ListResource
      * @param string $serviceSid The SID of the [Sync Service](https://www.twilio.com/docs/sync/api/service) to create the Map Item in.
      * @param string $mapSid The SID of the Sync Map to add the new Map Item to. Can be the Sync Map resource's `sid` or its `unique_name`.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid,
-        string $mapSid
-    ) {
+    public function __construct(Version $version, string $serviceSid, string $mapSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        'mapSid' =>
-            $mapSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Maps/' . \rawurlencode($mapSid)
-        .'/Items';
+        $this->solution = ['serviceSid' => $serviceSid, 'mapSid' => $mapSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Maps/' . \rawurlencode($mapSid) . '/Items';
     }
-
     /**
      * Create the SyncMapItemInstance
      *
@@ -65,35 +47,13 @@ class SyncMapItemList extends ListResource
      * @return SyncMapItemInstance Created SyncMapItemInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $key, array $data, array $options = []): SyncMapItemInstance
+    public function create(string $key, array $data, array $options = []) : SyncMapItemInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Key' =>
-                $key,
-            'Data' =>
-                Serialize::jsonObject($data),
-            'Ttl' =>
-                $options['ttl'],
-            'ItemTtl' =>
-                $options['itemTtl'],
-            'CollectionTtl' =>
-                $options['collectionTtl'],
-        ]);
-
+        $data = Values::of(['Key' => $key, 'Data' => Serialize::jsonObject($data), 'Ttl' => $options['ttl'], 'ItemTtl' => $options['itemTtl'], 'CollectionTtl' => $options['collectionTtl']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new SyncMapItemInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['mapSid']
-        );
+        return new SyncMapItemInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['mapSid']);
     }
-
-
     /**
      * Reads SyncMapItemInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -110,11 +70,10 @@ class SyncMapItemList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return SyncMapItemInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams SyncMapItemInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -134,15 +93,12 @@ class SyncMapItemList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of SyncMapItemInstance records from the API.
      * Request is executed immediately
@@ -152,32 +108,13 @@ class SyncMapItemList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return SyncMapItemPage Page of SyncMapItemInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): SyncMapItemPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : SyncMapItemPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Order' =>
-                $options['order'],
-            'From' =>
-                $options['from'],
-            'Bounds' =>
-                $options['bounds'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Order' => $options['order'], 'From' => $options['from'], 'Bounds' => $options['bounds'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new SyncMapItemPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of SyncMapItemInstance records from the API.
      * Request is executed immediately
@@ -185,41 +122,26 @@ class SyncMapItemList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return SyncMapItemPage Page of SyncMapItemInstance
      */
-    public function getPage(string $targetUrl): SyncMapItemPage
+    public function getPage(string $targetUrl) : SyncMapItemPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new SyncMapItemPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a SyncMapItemContext
      *
      * @param string $key The `key` value of the Sync Map Item resource to delete.
      */
-    public function getContext(
-        string $key
-        
-    ): SyncMapItemContext
+    public function getContext(string $key) : SyncMapItemContext
     {
-        return new SyncMapItemContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $this->solution['mapSid'],
-            $key
-        );
+        return new SyncMapItemContext($this->version, $this->solution['serviceSid'], $this->solution['mapSid'], $key);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Sync.V1.SyncMapItemList]';
     }

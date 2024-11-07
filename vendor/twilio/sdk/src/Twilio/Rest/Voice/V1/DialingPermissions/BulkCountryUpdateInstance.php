@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Voice\V1\DialingPermissions;
 
-
-namespace Twilio\Rest\Voice\V1\DialingPermissions;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property int|null $updateCount
  * @property string|null $updateRequest
@@ -38,16 +34,10 @@ class BulkCountryUpdateInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'updateCount' => Values::array_get($payload, 'update_count'),
-            'updateRequest' => Values::array_get($payload, 'update_request'),
-        ];
-
+        $this->properties = ['updateCount' => Values::array_get($payload, 'update_count'), 'updateRequest' => Values::array_get($payload, 'update_request')];
         $this->solution = [];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -60,23 +50,19 @@ class BulkCountryUpdateInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Voice.V1.BulkCountryUpdateInstance]';
     }
 }
-

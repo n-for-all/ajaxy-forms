@@ -1,8 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'Asia/Rangoon' => 'Myanmar Time (Rangoon)',
-    ],
-    'Meta' => [],
-];
+namespace Isolated;
+
+return ['Names' => ['Asia/Rangoon' => 'Myanmar Time (Rangoon)'], 'Meta' => []];

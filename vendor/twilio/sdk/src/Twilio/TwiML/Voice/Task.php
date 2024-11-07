@@ -6,37 +6,37 @@
  * | (_)\/(_)(_|\/| |(/_  v1.0.0
  * /       /
  */
+namespace Isolated\Twilio\TwiML\Voice;
 
-namespace Twilio\TwiML\Voice;
-
-use Twilio\TwiML\TwiML;
-
-class Task extends TwiML {
+use Isolated\Twilio\TwiML\TwiML;
+class Task extends TwiML
+{
     /**
      * Task constructor.
      *
      * @param string $body TaskRouter task attributes
      * @param array $attributes Optional attributes
      */
-    public function __construct($body, $attributes = []) {
+    public function __construct($body, $attributes = [])
+    {
         parent::__construct('Task', $body, $attributes);
     }
-
     /**
      * Add Priority attribute.
      *
      * @param int $priority Task priority
      */
-    public function setPriority($priority): self {
+    public function setPriority($priority) : self
+    {
         return $this->setAttribute('priority', $priority);
     }
-
     /**
      * Add Timeout attribute.
      *
      * @param int $timeout Timeout associated with task
      */
-    public function setTimeout($timeout): self {
+    public function setTimeout($timeout) : self
+    {
         return $this->setAttribute('timeout', $timeout);
     }
 }

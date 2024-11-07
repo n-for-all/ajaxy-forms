@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Constraints;
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
 /**
  * @Annotation
@@ -22,10 +21,6 @@ namespace Symfony\Component\Validator\Constraints;
 class LessThan extends AbstractComparison
 {
     public const TOO_HIGH_ERROR = '079d7420-2d13-460c-8756-de810eeb37d2';
-
-    protected static $errorNames = [
-        self::TOO_HIGH_ERROR => 'TOO_HIGH_ERROR',
-    ];
-
+    protected static $errorNames = [self::TOO_HIGH_ERROR => 'TOO_HIGH_ERROR'];
     public $message = 'This value should be less than {{ compared_value }}.';
 }

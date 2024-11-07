@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\DataCollector\EventListener;
 
-namespace Symfony\Component\Form\Extension\DataCollector\EventListener;
-
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Form\Extension\DataCollector\FormDataCollectorInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-
+use Isolated\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Isolated\Symfony\Component\Form\Extension\DataCollector\FormDataCollectorInterface;
+use Isolated\Symfony\Component\Form\FormEvent;
+use Isolated\Symfony\Component\Form\FormEvents;
 /**
  * Listener that invokes a data collector for the {@link FormEvents::POST_SET_DATA}
  * and {@link FormEvents::POST_SUBMIT} events.
@@ -25,12 +23,10 @@ use Symfony\Component\Form\FormEvents;
 class DataCollectorListener implements EventSubscriberInterface
 {
     private $dataCollector;
-
     public function __construct(FormDataCollectorInterface $dataCollector)
     {
         $this->dataCollector = $dataCollector;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -43,7 +39,6 @@ class DataCollectorListener implements EventSubscriberInterface
             FormEvents::POST_SUBMIT => ['postSubmit', -255],
         ];
     }
-
     /**
      * Listener for the {@link FormEvents::POST_SET_DATA} event.
      */
@@ -52,12 +47,10 @@ class DataCollectorListener implements EventSubscriberInterface
         if ($event->getForm()->isRoot()) {
             // Collect basic information about each form
             $this->dataCollector->collectConfiguration($event->getForm());
-
             // Collect the default data
             $this->dataCollector->collectDefaultData($event->getForm());
         }
     }
-
     /**
      * Listener for the {@link FormEvents::POST_SUBMIT} event.
      */
@@ -66,7 +59,6 @@ class DataCollectorListener implements EventSubscriberInterface
         if ($event->getForm()->isRoot()) {
             // Collect the submitted data of each form
             $this->dataCollector->collectSubmittedData($event->getForm());
-
             // Assemble a form tree
             // This is done again after the view is built, but we need it here as the view is not always created.
             $this->dataCollector->buildPreliminaryFormTree($event->getForm());

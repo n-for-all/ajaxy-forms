@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator;
+namespace Isolated\Symfony\Component\Validator;
 
 /**
  * Default implementation of {@ConstraintViolationListInterface}.
@@ -24,7 +23,6 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
      * @var list<ConstraintViolationInterface>
      */
     private $violations = [];
-
     /**
      * Creates a new constraint violation list.
      *
@@ -36,15 +34,12 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
             $this->add($violation);
         }
     }
-
-    public static function createFromMessage(string $message): self
+    public static function createFromMessage(string $message) : self
     {
         $self = new self();
         $self->add(new ConstraintViolation($message, '', [], null, '', null));
-
         return $self;
     }
-
     /**
      * Converts the violation into a string for debugging purposes.
      *
@@ -53,14 +48,11 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     public function __toString()
     {
         $string = '';
-
         foreach ($this->violations as $violation) {
-            $string .= $violation."\n";
+            $string .= $violation . "\n";
         }
-
         return $string;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -68,7 +60,6 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     {
         $this->violations[] = $violation;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -78,19 +69,16 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
             $this->violations[] = $violation;
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function get(int $offset)
     {
         if (!isset($this->violations[$offset])) {
-            throw new \OutOfBoundsException(sprintf('The offset "%s" does not exist.', $offset));
+            throw new \OutOfBoundsException(\sprintf('The offset "%s" does not exist.', $offset));
         }
-
         return $this->violations[$offset];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -98,7 +86,6 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     {
         return isset($this->violations[$offset]);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -106,7 +93,6 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     {
         $this->violations[$offset] = $violation;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -114,7 +100,6 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     {
         unset($this->violations[$offset]);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -125,7 +110,6 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     {
         return new \ArrayIterator($this->violations);
     }
-
     /**
      * @return int
      */
@@ -134,7 +118,6 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     {
         return \count($this->violations);
     }
-
     /**
      * @return bool
      */
@@ -143,7 +126,6 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     {
         return $this->has($offset);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -154,7 +136,6 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     {
         return $this->get($offset);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -169,7 +150,6 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
             $this->set($offset, $violation);
         }
     }
-
     /**
      * {@inheritdoc}
      *
@@ -180,7 +160,6 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     {
         $this->remove($offset);
     }
-
     /**
      * Creates iterator for errors with specific codes.
      *
@@ -193,11 +172,10 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
         $codes = (array) $codes;
         $violations = [];
         foreach ($this as $violation) {
-            if (\in_array($violation->getCode(), $codes, true)) {
+            if (\in_array($violation->getCode(), $codes, \true)) {
                 $violations[] = $violation;
             }
         }
-
         return new static($violations);
     }
 }

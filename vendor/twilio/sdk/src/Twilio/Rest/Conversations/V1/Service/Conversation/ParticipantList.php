@@ -13,20 +13,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1\Service\Conversation;
 
-namespace Twilio\Rest\Conversations\V1\Service\Conversation;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class ParticipantList extends ListResource
-    {
+{
     /**
      * Construct the ParticipantList
      *
@@ -34,28 +31,13 @@ class ParticipantList extends ListResource
      * @param string $chatServiceSid The SID of the [Conversation Service](https://www.twilio.com/docs/conversations/api/service-resource) the Participant resource is associated with.
      * @param string $conversationSid The unique ID of the [Conversation](https://www.twilio.com/docs/conversations/api/conversation-resource) for this participant.
      */
-    public function __construct(
-        Version $version,
-        string $chatServiceSid,
-        string $conversationSid
-    ) {
+    public function __construct(Version $version, string $chatServiceSid, string $conversationSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'chatServiceSid' =>
-            $chatServiceSid,
-        
-        'conversationSid' =>
-            $conversationSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($chatServiceSid)
-        .'/Conversations/' . \rawurlencode($conversationSid)
-        .'/Participants';
+        $this->solution = ['chatServiceSid' => $chatServiceSid, 'conversationSid' => $conversationSid];
+        $this->uri = '/Services/' . \rawurlencode($chatServiceSid) . '/Conversations/' . \rawurlencode($conversationSid) . '/Participants';
     }
-
     /**
      * Create the ParticipantInstance
      *
@@ -63,43 +45,14 @@ class ParticipantList extends ListResource
      * @return ParticipantInstance Created ParticipantInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): ParticipantInstance
+    public function create(array $options = []) : ParticipantInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Identity' =>
-                $options['identity'],
-            'MessagingBinding.Address' =>
-                $options['messagingBindingAddress'],
-            'MessagingBinding.ProxyAddress' =>
-                $options['messagingBindingProxyAddress'],
-            'DateCreated' =>
-                Serialize::iso8601DateTime($options['dateCreated']),
-            'DateUpdated' =>
-                Serialize::iso8601DateTime($options['dateUpdated']),
-            'Attributes' =>
-                $options['attributes'],
-            'MessagingBinding.ProjectedAddress' =>
-                $options['messagingBindingProjectedAddress'],
-            'RoleSid' =>
-                $options['roleSid'],
-        ]);
-
+        $data = Values::of(['Identity' => $options['identity'], 'MessagingBinding.Address' => $options['messagingBindingAddress'], 'MessagingBinding.ProxyAddress' => $options['messagingBindingProxyAddress'], 'DateCreated' => Serialize::iso8601DateTime($options['dateCreated']), 'DateUpdated' => Serialize::iso8601DateTime($options['dateUpdated']), 'Attributes' => $options['attributes'], 'MessagingBinding.ProjectedAddress' => $options['messagingBindingProjectedAddress'], 'RoleSid' => $options['roleSid']]);
         $headers = Values::of(['X-Twilio-Webhook-Enabled' => $options['xTwilioWebhookEnabled']]);
-
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new ParticipantInstance(
-            $this->version,
-            $payload,
-            $this->solution['chatServiceSid'],
-            $this->solution['conversationSid']
-        );
+        return new ParticipantInstance($this->version, $payload, $this->solution['chatServiceSid'], $this->solution['conversationSid']);
     }
-
-
     /**
      * Reads ParticipantInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -115,11 +68,10 @@ class ParticipantList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return ParticipantInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams ParticipantInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -138,15 +90,12 @@ class ParticipantList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of ParticipantInstance records from the API.
      * Request is executed immediately
@@ -156,24 +105,12 @@ class ParticipantList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return ParticipantPage Page of ParticipantInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): ParticipantPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : ParticipantPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new ParticipantPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of ParticipantInstance records from the API.
      * Request is executed immediately
@@ -181,41 +118,26 @@ class ParticipantList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return ParticipantPage Page of ParticipantInstance
      */
-    public function getPage(string $targetUrl): ParticipantPage
+    public function getPage(string $targetUrl) : ParticipantPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new ParticipantPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a ParticipantContext
      *
      * @param string $sid A 34 character string that uniquely identifies this resource.
      */
-    public function getContext(
-        string $sid
-        
-    ): ParticipantContext
+    public function getContext(string $sid) : ParticipantContext
     {
-        return new ParticipantContext(
-            $this->version,
-            $this->solution['chatServiceSid'],
-            $this->solution['conversationSid'],
-            $sid
-        );
+        return new ParticipantContext($this->version, $this->solution['chatServiceSid'], $this->solution['conversationSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Conversations.V1.ParticipantList]';
     }

@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Mapping\Loader;
 
-namespace Symfony\Component\Validator\Mapping\Loader;
-
-use Symfony\Component\Validator\Exception\MappingException;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
-
+use Isolated\Symfony\Component\Validator\Exception\MappingException;
+use Isolated\Symfony\Component\Validator\Mapping\ClassMetadata;
 /**
  * Loads validation metadata from multiple {@link LoaderInterface} instances.
  *
@@ -26,7 +24,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 class LoaderChain implements LoaderInterface
 {
     protected $loaders;
-
     /**
      * @param LoaderInterface[] $loaders The metadata loaders to use
      *
@@ -36,27 +33,22 @@ class LoaderChain implements LoaderInterface
     {
         foreach ($loaders as $loader) {
             if (!$loader instanceof LoaderInterface) {
-                throw new MappingException(sprintf('Class "%s" is expected to implement LoaderInterface.', get_debug_type($loader)));
+                throw new MappingException(\sprintf('Class "%s" is expected to implement LoaderInterface.', \get_debug_type($loader)));
             }
         }
-
         $this->loaders = $loaders;
     }
-
     /**
      * {@inheritdoc}
      */
     public function loadClassMetadata(ClassMetadata $metadata)
     {
-        $success = false;
-
+        $success = \false;
         foreach ($this->loaders as $loader) {
             $success = $loader->loadClassMetadata($metadata) || $success;
         }
-
         return $success;
     }
-
     /**
      * @return LoaderInterface[]
      */

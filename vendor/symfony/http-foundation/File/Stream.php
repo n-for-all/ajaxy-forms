@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\HttpFoundation\File;
+namespace Isolated\Symfony\Component\HttpFoundation\File;
 
 /**
  * A PHP stream of unknown size.
@@ -26,6 +25,6 @@ class Stream extends File
     #[\ReturnTypeWillChange]
     public function getSize()
     {
-        return false;
+        return \false;
     }
 }

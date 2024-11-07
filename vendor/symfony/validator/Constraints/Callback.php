@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
-namespace Symfony\Component\Validator\Constraints;
-
-use Symfony\Component\Validator\Constraint;
-
+use Isolated\Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  * @Target({"CLASS", "PROPERTY", "METHOD", "ANNOTATION"})
@@ -26,7 +24,6 @@ class Callback extends Constraint
      * @var string|callable
      */
     public $callback;
-
     /**
      * {@inheritdoc}
      *
@@ -38,16 +35,13 @@ class Callback extends Constraint
         if (\is_array($callback) && 1 === \count($callback) && isset($callback['value'])) {
             $callback = $callback['value'];
         }
-
-        if (!\is_array($callback) || (!isset($callback['callback']) && !isset($callback['groups']) && !isset($callback['payload']))) {
+        if (!\is_array($callback) || !isset($callback['callback']) && !isset($callback['groups']) && !isset($callback['payload'])) {
             $options['callback'] = $callback;
         } else {
-            $options = array_merge($callback, $options);
+            $options = \array_merge($callback, $options);
         }
-
         parent::__construct($options, $groups, $payload);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -55,7 +49,6 @@ class Callback extends Constraint
     {
         return 'callback';
     }
-
     /**
      * {@inheritdoc}
      */

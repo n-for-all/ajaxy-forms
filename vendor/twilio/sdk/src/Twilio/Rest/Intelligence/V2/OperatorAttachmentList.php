@@ -13,30 +13,23 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2;
 
-namespace Twilio\Rest\Intelligence\V2;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class OperatorAttachmentList extends ListResource
-    {
+{
     /**
      * Construct the OperatorAttachmentList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a OperatorAttachmentContext
      *
@@ -44,25 +37,16 @@ class OperatorAttachmentList extends ListResource
      *
      * @param string $operatorSid The unique SID identifier of the Operator. Allows both Custom and Pre-built Operators.
      */
-    public function getContext(
-        string $serviceSid
-        , string $operatorSid
-        
-    ): OperatorAttachmentContext
+    public function getContext(string $serviceSid, string $operatorSid) : OperatorAttachmentContext
     {
-        return new OperatorAttachmentContext(
-            $this->version,
-            $serviceSid,
-            $operatorSid
-        );
+        return new OperatorAttachmentContext($this->version, $serviceSid, $operatorSid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Intelligence.V2.OperatorAttachmentList]';
     }

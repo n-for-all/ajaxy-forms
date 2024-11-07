@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\DataTransformer;
 
-namespace Symfony\Component\Form\Extension\Core\DataTransformer;
-
-use Symfony\Component\Form\Exception\TransformationFailedException;
-
+use Isolated\Symfony\Component\Form\Exception\TransformationFailedException;
 /**
  * Transforms between a date string and a DateTime object.
  *
@@ -27,7 +25,6 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
      * @var string
      */
     private $generateFormat;
-
     /**
      * Format used for parsing strings.
      *
@@ -38,7 +35,6 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
      * @var string
      */
     private $parseFormat;
-
     /**
      * Transforms a \DateTime instance to a string.
      *
@@ -51,9 +47,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
     public function __construct(string $inputTimezone = null, string $outputTimezone = null, string $format = 'Y-m-d H:i:s')
     {
         parent::__construct($inputTimezone, $outputTimezone);
-
         $this->generateFormat = $this->parseFormat = $format;
-
         // See https://php.net/datetime.createfromformat
         // The character "|" in the format makes sure that the parts of a date
         // that are *not* specified in the format are reset to the corresponding
@@ -62,11 +56,10 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
         // where the time corresponds to the current server time.
         // With "|" and "Y-m-d", "2010-02-03" becomes "2010-02-03 00:00:00",
         // which is at least deterministic and thus used here.
-        if (!str_contains($this->parseFormat, '|')) {
+        if (!\str_contains($this->parseFormat, '|')) {
             $this->parseFormat .= '|';
         }
     }
-
     /**
      * Transforms a DateTime object into a date string with the configured format
      * and timezone.
@@ -82,20 +75,15 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
         if (null === $dateTime) {
             return '';
         }
-
         if (!$dateTime instanceof \DateTimeInterface) {
-            throw new TransformationFailedException('Expected a \DateTimeInterface.');
+            throw new TransformationFailedException('Expected a \\DateTimeInterface.');
         }
-
         if (!$dateTime instanceof \DateTimeImmutable) {
             $dateTime = clone $dateTime;
         }
-
         $dateTime = $dateTime->setTimezone(new \DateTimeZone($this->outputTimezone));
-
         return $dateTime->format($this->generateFormat);
     }
-
     /**
      * Transforms a date string in the configured timezone into a DateTime object.
      *
@@ -111,20 +99,15 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
         if (empty($value)) {
             return null;
         }
-
         if (!\is_string($value)) {
             throw new TransformationFailedException('Expected a string.');
         }
-
         $outputTz = new \DateTimeZone($this->outputTimezone);
         $dateTime = \DateTime::createFromFormat($this->parseFormat, $value, $outputTz);
-
         $lastErrors = \DateTime::getLastErrors();
-
         if (0 < $lastErrors['warning_count'] || 0 < $lastErrors['error_count']) {
-            throw new TransformationFailedException(implode(', ', array_merge(array_values($lastErrors['warnings']), array_values($lastErrors['errors']))));
+            throw new TransformationFailedException(\implode(', ', \array_merge(\array_values($lastErrors['warnings']), \array_values($lastErrors['errors']))));
         }
-
         try {
             if ($this->inputTimezone !== $this->outputTimezone) {
                 $dateTime->setTimezone(new \DateTimeZone($this->inputTimezone));
@@ -132,7 +115,6 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
         } catch (\Exception $e) {
             throw new TransformationFailedException($e->getMessage(), $e->getCode(), $e);
         }
-
         return $dateTime;
     }
 }

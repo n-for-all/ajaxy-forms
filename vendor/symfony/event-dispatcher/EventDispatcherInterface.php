@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\EventDispatcher;
 
-namespace Symfony\Component\EventDispatcher;
-
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
-
+use Isolated\Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 /**
  * The EventDispatcherInterface is the central point of Symfony's event listener system.
  * Listeners are registered on the manager and events are dispatched through the
@@ -29,7 +27,6 @@ interface EventDispatcherInterface extends ContractsEventDispatcherInterface
      *                      listener will be triggered in the chain (defaults to 0)
      */
     public function addListener(string $eventName, callable $listener, int $priority = 0);
-
     /**
      * Adds an event subscriber.
      *
@@ -37,21 +34,17 @@ interface EventDispatcherInterface extends ContractsEventDispatcherInterface
      * interested in and added as a listener for these events.
      */
     public function addSubscriber(EventSubscriberInterface $subscriber);
-
     /**
      * Removes an event listener from the specified events.
      */
     public function removeListener(string $eventName, callable $listener);
-
     public function removeSubscriber(EventSubscriberInterface $subscriber);
-
     /**
      * Gets the listeners of a specific event or all listeners sorted by descending priority.
      *
      * @return array<callable[]|callable>
      */
     public function getListeners(?string $eventName = null);
-
     /**
      * Gets the listener priority for a specific event.
      *
@@ -60,7 +53,6 @@ interface EventDispatcherInterface extends ContractsEventDispatcherInterface
      * @return int|null
      */
     public function getListenerPriority(string $eventName, callable $listener);
-
     /**
      * Checks whether an event has any registered listeners.
      *

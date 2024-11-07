@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\DataTransformer;
 
-namespace Symfony\Component\Form\Extension\Core\DataTransformer;
-
-use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
-
+use Isolated\Symfony\Component\Form\DataTransformerInterface;
+use Isolated\Symfony\Component\Form\Exception\TransformationFailedException;
 /**
  * Transforms between a DateTimeImmutable object and a DateTime object.
  *
@@ -28,23 +26,19 @@ final class DateTimeImmutableToDateTimeTransformer implements DataTransformerInt
      *
      * @throws TransformationFailedException If the given value is not a \DateTimeImmutable
      */
-    public function transform($value): ?\DateTime
+    public function transform($value) : ?\DateTime
     {
         if (null === $value) {
             return null;
         }
-
         if (!$value instanceof \DateTimeImmutable) {
-            throw new TransformationFailedException('Expected a \DateTimeImmutable.');
+            throw new TransformationFailedException('Expected a \\DateTimeImmutable.');
         }
-
         if (\PHP_VERSION_ID >= 70300) {
             return \DateTime::createFromImmutable($value);
         }
-
         return \DateTime::createFromFormat('U.u', $value->format('U.u'))->setTimezone($value->getTimezone());
     }
-
     /**
      * Transforms a DateTime object into a DateTimeImmutable object.
      *
@@ -52,16 +46,14 @@ final class DateTimeImmutableToDateTimeTransformer implements DataTransformerInt
      *
      * @throws TransformationFailedException If the given value is not a \DateTime
      */
-    public function reverseTransform($value): ?\DateTimeImmutable
+    public function reverseTransform($value) : ?\DateTimeImmutable
     {
         if (null === $value) {
             return null;
         }
-
         if (!$value instanceof \DateTime) {
-            throw new TransformationFailedException('Expected a \DateTime.');
+            throw new TransformationFailedException('Expected a \\DateTime.');
         }
-
         return \DateTimeImmutable::createFromMutable($value);
     }
 }

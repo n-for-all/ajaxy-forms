@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Test;
 
-namespace Symfony\Component\Form\Test;
-
-use Symfony\Component\Form\FormInterface as BaseFormInterface;
-
+use Isolated\Symfony\Component\Form\FormInterface as BaseFormInterface;
 interface FormInterface extends \Iterator, BaseFormInterface
 {
 }

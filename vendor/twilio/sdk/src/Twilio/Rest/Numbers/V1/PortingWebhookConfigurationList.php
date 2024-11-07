@@ -13,59 +13,44 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V1;
 
-namespace Twilio\Rest\Numbers\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class PortingWebhookConfigurationList extends ListResource
-    {
+{
     /**
      * Construct the PortingWebhookConfigurationList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Porting/Configuration/Webhook';
     }
-
     /**
      * Create the PortingWebhookConfigurationInstance
      *
      * @return PortingWebhookConfigurationInstance Created PortingWebhookConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(): PortingWebhookConfigurationInstance
+    public function create() : PortingWebhookConfigurationInstance
     {
-
         $data = $body->toArray();
         $headers['Content-Type'] = 'application/json';
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new PortingWebhookConfigurationInstance(
-            $this->version,
-            $payload
-        );
+        return new PortingWebhookConfigurationInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V1.PortingWebhookConfigurationList]';
     }

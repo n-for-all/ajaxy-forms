@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'MUR' => [
-            'Rs',
-            'roupie mauricienne',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['MUR' => ['Rs', 'roupie mauricienne']]];

@@ -1,9 +1,7 @@
 <?php
 
+namespace Isolated\Twilio\Exceptions;
 
-namespace Twilio\Exceptions;
-
-
-class TwilioException extends \Exception {
-
+class TwilioException extends \Exception
+{
 }

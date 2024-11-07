@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\Type;
 
-namespace Symfony\Component\Form\Extension\Core\Type;
-
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\Form\AbstractType;
+use Isolated\Symfony\Component\Form\DataTransformerInterface;
+use Isolated\Symfony\Component\Form\FormBuilderInterface;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 class TextType extends AbstractType implements DataTransformerInterface
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -29,17 +27,13 @@ class TextType extends AbstractType implements DataTransformerInterface
             $builder->addViewTransformer($this);
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'compound' => false,
-        ]);
+        $resolver->setDefaults(['compound' => \false]);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -47,7 +41,6 @@ class TextType extends AbstractType implements DataTransformerInterface
     {
         return 'text';
     }
-
     /**
      * {@inheritdoc}
      */
@@ -56,7 +49,6 @@ class TextType extends AbstractType implements DataTransformerInterface
         // Model data should not be transformed
         return $data;
     }
-
     /**
      * {@inheritdoc}
      */

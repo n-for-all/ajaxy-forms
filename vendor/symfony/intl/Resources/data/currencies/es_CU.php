@@ -1,14 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'CUP' => [
-            '$',
-            'peso cubano',
-        ],
-        'USD' => [
-            'US$',
-            'dólar estadounidense',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['CUP' => ['$', 'peso cubano'], 'USD' => ['US$', 'dólar estadounidense']]];

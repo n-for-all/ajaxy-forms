@@ -13,20 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace\Worker;
 
-
-namespace Twilio\Rest\Taskrouter\V1\Workspace\Worker;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class WorkerChannelContext extends InstanceContext
-    {
+{
     /**
      * Initialize the WorkerChannelContext
      *
@@ -35,51 +31,24 @@ class WorkerChannelContext extends InstanceContext
      * @param string $workerSid The SID of the Worker with the WorkerChannel to fetch.
      * @param string $sid The SID of the WorkerChannel to fetch.
      */
-    public function __construct(
-        Version $version,
-        $workspaceSid,
-        $workerSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $workspaceSid, $workerSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'workspaceSid' =>
-            $workspaceSid,
-        'workerSid' =>
-            $workerSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid)
-        .'/Workers/' . \rawurlencode($workerSid)
-        .'/Channels/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['workspaceSid' => $workspaceSid, 'workerSid' => $workerSid, 'sid' => $sid];
+        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid) . '/Workers/' . \rawurlencode($workerSid) . '/Channels/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the WorkerChannelInstance
      *
      * @return WorkerChannelInstance Fetched WorkerChannelInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): WorkerChannelInstance
+    public function fetch() : WorkerChannelInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new WorkerChannelInstance(
-            $this->version,
-            $payload,
-            $this->solution['workspaceSid'],
-            $this->solution['workerSid'],
-            $this->solution['sid']
-        );
+        return new WorkerChannelInstance($this->version, $payload, $this->solution['workspaceSid'], $this->solution['workerSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the WorkerChannelInstance
      *
@@ -87,40 +56,23 @@ class WorkerChannelContext extends InstanceContext
      * @return WorkerChannelInstance Updated WorkerChannelInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): WorkerChannelInstance
+    public function update(array $options = []) : WorkerChannelInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Capacity' =>
-                $options['capacity'],
-            'Available' =>
-                Serialize::booleanToString($options['available']),
-        ]);
-
+        $data = Values::of(['Capacity' => $options['capacity'], 'Available' => Serialize::booleanToString($options['available'])]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new WorkerChannelInstance(
-            $this->version,
-            $payload,
-            $this->solution['workspaceSid'],
-            $this->solution['workerSid'],
-            $this->solution['sid']
-        );
+        return new WorkerChannelInstance($this->version, $payload, $this->solution['workspaceSid'], $this->solution['workerSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Taskrouter.V1.WorkerChannelContext ' . \implode(' ', $context) . ']';
     }

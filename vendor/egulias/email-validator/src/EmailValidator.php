@@ -1,32 +1,27 @@
 <?php
 
-namespace Egulias\EmailValidator;
+namespace Isolated\Egulias\EmailValidator;
 
-use Egulias\EmailValidator\Result\InvalidEmail;
-use Egulias\EmailValidator\Validation\EmailValidation;
-
+use Isolated\Egulias\EmailValidator\Result\InvalidEmail;
+use Isolated\Egulias\EmailValidator\Validation\EmailValidation;
 class EmailValidator
 {
     /**
      * @var EmailLexer
      */
     private $lexer;
-
     /**
      * @var Warning\Warning[]
      */
     private $warnings = [];
-
     /**
      * @var ?InvalidEmail
      */
     private $error;
-
     public function __construct()
     {
         $this->lexer = new EmailLexer();
     }
-
     /**
      * @param string          $email
      * @param EmailValidation $emailValidation
@@ -37,10 +32,8 @@ class EmailValidator
         $isValid = $emailValidation->isValid($email, $this->lexer);
         $this->warnings = $emailValidation->getWarnings();
         $this->error = $emailValidation->getError();
-
         return $isValid;
     }
-
     /**
      * @return boolean
      */
@@ -48,7 +41,6 @@ class EmailValidator
     {
         return !empty($this->warnings);
     }
-
     /**
      * @return array
      */
@@ -56,7 +48,6 @@ class EmailValidator
     {
         return $this->warnings;
     }
-
     /**
      * @return InvalidEmail|null
      */

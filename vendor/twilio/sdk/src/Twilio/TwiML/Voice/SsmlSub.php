@@ -6,29 +6,29 @@
  * | (_)\/(_)(_|\/| |(/_  v1.0.0
  * /       /
  */
+namespace Isolated\Twilio\TwiML\Voice;
 
-namespace Twilio\TwiML\Voice;
-
-use Twilio\TwiML\TwiML;
-
-class SsmlSub extends TwiML {
+use Isolated\Twilio\TwiML\TwiML;
+class SsmlSub extends TwiML
+{
     /**
      * SsmlSub constructor.
      *
      * @param string $words Words to be substituted
      * @param array $attributes Optional attributes
      */
-    public function __construct($words, $attributes = []) {
+    public function __construct($words, $attributes = [])
+    {
         parent::__construct('sub', $words, $attributes);
     }
-
     /**
      * Add Alias attribute.
      *
      * @param string $alias Substitute a different word (or pronunciation) for
      *                      selected text such as an acronym or abbreviation
      */
-    public function setAlias($alias): self {
+    public function setAlias($alias) : self
+    {
         return $this->setAttribute('alias', $alias);
     }
 }

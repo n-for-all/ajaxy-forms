@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'WST' => [
-            'WS$',
-            'Samoan Tala',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['WST' => ['WS$', 'Samoan Tala']]];

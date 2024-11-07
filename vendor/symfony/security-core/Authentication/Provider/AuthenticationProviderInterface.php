@@ -8,14 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Authentication\Provider;
 
-namespace Symfony\Component\Security\Core\Authentication\Provider;
-
-use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
+use Isolated\Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
+use Isolated\Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 trigger_deprecation('symfony/security-core', '5.3', 'The "%s" interface is deprecated, use the new authenticator system instead.', AuthenticationProviderInterface::class);
-
 /**
  * AuthenticationProviderInterface is the interface for all authentication
  * providers.
@@ -34,7 +31,6 @@ interface AuthenticationProviderInterface extends AuthenticationManagerInterface
      * @var string
      */
     public const USERNAME_NONE_PROVIDED = 'NONE_PROVIDED';
-
     /**
      * Checks whether this provider supports the given token.
      *

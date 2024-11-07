@@ -13,43 +13,30 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Studio\V1\Flow;
 
-namespace Twilio\Rest\Studio\V1\Flow;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class EngagementList extends ListResource
-    {
+{
     /**
      * Construct the EngagementList
      *
      * @param Version $version Version that contains the resource
      * @param string $flowSid The SID of the Flow.
      */
-    public function __construct(
-        Version $version,
-        string $flowSid
-    ) {
+    public function __construct(Version $version, string $flowSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'flowSid' =>
-            $flowSid,
-        
-        ];
-
-        $this->uri = '/Flows/' . \rawurlencode($flowSid)
-        .'/Engagements';
+        $this->solution = ['flowSid' => $flowSid];
+        $this->uri = '/Flows/' . \rawurlencode($flowSid) . '/Engagements';
     }
-
     /**
      * Create the EngagementInstance
      *
@@ -59,30 +46,13 @@ class EngagementList extends ListResource
      * @return EngagementInstance Created EngagementInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $to, string $from, array $options = []): EngagementInstance
+    public function create(string $to, string $from, array $options = []) : EngagementInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'To' =>
-                $to,
-            'From' =>
-                $from,
-            'Parameters' =>
-                Serialize::jsonObject($options['parameters']),
-        ]);
-
+        $data = Values::of(['To' => $to, 'From' => $from, 'Parameters' => Serialize::jsonObject($options['parameters'])]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new EngagementInstance(
-            $this->version,
-            $payload,
-            $this->solution['flowSid']
-        );
+        return new EngagementInstance($this->version, $payload, $this->solution['flowSid']);
     }
-
-
     /**
      * Reads EngagementInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -98,11 +68,10 @@ class EngagementList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return EngagementInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams EngagementInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -121,15 +90,12 @@ class EngagementList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of EngagementInstance records from the API.
      * Request is executed immediately
@@ -139,24 +105,12 @@ class EngagementList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return EngagementPage Page of EngagementInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): EngagementPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : EngagementPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new EngagementPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of EngagementInstance records from the API.
      * Request is executed immediately
@@ -164,40 +118,26 @@ class EngagementList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return EngagementPage Page of EngagementInstance
      */
-    public function getPage(string $targetUrl): EngagementPage
+    public function getPage(string $targetUrl) : EngagementPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new EngagementPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a EngagementContext
      *
      * @param string $sid The SID of the Engagement resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): EngagementContext
+    public function getContext(string $sid) : EngagementContext
     {
-        return new EngagementContext(
-            $this->version,
-            $this->solution['flowSid'],
-            $sid
-        );
+        return new EngagementContext($this->version, $this->solution['flowSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Studio.V1.EngagementList]';
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class CommentsInIDRight implements Reason
 {
@@ -8,7 +8,6 @@ class CommentsInIDRight implements Reason
     {
         return 400;
     }
-
     public function description() : string
     {
         return 'Comments are not allowed in IDRight for message-id';

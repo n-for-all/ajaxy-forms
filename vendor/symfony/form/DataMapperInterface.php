@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form;
+namespace Isolated\Symfony\Component\Form;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
@@ -28,7 +27,6 @@ interface DataMapperInterface
      * @throws Exception\UnexpectedTypeException if the type of the data parameter is not supported
      */
     public function mapDataToForms($viewData, \Traversable $forms);
-
     /**
      * Maps the model data of a list of children forms into the view data of their parent.
      *

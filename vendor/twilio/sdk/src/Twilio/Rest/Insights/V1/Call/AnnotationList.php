@@ -13,54 +13,37 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Insights\V1\Call;
 
-namespace Twilio\Rest\Insights\V1\Call;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class AnnotationList extends ListResource
-    {
+{
     /**
      * Construct the AnnotationList
      *
      * @param Version $version Version that contains the resource
      * @param string $callSid The unique SID identifier of the Call.
      */
-    public function __construct(
-        Version $version,
-        string $callSid
-    ) {
+    public function __construct(Version $version, string $callSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'callSid' =>
-            $callSid,
-        
-        ];
+        $this->solution = ['callSid' => $callSid];
     }
-
     /**
      * Constructs a AnnotationContext
      */
-    public function getContext(
-        
-    ): AnnotationContext
+    public function getContext() : AnnotationContext
     {
-        return new AnnotationContext(
-            $this->version,
-            $this->solution['callSid']
-        );
+        return new AnnotationContext($this->version, $this->solution['callSid']);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Insights.V1.AnnotationList]';
     }

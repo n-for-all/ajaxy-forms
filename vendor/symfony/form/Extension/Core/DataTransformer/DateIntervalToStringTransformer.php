@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\DataTransformer;
 
-namespace Symfony\Component\Form\Extension\Core\DataTransformer;
-
-use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
-
+use Isolated\Symfony\Component\Form\DataTransformerInterface;
+use Isolated\Symfony\Component\Form\Exception\TransformationFailedException;
+use Isolated\Symfony\Component\Form\Exception\UnexpectedTypeException;
 /**
  * Transforms between a date string and a DateInterval object.
  *
@@ -23,7 +21,6 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 class DateIntervalToStringTransformer implements DataTransformerInterface
 {
     private $format;
-
     /**
      * Transforms a \DateInterval instance to a string.
      *
@@ -35,7 +32,6 @@ class DateIntervalToStringTransformer implements DataTransformerInterface
     {
         $this->format = $format;
     }
-
     /**
      * Transforms a DateInterval object into a date string with the configured format.
      *
@@ -53,10 +49,8 @@ class DateIntervalToStringTransformer implements DataTransformerInterface
         if (!$value instanceof \DateInterval) {
             throw new UnexpectedTypeException($value, \DateInterval::class);
         }
-
         return $value->format($this->format);
     }
-
     /**
      * Transforms a date string in the configured format into a DateInterval object.
      *
@@ -81,21 +75,19 @@ class DateIntervalToStringTransformer implements DataTransformerInterface
         if (!$this->isISO8601($value)) {
             throw new TransformationFailedException('Non ISO 8601 date strings are not supported yet.');
         }
-        $valuePattern = '/^'.preg_replace('/%([yYmMdDhHiIsSwW])(\w)/', '(?P<$1>\d+)$2', $this->format).'$/';
-        if (!preg_match($valuePattern, $value)) {
-            throw new TransformationFailedException(sprintf('Value "%s" contains intervals not accepted by format "%s".', $value, $this->format));
+        $valuePattern = '/^' . \preg_replace('/%([yYmMdDhHiIsSwW])(\\w)/', '(?P<$1>\\d+)$2', $this->format) . '$/';
+        if (!\preg_match($valuePattern, $value)) {
+            throw new TransformationFailedException(\sprintf('Value "%s" contains intervals not accepted by format "%s".', $value, $this->format));
         }
         try {
             $dateInterval = new \DateInterval($value);
         } catch (\Exception $e) {
             throw new TransformationFailedException($e->getMessage(), $e->getCode(), $e);
         }
-
         return $dateInterval;
     }
-
-    private function isISO8601(string $string): bool
+    private function isISO8601(string $string) : bool
     {
-        return preg_match('/^P(?=\w*(?:\d|%\w))(?:\d+Y|%[yY]Y)?(?:\d+M|%[mM]M)?(?:(?:\d+D|%[dD]D)|(?:\d+W|%[wW]W))?(?:T(?:\d+H|[hH]H)?(?:\d+M|[iI]M)?(?:\d+S|[sS]S)?)?$/', $string);
+        return \preg_match('/^P(?=\\w*(?:\\d|%\\w))(?:\\d+Y|%[yY]Y)?(?:\\d+M|%[mM]M)?(?:(?:\\d+D|%[dD]D)|(?:\\d+W|%[wW]W))?(?:T(?:\\d+H|[hH]H)?(?:\\d+M|[iI]M)?(?:\\d+S|[sS]S)?)?$/', $string);
     }
 }

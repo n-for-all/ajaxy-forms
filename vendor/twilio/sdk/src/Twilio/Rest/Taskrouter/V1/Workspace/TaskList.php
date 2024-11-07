@@ -13,43 +13,30 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace;
 
-namespace Twilio\Rest\Taskrouter\V1\Workspace;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class TaskList extends ListResource
-    {
+{
     /**
      * Construct the TaskList
      *
      * @param Version $version Version that contains the resource
      * @param string $workspaceSid The SID of the Workspace that the new Task belongs to.
      */
-    public function __construct(
-        Version $version,
-        string $workspaceSid
-    ) {
+    public function __construct(Version $version, string $workspaceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'workspaceSid' =>
-            $workspaceSid,
-        
-        ];
-
-        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid)
-        .'/Tasks';
+        $this->solution = ['workspaceSid' => $workspaceSid];
+        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid) . '/Tasks';
     }
-
     /**
      * Create the TaskInstance
      *
@@ -57,42 +44,13 @@ class TaskList extends ListResource
      * @return TaskInstance Created TaskInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): TaskInstance
+    public function create(array $options = []) : TaskInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Timeout' =>
-                $options['timeout'],
-            'Priority' =>
-                $options['priority'],
-            'TaskChannel' =>
-                $options['taskChannel'],
-            'WorkflowSid' =>
-                $options['workflowSid'],
-            'Attributes' =>
-                $options['attributes'],
-            'VirtualStartTime' =>
-                Serialize::iso8601DateTime($options['virtualStartTime']),
-            'RoutingTarget' =>
-                $options['routingTarget'],
-            'IgnoreCapacity' =>
-                $options['ignoreCapacity'],
-            'TaskQueueSid' =>
-                $options['taskQueueSid'],
-        ]);
-
+        $data = Values::of(['Timeout' => $options['timeout'], 'Priority' => $options['priority'], 'TaskChannel' => $options['taskChannel'], 'WorkflowSid' => $options['workflowSid'], 'Attributes' => $options['attributes'], 'VirtualStartTime' => Serialize::iso8601DateTime($options['virtualStartTime']), 'RoutingTarget' => $options['routingTarget'], 'IgnoreCapacity' => $options['ignoreCapacity'], 'TaskQueueSid' => $options['taskQueueSid']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new TaskInstance(
-            $this->version,
-            $payload,
-            $this->solution['workspaceSid']
-        );
+        return new TaskInstance($this->version, $payload, $this->solution['workspaceSid']);
     }
-
-
     /**
      * Reads TaskInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -109,11 +67,10 @@ class TaskList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return TaskInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams TaskInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -133,15 +90,12 @@ class TaskList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of TaskInstance records from the API.
      * Request is executed immediately
@@ -151,46 +105,15 @@ class TaskList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return TaskPage Page of TaskInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): TaskPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : TaskPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Priority' =>
-                $options['priority'],
-            'AssignmentStatus' =>
-                Serialize::map($options['assignmentStatus'], function ($e) { return $e; }),
-            'WorkflowSid' =>
-                $options['workflowSid'],
-            'WorkflowName' =>
-                $options['workflowName'],
-            'TaskQueueSid' =>
-                $options['taskQueueSid'],
-            'TaskQueueName' =>
-                $options['taskQueueName'],
-            'EvaluateTaskAttributes' =>
-                $options['evaluateTaskAttributes'],
-            'RoutingTarget' =>
-                $options['routingTarget'],
-            'Ordering' =>
-                $options['ordering'],
-            'HasAddons' =>
-                Serialize::booleanToString($options['hasAddons']),
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Priority' => $options['priority'], 'AssignmentStatus' => Serialize::map($options['assignmentStatus'], function ($e) {
+            return $e;
+        }), 'WorkflowSid' => $options['workflowSid'], 'WorkflowName' => $options['workflowName'], 'TaskQueueSid' => $options['taskQueueSid'], 'TaskQueueName' => $options['taskQueueName'], 'EvaluateTaskAttributes' => $options['evaluateTaskAttributes'], 'RoutingTarget' => $options['routingTarget'], 'Ordering' => $options['ordering'], 'HasAddons' => Serialize::booleanToString($options['hasAddons']), 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new TaskPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of TaskInstance records from the API.
      * Request is executed immediately
@@ -198,40 +121,26 @@ class TaskList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return TaskPage Page of TaskInstance
      */
-    public function getPage(string $targetUrl): TaskPage
+    public function getPage(string $targetUrl) : TaskPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new TaskPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a TaskContext
      *
      * @param string $sid The SID of the Task resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): TaskContext
+    public function getContext(string $sid) : TaskContext
     {
-        return new TaskContext(
-            $this->version,
-            $this->solution['workspaceSid'],
-            $sid
-        );
+        return new TaskContext($this->version, $this->solution['workspaceSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Taskrouter.V1.TaskList]';
     }

@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account;
 
-
-namespace Twilio\Rest\Api\V2010\Account;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ShortCodeContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ShortCodeContext
      *
@@ -33,46 +29,24 @@ class ShortCodeContext extends InstanceContext
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) that created the ShortCode resource(s) to fetch.
      * @param string $sid The Twilio-provided string that uniquely identifies the ShortCode resource to fetch
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $accountSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/SMS/ShortCodes/' . \rawurlencode($sid)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'sid' => $sid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/SMS/ShortCodes/' . \rawurlencode($sid) . '.json';
     }
-
     /**
      * Fetch the ShortCodeInstance
      *
      * @return ShortCodeInstance Fetched ShortCodeInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ShortCodeInstance
+    public function fetch() : ShortCodeInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ShortCodeInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['sid']
-        );
+        return new ShortCodeInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the ShortCodeInstance
      *
@@ -80,47 +54,23 @@ class ShortCodeContext extends InstanceContext
      * @return ShortCodeInstance Updated ShortCodeInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ShortCodeInstance
+    public function update(array $options = []) : ShortCodeInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'ApiVersion' =>
-                $options['apiVersion'],
-            'SmsUrl' =>
-                $options['smsUrl'],
-            'SmsMethod' =>
-                $options['smsMethod'],
-            'SmsFallbackUrl' =>
-                $options['smsFallbackUrl'],
-            'SmsFallbackMethod' =>
-                $options['smsFallbackMethod'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName'], 'ApiVersion' => $options['apiVersion'], 'SmsUrl' => $options['smsUrl'], 'SmsMethod' => $options['smsMethod'], 'SmsFallbackUrl' => $options['smsFallbackUrl'], 'SmsFallbackMethod' => $options['smsFallbackMethod']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new ShortCodeInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['sid']
-        );
+        return new ShortCodeInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.ShortCodeContext ' . \implode(' ', $context) . ']';
     }

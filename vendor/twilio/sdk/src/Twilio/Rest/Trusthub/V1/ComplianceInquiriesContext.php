@@ -13,40 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1;
 
-
-namespace Twilio\Rest\Trusthub\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ComplianceInquiriesContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ComplianceInquiriesContext
      *
      * @param Version $version Version that contains the resource
      * @param string $customerId The unique CustomerId matching the Customer Profile/Compliance Inquiry that should be resumed or resubmitted. This value will have been returned by the initial Compliance Inquiry creation call.
      */
-    public function __construct(
-        Version $version,
-        $customerId
-    ) {
+    public function __construct(Version $version, $customerId)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'customerId' =>
-            $customerId,
-        ];
-
-        $this->uri = '/ComplianceInquiries/Customers/' . \rawurlencode($customerId)
-        .'/Initialize';
+        $this->solution = ['customerId' => $customerId];
+        $this->uri = '/ComplianceInquiries/Customers/' . \rawurlencode($customerId) . '/Initialize';
     }
-
     /**
      * Update the ComplianceInquiriesInstance
      *
@@ -54,34 +41,22 @@ class ComplianceInquiriesContext extends InstanceContext
      * @return ComplianceInquiriesInstance Updated ComplianceInquiriesInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $primaryProfileSid): ComplianceInquiriesInstance
+    public function update(string $primaryProfileSid) : ComplianceInquiriesInstance
     {
-
-        $data = Values::of([
-            'PrimaryProfileSid' =>
-                $primaryProfileSid,
-        ]);
-
+        $data = Values::of(['PrimaryProfileSid' => $primaryProfileSid]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new ComplianceInquiriesInstance(
-            $this->version,
-            $payload,
-            $this->solution['customerId']
-        );
+        return new ComplianceInquiriesInstance($this->version, $payload, $this->solution['customerId']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Trusthub.V1.ComplianceInquiriesContext ' . \implode(' ', $context) . ']';
     }

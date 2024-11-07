@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'KZT' => [
-            '₸',
-            'казахский тенге',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['KZT' => ['₸', 'казахский тенге']]];

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Twig\Sandbox;
+namespace Isolated\Twig\Sandbox;
 
 /**
  * Exception thrown when a not allowed tag is used in a template.
@@ -19,14 +18,12 @@ namespace Twig\Sandbox;
 final class SecurityNotAllowedTagError extends SecurityError
 {
     private $tagName;
-
     public function __construct(string $message, string $tagName)
     {
         parent::__construct($message);
         $this->tagName = $tagName;
     }
-
-    public function getTagName(): string
+    public function getTagName() : string
     {
         return $this->tagName;
     }

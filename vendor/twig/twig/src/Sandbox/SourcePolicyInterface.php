@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Sandbox;
 
-namespace Twig\Sandbox;
-
-use Twig\Source;
-
+use Isolated\Twig\Source;
 /**
  * Interface for a class that can optionally enable the sandbox mode based on a template's Twig\Source.
  *
@@ -20,5 +18,5 @@ use Twig\Source;
  */
 interface SourcePolicyInterface
 {
-    public function enableSandbox(Source $source): bool;
+    public function enableSandbox(Source $source) : bool;
 }

@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Conference;
 
-
-namespace Twilio\Rest\Api\V2010\Account\Conference;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property string|null $callSid
@@ -56,73 +52,43 @@ class ParticipantInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $accountSid, string $conferenceSid, string $callSid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'callSid' => Values::array_get($payload, 'call_sid'),
-            'label' => Values::array_get($payload, 'label'),
-            'callSidToCoach' => Values::array_get($payload, 'call_sid_to_coach'),
-            'coaching' => Values::array_get($payload, 'coaching'),
-            'conferenceSid' => Values::array_get($payload, 'conference_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'endConferenceOnExit' => Values::array_get($payload, 'end_conference_on_exit'),
-            'muted' => Values::array_get($payload, 'muted'),
-            'hold' => Values::array_get($payload, 'hold'),
-            'startConferenceOnEnter' => Values::array_get($payload, 'start_conference_on_enter'),
-            'status' => Values::array_get($payload, 'status'),
-            'queueTime' => Values::array_get($payload, 'queue_time'),
-            'uri' => Values::array_get($payload, 'uri'),
-        ];
-
-        $this->solution = ['accountSid' => $accountSid, 'conferenceSid' => $conferenceSid, 'callSid' => $callSid ?: $this->properties['callSid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'callSid' => Values::array_get($payload, 'call_sid'), 'label' => Values::array_get($payload, 'label'), 'callSidToCoach' => Values::array_get($payload, 'call_sid_to_coach'), 'coaching' => Values::array_get($payload, 'coaching'), 'conferenceSid' => Values::array_get($payload, 'conference_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'endConferenceOnExit' => Values::array_get($payload, 'end_conference_on_exit'), 'muted' => Values::array_get($payload, 'muted'), 'hold' => Values::array_get($payload, 'hold'), 'startConferenceOnEnter' => Values::array_get($payload, 'start_conference_on_enter'), 'status' => Values::array_get($payload, 'status'), 'queueTime' => Values::array_get($payload, 'queue_time'), 'uri' => Values::array_get($payload, 'uri')];
+        $this->solution = ['accountSid' => $accountSid, 'conferenceSid' => $conferenceSid, 'callSid' => $callSid ?: $this->properties['callSid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ParticipantContext Context for this ParticipantInstance
      */
-    protected function proxy(): ParticipantContext
+    protected function proxy() : ParticipantContext
     {
         if (!$this->context) {
-            $this->context = new ParticipantContext(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['conferenceSid'],
-                $this->solution['callSid']
-            );
+            $this->context = new ParticipantContext($this->version, $this->solution['accountSid'], $this->solution['conferenceSid'], $this->solution['callSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the ParticipantInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the ParticipantInstance
      *
      * @return ParticipantInstance Fetched ParticipantInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ParticipantInstance
+    public function fetch() : ParticipantInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the ParticipantInstance
      *
@@ -130,12 +96,10 @@ class ParticipantInstance extends InstanceResource
      * @return ParticipantInstance Updated ParticipantInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ParticipantInstance
+    public function update(array $options = []) : ParticipantInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -148,27 +112,23 @@ class ParticipantInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.ParticipantInstance ' . \implode(' ', $context) . ']';
     }
 }
-

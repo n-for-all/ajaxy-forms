@@ -8,21 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\NodeVisitor;
 
-namespace Twig\NodeVisitor;
-
-use Twig\Environment;
-use Twig\Node\Expression\BlockReferenceExpression;
-use Twig\Node\Expression\ConditionalExpression;
-use Twig\Node\Expression\ConstantExpression;
-use Twig\Node\Expression\FilterExpression;
-use Twig\Node\Expression\FunctionExpression;
-use Twig\Node\Expression\GetAttrExpression;
-use Twig\Node\Expression\MethodCallExpression;
-use Twig\Node\Expression\NameExpression;
-use Twig\Node\Expression\ParentExpression;
-use Twig\Node\Node;
-
+use Isolated\Twig\Environment;
+use Isolated\Twig\Node\Expression\BlockReferenceExpression;
+use Isolated\Twig\Node\Expression\ConditionalExpression;
+use Isolated\Twig\Node\Expression\ConstantExpression;
+use Isolated\Twig\Node\Expression\FilterExpression;
+use Isolated\Twig\Node\Expression\FunctionExpression;
+use Isolated\Twig\Node\Expression\GetAttrExpression;
+use Isolated\Twig\Node\Expression\MethodCallExpression;
+use Isolated\Twig\Node\Expression\NameExpression;
+use Isolated\Twig\Node\Expression\ParentExpression;
+use Isolated\Twig\Node\Node;
 /**
  * @internal
  */
@@ -30,56 +28,44 @@ final class SafeAnalysisNodeVisitor implements NodeVisitorInterface
 {
     private $data = [];
     private $safeVars = [];
-
-    public function setSafeVars(array $safeVars): void
+    public function setSafeVars(array $safeVars) : void
     {
         $this->safeVars = $safeVars;
     }
-
     public function getSafe(Node $node)
     {
-        $hash = spl_object_hash($node);
+        $hash = \spl_object_hash($node);
         if (!isset($this->data[$hash])) {
             return;
         }
-
         foreach ($this->data[$hash] as $bucket) {
             if ($bucket['key'] !== $node) {
                 continue;
             }
-
             if (\in_array('html_attr', $bucket['value'])) {
                 $bucket['value'][] = 'html';
             }
-
             return $bucket['value'];
         }
     }
-
-    private function setSafe(Node $node, array $safe): void
+    private function setSafe(Node $node, array $safe) : void
     {
-        $hash = spl_object_hash($node);
+        $hash = \spl_object_hash($node);
         if (isset($this->data[$hash])) {
             foreach ($this->data[$hash] as &$bucket) {
                 if ($bucket['key'] === $node) {
                     $bucket['value'] = $safe;
-
                     return;
                 }
             }
         }
-        $this->data[$hash][] = [
-            'key' => $node,
-            'value' => $safe,
-        ];
+        $this->data[$hash][] = ['key' => $node, 'value' => $safe];
     }
-
-    public function enterNode(Node $node, Environment $env): Node
+    public function enterNode(Node $node, Environment $env) : Node
     {
         return $node;
     }
-
-    public function leaveNode(Node $node, Environment $env): ?Node
+    public function leaveNode(Node $node, Environment $env) : ?Node
     {
         if ($node instanceof ConstantExpression) {
             // constants are marked safe for all
@@ -132,28 +118,22 @@ final class SafeAnalysisNodeVisitor implements NodeVisitorInterface
         } else {
             $this->setSafe($node, []);
         }
-
         return $node;
     }
-
-    private function intersectSafe(?array $a = null, ?array $b = null): array
+    private function intersectSafe(?array $a = null, ?array $b = null) : array
     {
         if (null === $a || null === $b) {
             return [];
         }
-
         if (\in_array('all', $a)) {
             return $b;
         }
-
         if (\in_array('all', $b)) {
             return $a;
         }
-
-        return array_intersect($a, $b);
+        return \array_intersect($a, $b);
     }
-
-    public function getPriority(): int
+    public function getPriority() : int
     {
         return 0;
     }

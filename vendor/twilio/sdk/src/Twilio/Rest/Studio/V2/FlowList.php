@@ -13,37 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Studio\V2;
 
-namespace Twilio\Rest\Studio\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class FlowList extends ListResource
-    {
+{
     /**
      * Construct the FlowList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Flows';
     }
-
     /**
      * Create the FlowInstance
      *
@@ -54,31 +46,13 @@ class FlowList extends ListResource
      * @return FlowInstance Created FlowInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $friendlyName, string $status, array $definition, array $options = []): FlowInstance
+    public function create(string $friendlyName, string $status, array $definition, array $options = []) : FlowInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $friendlyName,
-            'Status' =>
-                $status,
-            'Definition' =>
-                Serialize::jsonObject($definition),
-            'CommitMessage' =>
-                $options['commitMessage'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $friendlyName, 'Status' => $status, 'Definition' => Serialize::jsonObject($definition), 'CommitMessage' => $options['commitMessage']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new FlowInstance(
-            $this->version,
-            $payload
-        );
+        return new FlowInstance($this->version, $payload);
     }
-
-
     /**
      * Reads FlowInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -94,11 +68,10 @@ class FlowList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return FlowInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams FlowInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -117,15 +90,12 @@ class FlowList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of FlowInstance records from the API.
      * Request is executed immediately
@@ -135,24 +105,12 @@ class FlowList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return FlowPage Page of FlowInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): FlowPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : FlowPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new FlowPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of FlowInstance records from the API.
      * Request is executed immediately
@@ -160,39 +118,26 @@ class FlowList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return FlowPage Page of FlowInstance
      */
-    public function getPage(string $targetUrl): FlowPage
+    public function getPage(string $targetUrl) : FlowPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new FlowPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a FlowContext
      *
      * @param string $sid The SID of the Flow resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): FlowContext
+    public function getContext(string $sid) : FlowContext
     {
-        return new FlowContext(
-            $this->version,
-            $sid
-        );
+        return new FlowContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Studio.V2.FlowList]';
     }

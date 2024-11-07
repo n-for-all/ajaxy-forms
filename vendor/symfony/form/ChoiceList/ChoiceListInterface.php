@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form\ChoiceList;
+namespace Isolated\Symfony\Component\Form\ChoiceList;
 
 /**
  * A list of choices that can be selected in a choice field.
@@ -31,7 +30,6 @@ interface ChoiceListInterface
      * @return array The selectable choices indexed by the corresponding values
      */
     public function getChoices();
-
     /**
      * Returns the values for the choices.
      *
@@ -58,7 +56,6 @@ interface ChoiceListInterface
      * @return string[]
      */
     public function getValues();
-
     /**
      * Returns the values in the structure originally passed to the list.
      *
@@ -89,7 +86,6 @@ interface ChoiceListInterface
      * @return string[]
      */
     public function getStructuredValues();
-
     /**
      * Returns the original keys of the choices.
      *
@@ -111,7 +107,6 @@ interface ChoiceListInterface
      *                        corresponding choice values
      */
     public function getOriginalKeys();
-
     /**
      * Returns the choices corresponding to the given values.
      *
@@ -124,7 +119,6 @@ interface ChoiceListInterface
      * @return array
      */
     public function getChoicesForValues(array $values);
-
     /**
      * Returns the values corresponding to the given choices.
      *

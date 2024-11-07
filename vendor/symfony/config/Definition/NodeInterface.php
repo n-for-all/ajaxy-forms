@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Config\Definition;
 
-namespace Symfony\Component\Config\Definition;
-
-use Symfony\Component\Config\Definition\Exception\ForbiddenOverwriteException;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
-
+use Isolated\Symfony\Component\Config\Definition\Exception\ForbiddenOverwriteException;
+use Isolated\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Isolated\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 /**
  * Common Interface among all nodes.
  *
@@ -31,28 +29,24 @@ interface NodeInterface
      * @return string
      */
     public function getName();
-
     /**
      * Returns the path of the node.
      *
      * @return string
      */
     public function getPath();
-
     /**
      * Returns true when the node is required.
      *
      * @return bool
      */
     public function isRequired();
-
     /**
      * Returns true when the node has a default value.
      *
      * @return bool
      */
     public function hasDefaultValue();
-
     /**
      * Returns the default value of the node.
      *
@@ -61,7 +55,6 @@ interface NodeInterface
      * @throws \RuntimeException if the node has no default value
      */
     public function getDefaultValue();
-
     /**
      * Normalizes a value.
      *
@@ -72,7 +65,6 @@ interface NodeInterface
      * @throws InvalidTypeException if the value type is invalid
      */
     public function normalize($value);
-
     /**
      * Merges two values together.
      *
@@ -85,7 +77,6 @@ interface NodeInterface
      * @throws InvalidTypeException        if the value type is invalid
      */
     public function merge($leftSide, $rightSide);
-
     /**
      * Finalizes a value.
      *

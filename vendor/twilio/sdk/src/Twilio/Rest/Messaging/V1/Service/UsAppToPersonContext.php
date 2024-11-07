@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1\Service;
 
-
-namespace Twilio\Rest\Messaging\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class UsAppToPersonContext extends InstanceContext
-    {
+{
     /**
      * Initialize the UsAppToPersonContext
      *
@@ -33,59 +29,34 @@ class UsAppToPersonContext extends InstanceContext
      * @param string $messagingServiceSid The SID of the [Messaging Service](https://www.twilio.com/docs/messaging/api/service-resource) to create the resources from.
      * @param string $sid The SID of the US A2P Compliance resource to delete `QE2c6890da8086d771620e9b13fadeba0b`.
      */
-    public function __construct(
-        Version $version,
-        $messagingServiceSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $messagingServiceSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'messagingServiceSid' =>
-            $messagingServiceSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($messagingServiceSid)
-        .'/Compliance/Usa2p/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['messagingServiceSid' => $messagingServiceSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($messagingServiceSid) . '/Compliance/Usa2p/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the UsAppToPersonInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the UsAppToPersonInstance
      *
      * @return UsAppToPersonInstance Fetched UsAppToPersonInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): UsAppToPersonInstance
+    public function fetch() : UsAppToPersonInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new UsAppToPersonInstance(
-            $this->version,
-            $payload,
-            $this->solution['messagingServiceSid'],
-            $this->solution['sid']
-        );
+        return new UsAppToPersonInstance($this->version, $payload, $this->solution['messagingServiceSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the UsAppToPersonInstance
      *
@@ -99,47 +70,24 @@ class UsAppToPersonContext extends InstanceContext
      * @return UsAppToPersonInstance Updated UsAppToPersonInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(bool $hasEmbeddedLinks, bool $hasEmbeddedPhone, array $messageSamples, string $messageFlow, string $description, bool $ageGated, bool $directLending): UsAppToPersonInstance
+    public function update(bool $hasEmbeddedLinks, bool $hasEmbeddedPhone, array $messageSamples, string $messageFlow, string $description, bool $ageGated, bool $directLending) : UsAppToPersonInstance
     {
-
-        $data = Values::of([
-            'HasEmbeddedLinks' =>
-                Serialize::booleanToString($hasEmbeddedLinks),
-            'HasEmbeddedPhone' =>
-                Serialize::booleanToString($hasEmbeddedPhone),
-            'MessageSamples' =>
-                Serialize::map($messageSamples,function ($e) { return $e; }),
-            'MessageFlow' =>
-                $messageFlow,
-            'Description' =>
-                $description,
-            'AgeGated' =>
-                Serialize::booleanToString($ageGated),
-            'DirectLending' =>
-                Serialize::booleanToString($directLending),
-        ]);
-
+        $data = Values::of(['HasEmbeddedLinks' => Serialize::booleanToString($hasEmbeddedLinks), 'HasEmbeddedPhone' => Serialize::booleanToString($hasEmbeddedPhone), 'MessageSamples' => Serialize::map($messageSamples, function ($e) {
+            return $e;
+        }), 'MessageFlow' => $messageFlow, 'Description' => $description, 'AgeGated' => Serialize::booleanToString($ageGated), 'DirectLending' => Serialize::booleanToString($directLending)]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new UsAppToPersonInstance(
-            $this->version,
-            $payload,
-            $this->solution['messagingServiceSid'],
-            $this->solution['sid']
-        );
+        return new UsAppToPersonInstance($this->version, $payload, $this->solution['messagingServiceSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.UsAppToPersonContext ' . \implode(' ', $context) . ']';
     }

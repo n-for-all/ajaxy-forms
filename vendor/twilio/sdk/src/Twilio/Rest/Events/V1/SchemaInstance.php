@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Events\V1;
 
-
-namespace Twilio\Rest\Events\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Events\V1\Schema\SchemaVersionList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Events\V1\Schema\SchemaVersionList;
 /**
  * @property string|null $id
  * @property string|null $url
@@ -35,7 +31,6 @@ use Twilio\Rest\Events\V1\Schema\SchemaVersionList;
 class SchemaInstance extends InstanceResource
 {
     protected $_versions;
-
     /**
      * Initialize the SchemaInstance
      *
@@ -46,57 +41,40 @@ class SchemaInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $id = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'id' => Values::array_get($payload, 'id'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-            'latestVersionDateCreated' => Deserialize::dateTime(Values::array_get($payload, 'latest_version_date_created')),
-            'latestVersion' => Values::array_get($payload, 'latest_version'),
-        ];
-
-        $this->solution = ['id' => $id ?: $this->properties['id'], ];
+        $this->properties = ['id' => Values::array_get($payload, 'id'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links'), 'latestVersionDateCreated' => Deserialize::dateTime(Values::array_get($payload, 'latest_version_date_created')), 'latestVersion' => Values::array_get($payload, 'latest_version')];
+        $this->solution = ['id' => $id ?: $this->properties['id']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return SchemaContext Context for this SchemaInstance
      */
-    protected function proxy(): SchemaContext
+    protected function proxy() : SchemaContext
     {
         if (!$this->context) {
-            $this->context = new SchemaContext(
-                $this->version,
-                $this->solution['id']
-            );
+            $this->context = new SchemaContext($this->version, $this->solution['id']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the SchemaInstance
      *
      * @return SchemaInstance Fetched SchemaInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SchemaInstance
+    public function fetch() : SchemaInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Access the versions
      */
-    protected function getVersions(): SchemaVersionList
+    protected function getVersions() : SchemaVersionList
     {
         return $this->proxy()->versions;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -109,27 +87,23 @@ class SchemaInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Events.V1.SchemaInstance ' . \implode(' ', $context) . ']';
     }
 }
-

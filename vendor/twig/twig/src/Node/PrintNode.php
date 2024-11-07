@@ -9,13 +9,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node;
 
-namespace Twig\Node;
-
-use Twig\Attribute\YieldReady;
-use Twig\Compiler;
-use Twig\Node\Expression\AbstractExpression;
-
+use Isolated\Twig\Attribute\YieldReady;
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Expression\AbstractExpression;
 /**
  * Represents a node that outputs an expression.
  *
@@ -28,17 +26,10 @@ class PrintNode extends Node implements NodeOutputInterface
     {
         parent::__construct(['expr' => $expr], [], $lineno, $tag);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
         /** @var AbstractExpression */
         $expr = $this->getNode('expr');
-
-        $compiler
-            ->addDebugInfo($this)
-            ->write($expr->isGenerator() ? 'yield from ' : 'yield ')
-            ->subcompile($expr)
-            ->raw(";\n")
-        ;
+        $compiler->addDebugInfo($this)->write($expr->isGenerator() ? 'yield from ' : 'yield ')->subcompile($expr)->raw(";\n");
     }
 }

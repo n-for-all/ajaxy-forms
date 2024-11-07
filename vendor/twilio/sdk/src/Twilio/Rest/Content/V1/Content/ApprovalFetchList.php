@@ -13,54 +13,37 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Content\V1\Content;
 
-namespace Twilio\Rest\Content\V1\Content;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class ApprovalFetchList extends ListResource
-    {
+{
     /**
      * Construct the ApprovalFetchList
      *
      * @param Version $version Version that contains the resource
      * @param string $contentSid The Twilio-provided string that uniquely identifies the Content resource whose approval information to fetch.
      */
-    public function __construct(
-        Version $version,
-        string $contentSid
-    ) {
+    public function __construct(Version $version, string $contentSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'contentSid' =>
-            $contentSid,
-        
-        ];
+        $this->solution = ['contentSid' => $contentSid];
     }
-
     /**
      * Constructs a ApprovalFetchContext
      */
-    public function getContext(
-        
-    ): ApprovalFetchContext
+    public function getContext() : ApprovalFetchContext
     {
-        return new ApprovalFetchContext(
-            $this->version,
-            $this->solution['contentSid']
-        );
+        return new ApprovalFetchContext($this->version, $this->solution['contentSid']);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Content.V1.ApprovalFetchList]';
     }

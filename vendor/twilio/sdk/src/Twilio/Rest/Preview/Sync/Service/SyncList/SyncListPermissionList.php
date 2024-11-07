@@ -13,17 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Sync\Service\SyncList;
 
-namespace Twilio\Rest\Preview\Sync\Service\SyncList;
-
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class SyncListPermissionList extends ListResource
-    {
+{
     /**
      * Construct the SyncListPermissionList
      *
@@ -31,28 +28,13 @@ class SyncListPermissionList extends ListResource
      * @param string $serviceSid 
      * @param string $listSid Identifier of the Sync List. Either a SID or a unique name.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid,
-        string $listSid
-    ) {
+    public function __construct(Version $version, string $serviceSid, string $listSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        'listSid' =>
-            $listSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Lists/' . \rawurlencode($listSid)
-        .'/Permissions';
+        $this->solution = ['serviceSid' => $serviceSid, 'listSid' => $listSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Lists/' . \rawurlencode($listSid) . '/Permissions';
     }
-
     /**
      * Reads SyncListPermissionInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -68,11 +50,10 @@ class SyncListPermissionList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return SyncListPermissionInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams SyncListPermissionInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -91,15 +72,12 @@ class SyncListPermissionList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of SyncListPermissionInstance records from the API.
      * Request is executed immediately
@@ -109,24 +87,12 @@ class SyncListPermissionList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return SyncListPermissionPage Page of SyncListPermissionInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): SyncListPermissionPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : SyncListPermissionPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new SyncListPermissionPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of SyncListPermissionInstance records from the API.
      * Request is executed immediately
@@ -134,41 +100,26 @@ class SyncListPermissionList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return SyncListPermissionPage Page of SyncListPermissionInstance
      */
-    public function getPage(string $targetUrl): SyncListPermissionPage
+    public function getPage(string $targetUrl) : SyncListPermissionPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new SyncListPermissionPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a SyncListPermissionContext
      *
      * @param string $identity Arbitrary string identifier representing a user associated with an FPA token, assigned by the developer.
      */
-    public function getContext(
-        string $identity
-        
-    ): SyncListPermissionContext
+    public function getContext(string $identity) : SyncListPermissionContext
     {
-        return new SyncListPermissionContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $this->solution['listSid'],
-            $identity
-        );
+        return new SyncListPermissionContext($this->version, $this->solution['serviceSid'], $this->solution['listSid'], $identity);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Preview.Sync.SyncListPermissionList]';
     }

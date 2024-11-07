@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form;
 
-namespace Symfony\Component\Form;
-
-use Symfony\Component\Form\Extension\Core\CoreExtension;
-
+use Isolated\Symfony\Component\Form\Extension\Core\CoreExtension;
 /**
  * The default implementation of FormFactoryBuilderInterface.
  *
@@ -21,77 +19,62 @@ use Symfony\Component\Form\Extension\Core\CoreExtension;
 class FormFactoryBuilder implements FormFactoryBuilderInterface
 {
     private $forceCoreExtension;
-
     /**
      * @var ResolvedFormTypeFactoryInterface
      */
     private $resolvedTypeFactory;
-
     /**
      * @var FormExtensionInterface[]
      */
     private $extensions = [];
-
     /**
      * @var FormTypeInterface[]
      */
     private $types = [];
-
     /**
      * @var FormTypeExtensionInterface[][]
      */
     private $typeExtensions = [];
-
     /**
      * @var FormTypeGuesserInterface[]
      */
     private $typeGuessers = [];
-
-    public function __construct(bool $forceCoreExtension = false)
+    public function __construct(bool $forceCoreExtension = \false)
     {
         $this->forceCoreExtension = $forceCoreExtension;
     }
-
     /**
      * {@inheritdoc}
      */
     public function setResolvedTypeFactory(ResolvedFormTypeFactoryInterface $resolvedTypeFactory)
     {
         $this->resolvedTypeFactory = $resolvedTypeFactory;
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
     public function addExtension(FormExtensionInterface $extension)
     {
         $this->extensions[] = $extension;
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
     public function addExtensions(array $extensions)
     {
-        $this->extensions = array_merge($this->extensions, $extensions);
-
+        $this->extensions = \array_merge($this->extensions, $extensions);
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
     public function addType(FormTypeInterface $type)
     {
         $this->types[] = $type;
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -100,10 +83,8 @@ class FormFactoryBuilder implements FormFactoryBuilderInterface
         foreach ($types as $type) {
             $this->types[] = $type;
         }
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -112,10 +93,8 @@ class FormFactoryBuilder implements FormFactoryBuilderInterface
         foreach ($typeExtension::getExtendedTypes() as $extendedType) {
             $this->typeExtensions[$extendedType][] = $typeExtension;
         }
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -124,64 +103,51 @@ class FormFactoryBuilder implements FormFactoryBuilderInterface
         foreach ($typeExtensions as $typeExtension) {
             $this->addTypeExtension($typeExtension);
         }
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
     public function addTypeGuesser(FormTypeGuesserInterface $typeGuesser)
     {
         $this->typeGuessers[] = $typeGuesser;
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
     public function addTypeGuessers(array $typeGuessers)
     {
-        $this->typeGuessers = array_merge($this->typeGuessers, $typeGuessers);
-
+        $this->typeGuessers = \array_merge($this->typeGuessers, $typeGuessers);
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
     public function getFormFactory()
     {
         $extensions = $this->extensions;
-
         if ($this->forceCoreExtension) {
-            $hasCoreExtension = false;
-
+            $hasCoreExtension = \false;
             foreach ($extensions as $extension) {
                 if ($extension instanceof CoreExtension) {
-                    $hasCoreExtension = true;
+                    $hasCoreExtension = \true;
                     break;
                 }
             }
-
             if (!$hasCoreExtension) {
-                array_unshift($extensions, new CoreExtension());
+                \array_unshift($extensions, new CoreExtension());
             }
         }
-
         if (\count($this->types) > 0 || \count($this->typeExtensions) > 0 || \count($this->typeGuessers) > 0) {
             if (\count($this->typeGuessers) > 1) {
                 $typeGuesser = new FormTypeGuesserChain($this->typeGuessers);
             } else {
                 $typeGuesser = $this->typeGuessers[0] ?? null;
             }
-
             $extensions[] = new PreloadedExtension($this->types, $this->typeExtensions, $typeGuesser);
         }
-
         $registry = new FormRegistry($extensions, $this->resolvedTypeFactory ?? new ResolvedFormTypeFactory());
-
         return new FormFactory($registry);
     }
 }

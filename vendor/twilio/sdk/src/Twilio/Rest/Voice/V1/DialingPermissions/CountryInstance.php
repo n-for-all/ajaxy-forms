@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Voice\V1\DialingPermissions;
 
-
-namespace Twilio\Rest\Voice\V1\DialingPermissions;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Rest\Voice\V1\DialingPermissions\Country\HighriskSpecialPrefixList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Rest\Voice\V1\DialingPermissions\Country\HighriskSpecialPrefixList;
 /**
  * @property string|null $isoCode
  * @property string|null $name
@@ -38,7 +34,6 @@ use Twilio\Rest\Voice\V1\DialingPermissions\Country\HighriskSpecialPrefixList;
 class CountryInstance extends InstanceResource
 {
     protected $_highriskSpecialPrefixes;
-
     /**
      * Initialize the CountryInstance
      *
@@ -49,61 +44,40 @@ class CountryInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $isoCode = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'isoCode' => Values::array_get($payload, 'iso_code'),
-            'name' => Values::array_get($payload, 'name'),
-            'continent' => Values::array_get($payload, 'continent'),
-            'countryCodes' => Values::array_get($payload, 'country_codes'),
-            'lowRiskNumbersEnabled' => Values::array_get($payload, 'low_risk_numbers_enabled'),
-            'highRiskSpecialNumbersEnabled' => Values::array_get($payload, 'high_risk_special_numbers_enabled'),
-            'highRiskTollfraudNumbersEnabled' => Values::array_get($payload, 'high_risk_tollfraud_numbers_enabled'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['isoCode' => $isoCode ?: $this->properties['isoCode'], ];
+        $this->properties = ['isoCode' => Values::array_get($payload, 'iso_code'), 'name' => Values::array_get($payload, 'name'), 'continent' => Values::array_get($payload, 'continent'), 'countryCodes' => Values::array_get($payload, 'country_codes'), 'lowRiskNumbersEnabled' => Values::array_get($payload, 'low_risk_numbers_enabled'), 'highRiskSpecialNumbersEnabled' => Values::array_get($payload, 'high_risk_special_numbers_enabled'), 'highRiskTollfraudNumbersEnabled' => Values::array_get($payload, 'high_risk_tollfraud_numbers_enabled'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['isoCode' => $isoCode ?: $this->properties['isoCode']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return CountryContext Context for this CountryInstance
      */
-    protected function proxy(): CountryContext
+    protected function proxy() : CountryContext
     {
         if (!$this->context) {
-            $this->context = new CountryContext(
-                $this->version,
-                $this->solution['isoCode']
-            );
+            $this->context = new CountryContext($this->version, $this->solution['isoCode']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the CountryInstance
      *
      * @return CountryInstance Fetched CountryInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): CountryInstance
+    public function fetch() : CountryInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Access the highriskSpecialPrefixes
      */
-    protected function getHighriskSpecialPrefixes(): HighriskSpecialPrefixList
+    protected function getHighriskSpecialPrefixes() : HighriskSpecialPrefixList
     {
         return $this->proxy()->highriskSpecialPrefixes;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -116,27 +90,23 @@ class CountryInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Voice.V1.CountryInstance ' . \implode(' ', $context) . ']';
     }
 }
-

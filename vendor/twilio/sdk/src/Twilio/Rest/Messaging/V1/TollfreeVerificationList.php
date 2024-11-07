@@ -13,37 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class TollfreeVerificationList extends ListResource
-    {
+{
     /**
      * Construct the TollfreeVerificationList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Tollfree/Verifications';
     }
-
     /**
      * Create the TollfreeVerificationInstance
      *
@@ -61,69 +53,17 @@ class TollfreeVerificationList extends ListResource
      * @return TollfreeVerificationInstance Created TollfreeVerificationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $businessName, string $businessWebsite, string $notificationEmail, array $useCaseCategories, string $useCaseSummary, string $productionMessageSample, array $optInImageUrls, string $optInType, string $messageVolume, string $tollfreePhoneNumberSid, array $options = []): TollfreeVerificationInstance
+    public function create(string $businessName, string $businessWebsite, string $notificationEmail, array $useCaseCategories, string $useCaseSummary, string $productionMessageSample, array $optInImageUrls, string $optInType, string $messageVolume, string $tollfreePhoneNumberSid, array $options = []) : TollfreeVerificationInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'BusinessName' =>
-                $businessName,
-            'BusinessWebsite' =>
-                $businessWebsite,
-            'NotificationEmail' =>
-                $notificationEmail,
-            'UseCaseCategories' =>
-                Serialize::map($useCaseCategories,function ($e) { return $e; }),
-            'UseCaseSummary' =>
-                $useCaseSummary,
-            'ProductionMessageSample' =>
-                $productionMessageSample,
-            'OptInImageUrls' =>
-                Serialize::map($optInImageUrls,function ($e) { return $e; }),
-            'OptInType' =>
-                $optInType,
-            'MessageVolume' =>
-                $messageVolume,
-            'TollfreePhoneNumberSid' =>
-                $tollfreePhoneNumberSid,
-            'CustomerProfileSid' =>
-                $options['customerProfileSid'],
-            'BusinessStreetAddress' =>
-                $options['businessStreetAddress'],
-            'BusinessStreetAddress2' =>
-                $options['businessStreetAddress2'],
-            'BusinessCity' =>
-                $options['businessCity'],
-            'BusinessStateProvinceRegion' =>
-                $options['businessStateProvinceRegion'],
-            'BusinessPostalCode' =>
-                $options['businessPostalCode'],
-            'BusinessCountry' =>
-                $options['businessCountry'],
-            'AdditionalInformation' =>
-                $options['additionalInformation'],
-            'BusinessContactFirstName' =>
-                $options['businessContactFirstName'],
-            'BusinessContactLastName' =>
-                $options['businessContactLastName'],
-            'BusinessContactEmail' =>
-                $options['businessContactEmail'],
-            'BusinessContactPhone' =>
-                $options['businessContactPhone'],
-            'ExternalReferenceId' =>
-                $options['externalReferenceId'],
-        ]);
-
+        $data = Values::of(['BusinessName' => $businessName, 'BusinessWebsite' => $businessWebsite, 'NotificationEmail' => $notificationEmail, 'UseCaseCategories' => Serialize::map($useCaseCategories, function ($e) {
+            return $e;
+        }), 'UseCaseSummary' => $useCaseSummary, 'ProductionMessageSample' => $productionMessageSample, 'OptInImageUrls' => Serialize::map($optInImageUrls, function ($e) {
+            return $e;
+        }), 'OptInType' => $optInType, 'MessageVolume' => $messageVolume, 'TollfreePhoneNumberSid' => $tollfreePhoneNumberSid, 'CustomerProfileSid' => $options['customerProfileSid'], 'BusinessStreetAddress' => $options['businessStreetAddress'], 'BusinessStreetAddress2' => $options['businessStreetAddress2'], 'BusinessCity' => $options['businessCity'], 'BusinessStateProvinceRegion' => $options['businessStateProvinceRegion'], 'BusinessPostalCode' => $options['businessPostalCode'], 'BusinessCountry' => $options['businessCountry'], 'AdditionalInformation' => $options['additionalInformation'], 'BusinessContactFirstName' => $options['businessContactFirstName'], 'BusinessContactLastName' => $options['businessContactLastName'], 'BusinessContactEmail' => $options['businessContactEmail'], 'BusinessContactPhone' => $options['businessContactPhone'], 'ExternalReferenceId' => $options['externalReferenceId']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new TollfreeVerificationInstance(
-            $this->version,
-            $payload
-        );
+        return new TollfreeVerificationInstance($this->version, $payload);
     }
-
-
     /**
      * Reads TollfreeVerificationInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -140,11 +80,10 @@ class TollfreeVerificationList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return TollfreeVerificationInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams TollfreeVerificationInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -164,15 +103,12 @@ class TollfreeVerificationList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of TollfreeVerificationInstance records from the API.
      * Request is executed immediately
@@ -182,30 +118,13 @@ class TollfreeVerificationList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return TollfreeVerificationPage Page of TollfreeVerificationInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): TollfreeVerificationPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : TollfreeVerificationPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'TollfreePhoneNumberSid' =>
-                $options['tollfreePhoneNumberSid'],
-            'Status' =>
-                $options['status'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['TollfreePhoneNumberSid' => $options['tollfreePhoneNumberSid'], 'Status' => $options['status'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new TollfreeVerificationPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of TollfreeVerificationInstance records from the API.
      * Request is executed immediately
@@ -213,39 +132,26 @@ class TollfreeVerificationList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return TollfreeVerificationPage Page of TollfreeVerificationInstance
      */
-    public function getPage(string $targetUrl): TollfreeVerificationPage
+    public function getPage(string $targetUrl) : TollfreeVerificationPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new TollfreeVerificationPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a TollfreeVerificationContext
      *
      * @param string $sid The unique string to identify Tollfree Verification.
      */
-    public function getContext(
-        string $sid
-        
-    ): TollfreeVerificationContext
+    public function getContext(string $sid) : TollfreeVerificationContext
     {
-        return new TollfreeVerificationContext(
-            $this->version,
-            $sid
-        );
+        return new TollfreeVerificationContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Messaging.V1.TollfreeVerificationList]';
     }

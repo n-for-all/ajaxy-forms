@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Validator\ViolationMapper;
 
-namespace Symfony\Component\Form\Extension\Validator\ViolationMapper;
-
-use Symfony\Component\PropertyAccess\PropertyPathIterator;
-
+use Isolated\Symfony\Component\PropertyAccess\PropertyPathIterator;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
@@ -22,7 +20,6 @@ class ViolationPathIterator extends PropertyPathIterator
     {
         parent::__construct($violationPath);
     }
-
     public function mapsForm()
     {
         return $this->path->mapsForm($this->key());

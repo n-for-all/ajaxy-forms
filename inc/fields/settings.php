@@ -1,6 +1,6 @@
 <?php
 
-use Symfony\Component\Form\Extension\Core\Type;
+use Isolated\Symfony\Component\Form\Extension\Core\Type;
 use Ajaxy\Forms\Inc\Types;
 
 return [
@@ -56,10 +56,10 @@ return [
                 "label" => "Rounding Mode",
                 "options" => [
                     "" => 'Select a rounding mode',
-                    \NumberFormatter::ROUND_DOWN => "Round towards zero",
-                    \NumberFormatter::ROUND_FLOOR => "Round towards negative infinity",
-                    \NumberFormatter::ROUND_UP => "Round away from zero",
-                    \NumberFormatter::ROUND_CEILING => "Round towards positive infinity"
+                    \Isolated\NumberFormatter::ROUND_DOWN => "Round towards zero",
+                    \Isolated\NumberFormatter::ROUND_FLOOR => "Round towards negative infinity",
+                    \Isolated\NumberFormatter::ROUND_UP => "Round away from zero",
+                    \Isolated\NumberFormatter::ROUND_CEILING => "Round towards positive infinity"
                 ],
                 "help" => "By default, if the user enters a non-integer number, it will be rounded down",
             ]
@@ -98,10 +98,10 @@ return [
                 "label" => "Rounding Mode",
                 "options" => [
                     "" => 'Select a rounding mode',
-                    \NumberFormatter::ROUND_DOWN => "Round towards zero",
-                    \NumberFormatter::ROUND_FLOOR => "Round towards negative infinity",
-                    \NumberFormatter::ROUND_UP => "Round away from zero",
-                    \NumberFormatter::ROUND_CEILING => "Round towards positive infinity"
+                    \Isolated\NumberFormatter::ROUND_DOWN => "Round towards zero",
+                    \Isolated\NumberFormatter::ROUND_FLOOR => "Round towards negative infinity",
+                    \Isolated\NumberFormatter::ROUND_UP => "Round away from zero",
+                    \Isolated\NumberFormatter::ROUND_CEILING => "Round towards positive infinity"
                 ],
                 "help" => "By default, if the user enters a non-integer number, it will be rounded down",
             ],
@@ -159,10 +159,10 @@ return [
                 "label" => "Rounding Mode",
                 "options" => [
                     "" => 'Select a rounding mode',
-                    \NumberFormatter::ROUND_DOWN => "Round towards zero",
-                    \NumberFormatter::ROUND_FLOOR => "Round towards negative infinity",
-                    \NumberFormatter::ROUND_UP => "Round away from zero",
-                    \NumberFormatter::ROUND_CEILING => "Round towards positive infinity"
+                    \Isolated\NumberFormatter::ROUND_DOWN => "Round towards zero",
+                    \Isolated\NumberFormatter::ROUND_FLOOR => "Round towards negative infinity",
+                    \Isolated\NumberFormatter::ROUND_UP => "Round away from zero",
+                    \Isolated\NumberFormatter::ROUND_CEILING => "Round towards positive infinity"
                 ],
                 "help" => "By default, if the user enters a non-integer number, it will be rounded down",
             ],
@@ -232,10 +232,10 @@ return [
                 "label" => "Rounding Mode",
                 "options" => [
                     "" => 'Select a rounding mode',
-                    \NumberFormatter::ROUND_DOWN => "Round towards zero",
-                    \NumberFormatter::ROUND_FLOOR => "Round towards negative infinity",
-                    \NumberFormatter::ROUND_UP => "Round away from zero",
-                    \NumberFormatter::ROUND_CEILING => "Round towards positive infinity"
+                    \Isolated\NumberFormatter::ROUND_DOWN => "Round towards zero",
+                    \Isolated\NumberFormatter::ROUND_FLOOR => "Round towards negative infinity",
+                    \Isolated\NumberFormatter::ROUND_UP => "Round away from zero",
+                    \Isolated\NumberFormatter::ROUND_CEILING => "Round towards positive infinity"
                 ],
                 "help" => "By default, if the user enters a non-integer number, it will be rounded down",
             ],

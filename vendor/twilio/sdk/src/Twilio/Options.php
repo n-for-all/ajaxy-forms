@@ -1,13 +1,12 @@
 <?php
 
+namespace Isolated\Twilio;
 
-namespace Twilio;
-
-
-abstract class Options implements \IteratorAggregate {
+abstract class Options implements \IteratorAggregate
+{
     protected $options = [];
-
-    public function getIterator(): \Traversable {
+    public function getIterator() : \Traversable
+    {
         return new \ArrayIterator($this->options);
     }
 }

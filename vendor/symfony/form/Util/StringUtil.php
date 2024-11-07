@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form\Util;
+namespace Isolated\Symfony\Component\Form\Util;
 
 /**
  * @author Issei Murasawa <issei.m7@gmail.com>
@@ -23,7 +22,6 @@ class StringUtil
     private function __construct()
     {
     }
-
     /**
      * Returns the trimmed data.
      *
@@ -31,13 +29,11 @@ class StringUtil
      */
     public static function trim(string $string)
     {
-        if (null !== $result = @preg_replace('/^[\pZ\p{Cc}\p{Cf}]+|[\pZ\p{Cc}\p{Cf}]+$/u', '', $string)) {
+        if (null !== ($result = @\preg_replace('/^[\\pZ\\p{Cc}\\p{Cf}]+|[\\pZ\\p{Cc}\\p{Cf}]+$/u', '', $string))) {
             return $result;
         }
-
-        return trim($string);
+        return \trim($string);
     }
-
     /**
      * Converts a fully-qualified class name to a block prefix.
      *
@@ -48,10 +44,9 @@ class StringUtil
     public static function fqcnToBlockPrefix(string $fqcn)
     {
         // Non-greedy ("+?") to match "type" suffix, if present
-        if (preg_match('~([^\\\\]+?)(type)?$~i', $fqcn, $matches)) {
-            return strtolower(preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], ['\\1_\\2', '\\1_\\2'], $matches[1]));
+        if (\preg_match('~([^\\\\]+?)(type)?$~i', $fqcn, $matches)) {
+            return \strtolower(\preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\\d])([A-Z])/'], ['\\1_\\2', '\\1_\\2'], $matches[1]));
         }
-
         return null;
     }
 }

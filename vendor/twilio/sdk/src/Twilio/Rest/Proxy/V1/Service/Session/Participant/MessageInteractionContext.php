@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Proxy\V1\Service\Session\Participant;
 
-
-namespace Twilio\Rest\Proxy\V1\Service\Session\Participant;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class MessageInteractionContext extends InstanceContext
-    {
+{
     /**
      * Initialize the MessageInteractionContext
      *
@@ -33,66 +29,34 @@ class MessageInteractionContext extends InstanceContext
      * @param string $participantSid The SID of the [Participant](https://www.twilio.com/docs/proxy/api/participant) resource.
      * @param string $sid The Twilio-provided string that uniquely identifies the MessageInteraction resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $sessionSid,
-        $participantSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $serviceSid, $sessionSid, $participantSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'sessionSid' =>
-            $sessionSid,
-        'participantSid' =>
-            $participantSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Sessions/' . \rawurlencode($sessionSid)
-        .'/Participants/' . \rawurlencode($participantSid)
-        .'/MessageInteractions/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'sessionSid' => $sessionSid, 'participantSid' => $participantSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Sessions/' . \rawurlencode($sessionSid) . '/Participants/' . \rawurlencode($participantSid) . '/MessageInteractions/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the MessageInteractionInstance
      *
      * @return MessageInteractionInstance Fetched MessageInteractionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): MessageInteractionInstance
+    public function fetch() : MessageInteractionInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new MessageInteractionInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['sessionSid'],
-            $this->solution['participantSid'],
-            $this->solution['sid']
-        );
+        return new MessageInteractionInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['sessionSid'], $this->solution['participantSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Proxy.V1.MessageInteractionContext ' . \implode(' ', $context) . ']';
     }

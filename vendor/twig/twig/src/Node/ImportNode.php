@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node;
 
-namespace Twig\Node;
-
-use Twig\Attribute\YieldReady;
-use Twig\Compiler;
-use Twig\Node\Expression\AbstractExpression;
-use Twig\Node\Expression\NameExpression;
-
+use Isolated\Twig\Attribute\YieldReady;
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Expression\AbstractExpression;
+use Isolated\Twig\Node\Expression\NameExpression;
 /**
  * Represents an import node.
  *
@@ -24,42 +22,21 @@ use Twig\Node\Expression\NameExpression;
 #[YieldReady]
 class ImportNode extends Node
 {
-    public function __construct(AbstractExpression $expr, AbstractExpression $var, int $lineno, ?string $tag = null, bool $global = true)
+    public function __construct(AbstractExpression $expr, AbstractExpression $var, int $lineno, ?string $tag = null, bool $global = \true)
     {
         parent::__construct(['expr' => $expr, 'var' => $var], ['global' => $global], $lineno, $tag);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
-        $compiler
-            ->addDebugInfo($this)
-            ->write('$macros[')
-            ->repr($this->getNode('var')->getAttribute('name'))
-            ->raw('] = ')
-        ;
-
+        $compiler->addDebugInfo($this)->write('$macros[')->repr($this->getNode('var')->getAttribute('name'))->raw('] = ');
         if ($this->getAttribute('global')) {
-            $compiler
-                ->raw('$this->macros[')
-                ->repr($this->getNode('var')->getAttribute('name'))
-                ->raw('] = ')
-            ;
+            $compiler->raw('$this->macros[')->repr($this->getNode('var')->getAttribute('name'))->raw('] = ');
         }
-
         if ($this->getNode('expr') instanceof NameExpression && '_self' === $this->getNode('expr')->getAttribute('name')) {
             $compiler->raw('$this');
         } else {
-            $compiler
-                ->raw('$this->loadTemplate(')
-                ->subcompile($this->getNode('expr'))
-                ->raw(', ')
-                ->repr($this->getTemplateName())
-                ->raw(', ')
-                ->repr($this->getTemplateLine())
-                ->raw(')->unwrap()')
-            ;
+            $compiler->raw('$this->loadTemplate(')->subcompile($this->getNode('expr'))->raw(', ')->repr($this->getTemplateName())->raw(', ')->repr($this->getTemplateLine())->raw(')->unwrap()');
         }
-
         $compiler->raw(";\n");
     }
 }

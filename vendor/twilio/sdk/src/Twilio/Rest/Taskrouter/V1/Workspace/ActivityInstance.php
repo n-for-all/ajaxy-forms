@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace;
 
-
-namespace Twilio\Rest\Taskrouter\V1\Workspace;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property bool|null $available
@@ -49,66 +45,43 @@ class ActivityInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $workspaceSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'available' => Values::array_get($payload, 'available'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'workspaceSid' => Values::array_get($payload, 'workspace_sid'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['workspaceSid' => $workspaceSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'available' => Values::array_get($payload, 'available'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'sid' => Values::array_get($payload, 'sid'), 'workspaceSid' => Values::array_get($payload, 'workspace_sid'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['workspaceSid' => $workspaceSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ActivityContext Context for this ActivityInstance
      */
-    protected function proxy(): ActivityContext
+    protected function proxy() : ActivityContext
     {
         if (!$this->context) {
-            $this->context = new ActivityContext(
-                $this->version,
-                $this->solution['workspaceSid'],
-                $this->solution['sid']
-            );
+            $this->context = new ActivityContext($this->version, $this->solution['workspaceSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the ActivityInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the ActivityInstance
      *
      * @return ActivityInstance Fetched ActivityInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ActivityInstance
+    public function fetch() : ActivityInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the ActivityInstance
      *
@@ -116,12 +89,10 @@ class ActivityInstance extends InstanceResource
      * @return ActivityInstance Updated ActivityInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ActivityInstance
+    public function update(array $options = []) : ActivityInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -134,27 +105,23 @@ class ActivityInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Taskrouter.V1.ActivityInstance ' . \implode(' ', $context) . ']';
     }
 }
-

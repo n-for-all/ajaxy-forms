@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form;
 
-namespace Symfony\Component\Form;
-
-use Symfony\Component\Form\Exception\BadMethodCallException;
-
+use Isolated\Symfony\Component\Form\Exception\BadMethodCallException;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  *
@@ -24,23 +22,17 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * The variables assigned to this view.
      */
-    public $vars = [
-        'value' => null,
-        'attr' => [],
-    ];
-
+    public $vars = ['value' => null, 'attr' => []];
     /**
      * The parent view.
      */
     public $parent;
-
     /**
      * The child views.
      *
      * @var array<string, FormView>
      */
     public $children = [];
-
     /**
      * Is the form attached to this renderer rendered?
      *
@@ -50,15 +42,12 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @var bool
      */
-    private $rendered = false;
-
-    private $methodRendered = false;
-
+    private $rendered = \false;
+    private $methodRendered = \false;
     public function __construct(self $parent = null)
     {
         $this->parent = $parent;
     }
-
     /**
      * Returns whether the view was already rendered.
      *
@@ -66,19 +55,16 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function isRendered()
     {
-        if (true === $this->rendered || 0 === \count($this->children)) {
+        if (\true === $this->rendered || 0 === \count($this->children)) {
             return $this->rendered;
         }
-
         foreach ($this->children as $child) {
             if (!$child->isRendered()) {
-                return false;
+                return \false;
             }
         }
-
-        return $this->rendered = true;
+        return $this->rendered = \true;
     }
-
     /**
      * Marks the view as rendered.
      *
@@ -86,11 +72,9 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function setRendered()
     {
-        $this->rendered = true;
-
+        $this->rendered = \true;
         return $this;
     }
-
     /**
      * @return bool
      */
@@ -98,12 +82,10 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return $this->methodRendered;
     }
-
     public function setMethodRendered()
     {
-        $this->methodRendered = true;
+        $this->methodRendered = \true;
     }
-
     /**
      * Returns a child by name (implements \ArrayAccess).
      *
@@ -116,7 +98,6 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return $this->children[$name];
     }
-
     /**
      * Returns whether the given child exists (implements \ArrayAccess).
      *
@@ -129,7 +110,6 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return isset($this->children[$name]);
     }
-
     /**
      * Implements \ArrayAccess.
      *
@@ -142,7 +122,6 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         throw new BadMethodCallException('Not supported.');
     }
-
     /**
      * Removes a child (implements \ArrayAccess).
      *
@@ -155,7 +134,6 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         unset($this->children[$name]);
     }
-
     /**
      * Returns an iterator to iterate over children (implements \IteratorAggregate).
      *
@@ -166,7 +144,6 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return new \ArrayIterator($this->children);
     }
-
     /**
      * Implements \Countable.
      *

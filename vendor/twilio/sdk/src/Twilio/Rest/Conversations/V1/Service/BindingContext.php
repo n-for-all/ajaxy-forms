@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1\Service;
 
-
-namespace Twilio\Rest\Conversations\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class BindingContext extends InstanceContext
-    {
+{
     /**
      * Initialize the BindingContext
      *
@@ -31,69 +27,44 @@ class BindingContext extends InstanceContext
      * @param string $chatServiceSid The SID of the [Conversation Service](https://www.twilio.com/docs/conversations/api/service-resource) to delete the Binding resource from.
      * @param string $sid The SID of the Binding resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $chatServiceSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $chatServiceSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'chatServiceSid' =>
-            $chatServiceSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($chatServiceSid)
-        .'/Bindings/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['chatServiceSid' => $chatServiceSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($chatServiceSid) . '/Bindings/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the BindingInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the BindingInstance
      *
      * @return BindingInstance Fetched BindingInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): BindingInstance
+    public function fetch() : BindingInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new BindingInstance(
-            $this->version,
-            $payload,
-            $this->solution['chatServiceSid'],
-            $this->solution['sid']
-        );
+        return new BindingInstance($this->version, $payload, $this->solution['chatServiceSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Conversations.V1.BindingContext ' . \implode(' ', $context) . ']';
     }

@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service;
 
-namespace Twilio\Rest\Verify\V2\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class AccessTokenList extends ListResource
-    {
+{
     /**
      * Construct the AccessTokenList
      *
      * @param Version $version Version that contains the resource
      * @param string $serviceSid The unique SID identifier of the Service.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid
-    ) {
+    public function __construct(Version $version, string $serviceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/AccessTokens';
+        $this->solution = ['serviceSid' => $serviceSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/AccessTokens';
     }
-
     /**
      * Create the AccessTokenInstance
      *
@@ -57,55 +44,28 @@ class AccessTokenList extends ListResource
      * @return AccessTokenInstance Created AccessTokenInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $identity, string $factorType, array $options = []): AccessTokenInstance
+    public function create(string $identity, string $factorType, array $options = []) : AccessTokenInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Identity' =>
-                $identity,
-            'FactorType' =>
-                $factorType,
-            'FactorFriendlyName' =>
-                $options['factorFriendlyName'],
-            'Ttl' =>
-                $options['ttl'],
-        ]);
-
+        $data = Values::of(['Identity' => $identity, 'FactorType' => $factorType, 'FactorFriendlyName' => $options['factorFriendlyName'], 'Ttl' => $options['ttl']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new AccessTokenInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid']
-        );
+        return new AccessTokenInstance($this->version, $payload, $this->solution['serviceSid']);
     }
-
-
     /**
      * Constructs a AccessTokenContext
      *
      * @param string $sid A 34 character string that uniquely identifies this Access Token.
      */
-    public function getContext(
-        string $sid
-        
-    ): AccessTokenContext
+    public function getContext(string $sid) : AccessTokenContext
     {
-        return new AccessTokenContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $sid
-        );
+        return new AccessTokenContext($this->version, $this->solution['serviceSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Verify.V2.AccessTokenList]';
     }

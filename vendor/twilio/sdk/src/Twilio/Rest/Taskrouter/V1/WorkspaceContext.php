@@ -13,29 +13,25 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1;
 
-
-namespace Twilio\Rest\Taskrouter\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-use Twilio\Rest\Taskrouter\V1\Workspace\TaskQueueList;
-use Twilio\Rest\Taskrouter\V1\Workspace\EventList;
-use Twilio\Rest\Taskrouter\V1\Workspace\TaskChannelList;
-use Twilio\Rest\Taskrouter\V1\Workspace\ActivityList;
-use Twilio\Rest\Taskrouter\V1\Workspace\WorkerList;
-use Twilio\Rest\Taskrouter\V1\Workspace\WorkflowList;
-use Twilio\Rest\Taskrouter\V1\Workspace\TaskList;
-use Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceCumulativeStatisticsList;
-use Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceRealTimeStatisticsList;
-use Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceStatisticsList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\TaskQueueList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\EventList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\TaskChannelList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\ActivityList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\WorkerList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\WorkflowList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\TaskList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceCumulativeStatisticsList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceRealTimeStatisticsList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceStatisticsList;
 /**
  * @property TaskQueueList $taskQueues
  * @property EventList $events
@@ -59,7 +55,7 @@ use Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceStatisticsList;
  * @method \Twilio\Rest\Taskrouter\V1\Workspace\TaskChannelContext taskChannels(string $sid)
  */
 class WorkspaceContext extends InstanceContext
-    {
+{
     protected $_taskQueues;
     protected $_events;
     protected $_taskChannels;
@@ -70,61 +66,40 @@ class WorkspaceContext extends InstanceContext
     protected $_cumulativeStatistics;
     protected $_realTimeStatistics;
     protected $_statistics;
-
     /**
      * Initialize the WorkspaceContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The SID of the Workspace resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Workspaces/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Workspaces/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the WorkspaceInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the WorkspaceInstance
      *
      * @return WorkspaceInstance Fetched WorkspaceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): WorkspaceInstance
+    public function fetch() : WorkspaceInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new WorkspaceInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new WorkspaceInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the WorkspaceInstance
      *
@@ -132,188 +107,113 @@ class WorkspaceContext extends InstanceContext
      * @return WorkspaceInstance Updated WorkspaceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): WorkspaceInstance
+    public function update(array $options = []) : WorkspaceInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'DefaultActivitySid' =>
-                $options['defaultActivitySid'],
-            'EventCallbackUrl' =>
-                $options['eventCallbackUrl'],
-            'EventsFilter' =>
-                $options['eventsFilter'],
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'MultiTaskEnabled' =>
-                Serialize::booleanToString($options['multiTaskEnabled']),
-            'TimeoutActivitySid' =>
-                $options['timeoutActivitySid'],
-            'PrioritizeQueueOrder' =>
-                $options['prioritizeQueueOrder'],
-        ]);
-
+        $data = Values::of(['DefaultActivitySid' => $options['defaultActivitySid'], 'EventCallbackUrl' => $options['eventCallbackUrl'], 'EventsFilter' => $options['eventsFilter'], 'FriendlyName' => $options['friendlyName'], 'MultiTaskEnabled' => Serialize::booleanToString($options['multiTaskEnabled']), 'TimeoutActivitySid' => $options['timeoutActivitySid'], 'PrioritizeQueueOrder' => $options['prioritizeQueueOrder']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new WorkspaceInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new WorkspaceInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the taskQueues
      */
-    protected function getTaskQueues(): TaskQueueList
+    protected function getTaskQueues() : TaskQueueList
     {
         if (!$this->_taskQueues) {
-            $this->_taskQueues = new TaskQueueList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_taskQueues = new TaskQueueList($this->version, $this->solution['sid']);
         }
-
         return $this->_taskQueues;
     }
-
     /**
      * Access the events
      */
-    protected function getEvents(): EventList
+    protected function getEvents() : EventList
     {
         if (!$this->_events) {
-            $this->_events = new EventList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_events = new EventList($this->version, $this->solution['sid']);
         }
-
         return $this->_events;
     }
-
     /**
      * Access the taskChannels
      */
-    protected function getTaskChannels(): TaskChannelList
+    protected function getTaskChannels() : TaskChannelList
     {
         if (!$this->_taskChannels) {
-            $this->_taskChannels = new TaskChannelList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_taskChannels = new TaskChannelList($this->version, $this->solution['sid']);
         }
-
         return $this->_taskChannels;
     }
-
     /**
      * Access the activities
      */
-    protected function getActivities(): ActivityList
+    protected function getActivities() : ActivityList
     {
         if (!$this->_activities) {
-            $this->_activities = new ActivityList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_activities = new ActivityList($this->version, $this->solution['sid']);
         }
-
         return $this->_activities;
     }
-
     /**
      * Access the workers
      */
-    protected function getWorkers(): WorkerList
+    protected function getWorkers() : WorkerList
     {
         if (!$this->_workers) {
-            $this->_workers = new WorkerList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_workers = new WorkerList($this->version, $this->solution['sid']);
         }
-
         return $this->_workers;
     }
-
     /**
      * Access the workflows
      */
-    protected function getWorkflows(): WorkflowList
+    protected function getWorkflows() : WorkflowList
     {
         if (!$this->_workflows) {
-            $this->_workflows = new WorkflowList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_workflows = new WorkflowList($this->version, $this->solution['sid']);
         }
-
         return $this->_workflows;
     }
-
     /**
      * Access the tasks
      */
-    protected function getTasks(): TaskList
+    protected function getTasks() : TaskList
     {
         if (!$this->_tasks) {
-            $this->_tasks = new TaskList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_tasks = new TaskList($this->version, $this->solution['sid']);
         }
-
         return $this->_tasks;
     }
-
     /**
      * Access the cumulativeStatistics
      */
-    protected function getCumulativeStatistics(): WorkspaceCumulativeStatisticsList
+    protected function getCumulativeStatistics() : WorkspaceCumulativeStatisticsList
     {
         if (!$this->_cumulativeStatistics) {
-            $this->_cumulativeStatistics = new WorkspaceCumulativeStatisticsList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_cumulativeStatistics = new WorkspaceCumulativeStatisticsList($this->version, $this->solution['sid']);
         }
-
         return $this->_cumulativeStatistics;
     }
-
     /**
      * Access the realTimeStatistics
      */
-    protected function getRealTimeStatistics(): WorkspaceRealTimeStatisticsList
+    protected function getRealTimeStatistics() : WorkspaceRealTimeStatisticsList
     {
         if (!$this->_realTimeStatistics) {
-            $this->_realTimeStatistics = new WorkspaceRealTimeStatisticsList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_realTimeStatistics = new WorkspaceRealTimeStatisticsList($this->version, $this->solution['sid']);
         }
-
         return $this->_realTimeStatistics;
     }
-
     /**
      * Access the statistics
      */
-    protected function getStatistics(): WorkspaceStatisticsList
+    protected function getStatistics() : WorkspaceStatisticsList
     {
         if (!$this->_statistics) {
-            $this->_statistics = new WorkspaceStatisticsList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_statistics = new WorkspaceStatisticsList($this->version, $this->solution['sid']);
         }
-
         return $this->_statistics;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -321,16 +221,14 @@ class WorkspaceContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -339,26 +237,24 @@ class WorkspaceContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Taskrouter.V1.WorkspaceContext ' . \implode(' ', $context) . ']';
     }

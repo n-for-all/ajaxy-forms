@@ -13,34 +13,26 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2;
 
-namespace Twilio\Rest\Verify\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class SafelistList extends ListResource
-    {
+{
     /**
      * Construct the SafelistList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/SafeList/Numbers';
     }
-
     /**
      * Create the SafelistInstance
      *
@@ -48,45 +40,27 @@ class SafelistList extends ListResource
      * @return SafelistInstance Created SafelistInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $phoneNumber): SafelistInstance
+    public function create(string $phoneNumber) : SafelistInstance
     {
-
-        $data = Values::of([
-            'PhoneNumber' =>
-                $phoneNumber,
-        ]);
-
+        $data = Values::of(['PhoneNumber' => $phoneNumber]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new SafelistInstance(
-            $this->version,
-            $payload
-        );
+        return new SafelistInstance($this->version, $payload);
     }
-
-
     /**
      * Constructs a SafelistContext
      *
      * @param string $phoneNumber The phone number to be removed from SafeList. Phone numbers must be in [E.164 format](https://www.twilio.com/docs/glossary/what-e164).
      */
-    public function getContext(
-        string $phoneNumber
-        
-    ): SafelistContext
+    public function getContext(string $phoneNumber) : SafelistContext
     {
-        return new SafelistContext(
-            $this->version,
-            $phoneNumber
-        );
+        return new SafelistContext($this->version, $phoneNumber);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Verify.V2.SafelistList]';
     }

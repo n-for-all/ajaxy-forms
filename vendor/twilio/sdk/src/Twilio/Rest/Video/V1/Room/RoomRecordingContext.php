@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Video\V1\Room;
 
-
-namespace Twilio\Rest\Video\V1\Room;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class RoomRecordingContext extends InstanceContext
-    {
+{
     /**
      * Initialize the RoomRecordingContext
      *
@@ -31,69 +27,44 @@ class RoomRecordingContext extends InstanceContext
      * @param string $roomSid The SID of the room with the RoomRecording resource to delete.
      * @param string $sid The SID of the RoomRecording resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $roomSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $roomSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'roomSid' =>
-            $roomSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Rooms/' . \rawurlencode($roomSid)
-        .'/Recordings/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['roomSid' => $roomSid, 'sid' => $sid];
+        $this->uri = '/Rooms/' . \rawurlencode($roomSid) . '/Recordings/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the RoomRecordingInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the RoomRecordingInstance
      *
      * @return RoomRecordingInstance Fetched RoomRecordingInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): RoomRecordingInstance
+    public function fetch() : RoomRecordingInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new RoomRecordingInstance(
-            $this->version,
-            $payload,
-            $this->solution['roomSid'],
-            $this->solution['sid']
-        );
+        return new RoomRecordingInstance($this->version, $payload, $this->solution['roomSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Video.V1.RoomRecordingContext ' . \implode(' ', $context) . ']';
     }

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form;
+namespace Isolated\Symfony\Component\Form;
 
 /**
  * Submits forms if they were submitted.
@@ -24,7 +23,6 @@ interface RequestHandlerInterface
      * @param mixed $request The current request
      */
     public function handleRequest(FormInterface $form, $request = null);
-
     /**
      * Returns true if the given data is a file upload.
      *

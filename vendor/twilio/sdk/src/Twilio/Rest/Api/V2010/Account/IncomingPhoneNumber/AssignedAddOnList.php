@@ -13,18 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\IncomingPhoneNumber;
 
-namespace Twilio\Rest\Api\V2010\Account\IncomingPhoneNumber;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class AssignedAddOnList extends ListResource
-    {
+{
     /**
      * Construct the AssignedAddOnList
      *
@@ -32,28 +29,13 @@ class AssignedAddOnList extends ListResource
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) that will create the resource.
      * @param string $resourceSid The SID of the Phone Number to assign the Add-on.
      */
-    public function __construct(
-        Version $version,
-        string $accountSid,
-        string $resourceSid
-    ) {
+    public function __construct(Version $version, string $accountSid, string $resourceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        
-        'resourceSid' =>
-            $resourceSid,
-        
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/IncomingPhoneNumbers/' . \rawurlencode($resourceSid)
-        .'/AssignedAddOns.json';
+        $this->solution = ['accountSid' => $accountSid, 'resourceSid' => $resourceSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/IncomingPhoneNumbers/' . \rawurlencode($resourceSid) . '/AssignedAddOns.json';
     }
-
     /**
      * Create the AssignedAddOnInstance
      *
@@ -61,25 +43,12 @@ class AssignedAddOnList extends ListResource
      * @return AssignedAddOnInstance Created AssignedAddOnInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $installedAddOnSid): AssignedAddOnInstance
+    public function create(string $installedAddOnSid) : AssignedAddOnInstance
     {
-
-        $data = Values::of([
-            'InstalledAddOnSid' =>
-                $installedAddOnSid,
-        ]);
-
+        $data = Values::of(['InstalledAddOnSid' => $installedAddOnSid]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new AssignedAddOnInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['resourceSid']
-        );
+        return new AssignedAddOnInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['resourceSid']);
     }
-
-
     /**
      * Reads AssignedAddOnInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -95,11 +64,10 @@ class AssignedAddOnList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return AssignedAddOnInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams AssignedAddOnInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -118,15 +86,12 @@ class AssignedAddOnList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of AssignedAddOnInstance records from the API.
      * Request is executed immediately
@@ -136,24 +101,12 @@ class AssignedAddOnList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return AssignedAddOnPage Page of AssignedAddOnInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): AssignedAddOnPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : AssignedAddOnPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new AssignedAddOnPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of AssignedAddOnInstance records from the API.
      * Request is executed immediately
@@ -161,41 +114,26 @@ class AssignedAddOnList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return AssignedAddOnPage Page of AssignedAddOnInstance
      */
-    public function getPage(string $targetUrl): AssignedAddOnPage
+    public function getPage(string $targetUrl) : AssignedAddOnPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new AssignedAddOnPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a AssignedAddOnContext
      *
      * @param string $sid The Twilio-provided string that uniquely identifies the resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): AssignedAddOnContext
+    public function getContext(string $sid) : AssignedAddOnContext
     {
-        return new AssignedAddOnContext(
-            $this->version,
-            $this->solution['accountSid'],
-            $this->solution['resourceSid'],
-            $sid
-        );
+        return new AssignedAddOnContext($this->version, $this->solution['accountSid'], $this->solution['resourceSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.AssignedAddOnList]';
     }

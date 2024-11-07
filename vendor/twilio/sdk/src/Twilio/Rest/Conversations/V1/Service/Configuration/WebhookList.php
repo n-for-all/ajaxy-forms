@@ -13,54 +13,37 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1\Service\Configuration;
 
-namespace Twilio\Rest\Conversations\V1\Service\Configuration;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class WebhookList extends ListResource
-    {
+{
     /**
      * Construct the WebhookList
      *
      * @param Version $version Version that contains the resource
      * @param string $chatServiceSid The unique ID of the [Conversation Service](https://www.twilio.com/docs/conversations/api/service-resource) this conversation belongs to.
      */
-    public function __construct(
-        Version $version,
-        string $chatServiceSid
-    ) {
+    public function __construct(Version $version, string $chatServiceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'chatServiceSid' =>
-            $chatServiceSid,
-        
-        ];
+        $this->solution = ['chatServiceSid' => $chatServiceSid];
     }
-
     /**
      * Constructs a WebhookContext
      */
-    public function getContext(
-        
-    ): WebhookContext
+    public function getContext() : WebhookContext
     {
-        return new WebhookContext(
-            $this->version,
-            $this->solution['chatServiceSid']
-        );
+        return new WebhookContext($this->version, $this->solution['chatServiceSid']);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Conversations.V1.WebhookList]';
     }

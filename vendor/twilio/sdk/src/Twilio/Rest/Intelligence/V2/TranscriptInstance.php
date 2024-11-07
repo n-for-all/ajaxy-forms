@@ -13,20 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2;
 
-
-namespace Twilio\Rest\Intelligence\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Intelligence\V2\Transcript\SentenceList;
-use Twilio\Rest\Intelligence\V2\Transcript\OperatorResultList;
-use Twilio\Rest\Intelligence\V2\Transcript\MediaList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Intelligence\V2\Transcript\SentenceList;
+use Isolated\Twilio\Rest\Intelligence\V2\Transcript\OperatorResultList;
+use Isolated\Twilio\Rest\Intelligence\V2\Transcript\MediaList;
 /**
  * @property string|null $accountSid
  * @property string|null $serviceSid
@@ -49,7 +45,6 @@ class TranscriptInstance extends InstanceResource
     protected $_sentences;
     protected $_operatorResults;
     protected $_media;
-
     /**
      * Initialize the TranscriptInstance
      *
@@ -60,95 +55,64 @@ class TranscriptInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'status' => Values::array_get($payload, 'status'),
-            'channel' => Values::array_get($payload, 'channel'),
-            'dataLogging' => Values::array_get($payload, 'data_logging'),
-            'languageCode' => Values::array_get($payload, 'language_code'),
-            'customerKey' => Values::array_get($payload, 'customer_key'),
-            'mediaStartTime' => Deserialize::dateTime(Values::array_get($payload, 'media_start_time')),
-            'duration' => Values::array_get($payload, 'duration'),
-            'url' => Values::array_get($payload, 'url'),
-            'redaction' => Values::array_get($payload, 'redaction'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'sid' => Values::array_get($payload, 'sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'status' => Values::array_get($payload, 'status'), 'channel' => Values::array_get($payload, 'channel'), 'dataLogging' => Values::array_get($payload, 'data_logging'), 'languageCode' => Values::array_get($payload, 'language_code'), 'customerKey' => Values::array_get($payload, 'customer_key'), 'mediaStartTime' => Deserialize::dateTime(Values::array_get($payload, 'media_start_time')), 'duration' => Values::array_get($payload, 'duration'), 'url' => Values::array_get($payload, 'url'), 'redaction' => Values::array_get($payload, 'redaction'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return TranscriptContext Context for this TranscriptInstance
      */
-    protected function proxy(): TranscriptContext
+    protected function proxy() : TranscriptContext
     {
         if (!$this->context) {
-            $this->context = new TranscriptContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new TranscriptContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the TranscriptInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the TranscriptInstance
      *
      * @return TranscriptInstance Fetched TranscriptInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): TranscriptInstance
+    public function fetch() : TranscriptInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Access the sentences
      */
-    protected function getSentences(): SentenceList
+    protected function getSentences() : SentenceList
     {
         return $this->proxy()->sentences;
     }
-
     /**
      * Access the operatorResults
      */
-    protected function getOperatorResults(): OperatorResultList
+    protected function getOperatorResults() : OperatorResultList
     {
         return $this->proxy()->operatorResults;
     }
-
     /**
      * Access the media
      */
-    protected function getMedia(): MediaList
+    protected function getMedia() : MediaList
     {
         return $this->proxy()->media;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -161,27 +125,23 @@ class TranscriptInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Intelligence.V2.TranscriptInstance ' . \implode(' ', $context) . ']';
     }
 }
-

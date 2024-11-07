@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\ChoiceList\View;
 
-namespace Symfony\Component\Form\ChoiceList\View;
-
-use Symfony\Component\Translation\TranslatableMessage;
-
+use Isolated\Symfony\Component\Translation\TranslatableMessage;
 /**
  * Represents a choice in templates.
  *
@@ -23,17 +21,14 @@ class ChoiceView
     public $label;
     public $value;
     public $data;
-
     /**
      * Additional attributes for the HTML tag.
      */
     public $attr;
-
     /**
      * Additional parameters used to translate the label.
      */
     public $labelTranslationParameters;
-
     /**
      * Creates a new choice view.
      *

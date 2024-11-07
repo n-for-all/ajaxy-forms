@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Video\V1\Room;
 
-
-namespace Twilio\Rest\Video\V1\Room;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $roomSid
  * @property string[]|null $rules
@@ -42,18 +38,10 @@ class RecordingRulesInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $roomSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'roomSid' => Values::array_get($payload, 'room_sid'),
-            'rules' => Values::array_get($payload, 'rules'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-        ];
-
-        $this->solution = ['roomSid' => $roomSid, ];
+        $this->properties = ['roomSid' => Values::array_get($payload, 'room_sid'), 'rules' => Values::array_get($payload, 'rules'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated'))];
+        $this->solution = ['roomSid' => $roomSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -66,23 +54,19 @@ class RecordingRulesInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Video.V1.RecordingRulesInstance]';
     }
 }
-

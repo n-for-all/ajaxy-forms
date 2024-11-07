@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Config\Loader;
 
-namespace Symfony\Component\Config\Loader;
-
-use Symfony\Component\Config\Exception\LoaderLoadException;
-
+use Isolated\Symfony\Component\Config\Exception\LoaderLoadException;
 /**
  * DelegatingLoader delegates loading to other loaders using a loader resolver.
  *
@@ -27,24 +25,21 @@ class DelegatingLoader extends Loader
     {
         $this->resolver = $resolver;
     }
-
     /**
      * {@inheritdoc}
      */
     public function load($resource, ?string $type = null)
     {
-        if (false === $loader = $this->resolver->resolve($resource, $type)) {
+        if (\false === ($loader = $this->resolver->resolve($resource, $type))) {
             throw new LoaderLoadException($resource, null, 0, null, $type);
         }
-
         return $loader->load($resource, $type);
     }
-
     /**
      * {@inheritdoc}
      */
     public function supports($resource, ?string $type = null)
     {
-        return false !== $this->resolver->resolve($resource, $type);
+        return \false !== $this->resolver->resolve($resource, $type);
     }
 }

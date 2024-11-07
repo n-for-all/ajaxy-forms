@@ -6,18 +6,18 @@
  * | (_)\/(_)(_|\/| |(/_  v1.0.0
  * /       /
  */
+namespace Isolated\Twilio\TwiML\Messaging;
 
-namespace Twilio\TwiML\Messaging;
-
-use Twilio\TwiML\TwiML;
-
-class Media extends TwiML {
+use Isolated\Twilio\TwiML\TwiML;
+class Media extends TwiML
+{
     /**
      * Media constructor.
      *
      * @param string $url Media URL
      */
-    public function __construct($url) {
+    public function __construct($url)
+    {
         parent::__construct('Media', $url);
     }
 }

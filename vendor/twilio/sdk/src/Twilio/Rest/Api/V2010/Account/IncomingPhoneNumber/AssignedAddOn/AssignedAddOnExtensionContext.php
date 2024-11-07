@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\IncomingPhoneNumber\AssignedAddOn;
 
-
-namespace Twilio\Rest\Api\V2010\Account\IncomingPhoneNumber\AssignedAddOn;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class AssignedAddOnExtensionContext extends InstanceContext
-    {
+{
     /**
      * Initialize the AssignedAddOnExtensionContext
      *
@@ -33,66 +29,34 @@ class AssignedAddOnExtensionContext extends InstanceContext
      * @param string $assignedAddOnSid The SID that uniquely identifies the assigned Add-on installation.
      * @param string $sid The Twilio-provided string that uniquely identifies the resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $resourceSid,
-        $assignedAddOnSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $accountSid, $resourceSid, $assignedAddOnSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'resourceSid' =>
-            $resourceSid,
-        'assignedAddOnSid' =>
-            $assignedAddOnSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/IncomingPhoneNumbers/' . \rawurlencode($resourceSid)
-        .'/AssignedAddOns/' . \rawurlencode($assignedAddOnSid)
-        .'/Extensions/' . \rawurlencode($sid)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'resourceSid' => $resourceSid, 'assignedAddOnSid' => $assignedAddOnSid, 'sid' => $sid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/IncomingPhoneNumbers/' . \rawurlencode($resourceSid) . '/AssignedAddOns/' . \rawurlencode($assignedAddOnSid) . '/Extensions/' . \rawurlencode($sid) . '.json';
     }
-
     /**
      * Fetch the AssignedAddOnExtensionInstance
      *
      * @return AssignedAddOnExtensionInstance Fetched AssignedAddOnExtensionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): AssignedAddOnExtensionInstance
+    public function fetch() : AssignedAddOnExtensionInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new AssignedAddOnExtensionInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['resourceSid'],
-            $this->solution['assignedAddOnSid'],
-            $this->solution['sid']
-        );
+        return new AssignedAddOnExtensionInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['resourceSid'], $this->solution['assignedAddOnSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.AssignedAddOnExtensionContext ' . \implode(' ', $context) . ']';
     }

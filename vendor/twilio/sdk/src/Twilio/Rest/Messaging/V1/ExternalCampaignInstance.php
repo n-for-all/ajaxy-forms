@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -42,19 +38,10 @@ class ExternalCampaignInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'campaignId' => Values::array_get($payload, 'campaign_id'),
-            'messagingServiceSid' => Values::array_get($payload, 'messaging_service_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-        ];
-
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'campaignId' => Values::array_get($payload, 'campaign_id'), 'messagingServiceSid' => Values::array_get($payload, 'messaging_service_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created'))];
         $this->solution = [];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -67,23 +54,19 @@ class ExternalCampaignInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Messaging.V1.ExternalCampaignInstance]';
     }
 }
-

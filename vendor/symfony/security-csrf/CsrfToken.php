@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Csrf;
+namespace Isolated\Symfony\Component\Security\Csrf;
 
 /**
  * A CSRF token.
@@ -20,13 +19,11 @@ class CsrfToken
 {
     private $id;
     private $value;
-
     public function __construct(string $id, ?string $value)
     {
         $this->id = $id;
         $this->value = $value ?? '';
     }
-
     /**
      * Returns the ID of the CSRF token.
      *
@@ -36,7 +33,6 @@ class CsrfToken
     {
         return $this->id;
     }
-
     /**
      * Returns the value of the CSRF token.
      *
@@ -46,7 +42,6 @@ class CsrfToken
     {
         return $this->value;
     }
-
     /**
      * Returns the value of the CSRF token.
      *

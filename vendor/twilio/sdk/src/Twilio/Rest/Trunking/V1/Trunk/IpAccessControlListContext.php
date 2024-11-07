@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trunking\V1\Trunk;
 
-
-namespace Twilio\Rest\Trunking\V1\Trunk;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class IpAccessControlListContext extends InstanceContext
-    {
+{
     /**
      * Initialize the IpAccessControlListContext
      *
@@ -31,69 +27,44 @@ class IpAccessControlListContext extends InstanceContext
      * @param string $trunkSid The SID of the Trunk to associate the IP Access Control List with.
      * @param string $sid The unique string that we created to identify the IpAccessControlList resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $trunkSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $trunkSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'trunkSid' =>
-            $trunkSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Trunks/' . \rawurlencode($trunkSid)
-        .'/IpAccessControlLists/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['trunkSid' => $trunkSid, 'sid' => $sid];
+        $this->uri = '/Trunks/' . \rawurlencode($trunkSid) . '/IpAccessControlLists/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the IpAccessControlListInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the IpAccessControlListInstance
      *
      * @return IpAccessControlListInstance Fetched IpAccessControlListInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): IpAccessControlListInstance
+    public function fetch() : IpAccessControlListInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new IpAccessControlListInstance(
-            $this->version,
-            $payload,
-            $this->solution['trunkSid'],
-            $this->solution['sid']
-        );
+        return new IpAccessControlListInstance($this->version, $payload, $this->solution['trunkSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Trunking.V1.IpAccessControlListContext ' . \implode(' ', $context) . ']';
     }

@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Insights\V1;
 
-
-namespace Twilio\Rest\Insights\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property string|null $callSid
@@ -60,37 +56,10 @@ class CallSummariesInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'callSid' => Values::array_get($payload, 'call_sid'),
-            'answeredBy' => Values::array_get($payload, 'answered_by'),
-            'callType' => Values::array_get($payload, 'call_type'),
-            'callState' => Values::array_get($payload, 'call_state'),
-            'processingState' => Values::array_get($payload, 'processing_state'),
-            'createdTime' => Deserialize::dateTime(Values::array_get($payload, 'created_time')),
-            'startTime' => Deserialize::dateTime(Values::array_get($payload, 'start_time')),
-            'endTime' => Deserialize::dateTime(Values::array_get($payload, 'end_time')),
-            'duration' => Values::array_get($payload, 'duration'),
-            'connectDuration' => Values::array_get($payload, 'connect_duration'),
-            'from' => Values::array_get($payload, 'from'),
-            'to' => Values::array_get($payload, 'to'),
-            'carrierEdge' => Values::array_get($payload, 'carrier_edge'),
-            'clientEdge' => Values::array_get($payload, 'client_edge'),
-            'sdkEdge' => Values::array_get($payload, 'sdk_edge'),
-            'sipEdge' => Values::array_get($payload, 'sip_edge'),
-            'tags' => Values::array_get($payload, 'tags'),
-            'url' => Values::array_get($payload, 'url'),
-            'attributes' => Values::array_get($payload, 'attributes'),
-            'properties' => Values::array_get($payload, 'properties'),
-            'trust' => Values::array_get($payload, 'trust'),
-            'annotation' => Values::array_get($payload, 'annotation'),
-        ];
-
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'callSid' => Values::array_get($payload, 'call_sid'), 'answeredBy' => Values::array_get($payload, 'answered_by'), 'callType' => Values::array_get($payload, 'call_type'), 'callState' => Values::array_get($payload, 'call_state'), 'processingState' => Values::array_get($payload, 'processing_state'), 'createdTime' => Deserialize::dateTime(Values::array_get($payload, 'created_time')), 'startTime' => Deserialize::dateTime(Values::array_get($payload, 'start_time')), 'endTime' => Deserialize::dateTime(Values::array_get($payload, 'end_time')), 'duration' => Values::array_get($payload, 'duration'), 'connectDuration' => Values::array_get($payload, 'connect_duration'), 'from' => Values::array_get($payload, 'from'), 'to' => Values::array_get($payload, 'to'), 'carrierEdge' => Values::array_get($payload, 'carrier_edge'), 'clientEdge' => Values::array_get($payload, 'client_edge'), 'sdkEdge' => Values::array_get($payload, 'sdk_edge'), 'sipEdge' => Values::array_get($payload, 'sip_edge'), 'tags' => Values::array_get($payload, 'tags'), 'url' => Values::array_get($payload, 'url'), 'attributes' => Values::array_get($payload, 'attributes'), 'properties' => Values::array_get($payload, 'properties'), 'trust' => Values::array_get($payload, 'trust'), 'annotation' => Values::array_get($payload, 'annotation')];
         $this->solution = [];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -103,23 +72,19 @@ class CallSummariesInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Insights.V1.CallSummariesInstance]';
     }
 }
-

@@ -13,35 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class InsightsSettingsAnswerSetsList extends ListResource
-    {
+{
     /**
      * Construct the InsightsSettingsAnswerSetsList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Insights/QualityManagement/Settings/AnswerSets';
     }
-
     /**
      * Fetch the InsightsSettingsAnswerSetsInstance
      *
@@ -49,28 +41,19 @@ class InsightsSettingsAnswerSetsList extends ListResource
      * @return InsightsSettingsAnswerSetsInstance Fetched InsightsSettingsAnswerSetsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): InsightsSettingsAnswerSetsInstance
+    public function fetch(array $options = []) : InsightsSettingsAnswerSetsInstance
     {
-
         $options = new Values($options);
-
         $headers = Values::of(['Authorization' => $options['authorization']]);
-
         $payload = $this->version->fetch('GET', $this->uri, [], [], $headers);
-
-        return new InsightsSettingsAnswerSetsInstance(
-            $this->version,
-            $payload
-        );
+        return new InsightsSettingsAnswerSetsInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.FlexApi.V1.InsightsSettingsAnswerSetsList]';
     }

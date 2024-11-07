@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Config\Builder;
+namespace Isolated\Symfony\Component\Config\Builder;
 
 /**
  * Represents a property when building classes.
@@ -22,64 +21,53 @@ class Property
 {
     private $name;
     private $originalName;
-    private $array = false;
-    private $scalarsAllowed = false;
+    private $array = \false;
+    private $scalarsAllowed = \false;
     private $type = null;
     private $content;
-
     public function __construct(string $originalName, string $name)
     {
         $this->name = $name;
         $this->originalName = $originalName;
     }
-
-    public function getName(): string
+    public function getName() : string
     {
         return $this->name;
     }
-
-    public function getOriginalName(): string
+    public function getOriginalName() : string
     {
         return $this->originalName;
     }
-
-    public function setType(string $type): void
+    public function setType(string $type) : void
     {
-        $this->array = false;
+        $this->array = \false;
         $this->type = $type;
-
-        if ('|scalar' === substr($type, -7)) {
-            $this->scalarsAllowed = true;
-            $this->type = $type = substr($type, 0, -7);
+        if ('|scalar' === \substr($type, -7)) {
+            $this->scalarsAllowed = \true;
+            $this->type = $type = \substr($type, 0, -7);
         }
-
-        if ('[]' === substr($type, -2)) {
-            $this->array = true;
-            $this->type = substr($type, 0, -2);
+        if ('[]' === \substr($type, -2)) {
+            $this->array = \true;
+            $this->type = \substr($type, 0, -2);
         }
     }
-
-    public function getType(): ?string
+    public function getType() : ?string
     {
         return $this->type;
     }
-
-    public function getContent(): ?string
+    public function getContent() : ?string
     {
         return $this->content;
     }
-
-    public function setContent(string $content): void
+    public function setContent(string $content) : void
     {
         $this->content = $content;
     }
-
-    public function isArray(): bool
+    public function isArray() : bool
     {
         return $this->array;
     }
-
-    public function areScalarsAllowed(): bool
+    public function areScalarsAllowed() : bool
     {
         return $this->scalarsAllowed;
     }

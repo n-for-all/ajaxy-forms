@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Mime\Encoder;
 
-namespace Symfony\Component\Mime\Encoder;
-
-use Symfony\Component\Mime\Exception\AddressEncoderException;
-
+use Isolated\Symfony\Component\Mime\Exception\AddressEncoderException;
 /**
  * An IDN email address encoder.
  *
@@ -33,22 +31,19 @@ final class IdnAddressEncoder implements AddressEncoderInterface
      *
      * @throws AddressEncoderException If local-part contains non-ASCII characters
      */
-    public function encodeString(string $address): string
+    public function encodeString(string $address) : string
     {
-        $i = strrpos($address, '@');
-        if (false !== $i) {
-            $local = substr($address, 0, $i);
-            $domain = substr($address, $i + 1);
-
-            if (preg_match('/[^\x00-\x7F]/', $local)) {
-                throw new AddressEncoderException(sprintf('Non-ASCII characters not supported in local-part os "%s".', $address));
+        $i = \strrpos($address, '@');
+        if (\false !== $i) {
+            $local = \substr($address, 0, $i);
+            $domain = \substr($address, $i + 1);
+            if (\preg_match('/[^\\x00-\\x7F]/', $local)) {
+                throw new AddressEncoderException(\sprintf('Non-ASCII characters not supported in local-part os "%s".', $address));
             }
-
-            if (preg_match('/[^\x00-\x7F]/', $domain)) {
-                $address = sprintf('%s@%s', $local, idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46));
+            if (\preg_match('/[^\\x00-\\x7F]/', $domain)) {
+                $address = \sprintf('%s@%s', $local, \idn_to_ascii($domain, 0, \INTL_IDNA_VARIANT_UTS46));
             }
         }
-
         return $address;
     }
 }

@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
-namespace Symfony\Component\Validator\Constraints;
-
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
-
+use Isolated\Symfony\Component\Validator\Constraint;
+use Isolated\Symfony\Component\Validator\ConstraintValidator;
+use Isolated\Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Isolated\Symfony\Component\Validator\Exception\UnexpectedValueException;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
  */
@@ -32,55 +30,32 @@ class CssColorValidator extends ConstraintValidator
     // List comes from https://drafts.csswg.org/css-color/#css-system-colors
     private const PATTERN_SYSTEM_COLORS = '/^(Canvas|CanvasText|LinkText|VisitedText|ActiveText|ButtonFace|ButtonText|ButtonBorder|Field|FieldText|Highlight|HighlightText|SelectedItem|SelectedItemText|Mark|MarkText|GrayText)$/i';
     private const PATTERN_KEYWORDS = '/^(transparent|currentColor)$/i';
-    private const PATTERN_RGB = '/^rgb\(\s*(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),\s*(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),\s*(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d)\s*\)$/i';
-    private const PATTERN_RGBA = '/^rgba\(\s*(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),\s*(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),\s*(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),\s*(0|0?\.\d+|1(\.0)?)\s*\)$/i';
-    private const PATTERN_HSL = '/^hsl\(\s*(0|360|35\d|3[0-4]\d|[12]\d\d|0?\d?\d),\s*(0|100|\d{1,2})%,\s*(0|100|\d{1,2})%\s*\)$/i';
-    private const PATTERN_HSLA = '/^hsla\(\s*(0|360|35\d|3[0-4]\d|[12]\d\d|0?\d?\d),\s*(0|100|\d{1,2})%,\s*(0|100|\d{1,2})%,\s*(0|0?\.\d+|1(\.0)?)\s*\)$/i';
-
-    private const COLOR_PATTERNS = [
-        CssColor::HEX_LONG => self::PATTERN_HEX_LONG,
-        CssColor::HEX_LONG_WITH_ALPHA => self::PATTERN_HEX_LONG_WITH_ALPHA,
-        CssColor::HEX_SHORT => self::PATTERN_HEX_SHORT,
-        CssColor::HEX_SHORT_WITH_ALPHA => self::PATTERN_HEX_SHORT_WITH_ALPHA,
-        CssColor::BASIC_NAMED_COLORS => self::PATTERN_BASIC_NAMED_COLORS,
-        CssColor::EXTENDED_NAMED_COLORS => self::PATTERN_EXTENDED_NAMED_COLORS,
-        CssColor::SYSTEM_COLORS => self::PATTERN_SYSTEM_COLORS,
-        CssColor::KEYWORDS => self::PATTERN_KEYWORDS,
-        CssColor::RGB => self::PATTERN_RGB,
-        CssColor::RGBA => self::PATTERN_RGBA,
-        CssColor::HSL => self::PATTERN_HSL,
-        CssColor::HSLA => self::PATTERN_HSLA,
-    ];
-
+    private const PATTERN_RGB = '/^rgb\\(\\s*(0|255|25[0-4]|2[0-4]\\d|1\\d\\d|0?\\d?\\d),\\s*(0|255|25[0-4]|2[0-4]\\d|1\\d\\d|0?\\d?\\d),\\s*(0|255|25[0-4]|2[0-4]\\d|1\\d\\d|0?\\d?\\d)\\s*\\)$/i';
+    private const PATTERN_RGBA = '/^rgba\\(\\s*(0|255|25[0-4]|2[0-4]\\d|1\\d\\d|0?\\d?\\d),\\s*(0|255|25[0-4]|2[0-4]\\d|1\\d\\d|0?\\d?\\d),\\s*(0|255|25[0-4]|2[0-4]\\d|1\\d\\d|0?\\d?\\d),\\s*(0|0?\\.\\d+|1(\\.0)?)\\s*\\)$/i';
+    private const PATTERN_HSL = '/^hsl\\(\\s*(0|360|35\\d|3[0-4]\\d|[12]\\d\\d|0?\\d?\\d),\\s*(0|100|\\d{1,2})%,\\s*(0|100|\\d{1,2})%\\s*\\)$/i';
+    private const PATTERN_HSLA = '/^hsla\\(\\s*(0|360|35\\d|3[0-4]\\d|[12]\\d\\d|0?\\d?\\d),\\s*(0|100|\\d{1,2})%,\\s*(0|100|\\d{1,2})%,\\s*(0|0?\\.\\d+|1(\\.0)?)\\s*\\)$/i';
+    private const COLOR_PATTERNS = [CssColor::HEX_LONG => self::PATTERN_HEX_LONG, CssColor::HEX_LONG_WITH_ALPHA => self::PATTERN_HEX_LONG_WITH_ALPHA, CssColor::HEX_SHORT => self::PATTERN_HEX_SHORT, CssColor::HEX_SHORT_WITH_ALPHA => self::PATTERN_HEX_SHORT_WITH_ALPHA, CssColor::BASIC_NAMED_COLORS => self::PATTERN_BASIC_NAMED_COLORS, CssColor::EXTENDED_NAMED_COLORS => self::PATTERN_EXTENDED_NAMED_COLORS, CssColor::SYSTEM_COLORS => self::PATTERN_SYSTEM_COLORS, CssColor::KEYWORDS => self::PATTERN_KEYWORDS, CssColor::RGB => self::PATTERN_RGB, CssColor::RGBA => self::PATTERN_RGBA, CssColor::HSL => self::PATTERN_HSL, CssColor::HSLA => self::PATTERN_HSLA];
     /**
      * {@inheritdoc}
      */
-    public function validate($value, Constraint $constraint): void
+    public function validate($value, Constraint $constraint) : void
     {
         if (!$constraint instanceof CssColor) {
             throw new UnexpectedTypeException($constraint, CssColor::class);
         }
-
         if (null === $value || '' === $value) {
             return;
         }
-
         if (!\is_string($value)) {
             throw new UnexpectedValueException($value, 'string');
         }
-
-        $formats = array_flip((array) $constraint->formats);
-        $formatRegexes = array_intersect_key(self::COLOR_PATTERNS, $formats);
-
+        $formats = \array_flip((array) $constraint->formats);
+        $formatRegexes = \array_intersect_key(self::COLOR_PATTERNS, $formats);
         foreach ($formatRegexes as $regex) {
-            if (preg_match($regex, (string) $value)) {
+            if (\preg_match($regex, (string) $value)) {
                 return;
             }
         }
-
-        $this->context->buildViolation($constraint->message)
-            ->setParameter('{{ value }}', $this->formatValue($value))
-            ->setCode(CssColor::INVALID_FORMAT_ERROR)
-            ->addViolation();
+        $this->context->buildViolation($constraint->message)->setParameter('{{ value }}', $this->formatValue($value))->setCode(CssColor::INVALID_FORMAT_ERROR)->addViolation();
     }
 }

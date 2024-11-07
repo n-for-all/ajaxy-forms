@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Translation\Extractor;
 
-namespace Symfony\Component\Translation\Extractor;
-
-use Symfony\Component\Translation\MessageCatalogue;
-
+use Isolated\Symfony\Component\Translation\MessageCatalogue;
 /**
  * ChainExtractor extracts translation messages from template files.
  *
@@ -26,7 +24,6 @@ class ChainExtractor implements ExtractorInterface
      * @var ExtractorInterface[]
      */
     private $extractors = [];
-
     /**
      * Adds a loader to the translation extractor.
      */
@@ -34,7 +31,6 @@ class ChainExtractor implements ExtractorInterface
     {
         $this->extractors[$format] = $extractor;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -44,7 +40,6 @@ class ChainExtractor implements ExtractorInterface
             $extractor->setPrefix($prefix);
         }
     }
-
     /**
      * {@inheritdoc}
      */

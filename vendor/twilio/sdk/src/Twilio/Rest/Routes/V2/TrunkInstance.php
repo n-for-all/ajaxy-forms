@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Routes\V2;
 
-
-namespace Twilio\Rest\Routes\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sipTrunkDomain
  * @property string|null $url
@@ -47,52 +43,33 @@ class TrunkInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sipTrunkDomain = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sipTrunkDomain' => Values::array_get($payload, 'sip_trunk_domain'),
-            'url' => Values::array_get($payload, 'url'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'voiceRegion' => Values::array_get($payload, 'voice_region'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-        ];
-
-        $this->solution = ['sipTrunkDomain' => $sipTrunkDomain ?: $this->properties['sipTrunkDomain'], ];
+        $this->properties = ['sipTrunkDomain' => Values::array_get($payload, 'sip_trunk_domain'), 'url' => Values::array_get($payload, 'url'), 'sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'voiceRegion' => Values::array_get($payload, 'voice_region'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated'))];
+        $this->solution = ['sipTrunkDomain' => $sipTrunkDomain ?: $this->properties['sipTrunkDomain']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return TrunkContext Context for this TrunkInstance
      */
-    protected function proxy(): TrunkContext
+    protected function proxy() : TrunkContext
     {
         if (!$this->context) {
-            $this->context = new TrunkContext(
-                $this->version,
-                $this->solution['sipTrunkDomain']
-            );
+            $this->context = new TrunkContext($this->version, $this->solution['sipTrunkDomain']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the TrunkInstance
      *
      * @return TrunkInstance Fetched TrunkInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): TrunkInstance
+    public function fetch() : TrunkInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the TrunkInstance
      *
@@ -100,12 +77,10 @@ class TrunkInstance extends InstanceResource
      * @return TrunkInstance Updated TrunkInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): TrunkInstance
+    public function update(array $options = []) : TrunkInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -118,27 +93,23 @@ class TrunkInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Routes.V2.TrunkInstance ' . \implode(' ', $context) . ']';
     }
 }
-

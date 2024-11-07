@@ -13,17 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Serverless\V1\Service\Asset;
 
-namespace Twilio\Rest\Serverless\V1\Service\Asset;
-
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class AssetVersionList extends ListResource
-    {
+{
     /**
      * Construct the AssetVersionList
      *
@@ -31,28 +28,13 @@ class AssetVersionList extends ListResource
      * @param string $serviceSid The SID of the Service to fetch the Asset Version resource from.
      * @param string $assetSid The SID of the Asset resource that is the parent of the Asset Version resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid,
-        string $assetSid
-    ) {
+    public function __construct(Version $version, string $serviceSid, string $assetSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        'assetSid' =>
-            $assetSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Assets/' . \rawurlencode($assetSid)
-        .'/Versions';
+        $this->solution = ['serviceSid' => $serviceSid, 'assetSid' => $assetSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Assets/' . \rawurlencode($assetSid) . '/Versions';
     }
-
     /**
      * Reads AssetVersionInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -68,11 +50,10 @@ class AssetVersionList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return AssetVersionInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams AssetVersionInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -91,15 +72,12 @@ class AssetVersionList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of AssetVersionInstance records from the API.
      * Request is executed immediately
@@ -109,24 +87,12 @@ class AssetVersionList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return AssetVersionPage Page of AssetVersionInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): AssetVersionPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : AssetVersionPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new AssetVersionPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of AssetVersionInstance records from the API.
      * Request is executed immediately
@@ -134,41 +100,26 @@ class AssetVersionList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return AssetVersionPage Page of AssetVersionInstance
      */
-    public function getPage(string $targetUrl): AssetVersionPage
+    public function getPage(string $targetUrl) : AssetVersionPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new AssetVersionPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a AssetVersionContext
      *
      * @param string $sid The SID of the Asset Version resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): AssetVersionContext
+    public function getContext(string $sid) : AssetVersionContext
     {
-        return new AssetVersionContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $this->solution['assetSid'],
-            $sid
-        );
+        return new AssetVersionContext($this->version, $this->solution['serviceSid'], $this->solution['assetSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Serverless.V1.AssetVersionList]';
     }

@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'ANG' => [
-            'NAf.',
-            'Nederlands-Antilliaanse gulden',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['ANG' => ['NAf.', 'Nederlands-Antilliaanse gulden']]];

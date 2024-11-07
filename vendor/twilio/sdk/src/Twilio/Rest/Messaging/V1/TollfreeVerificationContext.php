@@ -13,74 +13,50 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class TollfreeVerificationContext extends InstanceContext
-    {
+{
     /**
      * Initialize the TollfreeVerificationContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The unique string to identify Tollfree Verification.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Tollfree/Verifications/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Tollfree/Verifications/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the TollfreeVerificationInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the TollfreeVerificationInstance
      *
      * @return TollfreeVerificationInstance Fetched TollfreeVerificationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): TollfreeVerificationInstance
+    public function fetch() : TollfreeVerificationInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new TollfreeVerificationInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new TollfreeVerificationInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the TollfreeVerificationInstance
      *
@@ -88,76 +64,27 @@ class TollfreeVerificationContext extends InstanceContext
      * @return TollfreeVerificationInstance Updated TollfreeVerificationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): TollfreeVerificationInstance
+    public function update(array $options = []) : TollfreeVerificationInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'BusinessName' =>
-                $options['businessName'],
-            'BusinessWebsite' =>
-                $options['businessWebsite'],
-            'NotificationEmail' =>
-                $options['notificationEmail'],
-            'UseCaseCategories' =>
-                Serialize::map($options['useCaseCategories'], function ($e) { return $e; }),
-            'UseCaseSummary' =>
-                $options['useCaseSummary'],
-            'ProductionMessageSample' =>
-                $options['productionMessageSample'],
-            'OptInImageUrls' =>
-                Serialize::map($options['optInImageUrls'], function ($e) { return $e; }),
-            'OptInType' =>
-                $options['optInType'],
-            'MessageVolume' =>
-                $options['messageVolume'],
-            'BusinessStreetAddress' =>
-                $options['businessStreetAddress'],
-            'BusinessStreetAddress2' =>
-                $options['businessStreetAddress2'],
-            'BusinessCity' =>
-                $options['businessCity'],
-            'BusinessStateProvinceRegion' =>
-                $options['businessStateProvinceRegion'],
-            'BusinessPostalCode' =>
-                $options['businessPostalCode'],
-            'BusinessCountry' =>
-                $options['businessCountry'],
-            'AdditionalInformation' =>
-                $options['additionalInformation'],
-            'BusinessContactFirstName' =>
-                $options['businessContactFirstName'],
-            'BusinessContactLastName' =>
-                $options['businessContactLastName'],
-            'BusinessContactEmail' =>
-                $options['businessContactEmail'],
-            'BusinessContactPhone' =>
-                $options['businessContactPhone'],
-            'EditReason' =>
-                $options['editReason'],
-        ]);
-
+        $data = Values::of(['BusinessName' => $options['businessName'], 'BusinessWebsite' => $options['businessWebsite'], 'NotificationEmail' => $options['notificationEmail'], 'UseCaseCategories' => Serialize::map($options['useCaseCategories'], function ($e) {
+            return $e;
+        }), 'UseCaseSummary' => $options['useCaseSummary'], 'ProductionMessageSample' => $options['productionMessageSample'], 'OptInImageUrls' => Serialize::map($options['optInImageUrls'], function ($e) {
+            return $e;
+        }), 'OptInType' => $options['optInType'], 'MessageVolume' => $options['messageVolume'], 'BusinessStreetAddress' => $options['businessStreetAddress'], 'BusinessStreetAddress2' => $options['businessStreetAddress2'], 'BusinessCity' => $options['businessCity'], 'BusinessStateProvinceRegion' => $options['businessStateProvinceRegion'], 'BusinessPostalCode' => $options['businessPostalCode'], 'BusinessCountry' => $options['businessCountry'], 'AdditionalInformation' => $options['additionalInformation'], 'BusinessContactFirstName' => $options['businessContactFirstName'], 'BusinessContactLastName' => $options['businessContactLastName'], 'BusinessContactEmail' => $options['businessContactEmail'], 'BusinessContactPhone' => $options['businessContactPhone'], 'EditReason' => $options['editReason']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new TollfreeVerificationInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new TollfreeVerificationInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.TollfreeVerificationContext ' . \implode(' ', $context) . ']';
     }

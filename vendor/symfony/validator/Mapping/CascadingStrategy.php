@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Mapping;
+namespace Isolated\Symfony\Component\Validator\Mapping;
 
 /**
  * Specifies whether an object should be cascaded.
@@ -37,12 +36,10 @@ class CascadingStrategy
      * Specifies that a node should not be cascaded.
      */
     public const NONE = 1;
-
     /**
      * Specifies that a node should be cascaded.
      */
     public const CASCADE = 2;
-
     /**
      * Not instantiable.
      */

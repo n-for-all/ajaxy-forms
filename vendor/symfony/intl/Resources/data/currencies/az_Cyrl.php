@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'AZN' => [
-            '₼',
-            'AZN',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['AZN' => ['₼', 'AZN']]];

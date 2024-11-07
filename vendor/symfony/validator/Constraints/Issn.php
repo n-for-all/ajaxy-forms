@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
-namespace Symfony\Component\Validator\Constraints;
-
-use Symfony\Component\Validator\Constraint;
-
+use Isolated\Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
@@ -29,30 +27,13 @@ class Issn extends Constraint
     public const INVALID_CHARACTERS_ERROR = 'a663d266-37c2-4ece-a914-ae891940c588';
     public const INVALID_CASE_ERROR = '7b6dd393-7523-4a6c-b84d-72b91bba5e1a';
     public const CHECKSUM_FAILED_ERROR = 'b0f92dbc-667c-48de-b526-ad9586d43e85';
-
-    protected static $errorNames = [
-        self::TOO_SHORT_ERROR => 'TOO_SHORT_ERROR',
-        self::TOO_LONG_ERROR => 'TOO_LONG_ERROR',
-        self::MISSING_HYPHEN_ERROR => 'MISSING_HYPHEN_ERROR',
-        self::INVALID_CHARACTERS_ERROR => 'INVALID_CHARACTERS_ERROR',
-        self::INVALID_CASE_ERROR => 'INVALID_CASE_ERROR',
-        self::CHECKSUM_FAILED_ERROR => 'CHECKSUM_FAILED_ERROR',
-    ];
-
+    protected static $errorNames = [self::TOO_SHORT_ERROR => 'TOO_SHORT_ERROR', self::TOO_LONG_ERROR => 'TOO_LONG_ERROR', self::MISSING_HYPHEN_ERROR => 'MISSING_HYPHEN_ERROR', self::INVALID_CHARACTERS_ERROR => 'INVALID_CHARACTERS_ERROR', self::INVALID_CASE_ERROR => 'INVALID_CASE_ERROR', self::CHECKSUM_FAILED_ERROR => 'CHECKSUM_FAILED_ERROR'];
     public $message = 'This value is not a valid ISSN.';
-    public $caseSensitive = false;
-    public $requireHyphen = false;
-
-    public function __construct(
-        ?array $options = null,
-        ?string $message = null,
-        ?bool $caseSensitive = null,
-        ?bool $requireHyphen = null,
-        ?array $groups = null,
-        $payload = null
-    ) {
+    public $caseSensitive = \false;
+    public $requireHyphen = \false;
+    public function __construct(?array $options = null, ?string $message = null, ?bool $caseSensitive = null, ?bool $requireHyphen = null, ?array $groups = null, $payload = null)
+    {
         parent::__construct($options, $groups, $payload);
-
         $this->message = $message ?? $this->message;
         $this->caseSensitive = $caseSensitive ?? $this->caseSensitive;
         $this->requireHyphen = $requireHyphen ?? $this->requireHyphen;

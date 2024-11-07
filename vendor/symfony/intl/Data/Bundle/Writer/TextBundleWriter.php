@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Intl\Data\Bundle\Writer;
+namespace Isolated\Symfony\Component\Intl\Data\Bundle\Writer;
 
 /**
  * Writes .txt resource bundles.
@@ -29,15 +28,12 @@ class TextBundleWriter implements BundleWriterInterface
     /**
      * {@inheritdoc}
      */
-    public function write(string $path, string $locale, $data, bool $fallback = true)
+    public function write(string $path, string $locale, $data, bool $fallback = \true)
     {
-        $file = fopen($path.'/'.$locale.'.txt', 'w');
-
+        $file = \fopen($path . '/' . $locale . '.txt', 'w');
         $this->writeResourceBundle($file, $locale, $data, $fallback);
-
-        fclose($file);
+        \fclose($file);
     }
-
     /**
      * Writes a "resourceBundle" node.
      *
@@ -48,13 +44,10 @@ class TextBundleWriter implements BundleWriterInterface
      */
     private function writeResourceBundle($file, string $bundleName, $value, bool $fallback)
     {
-        fwrite($file, $bundleName);
-
+        \fwrite($file, $bundleName);
         $this->writeTable($file, $value, 0, $fallback);
-
-        fwrite($file, "\n");
+        \fwrite($file, "\n");
     }
-
     /**
      * Writes a "resource" node.
      *
@@ -63,50 +56,36 @@ class TextBundleWriter implements BundleWriterInterface
      *
      * @see http://source.icu-project.org/repos/icu/icuhtml/trunk/design/bnf_rb.txt
      */
-    private function writeResource($file, $value, int $indentation, bool $requireBraces = true)
+    private function writeResource($file, $value, int $indentation, bool $requireBraces = \true)
     {
         if (\is_int($value)) {
             $this->writeInteger($file, $value);
-
             return;
         }
-
         if ($value instanceof \Traversable) {
-            $value = iterator_to_array($value);
+            $value = \iterator_to_array($value);
         }
-
         if (\is_array($value)) {
-            $intValues = \count($value) === \count(array_filter($value, 'is_int'));
-
-            $keys = array_keys($value);
-
+            $intValues = \count($value) === \count(\array_filter($value, 'is_int'));
+            $keys = \array_keys($value);
             // check that the keys are 0-indexed and ascending
-            $intKeys = $keys === range(0, \count($keys) - 1);
-
+            $intKeys = $keys === \range(0, \count($keys) - 1);
             if ($intValues && $intKeys) {
                 $this->writeIntVector($file, $value, $indentation);
-
                 return;
             }
-
             if ($intKeys) {
                 $this->writeArray($file, $value, $indentation);
-
                 return;
             }
-
             $this->writeTable($file, $value, $indentation);
-
             return;
         }
-
         if (\is_bool($value)) {
             $value = $value ? 'true' : 'false';
         }
-
         $this->writeString($file, (string) $value, $requireBraces);
     }
-
     /**
      * Writes an "integer" node.
      *
@@ -116,9 +95,8 @@ class TextBundleWriter implements BundleWriterInterface
      */
     private function writeInteger($file, int $value)
     {
-        fprintf($file, ':int{%d}', $value);
+        \fprintf($file, ':int{%d}', $value);
     }
-
     /**
      * Writes an "intvector" node.
      *
@@ -128,15 +106,12 @@ class TextBundleWriter implements BundleWriterInterface
      */
     private function writeIntVector($file, array $value, int $indentation)
     {
-        fwrite($file, ":intvector{\n");
-
+        \fwrite($file, ":intvector{\n");
         foreach ($value as $int) {
-            fprintf($file, "%s%d,\n", str_repeat('    ', $indentation + 1), $int);
+            \fprintf($file, "%s%d,\n", \str_repeat('    ', $indentation + 1), $int);
         }
-
-        fprintf($file, '%s}', str_repeat('    ', $indentation));
+        \fprintf($file, '%s}', \str_repeat('    ', $indentation));
     }
-
     /**
      * Writes a "string" node.
      *
@@ -144,17 +119,14 @@ class TextBundleWriter implements BundleWriterInterface
      *
      * @see http://source.icu-project.org/repos/icu/icuhtml/trunk/design/bnf_rb.txt
      */
-    private function writeString($file, string $value, bool $requireBraces = true)
+    private function writeString($file, string $value, bool $requireBraces = \true)
     {
         if ($requireBraces) {
-            fprintf($file, '{"%s"}', $value);
-
+            \fprintf($file, '{"%s"}', $value);
             return;
         }
-
-        fprintf($file, '"%s"', $value);
+        \fprintf($file, '"%s"', $value);
     }
-
     /**
      * Writes an "array" node.
      *
@@ -164,47 +136,35 @@ class TextBundleWriter implements BundleWriterInterface
      */
     private function writeArray($file, array $value, int $indentation)
     {
-        fwrite($file, "{\n");
-
+        \fwrite($file, "{\n");
         foreach ($value as $entry) {
-            fwrite($file, str_repeat('    ', $indentation + 1));
-
-            $this->writeResource($file, $entry, $indentation + 1, false);
-
-            fwrite($file, ",\n");
+            \fwrite($file, \str_repeat('    ', $indentation + 1));
+            $this->writeResource($file, $entry, $indentation + 1, \false);
+            \fwrite($file, ",\n");
         }
-
-        fprintf($file, '%s}', str_repeat('    ', $indentation));
+        \fprintf($file, '%s}', \str_repeat('    ', $indentation));
     }
-
     /**
      * Writes a "table" node.
      *
      * @param resource $file The file handle to write to
      */
-    private function writeTable($file, iterable $value, int $indentation, bool $fallback = true)
+    private function writeTable($file, iterable $value, int $indentation, bool $fallback = \true)
     {
         if (!$fallback) {
-            fwrite($file, ':table(nofallback)');
+            \fwrite($file, ':table(nofallback)');
         }
-
-        fwrite($file, "{\n");
-
+        \fwrite($file, "{\n");
         foreach ($value as $key => $entry) {
-            fwrite($file, str_repeat('    ', $indentation + 1));
-
+            \fwrite($file, \str_repeat('    ', $indentation + 1));
             // escape colons, otherwise they are interpreted as resource types
-            if (str_contains($key, ':') || str_contains($key, ' ')) {
-                $key = '"'.$key.'"';
+            if (\str_contains($key, ':') || \str_contains($key, ' ')) {
+                $key = '"' . $key . '"';
             }
-
-            fwrite($file, $key);
-
+            \fwrite($file, $key);
             $this->writeResource($file, $entry, $indentation + 1);
-
-            fwrite($file, "\n");
+            \fwrite($file, "\n");
         }
-
-        fprintf($file, '%s}', str_repeat('    ', $indentation));
+        \fprintf($file, '%s}', \str_repeat('    ', $indentation));
     }
 }

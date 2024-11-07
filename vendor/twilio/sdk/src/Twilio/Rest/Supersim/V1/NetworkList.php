@@ -13,35 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Supersim\V1;
 
-namespace Twilio\Rest\Supersim\V1;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class NetworkList extends ListResource
-    {
+{
     /**
      * Construct the NetworkList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Networks';
     }
-
     /**
      * Reads NetworkInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -58,11 +50,10 @@ class NetworkList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return NetworkInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams NetworkInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -82,15 +73,12 @@ class NetworkList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of NetworkInstance records from the API.
      * Request is executed immediately
@@ -100,32 +88,13 @@ class NetworkList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return NetworkPage Page of NetworkInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): NetworkPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : NetworkPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'IsoCountry' =>
-                $options['isoCountry'],
-            'Mcc' =>
-                $options['mcc'],
-            'Mnc' =>
-                $options['mnc'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['IsoCountry' => $options['isoCountry'], 'Mcc' => $options['mcc'], 'Mnc' => $options['mnc'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new NetworkPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of NetworkInstance records from the API.
      * Request is executed immediately
@@ -133,39 +102,26 @@ class NetworkList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return NetworkPage Page of NetworkInstance
      */
-    public function getPage(string $targetUrl): NetworkPage
+    public function getPage(string $targetUrl) : NetworkPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new NetworkPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a NetworkContext
      *
      * @param string $sid The SID of the Network resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): NetworkContext
+    public function getContext(string $sid) : NetworkContext
     {
-        return new NetworkContext(
-            $this->version,
-            $sid
-        );
+        return new NetworkContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Supersim.V1.NetworkList]';
     }

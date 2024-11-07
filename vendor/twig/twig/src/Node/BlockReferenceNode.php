@@ -9,12 +9,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node;
 
-namespace Twig\Node;
-
-use Twig\Attribute\YieldReady;
-use Twig\Compiler;
-
+use Isolated\Twig\Attribute\YieldReady;
+use Isolated\Twig\Compiler;
 /**
  * Represents a block call node.
  *
@@ -27,12 +25,8 @@ class BlockReferenceNode extends Node implements NodeOutputInterface
     {
         parent::__construct([], ['name' => $name], $lineno, $tag);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
-        $compiler
-            ->addDebugInfo($this)
-            ->write(\sprintf("yield from \$this->unwrap()->yieldBlock('%s', \$context, \$blocks);\n", $this->getAttribute('name')))
-        ;
+        $compiler->addDebugInfo($this)->write(\sprintf("yield from \$this->unwrap()->yieldBlock('%s', \$context, \$blocks);\n", $this->getAttribute('name')));
     }
 }

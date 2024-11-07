@@ -13,40 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1\Interaction;
 
-namespace Twilio\Rest\FlexApi\V1\Interaction;
-
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class InteractionChannelList extends ListResource
-    {
+{
     /**
      * Construct the InteractionChannelList
      *
      * @param Version $version Version that contains the resource
      * @param string $interactionSid The unique string created by Twilio to identify an Interaction resource, prefixed with KD.
      */
-    public function __construct(
-        Version $version,
-        string $interactionSid
-    ) {
+    public function __construct(Version $version, string $interactionSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'interactionSid' =>
-            $interactionSid,
-        
-        ];
-
-        $this->uri = '/Interactions/' . \rawurlencode($interactionSid)
-        .'/Channels';
+        $this->solution = ['interactionSid' => $interactionSid];
+        $this->uri = '/Interactions/' . \rawurlencode($interactionSid) . '/Channels';
     }
-
     /**
      * Reads InteractionChannelInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -62,11 +49,10 @@ class InteractionChannelList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return InteractionChannelInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams InteractionChannelInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -85,15 +71,12 @@ class InteractionChannelList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of InteractionChannelInstance records from the API.
      * Request is executed immediately
@@ -103,24 +86,12 @@ class InteractionChannelList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return InteractionChannelPage Page of InteractionChannelInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): InteractionChannelPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : InteractionChannelPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new InteractionChannelPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of InteractionChannelInstance records from the API.
      * Request is executed immediately
@@ -128,40 +99,26 @@ class InteractionChannelList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return InteractionChannelPage Page of InteractionChannelInstance
      */
-    public function getPage(string $targetUrl): InteractionChannelPage
+    public function getPage(string $targetUrl) : InteractionChannelPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new InteractionChannelPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a InteractionChannelContext
      *
      * @param string $sid The unique string created by Twilio to identify an Interaction Channel resource, prefixed with UO.
      */
-    public function getContext(
-        string $sid
-        
-    ): InteractionChannelContext
+    public function getContext(string $sid) : InteractionChannelContext
     {
-        return new InteractionChannelContext(
-            $this->version,
-            $this->solution['interactionSid'],
-            $sid
-        );
+        return new InteractionChannelContext($this->version, $this->solution['interactionSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.FlexApi.V1.InteractionChannelList]';
     }

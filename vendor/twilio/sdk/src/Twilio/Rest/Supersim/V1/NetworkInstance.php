@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Supersim\V1;
 
-
-namespace Twilio\Rest\Supersim\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $sid
  * @property string|null $friendlyName
@@ -42,49 +38,33 @@ class NetworkInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'url' => Values::array_get($payload, 'url'),
-            'isoCountry' => Values::array_get($payload, 'iso_country'),
-            'identifiers' => Values::array_get($payload, 'identifiers'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'url' => Values::array_get($payload, 'url'), 'isoCountry' => Values::array_get($payload, 'iso_country'), 'identifiers' => Values::array_get($payload, 'identifiers')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return NetworkContext Context for this NetworkInstance
      */
-    protected function proxy(): NetworkContext
+    protected function proxy() : NetworkContext
     {
         if (!$this->context) {
-            $this->context = new NetworkContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new NetworkContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the NetworkInstance
      *
      * @return NetworkInstance Fetched NetworkInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): NetworkInstance
+    public function fetch() : NetworkInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -97,27 +77,23 @@ class NetworkInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Supersim.V1.NetworkInstance ' . \implode(' ', $context) . ']';
     }
 }
-

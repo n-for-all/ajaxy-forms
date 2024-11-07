@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $redirectTo
  */
@@ -38,32 +34,23 @@ class DeactivationsInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'redirectTo' => Values::array_get($payload, 'redirect_to'),
-        ];
-
+        $this->properties = ['redirectTo' => Values::array_get($payload, 'redirect_to')];
         $this->solution = [];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return DeactivationsContext Context for this DeactivationsInstance
      */
-    protected function proxy(): DeactivationsContext
+    protected function proxy() : DeactivationsContext
     {
         if (!$this->context) {
-            $this->context = new DeactivationsContext(
-                $this->version
-            );
+            $this->context = new DeactivationsContext($this->version);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the DeactivationsInstance
      *
@@ -71,12 +58,10 @@ class DeactivationsInstance extends InstanceResource
      * @return DeactivationsInstance Fetched DeactivationsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): DeactivationsInstance
+    public function fetch(array $options = []) : DeactivationsInstance
     {
-
         return $this->proxy()->fetch($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -89,27 +74,23 @@ class DeactivationsInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.DeactivationsInstance ' . \implode(' ', $context) . ']';
     }
 }
-

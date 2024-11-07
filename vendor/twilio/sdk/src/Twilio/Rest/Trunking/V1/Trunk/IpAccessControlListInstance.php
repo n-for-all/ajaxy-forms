@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trunking\V1\Trunk;
 
-
-namespace Twilio\Rest\Trunking\V1\Trunk;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property string|null $sid
@@ -46,64 +42,43 @@ class IpAccessControlListInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $trunkSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'trunkSid' => Values::array_get($payload, 'trunk_sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['trunkSid' => $trunkSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'sid' => Values::array_get($payload, 'sid'), 'trunkSid' => Values::array_get($payload, 'trunk_sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['trunkSid' => $trunkSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return IpAccessControlListContext Context for this IpAccessControlListInstance
      */
-    protected function proxy(): IpAccessControlListContext
+    protected function proxy() : IpAccessControlListContext
     {
         if (!$this->context) {
-            $this->context = new IpAccessControlListContext(
-                $this->version,
-                $this->solution['trunkSid'],
-                $this->solution['sid']
-            );
+            $this->context = new IpAccessControlListContext($this->version, $this->solution['trunkSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the IpAccessControlListInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the IpAccessControlListInstance
      *
      * @return IpAccessControlListInstance Fetched IpAccessControlListInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): IpAccessControlListInstance
+    public function fetch() : IpAccessControlListInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -116,27 +91,23 @@ class IpAccessControlListInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Trunking.V1.IpAccessControlListInstance ' . \implode(' ', $context) . ']';
     }
 }
-

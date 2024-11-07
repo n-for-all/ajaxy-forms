@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Notify\V1\Service;
 
-
-namespace Twilio\Rest\Notify\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -58,34 +54,10 @@ class NotificationInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'identities' => Values::array_get($payload, 'identities'),
-            'tags' => Values::array_get($payload, 'tags'),
-            'segments' => Values::array_get($payload, 'segments'),
-            'priority' => Values::array_get($payload, 'priority'),
-            'ttl' => Values::array_get($payload, 'ttl'),
-            'title' => Values::array_get($payload, 'title'),
-            'body' => Values::array_get($payload, 'body'),
-            'sound' => Values::array_get($payload, 'sound'),
-            'action' => Values::array_get($payload, 'action'),
-            'data' => Values::array_get($payload, 'data'),
-            'apn' => Values::array_get($payload, 'apn'),
-            'gcm' => Values::array_get($payload, 'gcm'),
-            'fcm' => Values::array_get($payload, 'fcm'),
-            'sms' => Values::array_get($payload, 'sms'),
-            'facebookMessenger' => Values::array_get($payload, 'facebook_messenger'),
-            'alexa' => Values::array_get($payload, 'alexa'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'identities' => Values::array_get($payload, 'identities'), 'tags' => Values::array_get($payload, 'tags'), 'segments' => Values::array_get($payload, 'segments'), 'priority' => Values::array_get($payload, 'priority'), 'ttl' => Values::array_get($payload, 'ttl'), 'title' => Values::array_get($payload, 'title'), 'body' => Values::array_get($payload, 'body'), 'sound' => Values::array_get($payload, 'sound'), 'action' => Values::array_get($payload, 'action'), 'data' => Values::array_get($payload, 'data'), 'apn' => Values::array_get($payload, 'apn'), 'gcm' => Values::array_get($payload, 'gcm'), 'fcm' => Values::array_get($payload, 'fcm'), 'sms' => Values::array_get($payload, 'sms'), 'facebookMessenger' => Values::array_get($payload, 'facebook_messenger'), 'alexa' => Values::array_get($payload, 'alexa')];
+        $this->solution = ['serviceSid' => $serviceSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -98,23 +70,19 @@ class NotificationInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Notify.V1.NotificationInstance]';
     }
 }
-

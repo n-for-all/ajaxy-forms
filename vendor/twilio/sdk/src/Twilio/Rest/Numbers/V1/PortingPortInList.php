@@ -13,75 +13,53 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V1;
 
-namespace Twilio\Rest\Numbers\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class PortingPortInList extends ListResource
-    {
+{
     /**
      * Construct the PortingPortInList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Porting/PortIn';
     }
-
     /**
      * Create the PortingPortInInstance
      *
      * @return PortingPortInInstance Created PortingPortInInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(): PortingPortInInstance
+    public function create() : PortingPortInInstance
     {
-
         $data = $body->toArray();
         $headers['Content-Type'] = 'application/json';
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new PortingPortInInstance(
-            $this->version,
-            $payload
-        );
+        return new PortingPortInInstance($this->version, $payload);
     }
-
-
     /**
      * Constructs a PortingPortInContext
      *
      * @param string $portInRequestSid The SID of the Port In request. This is a unique identifier of the port in request.
      */
-    public function getContext(
-        string $portInRequestSid
-        
-    ): PortingPortInContext
+    public function getContext(string $portInRequestSid) : PortingPortInContext
     {
-        return new PortingPortInContext(
-            $this->version,
-            $portInRequestSid
-        );
+        return new PortingPortInContext($this->version, $portInRequestSid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V1.PortingPortInList]';
     }

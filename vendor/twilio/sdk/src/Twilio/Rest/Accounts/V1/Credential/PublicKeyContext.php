@@ -13,73 +13,49 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Accounts\V1\Credential;
 
-
-namespace Twilio\Rest\Accounts\V1\Credential;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class PublicKeyContext extends InstanceContext
-    {
+{
     /**
      * Initialize the PublicKeyContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The Twilio-provided string that uniquely identifies the PublicKey resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Credentials/PublicKeys/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Credentials/PublicKeys/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the PublicKeyInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the PublicKeyInstance
      *
      * @return PublicKeyInstance Fetched PublicKeyInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): PublicKeyInstance
+    public function fetch() : PublicKeyInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new PublicKeyInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new PublicKeyInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the PublicKeyInstance
      *
@@ -87,36 +63,23 @@ class PublicKeyContext extends InstanceContext
      * @return PublicKeyInstance Updated PublicKeyInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): PublicKeyInstance
+    public function update(array $options = []) : PublicKeyInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new PublicKeyInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new PublicKeyInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Accounts.V1.PublicKeyContext ' . \implode(' ', $context) . ']';
     }

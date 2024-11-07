@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Mapping\Factory;
 
-namespace Symfony\Component\Validator\Mapping\Factory;
-
-use Symfony\Component\Validator\Exception\NoSuchMetadataException;
-use Symfony\Component\Validator\Mapping\MetadataInterface;
-
+use Isolated\Symfony\Component\Validator\Exception\NoSuchMetadataException;
+use Isolated\Symfony\Component\Validator\Mapping\MetadataInterface;
 /**
  * Returns {@link \Symfony\Component\Validator\Mapping\MetadataInterface} instances for values.
  *
@@ -31,7 +29,6 @@ interface MetadataFactoryInterface
      * @throws NoSuchMetadataException If no metadata exists for the given value
      */
     public function getMetadataFor($value);
-
     /**
      * Returns whether the class is able to return metadata for the given value.
      *

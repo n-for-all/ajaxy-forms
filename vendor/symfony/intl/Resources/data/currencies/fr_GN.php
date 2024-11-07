@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'GNF' => [
-            'FG',
-            'franc guinéen',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['GNF' => ['FG', 'franc guinéen']]];

@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class DotAtStart implements Reason
 {
@@ -8,7 +8,6 @@ class DotAtStart implements Reason
     {
         return 141;
     }
-
     public function description() : string
     {
         return "Starts with a DOT";

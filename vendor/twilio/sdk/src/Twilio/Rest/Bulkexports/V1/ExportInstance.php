@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Bulkexports\V1;
 
-
-namespace Twilio\Rest\Bulkexports\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Rest\Bulkexports\V1\Export\ExportCustomJobList;
-use Twilio\Rest\Bulkexports\V1\Export\DayList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Rest\Bulkexports\V1\Export\ExportCustomJobList;
+use Isolated\Twilio\Rest\Bulkexports\V1\Export\DayList;
 /**
  * @property string|null $resourceType
  * @property string|null $url
@@ -34,7 +30,6 @@ class ExportInstance extends InstanceResource
 {
     protected $_exportCustomJobs;
     protected $_days;
-
     /**
      * Initialize the ExportInstance
      *
@@ -45,63 +40,47 @@ class ExportInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $resourceType = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'resourceType' => Values::array_get($payload, 'resource_type'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['resourceType' => $resourceType ?: $this->properties['resourceType'], ];
+        $this->properties = ['resourceType' => Values::array_get($payload, 'resource_type'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['resourceType' => $resourceType ?: $this->properties['resourceType']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ExportContext Context for this ExportInstance
      */
-    protected function proxy(): ExportContext
+    protected function proxy() : ExportContext
     {
         if (!$this->context) {
-            $this->context = new ExportContext(
-                $this->version,
-                $this->solution['resourceType']
-            );
+            $this->context = new ExportContext($this->version, $this->solution['resourceType']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the ExportInstance
      *
      * @return ExportInstance Fetched ExportInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ExportInstance
+    public function fetch() : ExportInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Access the exportCustomJobs
      */
-    protected function getExportCustomJobs(): ExportCustomJobList
+    protected function getExportCustomJobs() : ExportCustomJobList
     {
         return $this->proxy()->exportCustomJobs;
     }
-
     /**
      * Access the days
      */
-    protected function getDays(): DayList
+    protected function getDays() : DayList
     {
         return $this->proxy()->days;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -114,27 +93,23 @@ class ExportInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Bulkexports.V1.ExportInstance ' . \implode(' ', $context) . ']';
     }
 }
-

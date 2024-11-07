@@ -13,43 +13,30 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Proxy\V1\Service;
 
-namespace Twilio\Rest\Proxy\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class PhoneNumberList extends ListResource
-    {
+{
     /**
      * Construct the PhoneNumberList
      *
      * @param Version $version Version that contains the resource
      * @param string $serviceSid The SID parent [Service](https://www.twilio.com/docs/proxy/api/service) resource of the new PhoneNumber resource.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid
-    ) {
+    public function __construct(Version $version, string $serviceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/PhoneNumbers';
+        $this->solution = ['serviceSid' => $serviceSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/PhoneNumbers';
     }
-
     /**
      * Create the PhoneNumberInstance
      *
@@ -57,30 +44,13 @@ class PhoneNumberList extends ListResource
      * @return PhoneNumberInstance Created PhoneNumberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): PhoneNumberInstance
+    public function create(array $options = []) : PhoneNumberInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Sid' =>
-                $options['sid'],
-            'PhoneNumber' =>
-                $options['phoneNumber'],
-            'IsReserved' =>
-                Serialize::booleanToString($options['isReserved']),
-        ]);
-
+        $data = Values::of(['Sid' => $options['sid'], 'PhoneNumber' => $options['phoneNumber'], 'IsReserved' => Serialize::booleanToString($options['isReserved'])]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new PhoneNumberInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid']
-        );
+        return new PhoneNumberInstance($this->version, $payload, $this->solution['serviceSid']);
     }
-
-
     /**
      * Reads PhoneNumberInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -96,11 +66,10 @@ class PhoneNumberList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return PhoneNumberInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams PhoneNumberInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -119,15 +88,12 @@ class PhoneNumberList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of PhoneNumberInstance records from the API.
      * Request is executed immediately
@@ -137,24 +103,12 @@ class PhoneNumberList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return PhoneNumberPage Page of PhoneNumberInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): PhoneNumberPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : PhoneNumberPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new PhoneNumberPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of PhoneNumberInstance records from the API.
      * Request is executed immediately
@@ -162,40 +116,26 @@ class PhoneNumberList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return PhoneNumberPage Page of PhoneNumberInstance
      */
-    public function getPage(string $targetUrl): PhoneNumberPage
+    public function getPage(string $targetUrl) : PhoneNumberPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new PhoneNumberPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a PhoneNumberContext
      *
      * @param string $sid The Twilio-provided string that uniquely identifies the PhoneNumber resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): PhoneNumberContext
+    public function getContext(string $sid) : PhoneNumberContext
     {
-        return new PhoneNumberContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $sid
-        );
+        return new PhoneNumberContext($this->version, $this->solution['serviceSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Proxy.V1.PhoneNumberList]';
     }

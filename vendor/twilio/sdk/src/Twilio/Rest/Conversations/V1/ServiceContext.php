@@ -13,22 +13,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1;
 
-
-namespace Twilio\Rest\Conversations\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Conversations\V1\Service\UserList;
-use Twilio\Rest\Conversations\V1\Service\BindingList;
-use Twilio\Rest\Conversations\V1\Service\ParticipantConversationList;
-use Twilio\Rest\Conversations\V1\Service\ConversationList;
-use Twilio\Rest\Conversations\V1\Service\RoleList;
-use Twilio\Rest\Conversations\V1\Service\ConfigurationList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Conversations\V1\Service\UserList;
+use Isolated\Twilio\Rest\Conversations\V1\Service\BindingList;
+use Isolated\Twilio\Rest\Conversations\V1\Service\ParticipantConversationList;
+use Isolated\Twilio\Rest\Conversations\V1\Service\ConversationList;
+use Isolated\Twilio\Rest\Conversations\V1\Service\RoleList;
+use Isolated\Twilio\Rest\Conversations\V1\Service\ConfigurationList;
 /**
  * @property UserList $users
  * @property BindingList $bindings
@@ -43,158 +39,107 @@ use Twilio\Rest\Conversations\V1\Service\ConfigurationList;
  * @method \Twilio\Rest\Conversations\V1\Service\ConversationContext conversations(string $sid)
  */
 class ServiceContext extends InstanceContext
-    {
+{
     protected $_users;
     protected $_bindings;
     protected $_participantConversations;
     protected $_conversations;
     protected $_roles;
     protected $_configuration;
-
     /**
      * Initialize the ServiceContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid A 34 character string that uniquely identifies this resource.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the ServiceInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the ServiceInstance
      *
      * @return ServiceInstance Fetched ServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ServiceInstance
+    public function fetch() : ServiceInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ServiceInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new ServiceInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the users
      */
-    protected function getUsers(): UserList
+    protected function getUsers() : UserList
     {
         if (!$this->_users) {
-            $this->_users = new UserList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_users = new UserList($this->version, $this->solution['sid']);
         }
-
         return $this->_users;
     }
-
     /**
      * Access the bindings
      */
-    protected function getBindings(): BindingList
+    protected function getBindings() : BindingList
     {
         if (!$this->_bindings) {
-            $this->_bindings = new BindingList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_bindings = new BindingList($this->version, $this->solution['sid']);
         }
-
         return $this->_bindings;
     }
-
     /**
      * Access the participantConversations
      */
-    protected function getParticipantConversations(): ParticipantConversationList
+    protected function getParticipantConversations() : ParticipantConversationList
     {
         if (!$this->_participantConversations) {
-            $this->_participantConversations = new ParticipantConversationList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_participantConversations = new ParticipantConversationList($this->version, $this->solution['sid']);
         }
-
         return $this->_participantConversations;
     }
-
     /**
      * Access the conversations
      */
-    protected function getConversations(): ConversationList
+    protected function getConversations() : ConversationList
     {
         if (!$this->_conversations) {
-            $this->_conversations = new ConversationList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_conversations = new ConversationList($this->version, $this->solution['sid']);
         }
-
         return $this->_conversations;
     }
-
     /**
      * Access the roles
      */
-    protected function getRoles(): RoleList
+    protected function getRoles() : RoleList
     {
         if (!$this->_roles) {
-            $this->_roles = new RoleList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_roles = new RoleList($this->version, $this->solution['sid']);
         }
-
         return $this->_roles;
     }
-
     /**
      * Access the configuration
      */
-    protected function getConfiguration(): ConfigurationList
+    protected function getConfiguration() : ConfigurationList
     {
         if (!$this->_configuration) {
-            $this->_configuration = new ConfigurationList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_configuration = new ConfigurationList($this->version, $this->solution['sid']);
         }
-
         return $this->_configuration;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -202,16 +147,14 @@ class ServiceContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -220,26 +163,24 @@ class ServiceContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Conversations.V1.ServiceContext ' . \implode(' ', $context) . ']';
     }

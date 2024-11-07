@@ -13,21 +13,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Proxy\V1;
 
-
-namespace Twilio\Rest\Proxy\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Proxy\V1\Service\PhoneNumberList;
-use Twilio\Rest\Proxy\V1\Service\ShortCodeList;
-use Twilio\Rest\Proxy\V1\Service\SessionList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Proxy\V1\Service\PhoneNumberList;
+use Isolated\Twilio\Rest\Proxy\V1\Service\ShortCodeList;
+use Isolated\Twilio\Rest\Proxy\V1\Service\SessionList;
 /**
  * @property string|null $sid
  * @property string|null $uniqueName
@@ -49,7 +45,6 @@ class ServiceInstance extends InstanceResource
     protected $_phoneNumbers;
     protected $_shortCodes;
     protected $_sessions;
-
     /**
      * Initialize the ServiceInstance
      *
@@ -60,70 +55,43 @@ class ServiceInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'uniqueName' => Values::array_get($payload, 'unique_name'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'chatInstanceSid' => Values::array_get($payload, 'chat_instance_sid'),
-            'callbackUrl' => Values::array_get($payload, 'callback_url'),
-            'defaultTtl' => Values::array_get($payload, 'default_ttl'),
-            'numberSelectionBehavior' => Values::array_get($payload, 'number_selection_behavior'),
-            'geoMatchLevel' => Values::array_get($payload, 'geo_match_level'),
-            'interceptCallbackUrl' => Values::array_get($payload, 'intercept_callback_url'),
-            'outOfSessionCallbackUrl' => Values::array_get($payload, 'out_of_session_callback_url'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'uniqueName' => Values::array_get($payload, 'unique_name'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'chatInstanceSid' => Values::array_get($payload, 'chat_instance_sid'), 'callbackUrl' => Values::array_get($payload, 'callback_url'), 'defaultTtl' => Values::array_get($payload, 'default_ttl'), 'numberSelectionBehavior' => Values::array_get($payload, 'number_selection_behavior'), 'geoMatchLevel' => Values::array_get($payload, 'geo_match_level'), 'interceptCallbackUrl' => Values::array_get($payload, 'intercept_callback_url'), 'outOfSessionCallbackUrl' => Values::array_get($payload, 'out_of_session_callback_url'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ServiceContext Context for this ServiceInstance
      */
-    protected function proxy(): ServiceContext
+    protected function proxy() : ServiceContext
     {
         if (!$this->context) {
-            $this->context = new ServiceContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new ServiceContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the ServiceInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the ServiceInstance
      *
      * @return ServiceInstance Fetched ServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ServiceInstance
+    public function fetch() : ServiceInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the ServiceInstance
      *
@@ -131,36 +99,31 @@ class ServiceInstance extends InstanceResource
      * @return ServiceInstance Updated ServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ServiceInstance
+    public function update(array $options = []) : ServiceInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the phoneNumbers
      */
-    protected function getPhoneNumbers(): PhoneNumberList
+    protected function getPhoneNumbers() : PhoneNumberList
     {
         return $this->proxy()->phoneNumbers;
     }
-
     /**
      * Access the shortCodes
      */
-    protected function getShortCodes(): ShortCodeList
+    protected function getShortCodes() : ShortCodeList
     {
         return $this->proxy()->shortCodes;
     }
-
     /**
      * Access the sessions
      */
-    protected function getSessions(): SessionList
+    protected function getSessions() : SessionList
     {
         return $this->proxy()->sessions;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -173,27 +136,23 @@ class ServiceInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Proxy.V1.ServiceInstance ' . \implode(' ', $context) . ']';
     }
 }
-

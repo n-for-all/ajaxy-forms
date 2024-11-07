@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Bridge\Twig\Extension;
 
-namespace Symfony\Bridge\Twig\Extension;
-
-use Symfony\Bridge\Twig\TokenParser\StopwatchTokenParser;
-use Symfony\Component\Stopwatch\Stopwatch;
-use Twig\Extension\AbstractExtension;
-use Twig\TokenParser\TokenParserInterface;
-
+use Isolated\Symfony\Bridge\Twig\TokenParser\StopwatchTokenParser;
+use Isolated\Symfony\Component\Stopwatch\Stopwatch;
+use Isolated\Twig\Extension\AbstractExtension;
+use Isolated\Twig\TokenParser\TokenParserInterface;
 /**
  * Twig extension for the stopwatch helper.
  *
@@ -25,22 +23,19 @@ final class StopwatchExtension extends AbstractExtension
 {
     private $stopwatch;
     private $enabled;
-
-    public function __construct(Stopwatch $stopwatch = null, bool $enabled = true)
+    public function __construct(Stopwatch $stopwatch = null, bool $enabled = \true)
     {
         $this->stopwatch = $stopwatch;
         $this->enabled = $enabled;
     }
-
-    public function getStopwatch(): Stopwatch
+    public function getStopwatch() : Stopwatch
     {
         return $this->stopwatch;
     }
-
     /**
      * @return TokenParserInterface[]
      */
-    public function getTokenParsers(): array
+    public function getTokenParsers() : array
     {
         return [
             /*

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Mapping\Factory;
 
-namespace Symfony\Component\Validator\Mapping\Factory;
-
-use Symfony\Component\Validator\Exception\LogicException;
-
+use Isolated\Symfony\Component\Validator\Exception\LogicException;
 /**
  * Metadata factory that does not store metadata.
  *
@@ -31,12 +29,11 @@ class BlackHoleMetadataFactory implements MetadataFactoryInterface
     {
         throw new LogicException('This class does not support metadata.');
     }
-
     /**
      * {@inheritdoc}
      */
     public function hasMetadataFor($value)
     {
-        return false;
+        return \false;
     }
 }

@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'IDR' => [
-            'Rp',
-            'Indonesian Rupiah',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['IDR' => ['Rp', 'Indonesian Rupiah']]];

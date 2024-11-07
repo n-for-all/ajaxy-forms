@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form;
 
-namespace Symfony\Component\Form;
-
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Util\StringUtil;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\Form\Extension\Core\Type\FormType;
+use Isolated\Symfony\Component\Form\Util\StringUtil;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
@@ -26,28 +24,24 @@ abstract class AbstractType implements FormTypeInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
     }
-
     /**
      * {@inheritdoc}
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
     }
-
     /**
      * {@inheritdoc}
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
     }
-
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
     }
-
     /**
      * {@inheritdoc}
      */
@@ -55,7 +49,6 @@ abstract class AbstractType implements FormTypeInterface
     {
         return StringUtil::fqcnToBlockPrefix(static::class) ?: '';
     }
-
     /**
      * {@inheritdoc}
      */

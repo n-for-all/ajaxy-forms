@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Insights\V1;
 
-
-namespace Twilio\Rest\Insights\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property bool|null $advancedFeatures
@@ -41,35 +37,23 @@ class SettingInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'advancedFeatures' => Values::array_get($payload, 'advanced_features'),
-            'voiceTrace' => Values::array_get($payload, 'voice_trace'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'advancedFeatures' => Values::array_get($payload, 'advanced_features'), 'voiceTrace' => Values::array_get($payload, 'voice_trace'), 'url' => Values::array_get($payload, 'url')];
         $this->solution = [];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return SettingContext Context for this SettingInstance
      */
-    protected function proxy(): SettingContext
+    protected function proxy() : SettingContext
     {
         if (!$this->context) {
-            $this->context = new SettingContext(
-                $this->version
-            );
+            $this->context = new SettingContext($this->version);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the SettingInstance
      *
@@ -77,12 +61,10 @@ class SettingInstance extends InstanceResource
      * @return SettingInstance Fetched SettingInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): SettingInstance
+    public function fetch(array $options = []) : SettingInstance
     {
-
         return $this->proxy()->fetch($options);
     }
-
     /**
      * Update the SettingInstance
      *
@@ -90,12 +72,10 @@ class SettingInstance extends InstanceResource
      * @return SettingInstance Updated SettingInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): SettingInstance
+    public function update(array $options = []) : SettingInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -108,27 +88,23 @@ class SettingInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Insights.V1.SettingInstance ' . \implode(' ', $context) . ']';
     }
 }
-

@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V2;
 
-
-namespace Twilio\Rest\FlexApi\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class FlexUserContext extends InstanceContext
-    {
+{
     /**
      * Initialize the FlexUserContext
      *
@@ -31,56 +27,34 @@ class FlexUserContext extends InstanceContext
      * @param string $instanceSid The unique ID created by Twilio to identify a Flex instance.
      * @param string $flexUserSid The unique id for the flex user to be retrieved.
      */
-    public function __construct(
-        Version $version,
-        $instanceSid,
-        $flexUserSid
-    ) {
+    public function __construct(Version $version, $instanceSid, $flexUserSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'instanceSid' =>
-            $instanceSid,
-        'flexUserSid' =>
-            $flexUserSid,
-        ];
-
-        $this->uri = '/Instances/' . \rawurlencode($instanceSid)
-        .'/Users/' . \rawurlencode($flexUserSid)
-        .'';
+        $this->solution = ['instanceSid' => $instanceSid, 'flexUserSid' => $flexUserSid];
+        $this->uri = '/Instances/' . \rawurlencode($instanceSid) . '/Users/' . \rawurlencode($flexUserSid) . '';
     }
-
     /**
      * Fetch the FlexUserInstance
      *
      * @return FlexUserInstance Fetched FlexUserInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): FlexUserInstance
+    public function fetch() : FlexUserInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new FlexUserInstance(
-            $this->version,
-            $payload,
-            $this->solution['instanceSid'],
-            $this->solution['flexUserSid']
-        );
+        return new FlexUserInstance($this->version, $payload, $this->solution['instanceSid'], $this->solution['flexUserSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V2.FlexUserContext ' . \implode(' ', $context) . ']';
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class CharNotAllowed implements Reason
 {
@@ -8,7 +8,6 @@ class CharNotAllowed implements Reason
     {
         return 1;
     }
-
     public function description() : string
     {
         return "Character not allowed";

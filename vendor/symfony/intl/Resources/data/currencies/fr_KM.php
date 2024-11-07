@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'KMF' => [
-            'CF',
-            'franc comorien',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['KMF' => ['CF', 'franc comorien']]];

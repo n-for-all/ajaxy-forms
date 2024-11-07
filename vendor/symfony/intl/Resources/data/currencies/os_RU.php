@@ -1,14 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'GEL' => [
-            'GEL',
-            'Лар',
-        ],
-        'RUB' => [
-            '₽',
-            'Сом',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['GEL' => ['GEL', 'Лар'], 'RUB' => ['₽', 'Сом']]];

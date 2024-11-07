@@ -13,17 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Recording;
 
-namespace Twilio\Rest\Api\V2010\Account\Recording;
-
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class AddOnResultList extends ListResource
-    {
+{
     /**
      * Construct the AddOnResultList
      *
@@ -31,28 +28,13 @@ class AddOnResultList extends ListResource
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) that created the Recording AddOnResult resources to delete.
      * @param string $referenceSid The SID of the recording to which the result to delete belongs.
      */
-    public function __construct(
-        Version $version,
-        string $accountSid,
-        string $referenceSid
-    ) {
+    public function __construct(Version $version, string $accountSid, string $referenceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        
-        'referenceSid' =>
-            $referenceSid,
-        
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Recordings/' . \rawurlencode($referenceSid)
-        .'/AddOnResults.json';
+        $this->solution = ['accountSid' => $accountSid, 'referenceSid' => $referenceSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Recordings/' . \rawurlencode($referenceSid) . '/AddOnResults.json';
     }
-
     /**
      * Reads AddOnResultInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -68,11 +50,10 @@ class AddOnResultList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return AddOnResultInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams AddOnResultInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -91,15 +72,12 @@ class AddOnResultList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of AddOnResultInstance records from the API.
      * Request is executed immediately
@@ -109,24 +87,12 @@ class AddOnResultList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return AddOnResultPage Page of AddOnResultInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): AddOnResultPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : AddOnResultPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new AddOnResultPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of AddOnResultInstance records from the API.
      * Request is executed immediately
@@ -134,41 +100,26 @@ class AddOnResultList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return AddOnResultPage Page of AddOnResultInstance
      */
-    public function getPage(string $targetUrl): AddOnResultPage
+    public function getPage(string $targetUrl) : AddOnResultPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new AddOnResultPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a AddOnResultContext
      *
      * @param string $sid The Twilio-provided string that uniquely identifies the Recording AddOnResult resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): AddOnResultContext
+    public function getContext(string $sid) : AddOnResultContext
     {
-        return new AddOnResultContext(
-            $this->version,
-            $this->solution['accountSid'],
-            $this->solution['referenceSid'],
-            $sid
-        );
+        return new AddOnResultContext($this->version, $this->solution['accountSid'], $this->solution['referenceSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.AddOnResultList]';
     }

@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Loader;
 
-namespace Twig\Loader;
-
-use Twig\Error\LoaderError;
-use Twig\Source;
-
+use Isolated\Twig\Error\LoaderError;
+use Isolated\Twig\Source;
 /**
  * Loads templates from other loaders.
  *
@@ -23,7 +21,6 @@ final class ChainLoader implements LoaderInterface
 {
     private $hasSourceCache = [];
     private $loaders = [];
-
     /**
      * @param LoaderInterface[] $loaders
      */
@@ -33,87 +30,73 @@ final class ChainLoader implements LoaderInterface
             $this->addLoader($loader);
         }
     }
-
-    public function addLoader(LoaderInterface $loader): void
+    public function addLoader(LoaderInterface $loader) : void
     {
         $this->loaders[] = $loader;
         $this->hasSourceCache = [];
     }
-
     /**
      * @return LoaderInterface[]
      */
-    public function getLoaders(): array
+    public function getLoaders() : array
     {
         return $this->loaders;
     }
-
-    public function getSourceContext(string $name): Source
+    public function getSourceContext(string $name) : Source
     {
         $exceptions = [];
         foreach ($this->loaders as $loader) {
             if (!$loader->exists($name)) {
                 continue;
             }
-
             try {
                 return $loader->getSourceContext($name);
             } catch (LoaderError $e) {
                 $exceptions[] = $e->getMessage();
             }
         }
-
-        throw new LoaderError(\sprintf('Template "%s" is not defined%s.', $name, $exceptions ? ' ('.implode(', ', $exceptions).')' : ''));
+        throw new LoaderError(\sprintf('Template "%s" is not defined%s.', $name, $exceptions ? ' (' . \implode(', ', $exceptions) . ')' : ''));
     }
-
-    public function exists(string $name): bool
+    public function exists(string $name) : bool
     {
         if (isset($this->hasSourceCache[$name])) {
             return $this->hasSourceCache[$name];
         }
-
         foreach ($this->loaders as $loader) {
             if ($loader->exists($name)) {
-                return $this->hasSourceCache[$name] = true;
+                return $this->hasSourceCache[$name] = \true;
             }
         }
-
-        return $this->hasSourceCache[$name] = false;
+        return $this->hasSourceCache[$name] = \false;
     }
-
-    public function getCacheKey(string $name): string
+    public function getCacheKey(string $name) : string
     {
         $exceptions = [];
         foreach ($this->loaders as $loader) {
             if (!$loader->exists($name)) {
                 continue;
             }
-
             try {
                 return $loader->getCacheKey($name);
             } catch (LoaderError $e) {
-                $exceptions[] = \get_class($loader).': '.$e->getMessage();
+                $exceptions[] = \get_class($loader) . ': ' . $e->getMessage();
             }
         }
-
-        throw new LoaderError(\sprintf('Template "%s" is not defined%s.', $name, $exceptions ? ' ('.implode(', ', $exceptions).')' : ''));
+        throw new LoaderError(\sprintf('Template "%s" is not defined%s.', $name, $exceptions ? ' (' . \implode(', ', $exceptions) . ')' : ''));
     }
-
-    public function isFresh(string $name, int $time): bool
+    public function isFresh(string $name, int $time) : bool
     {
         $exceptions = [];
         foreach ($this->loaders as $loader) {
             if (!$loader->exists($name)) {
                 continue;
             }
-
             try {
                 return $loader->isFresh($name, $time);
             } catch (LoaderError $e) {
-                $exceptions[] = \get_class($loader).': '.$e->getMessage();
+                $exceptions[] = \get_class($loader) . ': ' . $e->getMessage();
             }
         }
-
-        throw new LoaderError(\sprintf('Template "%s" is not defined%s.', $name, $exceptions ? ' ('.implode(', ', $exceptions).')' : ''));
+        throw new LoaderError(\sprintf('Template "%s" is not defined%s.', $name, $exceptions ? ' (' . \implode(', ', $exceptions) . ')' : ''));
     }
 }

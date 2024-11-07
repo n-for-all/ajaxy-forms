@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
-namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
-
-use Predis\Response\ErrorInterface;
-use Symfony\Component\Cache\Traits\RedisClusterProxy;
-use Symfony\Component\Cache\Traits\RedisProxy;
-
+use Isolated\Predis\Response\ErrorInterface;
+use Isolated\Symfony\Component\Cache\Traits\RedisClusterProxy;
+use Isolated\Symfony\Component\Cache\Traits\RedisProxy;
 /**
  * Redis based session storage handler based on the Redis class
  * provided by the PHP redis extension.
@@ -24,17 +22,14 @@ use Symfony\Component\Cache\Traits\RedisProxy;
 class RedisSessionHandler extends AbstractSessionHandler
 {
     private $redis;
-
     /**
      * @var string Key prefix for shared environments
      */
     private $prefix;
-
     /**
      * @var int Time to live in seconds
      */
     private $ttl;
-
     /**
      * List of available options:
      *  * prefix: The prefix to use for the keys in order to avoid collision on the Redis server
@@ -46,74 +41,56 @@ class RedisSessionHandler extends AbstractSessionHandler
      */
     public function __construct($redis, array $options = [])
     {
-        if (
-            !$redis instanceof \Redis &&
-            !$redis instanceof \RedisArray &&
-            !$redis instanceof \RedisCluster &&
-            !$redis instanceof \Predis\ClientInterface &&
-            !$redis instanceof RedisProxy &&
-            !$redis instanceof RedisClusterProxy
-        ) {
-            throw new \InvalidArgumentException(sprintf('"%s()" expects parameter 1 to be Redis, RedisArray, RedisCluster or Predis\ClientInterface, "%s" given.', __METHOD__, get_debug_type($redis)));
+        if (!$redis instanceof \Redis && !$redis instanceof \RedisArray && !$redis instanceof \RedisCluster && !$redis instanceof \Isolated\Predis\ClientInterface && !$redis instanceof RedisProxy && !$redis instanceof RedisClusterProxy) {
+            throw new \InvalidArgumentException(\sprintf('"%s()" expects parameter 1 to be Redis, RedisArray, RedisCluster or Predis\\ClientInterface, "%s" given.', __METHOD__, \get_debug_type($redis)));
         }
-
-        if ($diff = array_diff(array_keys($options), ['prefix', 'ttl'])) {
-            throw new \InvalidArgumentException(sprintf('The following options are not supported "%s".', implode(', ', $diff)));
+        if ($diff = \array_diff(\array_keys($options), ['prefix', 'ttl'])) {
+            throw new \InvalidArgumentException(\sprintf('The following options are not supported "%s".', \implode(', ', $diff)));
         }
-
         $this->redis = $redis;
         $this->prefix = $options['prefix'] ?? 'sf_s';
         $this->ttl = $options['ttl'] ?? null;
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function doRead(string $sessionId): string
+    protected function doRead(string $sessionId) : string
     {
-        return $this->redis->get($this->prefix.$sessionId) ?: '';
+        return $this->redis->get($this->prefix . $sessionId) ?: '';
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function doWrite(string $sessionId, string $data): bool
+    protected function doWrite(string $sessionId, string $data) : bool
     {
-        $result = $this->redis->setEx($this->prefix.$sessionId, (int) ($this->ttl ?? ini_get('session.gc_maxlifetime')), $data);
-
+        $result = $this->redis->setEx($this->prefix . $sessionId, (int) ($this->ttl ?? \ini_get('session.gc_maxlifetime')), $data);
         return $result && !$result instanceof ErrorInterface;
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function doDestroy(string $sessionId): bool
+    protected function doDestroy(string $sessionId) : bool
     {
-        static $unlink = true;
-
+        static $unlink = \true;
         if ($unlink) {
             try {
-                $unlink = false !== $this->redis->unlink($this->prefix.$sessionId);
+                $unlink = \false !== $this->redis->unlink($this->prefix . $sessionId);
             } catch (\Throwable $e) {
-                $unlink = false;
+                $unlink = \false;
             }
         }
-
         if (!$unlink) {
-            $this->redis->del($this->prefix.$sessionId);
+            $this->redis->del($this->prefix . $sessionId);
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function close(): bool
+    public function close() : bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -124,13 +101,12 @@ class RedisSessionHandler extends AbstractSessionHandler
     {
         return 0;
     }
-
     /**
      * @return bool
      */
     #[\ReturnTypeWillChange]
     public function updateTimestamp($sessionId, $data)
     {
-        return (bool) $this->redis->expire($this->prefix.$sessionId, (int) ($this->ttl ?? ini_get('session.gc_maxlifetime')));
+        return (bool) $this->redis->expire($this->prefix . $sessionId, (int) ($this->ttl ?? \ini_get('session.gc_maxlifetime')));
     }
 }

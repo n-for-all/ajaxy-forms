@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1\TrustProducts;
 
-namespace Twilio\Rest\Trusthub\V1\TrustProducts;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class TrustProductsEntityAssignmentsList extends ListResource
-    {
+{
     /**
      * Construct the TrustProductsEntityAssignmentsList
      *
      * @param Version $version Version that contains the resource
      * @param string $trustProductSid The unique string that we created to identify the TrustProduct resource.
      */
-    public function __construct(
-        Version $version,
-        string $trustProductSid
-    ) {
+    public function __construct(Version $version, string $trustProductSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'trustProductSid' =>
-            $trustProductSid,
-        
-        ];
-
-        $this->uri = '/TrustProducts/' . \rawurlencode($trustProductSid)
-        .'/EntityAssignments';
+        $this->solution = ['trustProductSid' => $trustProductSid];
+        $this->uri = '/TrustProducts/' . \rawurlencode($trustProductSid) . '/EntityAssignments';
     }
-
     /**
      * Create the TrustProductsEntityAssignmentsInstance
      *
@@ -56,24 +43,12 @@ class TrustProductsEntityAssignmentsList extends ListResource
      * @return TrustProductsEntityAssignmentsInstance Created TrustProductsEntityAssignmentsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $objectSid): TrustProductsEntityAssignmentsInstance
+    public function create(string $objectSid) : TrustProductsEntityAssignmentsInstance
     {
-
-        $data = Values::of([
-            'ObjectSid' =>
-                $objectSid,
-        ]);
-
+        $data = Values::of(['ObjectSid' => $objectSid]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new TrustProductsEntityAssignmentsInstance(
-            $this->version,
-            $payload,
-            $this->solution['trustProductSid']
-        );
+        return new TrustProductsEntityAssignmentsInstance($this->version, $payload, $this->solution['trustProductSid']);
     }
-
-
     /**
      * Reads TrustProductsEntityAssignmentsInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -90,11 +65,10 @@ class TrustProductsEntityAssignmentsList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return TrustProductsEntityAssignmentsInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams TrustProductsEntityAssignmentsInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -114,15 +88,12 @@ class TrustProductsEntityAssignmentsList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of TrustProductsEntityAssignmentsInstance records from the API.
      * Request is executed immediately
@@ -132,28 +103,13 @@ class TrustProductsEntityAssignmentsList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return TrustProductsEntityAssignmentsPage Page of TrustProductsEntityAssignmentsInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): TrustProductsEntityAssignmentsPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : TrustProductsEntityAssignmentsPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'ObjectType' =>
-                $options['objectType'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['ObjectType' => $options['objectType'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new TrustProductsEntityAssignmentsPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of TrustProductsEntityAssignmentsInstance records from the API.
      * Request is executed immediately
@@ -161,40 +117,26 @@ class TrustProductsEntityAssignmentsList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return TrustProductsEntityAssignmentsPage Page of TrustProductsEntityAssignmentsInstance
      */
-    public function getPage(string $targetUrl): TrustProductsEntityAssignmentsPage
+    public function getPage(string $targetUrl) : TrustProductsEntityAssignmentsPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new TrustProductsEntityAssignmentsPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a TrustProductsEntityAssignmentsContext
      *
      * @param string $sid The unique string that we created to identify the Identity resource.
      */
-    public function getContext(
-        string $sid
-        
-    ): TrustProductsEntityAssignmentsContext
+    public function getContext(string $sid) : TrustProductsEntityAssignmentsContext
     {
-        return new TrustProductsEntityAssignmentsContext(
-            $this->version,
-            $this->solution['trustProductSid'],
-            $sid
-        );
+        return new TrustProductsEntityAssignmentsContext($this->version, $this->solution['trustProductSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Trusthub.V1.TrustProductsEntityAssignmentsList]';
     }

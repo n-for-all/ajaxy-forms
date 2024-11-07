@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Validator;
 
-namespace Symfony\Component\Validator\Validator;
-
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\GroupSequence;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
-
+use Isolated\Symfony\Component\Validator\Constraint;
+use Isolated\Symfony\Component\Validator\Constraints\GroupSequence;
+use Isolated\Symfony\Component\Validator\ConstraintViolationListInterface;
 /**
  * A validator in a specific execution context.
  *
@@ -31,7 +29,6 @@ interface ContextualValidatorInterface
      * @return $this
      */
     public function atPath(string $path);
-
     /**
      * Validates a value against a constraint or a list of constraints.
      *
@@ -45,7 +42,6 @@ interface ContextualValidatorInterface
      * @return $this
      */
     public function validate($value, $constraints = null, $groups = null);
-
     /**
      * Validates a property of an object against the constraints specified
      * for this property.
@@ -56,7 +52,6 @@ interface ContextualValidatorInterface
      * @return $this
      */
     public function validateProperty(object $object, string $propertyName, $groups = null);
-
     /**
      * Validates a value against the constraints specified for an object's
      * property.
@@ -69,7 +64,6 @@ interface ContextualValidatorInterface
      * @return $this
      */
     public function validatePropertyValue($objectOrClass, string $propertyName, $value, $groups = null);
-
     /**
      * Returns the violations that have been generated so far in the context
      * of the validator.

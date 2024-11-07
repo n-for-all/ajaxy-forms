@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1;
 
-
-namespace Twilio\Rest\Trusthub\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $inquiryId
  * @property string|null $inquirySessionToken
@@ -42,36 +38,23 @@ class ComplianceRegistrationInquiriesInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $registrationId = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'inquiryId' => Values::array_get($payload, 'inquiry_id'),
-            'inquirySessionToken' => Values::array_get($payload, 'inquiry_session_token'),
-            'registrationId' => Values::array_get($payload, 'registration_id'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['registrationId' => $registrationId ?: $this->properties['registrationId'], ];
+        $this->properties = ['inquiryId' => Values::array_get($payload, 'inquiry_id'), 'inquirySessionToken' => Values::array_get($payload, 'inquiry_session_token'), 'registrationId' => Values::array_get($payload, 'registration_id'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['registrationId' => $registrationId ?: $this->properties['registrationId']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ComplianceRegistrationInquiriesContext Context for this ComplianceRegistrationInquiriesInstance
      */
-    protected function proxy(): ComplianceRegistrationInquiriesContext
+    protected function proxy() : ComplianceRegistrationInquiriesContext
     {
         if (!$this->context) {
-            $this->context = new ComplianceRegistrationInquiriesContext(
-                $this->version,
-                $this->solution['registrationId']
-            );
+            $this->context = new ComplianceRegistrationInquiriesContext($this->version, $this->solution['registrationId']);
         }
-
         return $this->context;
     }
-
     /**
      * Update the ComplianceRegistrationInquiriesInstance
      *
@@ -79,12 +62,10 @@ class ComplianceRegistrationInquiriesInstance extends InstanceResource
      * @return ComplianceRegistrationInquiriesInstance Updated ComplianceRegistrationInquiriesInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ComplianceRegistrationInquiriesInstance
+    public function update(array $options = []) : ComplianceRegistrationInquiriesInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -97,27 +78,23 @@ class ComplianceRegistrationInquiriesInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Trusthub.V1.ComplianceRegistrationInquiriesInstance ' . \implode(' ', $context) . ']';
     }
 }
-

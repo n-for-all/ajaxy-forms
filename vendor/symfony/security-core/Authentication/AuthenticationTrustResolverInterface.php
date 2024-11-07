@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Authentication;
 
-namespace Symfony\Component\Security\Core\Authentication;
-
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
+use Isolated\Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 /**
  * Interface for resolving the authentication status of a given token.
  *
@@ -33,7 +31,6 @@ interface AuthenticationTrustResolverInterface
      * @deprecated since Symfony 5.4, use !isAuthenticated() instead
      */
     public function isAnonymous(?TokenInterface $token = null);
-
     /**
      * Resolves whether the passed token implementation is authenticated
      * using remember-me capabilities.
@@ -41,7 +38,6 @@ interface AuthenticationTrustResolverInterface
      * @return bool
      */
     public function isRememberMe(?TokenInterface $token = null);
-
     /**
      * Resolves whether the passed token implementation is fully authenticated.
      *

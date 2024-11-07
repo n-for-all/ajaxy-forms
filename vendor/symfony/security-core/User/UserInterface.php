@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Core\User;
+namespace Isolated\Symfony\Component\Security\Core\User;
 
 /**
  * Represents the interface that all user classes must implement.
@@ -47,7 +46,6 @@ interface UserInterface
      * @return string[]
      */
     public function getRoles();
-
     /**
      * Returns the password used to authenticate the user.
      *
@@ -59,7 +57,6 @@ interface UserInterface
      * @return string|null
      */
     public function getPassword();
-
     /**
      * Returns the salt that was originally used to hash the password.
      *
@@ -70,7 +67,6 @@ interface UserInterface
      * @return string|null
      */
     public function getSalt();
-
     /**
      * Removes sensitive data from the user.
      *
@@ -78,7 +74,6 @@ interface UserInterface
      * the plain-text password is stored on this object.
      */
     public function eraseCredentials();
-
     /**
      * @return string
      *

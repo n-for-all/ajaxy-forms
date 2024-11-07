@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Config;
+namespace Isolated\Symfony\Component\Config;
 
 /**
  * Basic implementation of ConfigCacheFactoryInterface that
@@ -23,7 +22,6 @@ namespace Symfony\Component\Config;
 class ConfigCacheFactory implements ConfigCacheFactoryInterface
 {
     private $debug;
-
     /**
      * @param bool $debug The debug flag to pass to ConfigCache
      */
@@ -31,7 +29,6 @@ class ConfigCacheFactory implements ConfigCacheFactoryInterface
     {
         $this->debug = $debug;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -41,7 +38,6 @@ class ConfigCacheFactory implements ConfigCacheFactoryInterface
         if (!$cache->isFresh()) {
             $callback($cache);
         }
-
         return $cache;
     }
 }

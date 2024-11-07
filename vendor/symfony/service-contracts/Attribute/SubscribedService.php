@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Contracts\Service\Attribute;
 
-namespace Symfony\Contracts\Service\Attribute;
-
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
-
+use Isolated\Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Use with {@see ServiceSubscriberTrait} to mark a method's return type
  * as a subscribed service.
@@ -26,8 +24,7 @@ final class SubscribedService
      * @param string|null $key The key to use for the service
      *                         If null, use "ClassName::methodName"
      */
-    public function __construct(
-        public ?string $key = null
-    ) {
+    public function __construct(public ?string $key = null)
+    {
     }
 }

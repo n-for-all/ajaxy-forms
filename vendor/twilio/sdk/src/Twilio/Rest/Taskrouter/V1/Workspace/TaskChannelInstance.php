@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace;
 
-
-namespace Twilio\Rest\Taskrouter\V1\Workspace;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property \DateTime|null $dateCreated
@@ -50,67 +46,43 @@ class TaskChannelInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $workspaceSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'uniqueName' => Values::array_get($payload, 'unique_name'),
-            'workspaceSid' => Values::array_get($payload, 'workspace_sid'),
-            'channelOptimizedRouting' => Values::array_get($payload, 'channel_optimized_routing'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['workspaceSid' => $workspaceSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'sid' => Values::array_get($payload, 'sid'), 'uniqueName' => Values::array_get($payload, 'unique_name'), 'workspaceSid' => Values::array_get($payload, 'workspace_sid'), 'channelOptimizedRouting' => Values::array_get($payload, 'channel_optimized_routing'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['workspaceSid' => $workspaceSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return TaskChannelContext Context for this TaskChannelInstance
      */
-    protected function proxy(): TaskChannelContext
+    protected function proxy() : TaskChannelContext
     {
         if (!$this->context) {
-            $this->context = new TaskChannelContext(
-                $this->version,
-                $this->solution['workspaceSid'],
-                $this->solution['sid']
-            );
+            $this->context = new TaskChannelContext($this->version, $this->solution['workspaceSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the TaskChannelInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the TaskChannelInstance
      *
      * @return TaskChannelInstance Fetched TaskChannelInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): TaskChannelInstance
+    public function fetch() : TaskChannelInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the TaskChannelInstance
      *
@@ -118,12 +90,10 @@ class TaskChannelInstance extends InstanceResource
      * @return TaskChannelInstance Updated TaskChannelInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): TaskChannelInstance
+    public function update(array $options = []) : TaskChannelInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -136,27 +106,23 @@ class TaskChannelInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Taskrouter.V1.TaskChannelInstance ' . \implode(' ', $context) . ']';
     }
 }
-

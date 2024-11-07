@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form;
+namespace Isolated\Symfony\Component\Form;
 
 /**
  * The central registry of the Form component.
@@ -28,21 +27,18 @@ interface FormRegistryInterface
      * @throws Exception\InvalidArgumentException if the type cannot be retrieved from any extension
      */
     public function getType(string $name);
-
     /**
      * Returns whether the given form type is supported.
      *
      * @return bool
      */
     public function hasType(string $name);
-
     /**
      * Returns the guesser responsible for guessing types.
      *
      * @return FormTypeGuesserInterface|null
      */
     public function getTypeGuesser();
-
     /**
      * Returns the extensions loaded by the framework.
      *

@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'MOP' => [
-            'MOP$',
-            'pataca macaense',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['MOP' => ['MOP$', 'pataca macaense']]];

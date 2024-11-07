@@ -1,5 +1,7 @@
 <?php
 
+namespace Isolated;
+
 /*
  * This file is part of the Symfony package.
  *
@@ -8,31 +10,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Intl\Data\Bundle\Compiler\GenrbCompiler;
-use Symfony\Component\Intl\Data\Bundle\Writer\PhpBundleWriter;
-use Symfony\Component\Intl\Data\Generator\CurrencyDataGenerator;
-use Symfony\Component\Intl\Data\Generator\GeneratorConfig;
-use Symfony\Component\Intl\Data\Generator\LanguageDataGenerator;
-use Symfony\Component\Intl\Data\Generator\LocaleDataGenerator;
-use Symfony\Component\Intl\Data\Generator\RegionDataGenerator;
-use Symfony\Component\Intl\Data\Generator\ScriptDataGenerator;
-use Symfony\Component\Intl\Data\Generator\TimezoneDataGenerator;
-use Symfony\Component\Intl\Intl;
-use Symfony\Component\Intl\Locale;
-use Symfony\Component\Intl\Util\GitRepository;
-
+use Isolated\Symfony\Component\Filesystem\Filesystem;
+use Isolated\Symfony\Component\Intl\Data\Bundle\Compiler\GenrbCompiler;
+use Isolated\Symfony\Component\Intl\Data\Bundle\Writer\PhpBundleWriter;
+use Isolated\Symfony\Component\Intl\Data\Generator\CurrencyDataGenerator;
+use Isolated\Symfony\Component\Intl\Data\Generator\GeneratorConfig;
+use Isolated\Symfony\Component\Intl\Data\Generator\LanguageDataGenerator;
+use Isolated\Symfony\Component\Intl\Data\Generator\LocaleDataGenerator;
+use Isolated\Symfony\Component\Intl\Data\Generator\RegionDataGenerator;
+use Isolated\Symfony\Component\Intl\Data\Generator\ScriptDataGenerator;
+use Isolated\Symfony\Component\Intl\Data\Generator\TimezoneDataGenerator;
+use Isolated\Symfony\Component\Intl\Intl;
+use Isolated\Symfony\Component\Intl\Locale;
+use Isolated\Symfony\Component\Intl\Util\GitRepository;
 if ('cli' !== \PHP_SAPI) {
-    throw new Exception('This script must be run from the command line.');
+    throw new \Exception('This script must be run from the command line.');
 }
-
-require_once __DIR__.'/common.php';
-require_once __DIR__.'/autoload.php';
-
+require_once __DIR__ . '/common.php';
+require_once __DIR__ . '/autoload.php';
 $argc = $_SERVER['argc'];
 $argv = $_SERVER['argv'];
-
 if ($argc > 3 || 2 === $argc && '-h' === $argv[1]) {
     bailout(<<<'MESSAGE'
 Usage: php update-data.php <path/to/icu/source> <path/to/icu/build>
@@ -52,169 +49,111 @@ must have been installed through composer:
 composer install
 
 MESSAGE
-    );
+);
 }
-
-echo LINE;
-echo centered('ICU Resource Bundle Compilation')."\n";
-echo LINE;
-
+echo \Isolated\LINE;
+echo centered('ICU Resource Bundle Compilation') . "\n";
+echo \Isolated\LINE;
 if (!Intl::isExtensionLoaded()) {
     bailout('The intl extension for PHP is not installed.');
 }
-
 if ($argc >= 2) {
     $repoDir = $argv[1];
     $git = new GitRepository($repoDir);
-
     echo "Using the existing git repository at {$repoDir}.\n";
 } else {
     echo "Starting git clone. This may take a while...\n";
-
-    $repoDir = sys_get_temp_dir().'/icu-data';
+    $repoDir = \sys_get_temp_dir() . '/icu-data';
     $git = GitRepository::download('https://github.com/unicode-org/icu.git', $repoDir);
-
     echo "Git clone to {$repoDir} complete.\n";
 }
-
 $gitTag = $git->getLastTag(function ($tag) {
-    return preg_match('#^release-[0-9]{1,}-[0-9]{1}$#', $tag);
+    return \preg_match('#^release-[0-9]{1,}-[0-9]{1}$#', $tag);
 });
-$shortIcuVersion = strip_minor_versions(preg_replace('#release-([0-9]{1,})-([0-9]{1,})#', '$1.$2', $gitTag));
-
+$shortIcuVersion = strip_minor_versions(\preg_replace('#release-([0-9]{1,})-([0-9]{1,})#', '$1.$2', $gitTag));
 echo "Checking out `{$gitTag}` for version `{$shortIcuVersion}`...\n";
-$git->checkout('tags/'.$gitTag);
-
+$git->checkout('tags/' . $gitTag);
 $filesystem = new Filesystem();
-$sourceDir = $repoDir.'/icu4c/source';
-
+$sourceDir = $repoDir . '/icu4c/source';
 if ($argc >= 3) {
     $buildDir = $argv[2];
 } else {
     // Always build genrb so that we can determine the ICU version of the
     // download by running genrb --version
     echo "Building genrb.\n";
-
     cd($sourceDir);
-
     echo "Running configure...\n";
-
-    $buildDir = sys_get_temp_dir().'/icu-data/'.$shortIcuVersion.'/build';
-
+    $buildDir = \sys_get_temp_dir() . '/icu-data/' . $shortIcuVersion . '/build';
     $filesystem->remove($buildDir);
     $filesystem->mkdir($buildDir);
-
-    run('./configure --prefix='.$buildDir.' 2>&1');
-
+    run('./configure --prefix=' . $buildDir . ' 2>&1');
     echo "Running make...\n";
-
     // If the directory "lib" does not exist in the download, create it or we
     // will run into problems when building libicuuc.so.
-    $filesystem->mkdir($sourceDir.'/lib');
-
+    $filesystem->mkdir($sourceDir . '/lib');
     // If the directory "bin" does not exist in the download, create it or we
     // will run into problems when building genrb.
-    $filesystem->mkdir($sourceDir.'/bin');
-
+    $filesystem->mkdir($sourceDir . '/bin');
     echo '[1/6] libicudata.so...';
-
-    cd($sourceDir.'/stubdata');
+    cd($sourceDir . '/stubdata');
     run('make 2>&1 && make install 2>&1');
-
     echo " ok.\n";
-
     echo '[2/6] libicuuc.so...';
-
-    cd($sourceDir.'/common');
+    cd($sourceDir . '/common');
     run('make 2>&1 && make install 2>&1');
-
     echo " ok.\n";
-
     echo '[3/6] libicui18n.so...';
-
-    cd($sourceDir.'/i18n');
+    cd($sourceDir . '/i18n');
     run('make 2>&1 && make install 2>&1');
-
     echo " ok.\n";
-
     echo '[4/6] libicutu.so...';
-
-    cd($sourceDir.'/tools/toolutil');
+    cd($sourceDir . '/tools/toolutil');
     run('make 2>&1 && make install 2>&1');
-
     echo " ok.\n";
-
     echo '[5/6] libicuio.so...';
-
-    cd($sourceDir.'/io');
+    cd($sourceDir . '/io');
     run('make 2>&1 && make install 2>&1');
-
     echo " ok.\n";
-
     echo '[6/6] genrb...';
-
-    cd($sourceDir.'/tools/genrb');
+    cd($sourceDir . '/tools/genrb');
     run('make 2>&1 && make install 2>&1');
-
     echo " ok.\n";
 }
-
-$genrb = $buildDir.'/bin/genrb';
+$genrb = $buildDir . '/bin/genrb';
 if (\PHP_OS === 'Darwin') {
-    $genrbEnv = 'DYLD_LIBRARY_PATH='.$buildDir.'/lib ';
+    $genrbEnv = 'DYLD_LIBRARY_PATH=' . $buildDir . '/lib ';
 } else {
-    $genrbEnv = 'LD_LIBRARY_PATH='.$buildDir.'/lib ';
+    $genrbEnv = 'LD_LIBRARY_PATH=' . $buildDir . '/lib ';
 }
-
-echo "Using $genrb.\n";
-
-$icuVersionInDownload = get_icu_version_from_genrb($genrbEnv.' '.$genrb);
-
-echo "Preparing resource bundle compilation (version $icuVersionInDownload)...\n";
-
+echo "Using {$genrb}.\n";
+$icuVersionInDownload = get_icu_version_from_genrb($genrbEnv . ' ' . $genrb);
+echo "Preparing resource bundle compilation (version {$icuVersionInDownload})...\n";
 $compiler = new GenrbCompiler($genrb, $genrbEnv);
-$config = new GeneratorConfig($sourceDir.'/data', $icuVersionInDownload);
-$dataDir = dirname(__DIR__).'/data';
-
+$config = new GeneratorConfig($sourceDir . '/data', $icuVersionInDownload);
+$dataDir = \dirname(__DIR__) . '/data';
 $config->addBundleWriter($dataDir, new PhpBundleWriter());
-
 echo "Starting resource bundle compilation. This may take a while...\n";
-
 // We don't want to use fallback to English during generation
 Locale::setDefaultFallback('root');
-
 echo "Generating language data...\n";
-
 $generator = new LanguageDataGenerator($compiler, Intl::LANGUAGE_DIR);
 $generator->generateData($config);
-
 echo "Generating script data...\n";
-
 $generator = new ScriptDataGenerator($compiler, Intl::SCRIPT_DIR);
 $generator->generateData($config);
-
 echo "Generating region data...\n";
-
 $generator = new RegionDataGenerator($compiler, Intl::REGION_DIR);
 $generator->generateData($config);
-
 echo "Generating currency data...\n";
-
 $generator = new CurrencyDataGenerator($compiler, Intl::CURRENCY_DIR);
 $generator->generateData($config);
-
 echo "Generating locale data...\n";
-
 $generator = new LocaleDataGenerator($compiler, Intl::LOCALE_DIR);
 $generator->generateData($config);
-
 echo "Generating timezone data...\n";
-
 $generator = new TimezoneDataGenerator($compiler, Intl::TIMEZONE_DIR);
 $generator->generateData($config);
-
 echo "Resource bundle compilation complete.\n";
-
 $gitInfo = <<<GIT_INFO
 Git information
 ===============
@@ -225,16 +164,10 @@ Author: {$git->getLastAuthor()}
 Date: {$git->getLastAuthoredDate()->format('c')}
 
 GIT_INFO;
-
-$gitInfoFile = $dataDir.'/git-info.txt';
-
-file_put_contents($gitInfoFile, $gitInfo);
-
-echo "Wrote $gitInfoFile.\n";
-
-$versionFile = $dataDir.'/version.txt';
-
-file_put_contents($versionFile, "$icuVersionInDownload\n");
-
-echo "Wrote $versionFile.\n";
+$gitInfoFile = $dataDir . '/git-info.txt';
+\file_put_contents($gitInfoFile, $gitInfo);
+echo "Wrote {$gitInfoFile}.\n";
+$versionFile = $dataDir . '/version.txt';
+\file_put_contents($versionFile, "{$icuVersionInDownload}\n");
+echo "Wrote {$versionFile}.\n";
 echo "Done.\n";

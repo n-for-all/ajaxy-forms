@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\TokenParser;
 
-namespace Twig\TokenParser;
-
-use Twig\Error\SyntaxError;
-use Twig\Node\DeprecatedNode;
-use Twig\Node\Node;
-use Twig\Token;
-
+use Isolated\Twig\Error\SyntaxError;
+use Isolated\Twig\Node\DeprecatedNode;
+use Isolated\Twig\Node\Node;
+use Isolated\Twig\Token;
 /**
  * Deprecates a section of a template.
  *
@@ -30,18 +28,16 @@ use Twig\Token;
  */
 final class DeprecatedTokenParser extends AbstractTokenParser
 {
-    public function parse(Token $token): Node
+    public function parse(Token $token) : Node
     {
         $stream = $this->parser->getStream();
         $expressionParser = $this->parser->getExpressionParser();
         $expr = $expressionParser->parseExpression();
         $node = new DeprecatedNode($expr, $token->getLine(), $this->getTag());
-
         while ($stream->test(Token::NAME_TYPE)) {
             $k = $stream->getCurrent()->getValue();
             $stream->next();
             $stream->expect(Token::OPERATOR_TYPE, '=');
-
             switch ($k) {
                 case 'package':
                     $node->setNode('package', $expressionParser->parseExpression());
@@ -53,13 +49,10 @@ final class DeprecatedTokenParser extends AbstractTokenParser
                     throw new SyntaxError(\sprintf('Unknown "%s" option.', $k), $stream->getCurrent()->getLine(), $stream->getSourceContext());
             }
         }
-
         $stream->expect(Token::BLOCK_END_TYPE);
-
         return $node;
     }
-
-    public function getTag(): string
+    public function getTag() : string
     {
         return 'deprecated';
     }

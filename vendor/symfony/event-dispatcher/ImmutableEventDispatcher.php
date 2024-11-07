@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\EventDispatcher;
+namespace Isolated\Symfony\Component\EventDispatcher;
 
 /**
  * A read-only proxy for an event dispatcher.
@@ -19,20 +18,17 @@ namespace Symfony\Component\EventDispatcher;
 class ImmutableEventDispatcher implements EventDispatcherInterface
 {
     private $dispatcher;
-
     public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function dispatch(object $event, ?string $eventName = null): object
+    public function dispatch(object $event, ?string $eventName = null) : object
     {
         return $this->dispatcher->dispatch($event, $eventName);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -40,7 +36,6 @@ class ImmutableEventDispatcher implements EventDispatcherInterface
     {
         throw new \BadMethodCallException('Unmodifiable event dispatchers must not be modified.');
     }
-
     /**
      * {@inheritdoc}
      */
@@ -48,7 +43,6 @@ class ImmutableEventDispatcher implements EventDispatcherInterface
     {
         throw new \BadMethodCallException('Unmodifiable event dispatchers must not be modified.');
     }
-
     /**
      * {@inheritdoc}
      */
@@ -56,7 +50,6 @@ class ImmutableEventDispatcher implements EventDispatcherInterface
     {
         throw new \BadMethodCallException('Unmodifiable event dispatchers must not be modified.');
     }
-
     /**
      * {@inheritdoc}
      */
@@ -64,7 +57,6 @@ class ImmutableEventDispatcher implements EventDispatcherInterface
     {
         throw new \BadMethodCallException('Unmodifiable event dispatchers must not be modified.');
     }
-
     /**
      * {@inheritdoc}
      */
@@ -72,7 +64,6 @@ class ImmutableEventDispatcher implements EventDispatcherInterface
     {
         return $this->dispatcher->getListeners($eventName);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -80,7 +71,6 @@ class ImmutableEventDispatcher implements EventDispatcherInterface
     {
         return $this->dispatcher->getListenerPriority($eventName, $listener);
     }
-
     /**
      * {@inheritdoc}
      */

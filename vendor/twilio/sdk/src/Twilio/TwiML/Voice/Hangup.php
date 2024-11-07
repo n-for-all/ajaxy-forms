@@ -6,26 +6,26 @@
  * | (_)\/(_)(_|\/| |(/_  v1.0.0
  * /       /
  */
+namespace Isolated\Twilio\TwiML\Voice;
 
-namespace Twilio\TwiML\Voice;
-
-use Twilio\TwiML\TwiML;
-
-class Hangup extends TwiML {
+use Isolated\Twilio\TwiML\TwiML;
+class Hangup extends TwiML
+{
     /**
      * Hangup constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct('Hangup', null);
     }
-
     /**
      * Add Parameter child.
      *
      * @param array $attributes Optional attributes
      * @return Parameter Child element.
      */
-    public function parameter($attributes = []): Parameter {
+    public function parameter($attributes = []) : Parameter
+    {
         return $this->nest(new Parameter($attributes));
     }
 }

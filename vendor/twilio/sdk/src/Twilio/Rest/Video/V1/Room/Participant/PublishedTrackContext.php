@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Video\V1\Room\Participant;
 
-
-namespace Twilio\Rest\Video\V1\Room\Participant;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class PublishedTrackContext extends InstanceContext
-    {
+{
     /**
      * Initialize the PublishedTrackContext
      *
@@ -32,61 +28,34 @@ class PublishedTrackContext extends InstanceContext
      * @param string $participantSid The SID of the Participant resource with the published track to fetch.
      * @param string $sid The SID of the RoomParticipantPublishedTrack resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $roomSid,
-        $participantSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $roomSid, $participantSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'roomSid' =>
-            $roomSid,
-        'participantSid' =>
-            $participantSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Rooms/' . \rawurlencode($roomSid)
-        .'/Participants/' . \rawurlencode($participantSid)
-        .'/PublishedTracks/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['roomSid' => $roomSid, 'participantSid' => $participantSid, 'sid' => $sid];
+        $this->uri = '/Rooms/' . \rawurlencode($roomSid) . '/Participants/' . \rawurlencode($participantSid) . '/PublishedTracks/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the PublishedTrackInstance
      *
      * @return PublishedTrackInstance Fetched PublishedTrackInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): PublishedTrackInstance
+    public function fetch() : PublishedTrackInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new PublishedTrackInstance(
-            $this->version,
-            $payload,
-            $this->solution['roomSid'],
-            $this->solution['participantSid'],
-            $this->solution['sid']
-        );
+        return new PublishedTrackInstance($this->version, $payload, $this->solution['roomSid'], $this->solution['participantSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Video.V1.PublishedTrackContext ' . \implode(' ', $context) . ']';
     }

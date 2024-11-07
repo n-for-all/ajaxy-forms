@@ -1,18 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'USD' => [
-            'US$',
-            'dólar estadounidense',
-        ],
-        'UYU' => [
-            '$',
-            'peso uruguayo',
-        ],
-        'UYW' => [
-            'UP',
-            'unidad previsional uruguayo',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['USD' => ['US$', 'dólar estadounidense'], 'UYU' => ['$', 'peso uruguayo'], 'UYW' => ['UP', 'unidad previsional uruguayo']]];

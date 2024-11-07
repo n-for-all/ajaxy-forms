@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Validator\Type;
 
-namespace Symfony\Component\Form\Extension\Validator\Type;
-
-use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\Form\AbstractTypeExtension;
+use Isolated\Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Isolated\Symfony\Component\OptionsResolver\Options;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
@@ -30,16 +28,12 @@ class RepeatedTypeValidatorExtension extends AbstractTypeExtension
         $errorMapping = function (Options $options) {
             return ['.' => $options['first_name']];
         };
-
-        $resolver->setDefaults([
-            'error_mapping' => $errorMapping,
-        ]);
+        $resolver->setDefaults(['error_mapping' => $errorMapping]);
     }
-
     /**
      * {@inheritdoc}
      */
-    public static function getExtendedTypes(): iterable
+    public static function getExtendedTypes() : iterable
     {
         return [RepeatedType::class];
     }

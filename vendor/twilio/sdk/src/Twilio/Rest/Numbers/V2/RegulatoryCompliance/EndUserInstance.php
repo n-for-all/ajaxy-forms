@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance;
 
-
-namespace Twilio\Rest\Numbers\V2\RegulatoryCompliance;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -47,64 +43,43 @@ class EndUserInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'type' => Values::array_get($payload, 'type'),
-            'attributes' => Values::array_get($payload, 'attributes'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'type' => Values::array_get($payload, 'type'), 'attributes' => Values::array_get($payload, 'attributes'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return EndUserContext Context for this EndUserInstance
      */
-    protected function proxy(): EndUserContext
+    protected function proxy() : EndUserContext
     {
         if (!$this->context) {
-            $this->context = new EndUserContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new EndUserContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the EndUserInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the EndUserInstance
      *
      * @return EndUserInstance Fetched EndUserInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): EndUserInstance
+    public function fetch() : EndUserInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the EndUserInstance
      *
@@ -112,12 +87,10 @@ class EndUserInstance extends InstanceResource
      * @return EndUserInstance Updated EndUserInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): EndUserInstance
+    public function update(array $options = []) : EndUserInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -130,27 +103,23 @@ class EndUserInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Numbers.V2.EndUserInstance ' . \implode(' ', $context) . ']';
     }
 }
-

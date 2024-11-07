@@ -13,17 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Address;
 
-namespace Twilio\Rest\Api\V2010\Account\Address;
-
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class DependentPhoneNumberList extends ListResource
-    {
+{
     /**
      * Construct the DependentPhoneNumberList
      *
@@ -31,28 +28,13 @@ class DependentPhoneNumberList extends ListResource
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) that created the DependentPhoneNumber resources to read.
      * @param string $addressSid The SID of the Address resource associated with the phone number.
      */
-    public function __construct(
-        Version $version,
-        string $accountSid,
-        string $addressSid
-    ) {
+    public function __construct(Version $version, string $accountSid, string $addressSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        
-        'addressSid' =>
-            $addressSid,
-        
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Addresses/' . \rawurlencode($addressSid)
-        .'/DependentPhoneNumbers.json';
+        $this->solution = ['accountSid' => $accountSid, 'addressSid' => $addressSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Addresses/' . \rawurlencode($addressSid) . '/DependentPhoneNumbers.json';
     }
-
     /**
      * Reads DependentPhoneNumberInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -68,11 +50,10 @@ class DependentPhoneNumberList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return DependentPhoneNumberInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams DependentPhoneNumberInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -91,15 +72,12 @@ class DependentPhoneNumberList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of DependentPhoneNumberInstance records from the API.
      * Request is executed immediately
@@ -109,24 +87,12 @@ class DependentPhoneNumberList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return DependentPhoneNumberPage Page of DependentPhoneNumberInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): DependentPhoneNumberPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : DependentPhoneNumberPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new DependentPhoneNumberPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of DependentPhoneNumberInstance records from the API.
      * Request is executed immediately
@@ -134,23 +100,17 @@ class DependentPhoneNumberList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return DependentPhoneNumberPage Page of DependentPhoneNumberInstance
      */
-    public function getPage(string $targetUrl): DependentPhoneNumberPage
+    public function getPage(string $targetUrl) : DependentPhoneNumberPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new DependentPhoneNumberPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.DependentPhoneNumberList]';
     }

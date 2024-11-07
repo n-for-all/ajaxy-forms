@@ -1,7 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'Cans' => 'Haɗaɗɗun Gaɓoɓin Ƴan Asali na Kanada',
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['Cans' => 'Haɗaɗɗun Gaɓoɓin Ƴan Asali na Kanada']];

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
-namespace Symfony\Component\Validator\Constraints;
-
-use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
-
+use Isolated\Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 /**
  * @internal
  *
@@ -26,20 +24,16 @@ trait ZeroComparisonConstraintTrait
         if (null === $options) {
             $options = [];
         }
-
         if (isset($options['propertyPath'])) {
-            throw new ConstraintDefinitionException(sprintf('The "propertyPath" option of the "%s" constraint cannot be set.', static::class));
+            throw new ConstraintDefinitionException(\sprintf('The "propertyPath" option of the "%s" constraint cannot be set.', static::class));
         }
-
         if (isset($options['value'])) {
-            throw new ConstraintDefinitionException(sprintf('The "value" option of the "%s" constraint cannot be set.', static::class));
+            throw new ConstraintDefinitionException(\sprintf('The "value" option of the "%s" constraint cannot be set.', static::class));
         }
-
         parent::__construct(0, null, $message, $groups, $payload, $options);
     }
-
-    public function validatedBy(): string
+    public function validatedBy() : string
     {
-        return parent::class.'Validator';
+        return parent::class . 'Validator';
     }
 }

@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service;
 
-
-namespace Twilio\Rest\Verify\V2\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Verify\V2\Service\RateLimit\BucketList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Verify\V2\Service\RateLimit\BucketList;
 /**
  * @property string|null $sid
  * @property string|null $serviceSid
@@ -40,7 +36,6 @@ use Twilio\Rest\Verify\V2\Service\RateLimit\BucketList;
 class RateLimitInstance extends InstanceResource
 {
     protected $_buckets;
-
     /**
      * Initialize the RateLimitInstance
      *
@@ -52,66 +47,43 @@ class RateLimitInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'uniqueName' => Values::array_get($payload, 'unique_name'),
-            'description' => Values::array_get($payload, 'description'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'uniqueName' => Values::array_get($payload, 'unique_name'), 'description' => Values::array_get($payload, 'description'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return RateLimitContext Context for this RateLimitInstance
      */
-    protected function proxy(): RateLimitContext
+    protected function proxy() : RateLimitContext
     {
         if (!$this->context) {
-            $this->context = new RateLimitContext(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['sid']
-            );
+            $this->context = new RateLimitContext($this->version, $this->solution['serviceSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the RateLimitInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the RateLimitInstance
      *
      * @return RateLimitInstance Fetched RateLimitInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): RateLimitInstance
+    public function fetch() : RateLimitInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the RateLimitInstance
      *
@@ -119,20 +91,17 @@ class RateLimitInstance extends InstanceResource
      * @return RateLimitInstance Updated RateLimitInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): RateLimitInstance
+    public function update(array $options = []) : RateLimitInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the buckets
      */
-    protected function getBuckets(): BucketList
+    protected function getBuckets() : BucketList
     {
         return $this->proxy()->buckets;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -145,27 +114,23 @@ class RateLimitInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Verify.V2.RateLimitInstance ' . \implode(' ', $context) . ']';
     }
 }
-

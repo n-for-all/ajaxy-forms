@@ -13,54 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1;
 
-
-namespace Twilio\Rest\Conversations\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ConfigurationContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ConfigurationContext
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Configuration';
     }
-
     /**
      * Fetch the ConfigurationInstance
      *
      * @return ConfigurationInstance Fetched ConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ConfigurationInstance
+    public function fetch() : ConfigurationInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ConfigurationInstance(
-            $this->version,
-            $payload
-        );
+        return new ConfigurationInstance($this->version, $payload);
     }
-
-
     /**
      * Update the ConfigurationInstance
      *
@@ -68,41 +52,23 @@ class ConfigurationContext extends InstanceContext
      * @return ConfigurationInstance Updated ConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ConfigurationInstance
+    public function update(array $options = []) : ConfigurationInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'DefaultChatServiceSid' =>
-                $options['defaultChatServiceSid'],
-            'DefaultMessagingServiceSid' =>
-                $options['defaultMessagingServiceSid'],
-            'DefaultInactiveTimer' =>
-                $options['defaultInactiveTimer'],
-            'DefaultClosedTimer' =>
-                $options['defaultClosedTimer'],
-        ]);
-
+        $data = Values::of(['DefaultChatServiceSid' => $options['defaultChatServiceSid'], 'DefaultMessagingServiceSid' => $options['defaultMessagingServiceSid'], 'DefaultInactiveTimer' => $options['defaultInactiveTimer'], 'DefaultClosedTimer' => $options['defaultClosedTimer']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new ConfigurationInstance(
-            $this->version,
-            $payload
-        );
+        return new ConfigurationInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Conversations.V1.ConfigurationContext ' . \implode(' ', $context) . ']';
     }

@@ -2,10 +2,10 @@
 
 namespace Ajaxy\Forms\Inc\Types\Transformer;
 
-use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Isolated\Symfony\Component\Form\DataTransformerInterface;
+use Isolated\Symfony\Component\Form\Exception\TransformationFailedException;
+use Isolated\Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Isolated\Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 class UploadedFilesTransformer implements DataTransformerInterface

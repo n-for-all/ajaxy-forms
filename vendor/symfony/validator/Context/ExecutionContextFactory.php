@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Context;
 
-namespace Symfony\Component\Validator\Context;
-
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-
+use Isolated\Symfony\Component\Validator\Validator\ValidatorInterface;
+use Isolated\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Creates new {@link ExecutionContext} instances.
  *
@@ -25,23 +23,16 @@ class ExecutionContextFactory implements ExecutionContextFactoryInterface
 {
     private $translator;
     private $translationDomain;
-
     public function __construct(TranslatorInterface $translator, ?string $translationDomain = null)
     {
         $this->translator = $translator;
         $this->translationDomain = $translationDomain;
     }
-
     /**
      * {@inheritdoc}
      */
     public function createContext(ValidatorInterface $validator, $root)
     {
-        return new ExecutionContext(
-            $validator,
-            $root,
-            $this->translator,
-            $this->translationDomain
-        );
+        return new ExecutionContext($validator, $root, $this->translator, $this->translationDomain);
     }
 }

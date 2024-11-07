@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Filesystem\Exception;
+namespace Isolated\Symfony\Component\Filesystem\Exception;
 
 /**
  * Exception class thrown when a file couldn't be found.
@@ -25,10 +24,9 @@ class FileNotFoundException extends IOException
             if (null === $path) {
                 $message = 'File could not be found.';
             } else {
-                $message = sprintf('File "%s" could not be found.', $path);
+                $message = \sprintf('File "%s" could not be found.', $path);
             }
         }
-
         parent::__construct($message, $code, $previous, $path);
     }
 }

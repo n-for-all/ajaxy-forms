@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Events\V1\Subscription;
 
-namespace Twilio\Rest\Events\V1\Subscription;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class SubscribedEventList extends ListResource
-    {
+{
     /**
      * Construct the SubscribedEventList
      *
      * @param Version $version Version that contains the resource
      * @param string $subscriptionSid The unique SID identifier of the Subscription.
      */
-    public function __construct(
-        Version $version,
-        string $subscriptionSid
-    ) {
+    public function __construct(Version $version, string $subscriptionSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'subscriptionSid' =>
-            $subscriptionSid,
-        
-        ];
-
-        $this->uri = '/Subscriptions/' . \rawurlencode($subscriptionSid)
-        .'/SubscribedEvents';
+        $this->solution = ['subscriptionSid' => $subscriptionSid];
+        $this->uri = '/Subscriptions/' . \rawurlencode($subscriptionSid) . '/SubscribedEvents';
     }
-
     /**
      * Create the SubscribedEventInstance
      *
@@ -57,28 +44,13 @@ class SubscribedEventList extends ListResource
      * @return SubscribedEventInstance Created SubscribedEventInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $type, array $options = []): SubscribedEventInstance
+    public function create(string $type, array $options = []) : SubscribedEventInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Type' =>
-                $type,
-            'SchemaVersion' =>
-                $options['schemaVersion'],
-        ]);
-
+        $data = Values::of(['Type' => $type, 'SchemaVersion' => $options['schemaVersion']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new SubscribedEventInstance(
-            $this->version,
-            $payload,
-            $this->solution['subscriptionSid']
-        );
+        return new SubscribedEventInstance($this->version, $payload, $this->solution['subscriptionSid']);
     }
-
-
     /**
      * Reads SubscribedEventInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -94,11 +66,10 @@ class SubscribedEventList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return SubscribedEventInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams SubscribedEventInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -117,15 +88,12 @@ class SubscribedEventList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of SubscribedEventInstance records from the API.
      * Request is executed immediately
@@ -135,24 +103,12 @@ class SubscribedEventList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return SubscribedEventPage Page of SubscribedEventInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): SubscribedEventPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : SubscribedEventPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new SubscribedEventPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of SubscribedEventInstance records from the API.
      * Request is executed immediately
@@ -160,40 +116,26 @@ class SubscribedEventList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return SubscribedEventPage Page of SubscribedEventInstance
      */
-    public function getPage(string $targetUrl): SubscribedEventPage
+    public function getPage(string $targetUrl) : SubscribedEventPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new SubscribedEventPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a SubscribedEventContext
      *
      * @param string $type Type of event being subscribed to.
      */
-    public function getContext(
-        string $type
-        
-    ): SubscribedEventContext
+    public function getContext(string $type) : SubscribedEventContext
     {
-        return new SubscribedEventContext(
-            $this->version,
-            $this->solution['subscriptionSid'],
-            $type
-        );
+        return new SubscribedEventContext($this->version, $this->solution['subscriptionSid'], $type);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Events.V1.SubscribedEventList]';
     }

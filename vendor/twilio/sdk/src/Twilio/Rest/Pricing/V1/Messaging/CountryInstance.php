@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Pricing\V1\Messaging;
 
-
-namespace Twilio\Rest\Pricing\V1\Messaging;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $country
  * @property string|null $isoCountry
@@ -43,50 +39,33 @@ class CountryInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $isoCountry = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'country' => Values::array_get($payload, 'country'),
-            'isoCountry' => Values::array_get($payload, 'iso_country'),
-            'outboundSmsPrices' => Values::array_get($payload, 'outbound_sms_prices'),
-            'inboundSmsPrices' => Values::array_get($payload, 'inbound_sms_prices'),
-            'priceUnit' => Values::array_get($payload, 'price_unit'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['isoCountry' => $isoCountry ?: $this->properties['isoCountry'], ];
+        $this->properties = ['country' => Values::array_get($payload, 'country'), 'isoCountry' => Values::array_get($payload, 'iso_country'), 'outboundSmsPrices' => Values::array_get($payload, 'outbound_sms_prices'), 'inboundSmsPrices' => Values::array_get($payload, 'inbound_sms_prices'), 'priceUnit' => Values::array_get($payload, 'price_unit'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['isoCountry' => $isoCountry ?: $this->properties['isoCountry']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return CountryContext Context for this CountryInstance
      */
-    protected function proxy(): CountryContext
+    protected function proxy() : CountryContext
     {
         if (!$this->context) {
-            $this->context = new CountryContext(
-                $this->version,
-                $this->solution['isoCountry']
-            );
+            $this->context = new CountryContext($this->version, $this->solution['isoCountry']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the CountryInstance
      *
      * @return CountryInstance Fetched CountryInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): CountryInstance
+    public function fetch() : CountryInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -99,27 +78,23 @@ class CountryInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Pricing.V1.CountryInstance ' . \implode(' ', $context) . ']';
     }
 }
-

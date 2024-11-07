@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V1;
 
-
-namespace Twilio\Rest\Numbers\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class PortingPortInPhoneNumberContext extends InstanceContext
-    {
+{
     /**
      * Initialize the PortingPortInPhoneNumberContext
      *
@@ -31,69 +27,44 @@ class PortingPortInPhoneNumberContext extends InstanceContext
      * @param string $portInRequestSid The SID of the Port In request. This is a unique identifier of the port in request.
      * @param string $phoneNumberSid The SID of the Port In request phone number. This is a unique identifier of the phone number.
      */
-    public function __construct(
-        Version $version,
-        $portInRequestSid,
-        $phoneNumberSid
-    ) {
+    public function __construct(Version $version, $portInRequestSid, $phoneNumberSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'portInRequestSid' =>
-            $portInRequestSid,
-        'phoneNumberSid' =>
-            $phoneNumberSid,
-        ];
-
-        $this->uri = '/Porting/PortIn/' . \rawurlencode($portInRequestSid)
-        .'/PhoneNumber/' . \rawurlencode($phoneNumberSid)
-        .'';
+        $this->solution = ['portInRequestSid' => $portInRequestSid, 'phoneNumberSid' => $phoneNumberSid];
+        $this->uri = '/Porting/PortIn/' . \rawurlencode($portInRequestSid) . '/PhoneNumber/' . \rawurlencode($phoneNumberSid) . '';
     }
-
     /**
      * Delete the PortingPortInPhoneNumberInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the PortingPortInPhoneNumberInstance
      *
      * @return PortingPortInPhoneNumberInstance Fetched PortingPortInPhoneNumberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): PortingPortInPhoneNumberInstance
+    public function fetch() : PortingPortInPhoneNumberInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new PortingPortInPhoneNumberInstance(
-            $this->version,
-            $payload,
-            $this->solution['portInRequestSid'],
-            $this->solution['phoneNumberSid']
-        );
+        return new PortingPortInPhoneNumberInstance($this->version, $payload, $this->solution['portInRequestSid'], $this->solution['phoneNumberSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Numbers.V1.PortingPortInPhoneNumberContext ' . \implode(' ', $context) . ']';
     }

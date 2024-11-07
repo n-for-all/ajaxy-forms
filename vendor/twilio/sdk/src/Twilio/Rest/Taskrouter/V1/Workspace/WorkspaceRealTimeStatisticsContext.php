@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace;
 
-
-namespace Twilio\Rest\Taskrouter\V1\Workspace;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class WorkspaceRealTimeStatisticsContext extends InstanceContext
-    {
+{
     /**
      * Initialize the WorkspaceRealTimeStatisticsContext
      *
      * @param Version $version Version that contains the resource
      * @param string $workspaceSid The SID of the Workspace to fetch.
      */
-    public function __construct(
-        Version $version,
-        $workspaceSid
-    ) {
+    public function __construct(Version $version, $workspaceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'workspaceSid' =>
-            $workspaceSid,
-        ];
-
-        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid)
-        .'/RealTimeStatistics';
+        $this->solution = ['workspaceSid' => $workspaceSid];
+        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid) . '/RealTimeStatistics';
     }
-
     /**
      * Fetch the WorkspaceRealTimeStatisticsInstance
      *
@@ -55,36 +42,23 @@ class WorkspaceRealTimeStatisticsContext extends InstanceContext
      * @return WorkspaceRealTimeStatisticsInstance Fetched WorkspaceRealTimeStatisticsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): WorkspaceRealTimeStatisticsInstance
+    public function fetch(array $options = []) : WorkspaceRealTimeStatisticsInstance
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'TaskChannel' =>
-                $options['taskChannel'],
-        ]);
-
+        $params = Values::of(['TaskChannel' => $options['taskChannel']]);
         $payload = $this->version->fetch('GET', $this->uri, $params, []);
-
-        return new WorkspaceRealTimeStatisticsInstance(
-            $this->version,
-            $payload,
-            $this->solution['workspaceSid']
-        );
+        return new WorkspaceRealTimeStatisticsInstance($this->version, $payload, $this->solution['workspaceSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Taskrouter.V1.WorkspaceRealTimeStatisticsContext ' . \implode(' ', $context) . ']';
     }

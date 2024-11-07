@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Voice\V1\DialingPermissions;
 
-
-namespace Twilio\Rest\Voice\V1\DialingPermissions;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property bool|null $dialingPermissionsInheritance
  * @property string|null $url
@@ -39,45 +35,33 @@ class SettingsInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'dialingPermissionsInheritance' => Values::array_get($payload, 'dialing_permissions_inheritance'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
+        $this->properties = ['dialingPermissionsInheritance' => Values::array_get($payload, 'dialing_permissions_inheritance'), 'url' => Values::array_get($payload, 'url')];
         $this->solution = [];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return SettingsContext Context for this SettingsInstance
      */
-    protected function proxy(): SettingsContext
+    protected function proxy() : SettingsContext
     {
         if (!$this->context) {
-            $this->context = new SettingsContext(
-                $this->version
-            );
+            $this->context = new SettingsContext($this->version);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the SettingsInstance
      *
      * @return SettingsInstance Fetched SettingsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SettingsInstance
+    public function fetch() : SettingsInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the SettingsInstance
      *
@@ -85,12 +69,10 @@ class SettingsInstance extends InstanceResource
      * @return SettingsInstance Updated SettingsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): SettingsInstance
+    public function update(array $options = []) : SettingsInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -103,27 +85,23 @@ class SettingsInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Voice.V1.SettingsInstance ' . \implode(' ', $context) . ']';
     }
 }
-

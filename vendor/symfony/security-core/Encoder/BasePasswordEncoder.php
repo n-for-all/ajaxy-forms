@@ -8,13 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Encoder;
 
-namespace Symfony\Component\Security\Core\Encoder;
-
-use Symfony\Component\PasswordHasher\Hasher\CheckPasswordLengthTrait;
-
+use Isolated\Symfony\Component\PasswordHasher\Hasher\CheckPasswordLengthTrait;
 trigger_deprecation('symfony/security-core', '5.3', 'The "%s" class is deprecated, use "%s" instead.', BasePasswordEncoder::class, CheckPasswordLengthTrait::class);
-
 /**
  * BasePasswordEncoder is the base class for all password encoders.
  *
@@ -25,15 +22,13 @@ trigger_deprecation('symfony/security-core', '5.3', 'The "%s" class is deprecate
 abstract class BasePasswordEncoder implements PasswordEncoderInterface
 {
     public const MAX_PASSWORD_LENGTH = 4096;
-
     /**
      * {@inheritdoc}
      */
-    public function needsRehash(string $encoded): bool
+    public function needsRehash(string $encoded) : bool
     {
-        return false;
+        return \false;
     }
-
     /**
      * Demerges a merge password and salt string.
      *
@@ -44,19 +39,15 @@ abstract class BasePasswordEncoder implements PasswordEncoderInterface
         if (empty($mergedPasswordSalt)) {
             return ['', ''];
         }
-
         $password = $mergedPasswordSalt;
         $salt = '';
-        $saltBegins = strrpos($mergedPasswordSalt, '{');
-
-        if (false !== $saltBegins && $saltBegins + 1 < \strlen($mergedPasswordSalt)) {
-            $salt = substr($mergedPasswordSalt, $saltBegins + 1, -1);
-            $password = substr($mergedPasswordSalt, 0, $saltBegins);
+        $saltBegins = \strrpos($mergedPasswordSalt, '{');
+        if (\false !== $saltBegins && $saltBegins + 1 < \strlen($mergedPasswordSalt)) {
+            $salt = \substr($mergedPasswordSalt, $saltBegins + 1, -1);
+            $password = \substr($mergedPasswordSalt, 0, $saltBegins);
         }
-
         return [$password, $salt];
     }
-
     /**
      * Merges a password and a salt.
      *
@@ -69,14 +60,11 @@ abstract class BasePasswordEncoder implements PasswordEncoderInterface
         if (empty($salt)) {
             return $password;
         }
-
-        if (false !== strrpos($salt, '{') || false !== strrpos($salt, '}')) {
+        if (\false !== \strrpos($salt, '{') || \false !== \strrpos($salt, '}')) {
             throw new \InvalidArgumentException('Cannot use { or } in salt.');
         }
-
-        return $password.'{'.$salt.'}';
+        return $password . '{' . $salt . '}';
     }
-
     /**
      * Compares two passwords.
      *
@@ -87,9 +75,8 @@ abstract class BasePasswordEncoder implements PasswordEncoderInterface
      */
     protected function comparePasswords(string $password1, string $password2)
     {
-        return hash_equals($password1, $password2);
+        return \hash_equals($password1, $password2);
     }
-
     /**
      * Checks if the password is too long.
      *

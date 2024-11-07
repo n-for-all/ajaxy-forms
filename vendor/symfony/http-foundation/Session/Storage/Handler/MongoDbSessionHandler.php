@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
+namespace Isolated\Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\UTCDateTime;
-use MongoDB\Client;
-use MongoDB\Collection;
-
+use Isolated\MongoDB\Client;
+use Isolated\MongoDB\Collection;
 /**
  * Session handler using the mongodb/mongodb package and MongoDB driver extension.
  *
@@ -27,17 +25,14 @@ use MongoDB\Collection;
 class MongoDbSessionHandler extends AbstractSessionHandler
 {
     private $mongo;
-
     /**
      * @var Collection
      */
     private $collection;
-
     /**
      * @var array
      */
     private $options;
-
     /**
      * Constructor.
      *
@@ -73,116 +68,71 @@ class MongoDbSessionHandler extends AbstractSessionHandler
         if (!isset($options['database']) || !isset($options['collection'])) {
             throw new \InvalidArgumentException('You must provide the "database" and "collection" option for MongoDBSessionHandler.');
         }
-
         $this->mongo = $mongo;
-
-        $this->options = array_merge([
-            'id_field' => '_id',
-            'data_field' => 'data',
-            'time_field' => 'time',
-            'expiry_field' => 'expires_at',
-        ], $options);
+        $this->options = \array_merge(['id_field' => '_id', 'data_field' => 'data', 'time_field' => 'time', 'expiry_field' => 'expires_at'], $options);
     }
-
     /**
      * @return bool
      */
     #[\ReturnTypeWillChange]
     public function close()
     {
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      */
     protected function doDestroy(string $sessionId)
     {
-        $this->getCollection()->deleteOne([
-            $this->options['id_field'] => $sessionId,
-        ]);
-
-        return true;
+        $this->getCollection()->deleteOne([$this->options['id_field'] => $sessionId]);
+        return \true;
     }
-
     /**
      * @return int|false
      */
     #[\ReturnTypeWillChange]
     public function gc($maxlifetime)
     {
-        return $this->getCollection()->deleteMany([
-            $this->options['expiry_field'] => ['$lt' => new UTCDateTime()],
-        ])->getDeletedCount();
+        return $this->getCollection()->deleteMany([$this->options['expiry_field'] => ['$lt' => new UTCDateTime()]])->getDeletedCount();
     }
-
     /**
      * {@inheritdoc}
      */
     protected function doWrite(string $sessionId, string $data)
     {
-        $expiry = new UTCDateTime((time() + (int) ini_get('session.gc_maxlifetime')) * 1000);
-
-        $fields = [
-            $this->options['time_field'] => new UTCDateTime(),
-            $this->options['expiry_field'] => $expiry,
-            $this->options['data_field'] => new Binary($data, Binary::TYPE_OLD_BINARY),
-        ];
-
-        $this->getCollection()->updateOne(
-            [$this->options['id_field'] => $sessionId],
-            ['$set' => $fields],
-            ['upsert' => true]
-        );
-
-        return true;
+        $expiry = new UTCDateTime((\time() + (int) \ini_get('session.gc_maxlifetime')) * 1000);
+        $fields = [$this->options['time_field'] => new UTCDateTime(), $this->options['expiry_field'] => $expiry, $this->options['data_field'] => new Binary($data, Binary::TYPE_OLD_BINARY)];
+        $this->getCollection()->updateOne([$this->options['id_field'] => $sessionId], ['$set' => $fields], ['upsert' => \true]);
+        return \true;
     }
-
     /**
      * @return bool
      */
     #[\ReturnTypeWillChange]
     public function updateTimestamp($sessionId, $data)
     {
-        $expiry = new UTCDateTime((time() + (int) ini_get('session.gc_maxlifetime')) * 1000);
-
-        $this->getCollection()->updateOne(
-            [$this->options['id_field'] => $sessionId],
-            ['$set' => [
-                $this->options['time_field'] => new UTCDateTime(),
-                $this->options['expiry_field'] => $expiry,
-            ]]
-        );
-
-        return true;
+        $expiry = new UTCDateTime((\time() + (int) \ini_get('session.gc_maxlifetime')) * 1000);
+        $this->getCollection()->updateOne([$this->options['id_field'] => $sessionId], ['$set' => [$this->options['time_field'] => new UTCDateTime(), $this->options['expiry_field'] => $expiry]]);
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      */
     protected function doRead(string $sessionId)
     {
-        $dbData = $this->getCollection()->findOne([
-            $this->options['id_field'] => $sessionId,
-            $this->options['expiry_field'] => ['$gte' => new UTCDateTime()],
-        ]);
-
+        $dbData = $this->getCollection()->findOne([$this->options['id_field'] => $sessionId, $this->options['expiry_field'] => ['$gte' => new UTCDateTime()]]);
         if (null === $dbData) {
             return '';
         }
-
         return $dbData[$this->options['data_field']]->getData();
     }
-
-    private function getCollection(): Collection
+    private function getCollection() : Collection
     {
         if (null === $this->collection) {
             $this->collection = $this->mongo->selectCollection($this->options['database'], $this->options['collection']);
         }
-
         return $this->collection;
     }
-
     /**
      * @return Client
      */

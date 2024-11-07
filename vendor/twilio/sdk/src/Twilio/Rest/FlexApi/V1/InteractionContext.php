@@ -13,81 +13,54 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\FlexApi\V1\Interaction\InteractionChannelList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\FlexApi\V1\Interaction\InteractionChannelList;
 /**
  * @property InteractionChannelList $channels
  * @method \Twilio\Rest\FlexApi\V1\Interaction\InteractionChannelContext channels(string $sid)
  */
 class InteractionContext extends InstanceContext
-    {
+{
     protected $_channels;
-
     /**
      * Initialize the InteractionContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The SID of the Interaction resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Interactions/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Interactions/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the InteractionInstance
      *
      * @return InteractionInstance Fetched InteractionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): InteractionInstance
+    public function fetch() : InteractionInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new InteractionInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new InteractionInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the channels
      */
-    protected function getChannels(): InteractionChannelList
+    protected function getChannels() : InteractionChannelList
     {
         if (!$this->_channels) {
-            $this->_channels = new InteractionChannelList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_channels = new InteractionChannelList($this->version, $this->solution['sid']);
         }
-
         return $this->_channels;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -95,16 +68,14 @@ class InteractionContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -113,26 +84,24 @@ class InteractionContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.InteractionContext ' . \implode(' ', $context) . ']';
     }

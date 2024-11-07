@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
-namespace Symfony\Component\Validator\Constraints;
-
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
-
+use Isolated\Symfony\Component\Validator\Constraint;
+use Isolated\Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 /**
  * @Annotation
  *
@@ -22,20 +20,17 @@ use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class Traverse extends Constraint
 {
-    public $traverse = true;
-
+    public $traverse = \true;
     /**
      * @param bool|array|null $traverse
      */
     public function __construct($traverse = null)
     {
         if (\is_array($traverse) && \array_key_exists('groups', $traverse)) {
-            throw new ConstraintDefinitionException(sprintf('The option "groups" is not supported by the constraint "%s".', __CLASS__));
+            throw new ConstraintDefinitionException(\sprintf('The option "groups" is not supported by the constraint "%s".', __CLASS__));
         }
-
         parent::__construct($traverse);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -43,7 +38,6 @@ class Traverse extends Constraint
     {
         return 'traverse';
     }
-
     /**
      * {@inheritdoc}
      */

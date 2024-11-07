@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'KES' => [
-            'Ksh',
-            'Shilingka Kenya',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['KES' => ['Ksh', 'Shilingka Kenya']]];

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Bridge\Twig\Extension;
 
-namespace Symfony\Bridge\Twig\Extension;
-
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-
+use Isolated\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 /**
  * @author Christian Flothmann <christian.flothmann@sensiolabs.de>
  * @author Titouan Galopin <galopintitouan@gmail.com>
@@ -20,13 +18,11 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final class CsrfRuntime
 {
     private $csrfTokenManager;
-
     public function __construct(CsrfTokenManagerInterface $csrfTokenManager)
     {
         $this->csrfTokenManager = $csrfTokenManager;
     }
-
-    public function getCsrfToken(string $tokenId): string
+    public function getCsrfToken(string $tokenId) : string
     {
         return $this->csrfTokenManager->getToken($tokenId)->getValue();
     }

@@ -13,52 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class PluginArchiveList extends ListResource
-    {
+{
     /**
      * Construct the PluginArchiveList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a PluginArchiveContext
      *
      * @param string $sid The SID of the Flex Plugin resource to archive.
      */
-    public function getContext(
-        string $sid
-        
-    ): PluginArchiveContext
+    public function getContext(string $sid) : PluginArchiveContext
     {
-        return new PluginArchiveContext(
-            $this->version,
-            $sid
-        );
+        return new PluginArchiveContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.FlexApi.V1.PluginArchiveList]';
     }

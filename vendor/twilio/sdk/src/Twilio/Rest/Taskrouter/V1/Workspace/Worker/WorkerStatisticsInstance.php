@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace\Worker;
 
-
-namespace Twilio\Rest\Taskrouter\V1\Workspace\Worker;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property array|null $cumulative
@@ -44,38 +40,23 @@ class WorkerStatisticsInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $workspaceSid, string $workerSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'cumulative' => Values::array_get($payload, 'cumulative'),
-            'workerSid' => Values::array_get($payload, 'worker_sid'),
-            'workspaceSid' => Values::array_get($payload, 'workspace_sid'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['workspaceSid' => $workspaceSid, 'workerSid' => $workerSid, ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'cumulative' => Values::array_get($payload, 'cumulative'), 'workerSid' => Values::array_get($payload, 'worker_sid'), 'workspaceSid' => Values::array_get($payload, 'workspace_sid'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['workspaceSid' => $workspaceSid, 'workerSid' => $workerSid];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return WorkerStatisticsContext Context for this WorkerStatisticsInstance
      */
-    protected function proxy(): WorkerStatisticsContext
+    protected function proxy() : WorkerStatisticsContext
     {
         if (!$this->context) {
-            $this->context = new WorkerStatisticsContext(
-                $this->version,
-                $this->solution['workspaceSid'],
-                $this->solution['workerSid']
-            );
+            $this->context = new WorkerStatisticsContext($this->version, $this->solution['workspaceSid'], $this->solution['workerSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the WorkerStatisticsInstance
      *
@@ -83,12 +64,10 @@ class WorkerStatisticsInstance extends InstanceResource
      * @return WorkerStatisticsInstance Fetched WorkerStatisticsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): WorkerStatisticsInstance
+    public function fetch(array $options = []) : WorkerStatisticsInstance
     {
-
         return $this->proxy()->fetch($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -101,27 +80,23 @@ class WorkerStatisticsInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Taskrouter.V1.WorkerStatisticsInstance ' . \implode(' ', $context) . ']';
     }
 }
-

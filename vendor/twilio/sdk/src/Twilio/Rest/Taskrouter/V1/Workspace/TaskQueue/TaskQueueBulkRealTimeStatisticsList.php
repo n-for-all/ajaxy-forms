@@ -13,66 +13,45 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue;
 
-namespace Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class TaskQueueBulkRealTimeStatisticsList extends ListResource
-    {
+{
     /**
      * Construct the TaskQueueBulkRealTimeStatisticsList
      *
      * @param Version $version Version that contains the resource
      * @param string $workspaceSid The unique SID identifier of the Workspace.
      */
-    public function __construct(
-        Version $version,
-        string $workspaceSid
-    ) {
+    public function __construct(Version $version, string $workspaceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'workspaceSid' =>
-            $workspaceSid,
-        
-        ];
-
-        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid)
-        .'/TaskQueues/RealTimeStatistics';
+        $this->solution = ['workspaceSid' => $workspaceSid];
+        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid) . '/TaskQueues/RealTimeStatistics';
     }
-
     /**
      * Create the TaskQueueBulkRealTimeStatisticsInstance
      *
      * @return TaskQueueBulkRealTimeStatisticsInstance Created TaskQueueBulkRealTimeStatisticsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(): TaskQueueBulkRealTimeStatisticsInstance
+    public function create() : TaskQueueBulkRealTimeStatisticsInstance
     {
-
         $data = $body->toArray();
         $headers['Content-Type'] = 'application/json';
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new TaskQueueBulkRealTimeStatisticsInstance(
-            $this->version,
-            $payload,
-            $this->solution['workspaceSid']
-        );
+        return new TaskQueueBulkRealTimeStatisticsInstance($this->version, $payload, $this->solution['workspaceSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Taskrouter.V1.TaskQueueBulkRealTimeStatisticsList]';
     }

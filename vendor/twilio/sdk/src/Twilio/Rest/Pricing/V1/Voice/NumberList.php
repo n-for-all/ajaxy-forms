@@ -13,52 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Pricing\V1\Voice;
 
-namespace Twilio\Rest\Pricing\V1\Voice;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class NumberList extends ListResource
-    {
+{
     /**
      * Construct the NumberList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a NumberContext
      *
      * @param string $number The phone number to fetch.
      */
-    public function getContext(
-        string $number
-        
-    ): NumberContext
+    public function getContext(string $number) : NumberContext
     {
-        return new NumberContext(
-            $this->version,
-            $number
-        );
+        return new NumberContext($this->version, $number);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Pricing.V1.NumberList]';
     }

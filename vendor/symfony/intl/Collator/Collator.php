@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl\Collator;
 
-namespace Symfony\Component\Intl\Collator;
-
-use Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException;
-use Symfony\Component\Intl\Exception\MethodNotImplementedException;
-use Symfony\Component\Intl\Globals\IntlGlobals;
-use Symfony\Component\Intl\Locale\Locale;
-
+use Isolated\Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException;
+use Isolated\Symfony\Component\Intl\Exception\MethodNotImplementedException;
+use Isolated\Symfony\Component\Intl\Globals\IntlGlobals;
+use Isolated\Symfony\Component\Intl\Locale\Locale;
 /**
  * Replacement for PHP's native {@link \Collator} class.
  *
@@ -46,31 +44,24 @@ abstract class Collator
     public const STRENGTH = 5;
     public const HIRAGANA_QUATERNARY_MODE = 6;
     public const NUMERIC_COLLATION = 7;
-
     /* Attribute constants values */
     public const DEFAULT_VALUE = -1;
-
     public const PRIMARY = 0;
     public const SECONDARY = 1;
     public const TERTIARY = 2;
     public const DEFAULT_STRENGTH = 2;
     public const QUATERNARY = 3;
     public const IDENTICAL = 15;
-
     public const OFF = 16;
     public const ON = 17;
-
     public const SHIFTED = 20;
     public const NON_IGNORABLE = 21;
-
     public const LOWER_FIRST = 24;
     public const UPPER_FIRST = 25;
-
     /* Sorting options */
     public const SORT_REGULAR = 0;
     public const SORT_NUMERIC = 2;
     public const SORT_STRING = 1;
-
     /**
      * @param string|null $locale The locale code. The only currently supported locale is "en" (or null using the default locale, i.e. "en")
      *
@@ -82,7 +73,6 @@ abstract class Collator
             throw new MethodArgumentValueNotImplementedException(__METHOD__, 'locale', $locale, 'Only the locale "en" is supported');
         }
     }
-
     /**
      * Static constructor.
      *
@@ -96,7 +86,6 @@ abstract class Collator
     {
         return new static($locale);
     }
-
     /**
      * Sort array maintaining index association.
      *
@@ -110,17 +99,10 @@ abstract class Collator
      */
     public function asort(array &$array, int $sortFlag = self::SORT_REGULAR)
     {
-        $intlToPlainFlagMap = [
-            self::SORT_REGULAR => \SORT_REGULAR,
-            self::SORT_NUMERIC => \SORT_NUMERIC,
-            self::SORT_STRING => \SORT_STRING,
-        ];
-
+        $intlToPlainFlagMap = [self::SORT_REGULAR => \SORT_REGULAR, self::SORT_NUMERIC => \SORT_NUMERIC, self::SORT_STRING => \SORT_STRING];
         $plainSortFlag = $intlToPlainFlagMap[$sortFlag] ?? self::SORT_REGULAR;
-
-        return asort($array, $plainSortFlag);
+        return \asort($array, $plainSortFlag);
     }
-
     /**
      * Not supported. Compare two Unicode strings.
      *
@@ -140,7 +122,6 @@ abstract class Collator
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Get a value of an integer collator attribute.
      *
@@ -156,7 +137,6 @@ abstract class Collator
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Returns collator's last error code. Always returns the U_ZERO_ERROR class constant value.
      *
@@ -166,7 +146,6 @@ abstract class Collator
     {
         return IntlGlobals::U_ZERO_ERROR;
     }
-
     /**
      * Returns collator's last error message. Always returns the U_ZERO_ERROR_MESSAGE class constant value.
      *
@@ -176,7 +155,6 @@ abstract class Collator
     {
         return 'U_ZERO_ERROR';
     }
-
     /**
      * Returns the collator's locale.
      *
@@ -189,7 +167,6 @@ abstract class Collator
     {
         return 'en';
     }
-
     /**
      * Not supported. Get sorting key for a string.
      *
@@ -205,7 +182,6 @@ abstract class Collator
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Get current collator's strength.
      *
@@ -219,7 +195,6 @@ abstract class Collator
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Set a collator's attribute.
      *
@@ -236,7 +211,6 @@ abstract class Collator
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Set the collator's strength.
      *
@@ -258,7 +232,6 @@ abstract class Collator
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Sort array using specified collator and sort keys.
      *
@@ -274,7 +247,6 @@ abstract class Collator
     {
         throw new MethodNotImplementedException(__METHOD__);
     }
-
     /**
      * Not supported. Sort array using specified collator.
      *

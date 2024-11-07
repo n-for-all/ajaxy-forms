@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class DomainAcceptsNoMail implements Reason
 {
@@ -8,7 +8,6 @@ class DomainAcceptsNoMail implements Reason
     {
         return 154;
     }
-
     public function description() : string
     {
         return 'Domain accepts no mail (Null MX, RFC7505)';

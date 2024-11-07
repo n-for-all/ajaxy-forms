@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Mime\Part;
 
-namespace Symfony\Component\Mime\Part;
-
-use Symfony\Component\Mime\Message;
-use Symfony\Component\Mime\RawMessage;
-
+use Isolated\Symfony\Component\Mime\Message;
+use Isolated\Symfony\Component\Mime\RawMessage;
 /**
  * @final
  *
@@ -22,40 +20,33 @@ use Symfony\Component\Mime\RawMessage;
 class MessagePart extends DataPart
 {
     private $message;
-
     public function __construct(RawMessage $message)
     {
         if ($message instanceof Message) {
-            $name = $message->getHeaders()->getHeaderBody('Subject').'.eml';
+            $name = $message->getHeaders()->getHeaderBody('Subject') . '.eml';
         } else {
             $name = 'email.eml';
         }
         parent::__construct('', $name);
-
         $this->message = $message;
     }
-
-    public function getMediaType(): string
+    public function getMediaType() : string
     {
         return 'message';
     }
-
-    public function getMediaSubtype(): string
+    public function getMediaSubtype() : string
     {
         return 'rfc822';
     }
-
-    public function getBody(): string
+    public function getBody() : string
     {
         return $this->message->toString();
     }
-
-    public function bodyToString(): string
+    public function bodyToString() : string
     {
         return $this->getBody();
     }
-
-    public function bodyToIterable(): iterable
+    public function bodyToIterable() : iterable
     {
         return $this->message->toIterable();
     }

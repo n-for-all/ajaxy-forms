@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1;
 
-
-namespace Twilio\Rest\Trusthub\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $sid
  * @property string|null $friendlyName
@@ -42,49 +38,33 @@ class EndUserTypeInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'machineName' => Values::array_get($payload, 'machine_name'),
-            'fields' => Values::array_get($payload, 'fields'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'machineName' => Values::array_get($payload, 'machine_name'), 'fields' => Values::array_get($payload, 'fields'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return EndUserTypeContext Context for this EndUserTypeInstance
      */
-    protected function proxy(): EndUserTypeContext
+    protected function proxy() : EndUserTypeContext
     {
         if (!$this->context) {
-            $this->context = new EndUserTypeContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new EndUserTypeContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the EndUserTypeInstance
      *
      * @return EndUserTypeInstance Fetched EndUserTypeInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): EndUserTypeInstance
+    public function fetch() : EndUserTypeInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -97,27 +77,23 @@ class EndUserTypeInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Trusthub.V1.EndUserTypeInstance ' . \implode(' ', $context) . ']';
     }
 }
-

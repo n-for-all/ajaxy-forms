@@ -8,16 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Mime;
 
-namespace Symfony\Component\Mime;
-
-use Egulias\EmailValidator\EmailValidator;
-use Egulias\EmailValidator\Validation\RFCValidation;
-use Symfony\Component\Mime\Encoder\IdnAddressEncoder;
-use Symfony\Component\Mime\Exception\InvalidArgumentException;
-use Symfony\Component\Mime\Exception\LogicException;
-use Symfony\Component\Mime\Exception\RfcComplianceException;
-
+use Isolated\Egulias\EmailValidator\EmailValidator;
+use Isolated\Egulias\EmailValidator\Validation\RFCValidation;
+use Isolated\Symfony\Component\Mime\Encoder\IdnAddressEncoder;
+use Isolated\Symfony\Component\Mime\Exception\InvalidArgumentException;
+use Isolated\Symfony\Component\Mime\Exception\LogicException;
+use Isolated\Symfony\Component\Mime\Exception\RfcComplianceException;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -31,59 +29,47 @@ final class Address
      * This does not try to cover all edge cases for address.
      */
     private const FROM_STRING_PATTERN = '~(?<displayName>[^<]*)<(?<addrSpec>.*)>[^>]*~';
-
     private static $validator;
     private static $encoder;
-
     private $address;
     private $name;
-
     public function __construct(string $address, string $name = '')
     {
-        if (!class_exists(EmailValidator::class)) {
-            throw new LogicException(sprintf('The "%s" class cannot be used as it needs "%s"; try running "composer require egulias/email-validator".', __CLASS__, EmailValidator::class));
+        if (!\class_exists(EmailValidator::class)) {
+            throw new LogicException(\sprintf('The "%s" class cannot be used as it needs "%s"; try running "composer require egulias/email-validator".', __CLASS__, EmailValidator::class));
         }
-
         if (null === self::$validator) {
             self::$validator = new EmailValidator();
         }
-
-        $this->address = trim($address);
-        $this->name = trim(str_replace(["\n", "\r"], '', $name));
-
+        $this->address = \trim($address);
+        $this->name = \trim(\str_replace(["\n", "\r"], '', $name));
         if (!self::$validator->isValid($this->address, new RFCValidation())) {
-            throw new RfcComplianceException(sprintf('Email "%s" does not comply with addr-spec of RFC 2822.', $address));
+            throw new RfcComplianceException(\sprintf('Email "%s" does not comply with addr-spec of RFC 2822.', $address));
         }
     }
-
-    public function getAddress(): string
+    public function getAddress() : string
     {
         return $this->address;
     }
-
-    public function getName(): string
+    public function getName() : string
     {
         return $this->name;
     }
-
-    public function getEncodedAddress(): string
+    public function getEncodedAddress() : string
     {
         if (null === self::$encoder) {
             self::$encoder = new IdnAddressEncoder();
         }
-
         return self::$encoder->encodeString($this->address);
     }
-
-    public function toString(): string
+    public function toString() : string
     {
-        return ($n = $this->getName()) ? $n.' <'.$this->getEncodedAddress().'>' : $this->getEncodedAddress();
+        return ($n = $this->getName()) ? $n . ' <' . $this->getEncodedAddress() . '>' : $this->getEncodedAddress();
     }
-
     /**
      * @param Address|string $address
      */
-    public static function create($address): self
+    public static function create($address) : self
     {
         if ($address instanceof self) {
             return $address;
@@ -91,35 +77,29 @@ final class Address
         if (\is_string($address)) {
             return new self($address);
         }
-
-        throw new InvalidArgumentException(sprintf('An address can be an instance of Address or a string ("%s") given).', \is_object($address) ? \get_class($address) : \gettype($address)));
+        throw new InvalidArgumentException(\sprintf('An address can be an instance of Address or a string ("%s") given).', \is_object($address) ? \get_class($address) : \gettype($address)));
     }
-
     /**
      * @param (Address|string)[] $addresses
      *
      * @return Address[]
      */
-    public static function createArray(array $addresses): array
+    public static function createArray(array $addresses) : array
     {
         $addrs = [];
         foreach ($addresses as $address) {
             $addrs[] = self::create($address);
         }
-
         return $addrs;
     }
-
-    public static function fromString(string $string): self
+    public static function fromString(string $string) : self
     {
-        if (false === strpos($string, '<')) {
+        if (\false === \strpos($string, '<')) {
             return new self($string, '');
         }
-
-        if (!preg_match(self::FROM_STRING_PATTERN, $string, $matches)) {
-            throw new InvalidArgumentException(sprintf('Could not parse "%s" to a "%s" instance.', $string, static::class));
+        if (!\preg_match(self::FROM_STRING_PATTERN, $string, $matches)) {
+            throw new InvalidArgumentException(\sprintf('Could not parse "%s" to a "%s" instance.', $string, static::class));
         }
-
-        return new self($matches['addrSpec'], trim($matches['displayName'], ' \'"'));
+        return new self($matches['addrSpec'], \trim($matches['displayName'], ' \'"'));
     }
 }

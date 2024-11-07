@@ -13,52 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Routes\V2;
 
-namespace Twilio\Rest\Routes\V2;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class SipDomainList extends ListResource
-    {
+{
     /**
      * Construct the SipDomainList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a SipDomainContext
      *
      * @param string $sipDomain 
      */
-    public function getContext(
-        string $sipDomain
-        
-    ): SipDomainContext
+    public function getContext(string $sipDomain) : SipDomainContext
     {
-        return new SipDomainContext(
-            $this->version,
-            $sipDomain
-        );
+        return new SipDomainContext($this->version, $sipDomain);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Routes.V2.SipDomainList]';
     }

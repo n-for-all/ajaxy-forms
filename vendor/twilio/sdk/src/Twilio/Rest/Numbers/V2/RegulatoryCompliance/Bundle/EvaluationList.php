@@ -13,60 +13,39 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle;
 
-namespace Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class EvaluationList extends ListResource
-    {
+{
     /**
      * Construct the EvaluationList
      *
      * @param Version $version Version that contains the resource
      * @param string $bundleSid The unique string that identifies the Bundle resource.
      */
-    public function __construct(
-        Version $version,
-        string $bundleSid
-    ) {
+    public function __construct(Version $version, string $bundleSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'bundleSid' =>
-            $bundleSid,
-        
-        ];
-
-        $this->uri = '/RegulatoryCompliance/Bundles/' . \rawurlencode($bundleSid)
-        .'/Evaluations';
+        $this->solution = ['bundleSid' => $bundleSid];
+        $this->uri = '/RegulatoryCompliance/Bundles/' . \rawurlencode($bundleSid) . '/Evaluations';
     }
-
     /**
      * Create the EvaluationInstance
      *
      * @return EvaluationInstance Created EvaluationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(): EvaluationInstance
+    public function create() : EvaluationInstance
     {
-
         $payload = $this->version->create('POST', $this->uri, [], []);
-
-        return new EvaluationInstance(
-            $this->version,
-            $payload,
-            $this->solution['bundleSid']
-        );
+        return new EvaluationInstance($this->version, $payload, $this->solution['bundleSid']);
     }
-
-
     /**
      * Reads EvaluationInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -82,11 +61,10 @@ class EvaluationList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return EvaluationInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams EvaluationInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -105,15 +83,12 @@ class EvaluationList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of EvaluationInstance records from the API.
      * Request is executed immediately
@@ -123,24 +98,12 @@ class EvaluationList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return EvaluationPage Page of EvaluationInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): EvaluationPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : EvaluationPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new EvaluationPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of EvaluationInstance records from the API.
      * Request is executed immediately
@@ -148,40 +111,26 @@ class EvaluationList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return EvaluationPage Page of EvaluationInstance
      */
-    public function getPage(string $targetUrl): EvaluationPage
+    public function getPage(string $targetUrl) : EvaluationPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new EvaluationPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a EvaluationContext
      *
      * @param string $sid The unique string that identifies the Evaluation resource.
      */
-    public function getContext(
-        string $sid
-        
-    ): EvaluationContext
+    public function getContext(string $sid) : EvaluationContext
     {
-        return new EvaluationContext(
-            $this->version,
-            $this->solution['bundleSid'],
-            $sid
-        );
+        return new EvaluationContext($this->version, $this->solution['bundleSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V2.EvaluationList]';
     }

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Core\Role;
+namespace Isolated\Symfony\Component\Security\Core\Role;
 
 /**
  * RoleHierarchyInterface is the interface for a role hierarchy.
@@ -23,5 +22,5 @@ interface RoleHierarchyInterface
      *
      * @return string[]
      */
-    public function getReachableRoleNames(array $roles): array;
+    public function getReachableRoleNames(array $roles) : array;
 }

@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Sync\V1\Service\SyncMap;
 
-
-namespace Twilio\Rest\Sync\V1\Service\SyncMap;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class SyncMapPermissionContext extends InstanceContext
-    {
+{
     /**
      * Initialize the SyncMapPermissionContext
      *
@@ -34,64 +30,34 @@ class SyncMapPermissionContext extends InstanceContext
      * @param string $mapSid The SID of the Sync Map with the Sync Map Permission resource to delete. Can be the Sync Map resource's `sid` or its `unique_name`.
      * @param string $identity The application-defined string that uniquely identifies the User's Sync Map Permission resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $mapSid,
-        $identity
-    ) {
+    public function __construct(Version $version, $serviceSid, $mapSid, $identity)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'mapSid' =>
-            $mapSid,
-        'identity' =>
-            $identity,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Maps/' . \rawurlencode($mapSid)
-        .'/Permissions/' . \rawurlencode($identity)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'mapSid' => $mapSid, 'identity' => $identity];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Maps/' . \rawurlencode($mapSid) . '/Permissions/' . \rawurlencode($identity) . '';
     }
-
     /**
      * Delete the SyncMapPermissionInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the SyncMapPermissionInstance
      *
      * @return SyncMapPermissionInstance Fetched SyncMapPermissionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SyncMapPermissionInstance
+    public function fetch() : SyncMapPermissionInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new SyncMapPermissionInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['mapSid'],
-            $this->solution['identity']
-        );
+        return new SyncMapPermissionInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['mapSid'], $this->solution['identity']);
     }
-
-
     /**
      * Update the SyncMapPermissionInstance
      *
@@ -101,40 +67,22 @@ class SyncMapPermissionContext extends InstanceContext
      * @return SyncMapPermissionInstance Updated SyncMapPermissionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(bool $read, bool $write, bool $manage): SyncMapPermissionInstance
+    public function update(bool $read, bool $write, bool $manage) : SyncMapPermissionInstance
     {
-
-        $data = Values::of([
-            'Read' =>
-                Serialize::booleanToString($read),
-            'Write' =>
-                Serialize::booleanToString($write),
-            'Manage' =>
-                Serialize::booleanToString($manage),
-        ]);
-
+        $data = Values::of(['Read' => Serialize::booleanToString($read), 'Write' => Serialize::booleanToString($write), 'Manage' => Serialize::booleanToString($manage)]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new SyncMapPermissionInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['mapSid'],
-            $this->solution['identity']
-        );
+        return new SyncMapPermissionInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['mapSid'], $this->solution['identity']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Sync.V1.SyncMapPermissionContext ' . \implode(' ', $context) . ']';
     }

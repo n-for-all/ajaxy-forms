@@ -6,18 +6,18 @@
  * | (_)\/(_)(_|\/| |(/_  v1.0.0
  * /       /
  */
+namespace Isolated\Twilio\TwiML\Voice;
 
-namespace Twilio\TwiML\Voice;
-
-use Twilio\TwiML\TwiML;
-
-class Sim extends TwiML {
+use Isolated\Twilio\TwiML\TwiML;
+class Sim extends TwiML
+{
     /**
      * Sim constructor.
      *
      * @param string $simSid SIM SID
      */
-    public function __construct($simSid) {
+    public function __construct($simSid)
+    {
         parent::__construct('Sim', $simSid);
     }
 }

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form\Util;
+namespace Isolated\Symfony\Component\Form\Util;
 
 /**
  * A hash map which keeps track of deletions and additions.
@@ -78,21 +77,18 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
      * @var array<TKey, TValue>
      */
     private $elements = [];
-
     /**
      * The keys of the map in the order in which they were inserted or changed.
      *
      * @var list<TKey>
      */
     private $orderedKeys = [];
-
     /**
      * References to the cursors of all open iterators.
      *
      * @var array<int, int>
      */
     private $managedCursors = [];
-
     /**
      * Creates a new map.
      *
@@ -101,9 +97,8 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
     public function __construct(array $elements = [])
     {
         $this->elements = $elements;
-        $this->orderedKeys = array_keys($elements);
+        $this->orderedKeys = \array_keys($elements);
     }
-
     /**
      * @return bool
      */
@@ -112,7 +107,6 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return isset($this->elements[$key]);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -122,12 +116,10 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
     public function offsetGet($key)
     {
         if (!isset($this->elements[$key])) {
-            throw new \OutOfBoundsException(sprintf('The offset "%s" does not exist.', $key));
+            throw new \OutOfBoundsException(\sprintf('The offset "%s" does not exist.', $key));
         }
-
         return $this->elements[$key];
     }
-
     /**
      * {@inheritdoc}
      *
@@ -138,20 +130,12 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         if (null === $key || !isset($this->elements[$key])) {
             if (null === $key) {
-                $key = [] === $this->orderedKeys
-                    // If the array is empty, use 0 as key
-                    ? 0
-                    // Imitate PHP behavior of generating a key that equals
-                    // the highest existing integer key + 1
-                    : 1 + (int) max($this->orderedKeys);
+                $key = [] === $this->orderedKeys ? 0 : 1 + (int) \max($this->orderedKeys);
             }
-
             $this->orderedKeys[] = (string) $key;
         }
-
         $this->elements[$key] = $value;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -160,10 +144,9 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
     #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
-        if (false !== ($position = array_search((string) $key, $this->orderedKeys))) {
-            array_splice($this->orderedKeys, $position, 1);
+        if (\false !== ($position = \array_search((string) $key, $this->orderedKeys))) {
+            \array_splice($this->orderedKeys, $position, 1);
             unset($this->elements[$key]);
-
             foreach ($this->managedCursors as $i => $cursor) {
                 if ($cursor >= $position) {
                     --$this->managedCursors[$i];
@@ -171,7 +154,6 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
             }
         }
     }
-
     /**
      * @return \Traversable<TKey, TValue>
      */
@@ -180,7 +162,6 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return new OrderedHashMapIterator($this->elements, $this->orderedKeys, $this->managedCursors);
     }
-
     /**
      * @return int
      */

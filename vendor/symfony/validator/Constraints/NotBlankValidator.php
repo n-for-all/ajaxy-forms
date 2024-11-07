@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
-namespace Symfony\Component\Validator\Constraints;
-
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-
+use Isolated\Symfony\Component\Validator\Constraint;
+use Isolated\Symfony\Component\Validator\ConstraintValidator;
+use Isolated\Symfony\Component\Validator\Exception\UnexpectedTypeException;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Kévin Dunglas <dunglas@gmail.com>
@@ -29,20 +27,14 @@ class NotBlankValidator extends ConstraintValidator
         if (!$constraint instanceof NotBlank) {
             throw new UnexpectedTypeException($constraint, NotBlank::class);
         }
-
         if ($constraint->allowNull && null === $value) {
             return;
         }
-
         if (\is_string($value) && null !== $constraint->normalizer) {
             $value = ($constraint->normalizer)($value);
         }
-
-        if (false === $value || (empty($value) && '0' != $value)) {
-            $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ value }}', $this->formatValue($value))
-                ->setCode(NotBlank::IS_BLANK_ERROR)
-                ->addViolation();
+        if (\false === $value || empty($value) && '0' != $value) {
+            $this->context->buildViolation($constraint->message)->setParameter('{{ value }}', $this->formatValue($value))->setCode(NotBlank::IS_BLANK_ERROR)->addViolation();
         }
     }
 }

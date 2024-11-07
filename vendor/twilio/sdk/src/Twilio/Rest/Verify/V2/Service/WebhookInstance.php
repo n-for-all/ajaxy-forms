@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service;
 
-
-namespace Twilio\Rest\Verify\V2\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $serviceSid
@@ -52,69 +48,43 @@ class WebhookInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'eventTypes' => Values::array_get($payload, 'event_types'),
-            'status' => Values::array_get($payload, 'status'),
-            'version' => Values::array_get($payload, 'version'),
-            'webhookUrl' => Values::array_get($payload, 'webhook_url'),
-            'webhookMethod' => Values::array_get($payload, 'webhook_method'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'eventTypes' => Values::array_get($payload, 'event_types'), 'status' => Values::array_get($payload, 'status'), 'version' => Values::array_get($payload, 'version'), 'webhookUrl' => Values::array_get($payload, 'webhook_url'), 'webhookMethod' => Values::array_get($payload, 'webhook_method'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return WebhookContext Context for this WebhookInstance
      */
-    protected function proxy(): WebhookContext
+    protected function proxy() : WebhookContext
     {
         if (!$this->context) {
-            $this->context = new WebhookContext(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['sid']
-            );
+            $this->context = new WebhookContext($this->version, $this->solution['serviceSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the WebhookInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the WebhookInstance
      *
      * @return WebhookInstance Fetched WebhookInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): WebhookInstance
+    public function fetch() : WebhookInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the WebhookInstance
      *
@@ -122,12 +92,10 @@ class WebhookInstance extends InstanceResource
      * @return WebhookInstance Updated WebhookInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): WebhookInstance
+    public function update(array $options = []) : WebhookInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -140,27 +108,23 @@ class WebhookInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Verify.V2.WebhookInstance ' . \implode(' ', $context) . ']';
     }
 }
-

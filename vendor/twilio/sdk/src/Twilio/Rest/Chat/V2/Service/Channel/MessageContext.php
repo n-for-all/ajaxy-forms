@@ -13,20 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Chat\V2\Service\Channel;
 
-
-namespace Twilio\Rest\Chat\V2\Service\Channel;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class MessageContext extends InstanceContext
-    {
+{
     /**
      * Initialize the MessageContext
      *
@@ -35,30 +31,13 @@ class MessageContext extends InstanceContext
      * @param string $channelSid The SID of the [Channel](https://www.twilio.com/docs/chat/channels) the new Message resource belongs to. This value can be the Channel resource's `sid` or `unique_name`.
      * @param string $sid The SID of the Message resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $channelSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $serviceSid, $channelSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'channelSid' =>
-            $channelSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Channels/' . \rawurlencode($channelSid)
-        .'/Messages/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'channelSid' => $channelSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Channels/' . \rawurlencode($channelSid) . '/Messages/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the MessageInstance
      *
@@ -66,38 +45,23 @@ class MessageContext extends InstanceContext
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(array $options = []): bool
+    public function delete(array $options = []) : bool
     {
-
         $options = new Values($options);
-
         $headers = Values::of(['X-Twilio-Webhook-Enabled' => $options['xTwilioWebhookEnabled']]);
-
         return $this->version->delete('DELETE', $this->uri, [], [], $headers);
     }
-
-
     /**
      * Fetch the MessageInstance
      *
      * @return MessageInstance Fetched MessageInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): MessageInstance
+    public function fetch() : MessageInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new MessageInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['channelSid'],
-            $this->solution['sid']
-        );
+        return new MessageInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['channelSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the MessageInstance
      *
@@ -105,50 +69,24 @@ class MessageContext extends InstanceContext
      * @return MessageInstance Updated MessageInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): MessageInstance
+    public function update(array $options = []) : MessageInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Body' =>
-                $options['body'],
-            'Attributes' =>
-                $options['attributes'],
-            'DateCreated' =>
-                Serialize::iso8601DateTime($options['dateCreated']),
-            'DateUpdated' =>
-                Serialize::iso8601DateTime($options['dateUpdated']),
-            'LastUpdatedBy' =>
-                $options['lastUpdatedBy'],
-            'From' =>
-                $options['from'],
-        ]);
-
+        $data = Values::of(['Body' => $options['body'], 'Attributes' => $options['attributes'], 'DateCreated' => Serialize::iso8601DateTime($options['dateCreated']), 'DateUpdated' => Serialize::iso8601DateTime($options['dateUpdated']), 'LastUpdatedBy' => $options['lastUpdatedBy'], 'From' => $options['from']]);
         $headers = Values::of(['X-Twilio-Webhook-Enabled' => $options['xTwilioWebhookEnabled']]);
-
         $payload = $this->version->update('POST', $this->uri, [], $data, $headers);
-
-        return new MessageInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['channelSid'],
-            $this->solution['sid']
-        );
+        return new MessageInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['channelSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Chat.V2.MessageContext ' . \implode(' ', $context) . ']';
     }

@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Supersim\V1;
 
-
-namespace Twilio\Rest\Supersim\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $iccid
@@ -45,22 +41,10 @@ class SettingsUpdateInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'iccid' => Values::array_get($payload, 'iccid'),
-            'simSid' => Values::array_get($payload, 'sim_sid'),
-            'status' => Values::array_get($payload, 'status'),
-            'packages' => Values::array_get($payload, 'packages'),
-            'dateCompleted' => Deserialize::dateTime(Values::array_get($payload, 'date_completed')),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-        ];
-
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'iccid' => Values::array_get($payload, 'iccid'), 'simSid' => Values::array_get($payload, 'sim_sid'), 'status' => Values::array_get($payload, 'status'), 'packages' => Values::array_get($payload, 'packages'), 'dateCompleted' => Deserialize::dateTime(Values::array_get($payload, 'date_completed')), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated'))];
         $this->solution = [];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -73,23 +57,19 @@ class SettingsUpdateInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Supersim.V1.SettingsUpdateInstance]';
     }
 }
-

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Config;
 
-namespace Symfony\Component\Config;
-
-use Symfony\Component\Config\Resource\ResourceInterface;
-
+use Isolated\Symfony\Component\Config\Resource\ResourceInterface;
 /**
  * Interface for ResourceCheckers.
  *
@@ -33,7 +31,6 @@ interface ResourceCheckerInterface
      * @return bool
      */
     public function supports(ResourceInterface $metadata);
-
     /**
      * Validates the resource.
      *

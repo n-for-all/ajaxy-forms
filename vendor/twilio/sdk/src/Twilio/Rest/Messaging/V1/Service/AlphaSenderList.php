@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1\Service;
 
-namespace Twilio\Rest\Messaging\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class AlphaSenderList extends ListResource
-    {
+{
     /**
      * Construct the AlphaSenderList
      *
      * @param Version $version Version that contains the resource
      * @param string $serviceSid The SID of the [Service](https://www.twilio.com/docs/chat/rest/service-resource) to create the resource under.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid
-    ) {
+    public function __construct(Version $version, string $serviceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/AlphaSenders';
+        $this->solution = ['serviceSid' => $serviceSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/AlphaSenders';
     }
-
     /**
      * Create the AlphaSenderInstance
      *
@@ -55,24 +42,12 @@ class AlphaSenderList extends ListResource
      * @return AlphaSenderInstance Created AlphaSenderInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $alphaSender): AlphaSenderInstance
+    public function create(string $alphaSender) : AlphaSenderInstance
     {
-
-        $data = Values::of([
-            'AlphaSender' =>
-                $alphaSender,
-        ]);
-
+        $data = Values::of(['AlphaSender' => $alphaSender]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new AlphaSenderInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid']
-        );
+        return new AlphaSenderInstance($this->version, $payload, $this->solution['serviceSid']);
     }
-
-
     /**
      * Reads AlphaSenderInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -88,11 +63,10 @@ class AlphaSenderList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return AlphaSenderInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams AlphaSenderInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -111,15 +85,12 @@ class AlphaSenderList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of AlphaSenderInstance records from the API.
      * Request is executed immediately
@@ -129,24 +100,12 @@ class AlphaSenderList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return AlphaSenderPage Page of AlphaSenderInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): AlphaSenderPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : AlphaSenderPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new AlphaSenderPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of AlphaSenderInstance records from the API.
      * Request is executed immediately
@@ -154,40 +113,26 @@ class AlphaSenderList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return AlphaSenderPage Page of AlphaSenderInstance
      */
-    public function getPage(string $targetUrl): AlphaSenderPage
+    public function getPage(string $targetUrl) : AlphaSenderPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new AlphaSenderPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a AlphaSenderContext
      *
      * @param string $sid The SID of the AlphaSender resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): AlphaSenderContext
+    public function getContext(string $sid) : AlphaSenderContext
     {
-        return new AlphaSenderContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $sid
-        );
+        return new AlphaSenderContext($this->version, $this->solution['serviceSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Messaging.V1.AlphaSenderList]';
     }

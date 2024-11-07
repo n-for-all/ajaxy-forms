@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Loader;
 
-namespace Twig\Loader;
-
-use Twig\Error\LoaderError;
-use Twig\Source;
-
+use Isolated\Twig\Error\LoaderError;
+use Isolated\Twig\Source;
 /**
  * Loads a template from an array.
  *
@@ -29,7 +27,6 @@ use Twig\Source;
 final class ArrayLoader implements LoaderInterface
 {
     private $templates = [];
-
     /**
      * @param array $templates An array of templates (keys are the names, and values are the source code)
      */
@@ -37,41 +34,33 @@ final class ArrayLoader implements LoaderInterface
     {
         $this->templates = $templates;
     }
-
-    public function setTemplate(string $name, string $template): void
+    public function setTemplate(string $name, string $template) : void
     {
         $this->templates[$name] = $template;
     }
-
-    public function getSourceContext(string $name): Source
+    public function getSourceContext(string $name) : Source
     {
         if (!isset($this->templates[$name])) {
             throw new LoaderError(\sprintf('Template "%s" is not defined.', $name));
         }
-
         return new Source($this->templates[$name], $name);
     }
-
-    public function exists(string $name): bool
+    public function exists(string $name) : bool
     {
         return isset($this->templates[$name]);
     }
-
-    public function getCacheKey(string $name): string
+    public function getCacheKey(string $name) : string
     {
         if (!isset($this->templates[$name])) {
             throw new LoaderError(\sprintf('Template "%s" is not defined.', $name));
         }
-
-        return $name.':'.$this->templates[$name];
+        return $name . ':' . $this->templates[$name];
     }
-
-    public function isFresh(string $name, int $time): bool
+    public function isFresh(string $name, int $time) : bool
     {
         if (!isset($this->templates[$name])) {
             throw new LoaderError(\sprintf('Template "%s" is not defined.', $name));
         }
-
-        return true;
+        return \true;
     }
 }

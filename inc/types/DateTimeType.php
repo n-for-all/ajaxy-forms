@@ -2,28 +2,29 @@
 
 namespace Ajaxy\Forms\Inc\Types;
 
-use Symfony\Component\Form\Exception\LogicException;
-use Symfony\Component\Form\Extension\Core\DataTransformer\ArrayToPartsTransformer;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DataTransformerChain;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeImmutableToDateTimeTransformer;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToHtml5LocalDateTimeTransformer;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToLocalizedStringTransformer;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToTimestampTransformer;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\ReversedTransformer;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Isolated\Symfony\Component\Form\Exception\LogicException;
+use Isolated\Symfony\Component\Form\Extension\Core\DataTransformer\ArrayToPartsTransformer;
+use Isolated\Symfony\Component\Form\Extension\Core\DataTransformer\DataTransformerChain;
+use Isolated\Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeImmutableToDateTimeTransformer;
+use Isolated\Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
+use Isolated\Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToHtml5LocalDateTimeTransformer;
+use Isolated\Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToLocalizedStringTransformer;
+use Isolated\Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
+use Isolated\Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToTimestampTransformer;
+use Isolated\Symfony\Component\Form\Extension\Core\Type\DateTimeType as SymfonyDateTimeType;
+use Isolated\Symfony\Component\Form\Extension\Core\Type\DateType;
+use Isolated\Symfony\Component\Form\Extension\Core\Type\TimeType;
+use Isolated\Symfony\Component\Form\FormBuilderInterface;
+use Isolated\Symfony\Component\Form\FormEvent;
+use Isolated\Symfony\Component\Form\FormEvents;
+use Isolated\Symfony\Component\Form\FormInterface;
+use Isolated\Symfony\Component\Form\FormView;
+use Isolated\Symfony\Component\Form\ReversedTransformer;
+use Isolated\Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Isolated\Symfony\Component\OptionsResolver\Options;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 
-class DateTimeType extends \Symfony\Component\Form\Extension\Core\Type\DateTimeType
+class DateTimeType extends SymfonyDateTimeType
 {
     public const DEFAULT_DATE_FORMAT = \IntlDateFormatter::MEDIUM;
     public const DEFAULT_TIME_FORMAT = \IntlDateFormatter::MEDIUM;

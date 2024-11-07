@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form;
 
-namespace Symfony\Component\Form;
-
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
-
+use Isolated\Symfony\Component\Form\Extension\Core\Type\FormType;
+use Isolated\Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 /**
  * Allows creating a form based on a name, a class or a property.
  *
@@ -33,7 +31,6 @@ interface FormFactoryInterface
      * @throws InvalidOptionsException if any given option is not applicable to the given type
      */
     public function create(string $type = FormType::class, $data = null, array $options = []);
-
     /**
      * Returns a form.
      *
@@ -46,7 +43,6 @@ interface FormFactoryInterface
      * @throws InvalidOptionsException if any given option is not applicable to the given type
      */
     public function createNamed(string $name, string $type = FormType::class, $data = null, array $options = []);
-
     /**
      * Returns a form for a property of a class.
      *
@@ -61,7 +57,6 @@ interface FormFactoryInterface
      * @throws InvalidOptionsException if any given option is not applicable to the form type
      */
     public function createForProperty(string $class, string $property, $data = null, array $options = []);
-
     /**
      * Returns a form builder.
      *
@@ -72,7 +67,6 @@ interface FormFactoryInterface
      * @throws InvalidOptionsException if any given option is not applicable to the given type
      */
     public function createBuilder(string $type = FormType::class, $data = null, array $options = []);
-
     /**
      * Returns a form builder.
      *
@@ -83,7 +77,6 @@ interface FormFactoryInterface
      * @throws InvalidOptionsException if any given option is not applicable to the given type
      */
     public function createNamedBuilder(string $name, string $type = FormType::class, $data = null, array $options = []);
-
     /**
      * Returns a form builder for a property of a class.
      *

@@ -6,36 +6,36 @@
  * | (_)\/(_)(_|\/| |(/_  v1.0.0
  * /       /
  */
+namespace Isolated\Twilio\TwiML\Voice;
 
-namespace Twilio\TwiML\Voice;
-
-use Twilio\TwiML\TwiML;
-
-class Stop extends TwiML {
+use Isolated\Twilio\TwiML\TwiML;
+class Stop extends TwiML
+{
     /**
      * Stop constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct('Stop', null);
     }
-
     /**
      * Add Stream child.
      *
      * @param array $attributes Optional attributes
      * @return Stream Child element.
      */
-    public function stream($attributes = []): Stream {
+    public function stream($attributes = []) : Stream
+    {
         return $this->nest(new Stream($attributes));
     }
-
     /**
      * Add Siprec child.
      *
      * @param array $attributes Optional attributes
      * @return Siprec Child element.
      */
-    public function siprec($attributes = []): Siprec {
+    public function siprec($attributes = []) : Siprec
+    {
         return $this->nest(new Siprec($attributes));
     }
 }

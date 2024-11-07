@@ -13,36 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class InsightsQuestionnairesCategoryList extends ListResource
-    {
+{
     /**
      * Construct the InsightsQuestionnairesCategoryList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Insights/QualityManagement/Categories';
     }
-
     /**
      * Create the InsightsQuestionnairesCategoryInstance
      *
@@ -51,27 +43,14 @@ class InsightsQuestionnairesCategoryList extends ListResource
      * @return InsightsQuestionnairesCategoryInstance Created InsightsQuestionnairesCategoryInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $name, array $options = []): InsightsQuestionnairesCategoryInstance
+    public function create(string $name, array $options = []) : InsightsQuestionnairesCategoryInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Name' =>
-                $name,
-        ]);
-
+        $data = Values::of(['Name' => $name]);
         $headers = Values::of(['Authorization' => $options['authorization']]);
-
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new InsightsQuestionnairesCategoryInstance(
-            $this->version,
-            $payload
-        );
+        return new InsightsQuestionnairesCategoryInstance($this->version, $payload);
     }
-
-
     /**
      * Reads InsightsQuestionnairesCategoryInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -87,11 +66,10 @@ class InsightsQuestionnairesCategoryList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return InsightsQuestionnairesCategoryInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams InsightsQuestionnairesCategoryInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -110,15 +88,12 @@ class InsightsQuestionnairesCategoryList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of InsightsQuestionnairesCategoryInstance records from the API.
      * Request is executed immediately
@@ -128,26 +103,12 @@ class InsightsQuestionnairesCategoryList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return InsightsQuestionnairesCategoryPage Page of InsightsQuestionnairesCategoryInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): InsightsQuestionnairesCategoryPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : InsightsQuestionnairesCategoryPage
     {
-
-        $params = Values::of([
-            'Authorization' =>
-                $options['authorization'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Authorization' => $options['authorization'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new InsightsQuestionnairesCategoryPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of InsightsQuestionnairesCategoryInstance records from the API.
      * Request is executed immediately
@@ -155,39 +116,26 @@ class InsightsQuestionnairesCategoryList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return InsightsQuestionnairesCategoryPage Page of InsightsQuestionnairesCategoryInstance
      */
-    public function getPage(string $targetUrl): InsightsQuestionnairesCategoryPage
+    public function getPage(string $targetUrl) : InsightsQuestionnairesCategoryPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new InsightsQuestionnairesCategoryPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a InsightsQuestionnairesCategoryContext
      *
      * @param string $categorySid The SID of the category to be deleted
      */
-    public function getContext(
-        string $categorySid
-        
-    ): InsightsQuestionnairesCategoryContext
+    public function getContext(string $categorySid) : InsightsQuestionnairesCategoryContext
     {
-        return new InsightsQuestionnairesCategoryContext(
-            $this->version,
-            $categorySid
-        );
+        return new InsightsQuestionnairesCategoryContext($this->version, $categorySid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.FlexApi.V1.InsightsQuestionnairesCategoryList]';
     }

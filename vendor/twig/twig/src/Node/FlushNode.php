@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node;
 
-namespace Twig\Node;
-
-use Twig\Attribute\YieldReady;
-use Twig\Compiler;
-
+use Isolated\Twig\Attribute\YieldReady;
+use Isolated\Twig\Compiler;
 /**
  * Represents a flush node.
  *
@@ -26,12 +24,8 @@ class FlushNode extends Node
     {
         parent::__construct([], [], $lineno, $tag);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
-        $compiler
-            ->addDebugInfo($this)
-            ->write("flush();\n")
-        ;
+        $compiler->addDebugInfo($this)->write("flush();\n");
     }
 }

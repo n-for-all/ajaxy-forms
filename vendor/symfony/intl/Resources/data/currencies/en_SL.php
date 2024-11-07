@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'SLE' => [
-            'Le',
-            'Sierra Leonean Leone',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['SLE' => ['Le', 'Sierra Leonean Leone']]];

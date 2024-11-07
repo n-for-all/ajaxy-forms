@@ -13,27 +13,24 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Usage;
 
-namespace Twilio\Rest\Api\V2010\Account\Usage;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-use Twilio\Rest\Api\V2010\Account\Usage\Record\LastMonthList;
-use Twilio\Rest\Api\V2010\Account\Usage\Record\TodayList;
-use Twilio\Rest\Api\V2010\Account\Usage\Record\YearlyList;
-use Twilio\Rest\Api\V2010\Account\Usage\Record\ThisMonthList;
-use Twilio\Rest\Api\V2010\Account\Usage\Record\DailyList;
-use Twilio\Rest\Api\V2010\Account\Usage\Record\AllTimeList;
-use Twilio\Rest\Api\V2010\Account\Usage\Record\YesterdayList;
-use Twilio\Rest\Api\V2010\Account\Usage\Record\MonthlyList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
+use Isolated\Twilio\Rest\Api\V2010\Account\Usage\Record\LastMonthList;
+use Isolated\Twilio\Rest\Api\V2010\Account\Usage\Record\TodayList;
+use Isolated\Twilio\Rest\Api\V2010\Account\Usage\Record\YearlyList;
+use Isolated\Twilio\Rest\Api\V2010\Account\Usage\Record\ThisMonthList;
+use Isolated\Twilio\Rest\Api\V2010\Account\Usage\Record\DailyList;
+use Isolated\Twilio\Rest\Api\V2010\Account\Usage\Record\AllTimeList;
+use Isolated\Twilio\Rest\Api\V2010\Account\Usage\Record\YesterdayList;
+use Isolated\Twilio\Rest\Api\V2010\Account\Usage\Record\MonthlyList;
 /**
  * @property LastMonthList $lastMonth
  * @property TodayList $today
@@ -45,7 +42,7 @@ use Twilio\Rest\Api\V2010\Account\Usage\Record\MonthlyList;
  * @property MonthlyList $monthly
  */
 class RecordList extends ListResource
-    {
+{
     protected $_lastMonth = null;
     protected $_today = null;
     protected $_yearly = null;
@@ -54,30 +51,19 @@ class RecordList extends ListResource
     protected $_allTime = null;
     protected $_yesterday = null;
     protected $_monthly = null;
-
     /**
      * Construct the RecordList
      *
      * @param Version $version Version that contains the resource
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) that created the UsageRecord resources to read.
      */
-    public function __construct(
-        Version $version,
-        string $accountSid
-    ) {
+    public function __construct(Version $version, string $accountSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Usage/Records.json';
+        $this->solution = ['accountSid' => $accountSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Usage/Records.json';
     }
-
     /**
      * Reads RecordInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -94,11 +80,10 @@ class RecordList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return RecordInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams RecordInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -118,15 +103,12 @@ class RecordList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of RecordInstance records from the API.
      * Request is executed immediately
@@ -136,34 +118,13 @@ class RecordList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return RecordPage Page of RecordInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): RecordPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : RecordPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Category' =>
-                $options['category'],
-            'StartDate' =>
-                Serialize::iso8601Date($options['startDate']),
-            'EndDate' =>
-                Serialize::iso8601Date($options['endDate']),
-            'IncludeSubaccounts' =>
-                Serialize::booleanToString($options['includeSubaccounts']),
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Category' => $options['category'], 'StartDate' => Serialize::iso8601Date($options['startDate']), 'EndDate' => Serialize::iso8601Date($options['endDate']), 'IncludeSubaccounts' => Serialize::booleanToString($options['includeSubaccounts']), 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new RecordPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of RecordInstance records from the API.
      * Request is executed immediately
@@ -171,129 +132,91 @@ class RecordList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return RecordPage Page of RecordInstance
      */
-    public function getPage(string $targetUrl): RecordPage
+    public function getPage(string $targetUrl) : RecordPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new RecordPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Access the lastMonth
      */
-    protected function getLastMonth(): LastMonthList
+    protected function getLastMonth() : LastMonthList
     {
         if (!$this->_lastMonth) {
-            $this->_lastMonth = new LastMonthList(
-                $this->version,
-                $this->solution['accountSid']
-            );
+            $this->_lastMonth = new LastMonthList($this->version, $this->solution['accountSid']);
         }
         return $this->_lastMonth;
     }
-
     /**
      * Access the today
      */
-    protected function getToday(): TodayList
+    protected function getToday() : TodayList
     {
         if (!$this->_today) {
-            $this->_today = new TodayList(
-                $this->version,
-                $this->solution['accountSid']
-            );
+            $this->_today = new TodayList($this->version, $this->solution['accountSid']);
         }
         return $this->_today;
     }
-
     /**
      * Access the yearly
      */
-    protected function getYearly(): YearlyList
+    protected function getYearly() : YearlyList
     {
         if (!$this->_yearly) {
-            $this->_yearly = new YearlyList(
-                $this->version,
-                $this->solution['accountSid']
-            );
+            $this->_yearly = new YearlyList($this->version, $this->solution['accountSid']);
         }
         return $this->_yearly;
     }
-
     /**
      * Access the thisMonth
      */
-    protected function getThisMonth(): ThisMonthList
+    protected function getThisMonth() : ThisMonthList
     {
         if (!$this->_thisMonth) {
-            $this->_thisMonth = new ThisMonthList(
-                $this->version,
-                $this->solution['accountSid']
-            );
+            $this->_thisMonth = new ThisMonthList($this->version, $this->solution['accountSid']);
         }
         return $this->_thisMonth;
     }
-
     /**
      * Access the daily
      */
-    protected function getDaily(): DailyList
+    protected function getDaily() : DailyList
     {
         if (!$this->_daily) {
-            $this->_daily = new DailyList(
-                $this->version,
-                $this->solution['accountSid']
-            );
+            $this->_daily = new DailyList($this->version, $this->solution['accountSid']);
         }
         return $this->_daily;
     }
-
     /**
      * Access the allTime
      */
-    protected function getAllTime(): AllTimeList
+    protected function getAllTime() : AllTimeList
     {
         if (!$this->_allTime) {
-            $this->_allTime = new AllTimeList(
-                $this->version,
-                $this->solution['accountSid']
-            );
+            $this->_allTime = new AllTimeList($this->version, $this->solution['accountSid']);
         }
         return $this->_allTime;
     }
-
     /**
      * Access the yesterday
      */
-    protected function getYesterday(): YesterdayList
+    protected function getYesterday() : YesterdayList
     {
         if (!$this->_yesterday) {
-            $this->_yesterday = new YesterdayList(
-                $this->version,
-                $this->solution['accountSid']
-            );
+            $this->_yesterday = new YesterdayList($this->version, $this->solution['accountSid']);
         }
         return $this->_yesterday;
     }
-
     /**
      * Access the monthly
      */
-    protected function getMonthly(): MonthlyList
+    protected function getMonthly() : MonthlyList
     {
         if (!$this->_monthly) {
-            $this->_monthly = new MonthlyList(
-                $this->version,
-                $this->solution['accountSid']
-            );
+            $this->_monthly = new MonthlyList($this->version, $this->solution['accountSid']);
         }
         return $this->_monthly;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -305,12 +228,10 @@ class RecordList extends ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -319,22 +240,20 @@ class RecordList extends ListResource
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.RecordList]';
     }

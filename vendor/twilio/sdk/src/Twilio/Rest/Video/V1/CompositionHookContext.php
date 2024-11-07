@@ -13,74 +13,50 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Video\V1;
 
-
-namespace Twilio\Rest\Video\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class CompositionHookContext extends InstanceContext
-    {
+{
     /**
      * Initialize the CompositionHookContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The SID of the CompositionHook resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/CompositionHooks/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/CompositionHooks/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the CompositionHookInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the CompositionHookInstance
      *
      * @return CompositionHookInstance Fetched CompositionHookInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): CompositionHookInstance
+    public function fetch() : CompositionHookInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new CompositionHookInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new CompositionHookInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the CompositionHookInstance
      *
@@ -89,54 +65,27 @@ class CompositionHookContext extends InstanceContext
      * @return CompositionHookInstance Updated CompositionHookInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $friendlyName, array $options = []): CompositionHookInstance
+    public function update(string $friendlyName, array $options = []) : CompositionHookInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $friendlyName,
-            'Enabled' =>
-                Serialize::booleanToString($options['enabled']),
-            'VideoLayout' =>
-                Serialize::jsonObject($options['videoLayout']),
-            'AudioSources' =>
-                Serialize::map($options['audioSources'], function ($e) { return $e; }),
-            'AudioSourcesExcluded' =>
-                Serialize::map($options['audioSourcesExcluded'], function ($e) { return $e; }),
-            'Trim' =>
-                Serialize::booleanToString($options['trim']),
-            'Format' =>
-                $options['format'],
-            'Resolution' =>
-                $options['resolution'],
-            'StatusCallback' =>
-                $options['statusCallback'],
-            'StatusCallbackMethod' =>
-                $options['statusCallbackMethod'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $friendlyName, 'Enabled' => Serialize::booleanToString($options['enabled']), 'VideoLayout' => Serialize::jsonObject($options['videoLayout']), 'AudioSources' => Serialize::map($options['audioSources'], function ($e) {
+            return $e;
+        }), 'AudioSourcesExcluded' => Serialize::map($options['audioSourcesExcluded'], function ($e) {
+            return $e;
+        }), 'Trim' => Serialize::booleanToString($options['trim']), 'Format' => $options['format'], 'Resolution' => $options['resolution'], 'StatusCallback' => $options['statusCallback'], 'StatusCallbackMethod' => $options['statusCallbackMethod']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new CompositionHookInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new CompositionHookInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Video.V1.CompositionHookContext ' . \implode(' ', $context) . ']';
     }

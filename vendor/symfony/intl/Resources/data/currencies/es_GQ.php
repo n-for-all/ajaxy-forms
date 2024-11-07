@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'XAF' => [
-            'FCFA',
-            'franco CFA de África Central',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['XAF' => ['FCFA', 'franco CFA de África Central']]];

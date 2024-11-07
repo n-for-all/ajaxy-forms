@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'MZN' => [
-            'MTn',
-            'metical moçambicano',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['MZN' => ['MTn', 'metical moçambicano']]];

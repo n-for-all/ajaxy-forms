@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl;
 
-namespace Symfony\Component\Intl;
-
-use Symfony\Component\Intl\Exception\MissingResourceException;
-use Symfony\Component\Intl\Exception\RuntimeException;
-
+use Isolated\Symfony\Component\Intl\Exception\MissingResourceException;
+use Isolated\Symfony\Component\Intl\Exception\RuntimeException;
 /**
  * Gives access to timezone-related ICU data.
  *
@@ -24,75 +22,64 @@ final class Timezones extends ResourceBundle
     /**
      * @return string[]
      */
-    public static function getIds(): array
+    public static function getIds() : array
     {
         return self::readEntry(['Zones'], 'meta');
     }
-
-    public static function exists(string $timezone): bool
+    public static function exists(string $timezone) : bool
     {
         try {
             self::readEntry(['Names', $timezone]);
-
-            return true;
+            return \true;
         } catch (MissingResourceException $e) {
             try {
                 new \DateTimeZone($timezone);
-
-                return true;
+                return \true;
             } catch (\Exception $e) {
-                return false;
+                return \false;
             }
         }
     }
-
     /**
      * @throws MissingResourceException if the timezone identifier does not exist or is an alias
      */
-    public static function getName(string $timezone, ?string $displayLocale = null): string
+    public static function getName(string $timezone, ?string $displayLocale = null) : string
     {
         return self::readEntry(['Names', $timezone], $displayLocale);
     }
-
     /**
      * @return string[]
      */
-    public static function getNames(?string $displayLocale = null): array
+    public static function getNames(?string $displayLocale = null) : array
     {
         return self::asort(self::readEntry(['Names'], $displayLocale), $displayLocale);
     }
-
     /**
      * @throws \Exception       if the timezone identifier does not exist
      * @throws RuntimeException if there's no timezone DST transition information available
      */
-    public static function getRawOffset(string $timezone, ?int $timestamp = null): int
+    public static function getRawOffset(string $timezone, ?int $timestamp = null) : int
     {
-        $dateTimeImmutable = new \DateTimeImmutable(date('Y-m-d H:i:s', $timestamp ?? time()), new \DateTimeZone($timezone));
-
+        $dateTimeImmutable = new \DateTimeImmutable(\date('Y-m-d H:i:s', $timestamp ?? \time()), new \DateTimeZone($timezone));
         return $dateTimeImmutable->getOffset();
     }
-
-    public static function getGmtOffset(string $timezone, ?int $timestamp = null, ?string $displayLocale = null): string
+    public static function getGmtOffset(string $timezone, ?int $timestamp = null, ?string $displayLocale = null) : string
     {
         $offset = self::getRawOffset($timezone, $timestamp);
-        $abs = abs($offset);
-
-        return sprintf(self::readEntry(['Meta', 'GmtFormat'], $displayLocale), sprintf(self::readEntry(['Meta', 'HourFormat'.(0 <= $offset ? 'Pos' : 'Neg')], $displayLocale), $abs / 3600, $abs / 60 % 60));
+        $abs = \abs($offset);
+        return \sprintf(self::readEntry(['Meta', 'GmtFormat'], $displayLocale), \sprintf(self::readEntry(['Meta', 'HourFormat' . (0 <= $offset ? 'Pos' : 'Neg')], $displayLocale), $abs / 3600, $abs / 60 % 60));
     }
-
     /**
      * @throws MissingResourceException if the timezone identifier has no associated country code
      */
-    public static function getCountryCode(string $timezone): string
+    public static function getCountryCode(string $timezone) : string
     {
         return self::readEntry(['ZoneToCountry', $timezone], 'meta');
     }
-
     /**
      * @throws MissingResourceException if the country code does not exist
      */
-    public static function forCountryCode(string $country): array
+    public static function forCountryCode(string $country) : array
     {
         try {
             return self::readEntry(['CountryToZone', $country], 'meta');
@@ -100,17 +87,14 @@ final class Timezones extends ResourceBundle
             if (Countries::exists($country)) {
                 return [];
             }
-
-            if (Countries::exists(strtoupper($country))) {
-                throw new MissingResourceException(sprintf('Country codes must be in uppercase, but "%s" was passed. Try with "%s" country code instead.', $country, strtoupper($country)));
+            if (Countries::exists(\strtoupper($country))) {
+                throw new MissingResourceException(\sprintf('Country codes must be in uppercase, but "%s" was passed. Try with "%s" country code instead.', $country, \strtoupper($country)));
             }
-
             throw $e;
         }
     }
-
-    protected static function getPath(): string
+    protected static function getPath() : string
     {
-        return Intl::getDataDirectory().'/'.Intl::TIMEZONE_DIR;
+        return Intl::getDataDirectory() . '/' . Intl::TIMEZONE_DIR;
     }
 }

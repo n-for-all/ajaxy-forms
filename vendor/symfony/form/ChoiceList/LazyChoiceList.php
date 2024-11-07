@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\ChoiceList;
 
-namespace Symfony\Component\Form\ChoiceList;
-
-use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
-
+use Isolated\Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
 /**
  * A choice list that loads its choices lazily.
  *
@@ -28,7 +26,6 @@ use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
 class LazyChoiceList implements ChoiceListInterface
 {
     private $loader;
-
     /**
      * The callable creating string values for each choice.
      *
@@ -37,7 +34,6 @@ class LazyChoiceList implements ChoiceListInterface
      * @var callable|null
      */
     private $value;
-
     /**
      * Creates a lazily-loaded list using the given loader.
      *
@@ -52,7 +48,6 @@ class LazyChoiceList implements ChoiceListInterface
         $this->loader = $loader;
         $this->value = $value;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -60,7 +55,6 @@ class LazyChoiceList implements ChoiceListInterface
     {
         return $this->loader->loadChoiceList($this->value)->getChoices();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -68,7 +62,6 @@ class LazyChoiceList implements ChoiceListInterface
     {
         return $this->loader->loadChoiceList($this->value)->getValues();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -76,7 +69,6 @@ class LazyChoiceList implements ChoiceListInterface
     {
         return $this->loader->loadChoiceList($this->value)->getStructuredValues();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -84,7 +76,6 @@ class LazyChoiceList implements ChoiceListInterface
     {
         return $this->loader->loadChoiceList($this->value)->getOriginalKeys();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -92,7 +83,6 @@ class LazyChoiceList implements ChoiceListInterface
     {
         return $this->loader->loadChoicesForValues($values, $this->value);
     }
-
     /**
      * {@inheritdoc}
      */

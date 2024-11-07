@@ -4,9 +4,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
 
-  <class name="Symfony\Component\Form\Form">
-    <constraint name="Symfony\Component\Form\Extension\Validator\Constraints\Form" />
-    <constraint name="Symfony\Component\Validator\Constraints\Traverse">
+  <class name="Isolated\Symfony\Component\Form\Form">
+    <constraint name="Isolated\Symfony\Component\Form\Extension\Validator\Constraints\Form" />
+    <constraint name="Isolated\Symfony\Component\Validator\Constraints\Traverse">
       <option name="traverse">false</option>
     </constraint>
   </class>

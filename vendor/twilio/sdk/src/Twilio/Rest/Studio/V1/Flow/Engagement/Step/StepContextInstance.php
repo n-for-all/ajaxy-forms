@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Studio\V1\Flow\Engagement\Step;
 
-
-namespace Twilio\Rest\Studio\V1\Flow\Engagement\Step;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property array|null $context
@@ -45,52 +41,33 @@ class StepContextInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $flowSid, string $engagementSid, string $stepSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'context' => Values::array_get($payload, 'context'),
-            'engagementSid' => Values::array_get($payload, 'engagement_sid'),
-            'flowSid' => Values::array_get($payload, 'flow_sid'),
-            'stepSid' => Values::array_get($payload, 'step_sid'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['flowSid' => $flowSid, 'engagementSid' => $engagementSid, 'stepSid' => $stepSid, ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'context' => Values::array_get($payload, 'context'), 'engagementSid' => Values::array_get($payload, 'engagement_sid'), 'flowSid' => Values::array_get($payload, 'flow_sid'), 'stepSid' => Values::array_get($payload, 'step_sid'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['flowSid' => $flowSid, 'engagementSid' => $engagementSid, 'stepSid' => $stepSid];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return StepContextContext Context for this StepContextInstance
      */
-    protected function proxy(): StepContextContext
+    protected function proxy() : StepContextContext
     {
         if (!$this->context) {
-            $this->context = new StepContextContext(
-                $this->version,
-                $this->solution['flowSid'],
-                $this->solution['engagementSid'],
-                $this->solution['stepSid']
-            );
+            $this->context = new StepContextContext($this->version, $this->solution['flowSid'], $this->solution['engagementSid'], $this->solution['stepSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the StepContextInstance
      *
      * @return StepContextInstance Fetched StepContextInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): StepContextInstance
+    public function fetch() : StepContextInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -103,27 +80,23 @@ class StepContextInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Studio.V1.StepContextInstance ' . \implode(' ', $context) . ']';
     }
 }
-

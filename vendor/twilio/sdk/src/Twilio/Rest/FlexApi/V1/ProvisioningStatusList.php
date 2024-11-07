@@ -13,48 +13,36 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class ProvisioningStatusList extends ListResource
-    {
+{
     /**
      * Construct the ProvisioningStatusList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a ProvisioningStatusContext
      */
-    public function getContext(
-        
-    ): ProvisioningStatusContext
+    public function getContext() : ProvisioningStatusContext
     {
-        return new ProvisioningStatusContext(
-            $this->version
-        );
+        return new ProvisioningStatusContext($this->version);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.FlexApi.V1.ProvisioningStatusList]';
     }

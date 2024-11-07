@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\User;
 
-namespace Symfony\Component\Security\Core\User;
-
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-
+use Isolated\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 /**
  * MissingUserProvider is a dummy user provider used to throw proper exception
  * when a firewall requires a user provider but none was defined.
@@ -26,34 +24,30 @@ class MissingUserProvider implements UserProviderInterface
      */
     public function __construct(string $firewall)
     {
-        throw new InvalidConfigurationException(sprintf('"%s" firewall requires a user provider but none was defined.', $firewall));
+        throw new InvalidConfigurationException(\sprintf('"%s" firewall requires a user provider but none was defined.', $firewall));
     }
-
     /**
      * {@inheritdoc}
      */
-    public function loadUserByUsername(string $username): UserInterface
+    public function loadUserByUsername(string $username) : UserInterface
     {
         throw new \BadMethodCallException();
     }
-
-    public function loadUserByIdentifier(string $identifier): UserInterface
+    public function loadUserByIdentifier(string $identifier) : UserInterface
     {
         throw new \BadMethodCallException();
     }
-
     /**
      * {@inheritdoc}
      */
-    public function refreshUser(UserInterface $user): UserInterface
+    public function refreshUser(UserInterface $user) : UserInterface
     {
         throw new \BadMethodCallException();
     }
-
     /**
      * {@inheritdoc}
      */
-    public function supportsClass(string $class): bool
+    public function supportsClass(string $class) : bool
     {
         throw new \BadMethodCallException();
     }

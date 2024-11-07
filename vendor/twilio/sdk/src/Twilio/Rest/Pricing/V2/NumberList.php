@@ -13,52 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Pricing\V2;
 
-namespace Twilio\Rest\Pricing\V2;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class NumberList extends ListResource
-    {
+{
     /**
      * Construct the NumberList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a NumberContext
      *
      * @param string $destinationNumber The destination phone number, in [E.164](https://www.twilio.com/docs/glossary/what-e164) format, for which to fetch the origin-based voice pricing information. E.164 format consists of a + followed by the country code and subscriber number.
      */
-    public function getContext(
-        string $destinationNumber
-        
-    ): NumberContext
+    public function getContext(string $destinationNumber) : NumberContext
     {
-        return new NumberContext(
-            $this->version,
-            $destinationNumber
-        );
+        return new NumberContext($this->version, $destinationNumber);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Pricing.V2.NumberList]';
     }

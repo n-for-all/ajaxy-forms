@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Bridge\Twig\Node;
 
-namespace Symfony\Bridge\Twig\Node;
-
-use Twig\Compiler;
-use Twig\Node\Expression\FunctionExpression;
-
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Expression\FunctionExpression;
 /**
  * Compiles a call to {@link \Symfony\Component\Form\FormRendererInterface::renderBlock()}.
  *
@@ -24,22 +22,19 @@ use Twig\Node\Expression\FunctionExpression;
  */
 final class RenderBlockNode extends FunctionExpression
 {
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
         $compiler->addDebugInfo($this);
-        $arguments = iterator_to_array($this->getNode('arguments'));
-        $compiler->write('$this->env->getRuntime(\'Symfony\Component\Form\FormRenderer\')->renderBlock(');
-
+        $arguments = \iterator_to_array($this->getNode('arguments'));
+        $compiler->write('$this->env->getRuntime(\'Isolated\\Symfony\\Component\\Form\\FormRenderer\')->renderBlock(');
         if (isset($arguments[0])) {
             $compiler->subcompile($arguments[0]);
-            $compiler->raw(', \''.$this->getAttribute('name').'\'');
-
+            $compiler->raw(', \'' . $this->getAttribute('name') . '\'');
             if (isset($arguments[1])) {
                 $compiler->raw(', ');
                 $compiler->subcompile($arguments[1]);
             }
         }
-
         $compiler->raw(')');
     }
 }

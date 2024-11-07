@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1;
 
-
-namespace Twilio\Rest\Trusthub\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class ComplianceRegistrationInquiriesContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ComplianceRegistrationInquiriesContext
      *
      * @param Version $version Version that contains the resource
      * @param string $registrationId The unique RegistrationId matching the Regulatory Compliance Inquiry that should be resumed or resubmitted. This value will have been returned by the initial Regulatory Compliance Inquiry creation call.
      */
-    public function __construct(
-        Version $version,
-        $registrationId
-    ) {
+    public function __construct(Version $version, $registrationId)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'registrationId' =>
-            $registrationId,
-        ];
-
-        $this->uri = '/ComplianceInquiries/Registration/' . \rawurlencode($registrationId)
-        .'/RegulatoryCompliance/GB/Initialize';
+        $this->solution = ['registrationId' => $registrationId];
+        $this->uri = '/ComplianceInquiries/Registration/' . \rawurlencode($registrationId) . '/RegulatoryCompliance/GB/Initialize';
     }
-
     /**
      * Update the ComplianceRegistrationInquiriesInstance
      *
@@ -56,38 +43,23 @@ class ComplianceRegistrationInquiriesContext extends InstanceContext
      * @return ComplianceRegistrationInquiriesInstance Updated ComplianceRegistrationInquiriesInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ComplianceRegistrationInquiriesInstance
+    public function update(array $options = []) : ComplianceRegistrationInquiriesInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'IsIsvEmbed' =>
-                Serialize::booleanToString($options['isIsvEmbed']),
-            'ThemeSetId' =>
-                $options['themeSetId'],
-        ]);
-
+        $data = Values::of(['IsIsvEmbed' => Serialize::booleanToString($options['isIsvEmbed']), 'ThemeSetId' => $options['themeSetId']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new ComplianceRegistrationInquiriesInstance(
-            $this->version,
-            $payload,
-            $this->solution['registrationId']
-        );
+        return new ComplianceRegistrationInquiriesInstance($this->version, $payload, $this->solution['registrationId']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Trusthub.V1.ComplianceRegistrationInquiriesContext ' . \implode(' ', $context) . ']';
     }

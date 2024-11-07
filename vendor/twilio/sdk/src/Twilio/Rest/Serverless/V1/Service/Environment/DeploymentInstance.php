@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Serverless\V1\Service\Environment;
 
-
-namespace Twilio\Rest\Serverless\V1\Service\Environment;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -48,54 +44,33 @@ class DeploymentInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $environmentSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'environmentSid' => Values::array_get($payload, 'environment_sid'),
-            'buildSid' => Values::array_get($payload, 'build_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'environmentSid' => $environmentSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'environmentSid' => Values::array_get($payload, 'environment_sid'), 'buildSid' => Values::array_get($payload, 'build_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['serviceSid' => $serviceSid, 'environmentSid' => $environmentSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return DeploymentContext Context for this DeploymentInstance
      */
-    protected function proxy(): DeploymentContext
+    protected function proxy() : DeploymentContext
     {
         if (!$this->context) {
-            $this->context = new DeploymentContext(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['environmentSid'],
-                $this->solution['sid']
-            );
+            $this->context = new DeploymentContext($this->version, $this->solution['serviceSid'], $this->solution['environmentSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the DeploymentInstance
      *
      * @return DeploymentInstance Fetched DeploymentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DeploymentInstance
+    public function fetch() : DeploymentInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -108,27 +83,23 @@ class DeploymentInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Serverless.V1.DeploymentInstance ' . \implode(' ', $context) . ']';
     }
 }
-

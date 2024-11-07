@@ -6,27 +6,27 @@
  * | (_)\/(_)(_|\/| |(/_  v1.0.0
  * /       /
  */
+namespace Isolated\Twilio\TwiML\Voice;
 
-namespace Twilio\TwiML\Voice;
-
-use Twilio\TwiML\TwiML;
-
-class Pause extends TwiML {
+use Isolated\Twilio\TwiML\TwiML;
+class Pause extends TwiML
+{
     /**
      * Pause constructor.
      *
      * @param array $attributes Optional attributes
      */
-    public function __construct($attributes = []) {
+    public function __construct($attributes = [])
+    {
         parent::__construct('Pause', null, $attributes);
     }
-
     /**
      * Add Length attribute.
      *
      * @param int $length Length in seconds to pause
      */
-    public function setLength($length): self {
+    public function setLength($length) : self
+    {
         return $this->setAttribute('length', $length);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 interface Reason
 {
@@ -8,7 +8,6 @@ interface Reason
      * Code for user land to act upon;
      */
     public function code() : int;
-
     /**
      * Short description of the result, human readable.
      */

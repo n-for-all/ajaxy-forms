@@ -13,37 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class InsightsQuestionnairesList extends ListResource
-    {
+{
     /**
      * Construct the InsightsQuestionnairesList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Insights/QualityManagement/Questionnaires';
     }
-
     /**
      * Create the InsightsQuestionnairesInstance
      *
@@ -52,33 +44,16 @@ class InsightsQuestionnairesList extends ListResource
      * @return InsightsQuestionnairesInstance Created InsightsQuestionnairesInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $name, array $options = []): InsightsQuestionnairesInstance
+    public function create(string $name, array $options = []) : InsightsQuestionnairesInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Name' =>
-                $name,
-            'Description' =>
-                $options['description'],
-            'Active' =>
-                Serialize::booleanToString($options['active']),
-            'QuestionSids' =>
-                Serialize::map($options['questionSids'], function ($e) { return $e; }),
-        ]);
-
+        $data = Values::of(['Name' => $name, 'Description' => $options['description'], 'Active' => Serialize::booleanToString($options['active']), 'QuestionSids' => Serialize::map($options['questionSids'], function ($e) {
+            return $e;
+        })]);
         $headers = Values::of(['Authorization' => $options['authorization']]);
-
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new InsightsQuestionnairesInstance(
-            $this->version,
-            $payload
-        );
+        return new InsightsQuestionnairesInstance($this->version, $payload);
     }
-
-
     /**
      * Reads InsightsQuestionnairesInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -95,11 +70,10 @@ class InsightsQuestionnairesList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return InsightsQuestionnairesInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams InsightsQuestionnairesInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -119,15 +93,12 @@ class InsightsQuestionnairesList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of InsightsQuestionnairesInstance records from the API.
      * Request is executed immediately
@@ -137,30 +108,13 @@ class InsightsQuestionnairesList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return InsightsQuestionnairesPage Page of InsightsQuestionnairesInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): InsightsQuestionnairesPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : InsightsQuestionnairesPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'IncludeInactive' =>
-                Serialize::booleanToString($options['includeInactive']),
-            'Authorization' =>
-                $options['authorization'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['IncludeInactive' => Serialize::booleanToString($options['includeInactive']), 'Authorization' => $options['authorization'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new InsightsQuestionnairesPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of InsightsQuestionnairesInstance records from the API.
      * Request is executed immediately
@@ -168,39 +122,26 @@ class InsightsQuestionnairesList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return InsightsQuestionnairesPage Page of InsightsQuestionnairesInstance
      */
-    public function getPage(string $targetUrl): InsightsQuestionnairesPage
+    public function getPage(string $targetUrl) : InsightsQuestionnairesPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new InsightsQuestionnairesPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a InsightsQuestionnairesContext
      *
      * @param string $questionnaireSid The SID of the questionnaire
      */
-    public function getContext(
-        string $questionnaireSid
-        
-    ): InsightsQuestionnairesContext
+    public function getContext(string $questionnaireSid) : InsightsQuestionnairesContext
     {
-        return new InsightsQuestionnairesContext(
-            $this->version,
-            $questionnaireSid
-        );
+        return new InsightsQuestionnairesContext($this->version, $questionnaireSid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.FlexApi.V1.InsightsQuestionnairesList]';
     }

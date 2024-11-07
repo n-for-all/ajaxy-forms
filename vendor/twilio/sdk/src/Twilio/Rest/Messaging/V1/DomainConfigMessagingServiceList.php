@@ -13,52 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class DomainConfigMessagingServiceList extends ListResource
-    {
+{
     /**
      * Construct the DomainConfigMessagingServiceList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a DomainConfigMessagingServiceContext
      *
      * @param string $messagingServiceSid Unique string used to identify the Messaging service that this domain should be associated with.
      */
-    public function getContext(
-        string $messagingServiceSid
-        
-    ): DomainConfigMessagingServiceContext
+    public function getContext(string $messagingServiceSid) : DomainConfigMessagingServiceContext
     {
-        return new DomainConfigMessagingServiceContext(
-            $this->version,
-            $messagingServiceSid
-        );
+        return new DomainConfigMessagingServiceContext($this->version, $messagingServiceSid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Messaging.V1.DomainConfigMessagingServiceList]';
     }

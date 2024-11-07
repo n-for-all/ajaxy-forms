@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Csrf;
+namespace Isolated\Symfony\Component\Security\Csrf;
 
 /**
  * Manages CSRF tokens.
@@ -31,7 +30,6 @@ interface CsrfTokenManagerInterface
      * @return CsrfToken
      */
     public function getToken(string $tokenId);
-
     /**
      * Generates a new token value for the given ID.
      *
@@ -45,7 +43,6 @@ interface CsrfTokenManagerInterface
      * @return CsrfToken
      */
     public function refreshToken(string $tokenId);
-
     /**
      * Invalidates the CSRF token with the given ID, if one exists.
      *
@@ -53,7 +50,6 @@ interface CsrfTokenManagerInterface
      *                     otherwise
      */
     public function removeToken(string $tokenId);
-
     /**
      * Returns whether the given CSRF token is valid.
      *

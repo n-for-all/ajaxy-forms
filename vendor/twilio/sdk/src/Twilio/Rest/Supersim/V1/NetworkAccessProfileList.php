@@ -13,37 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Supersim\V1;
 
-namespace Twilio\Rest\Supersim\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class NetworkAccessProfileList extends ListResource
-    {
+{
     /**
      * Construct the NetworkAccessProfileList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/NetworkAccessProfiles';
     }
-
     /**
      * Create the NetworkAccessProfileInstance
      *
@@ -51,27 +43,15 @@ class NetworkAccessProfileList extends ListResource
      * @return NetworkAccessProfileInstance Created NetworkAccessProfileInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): NetworkAccessProfileInstance
+    public function create(array $options = []) : NetworkAccessProfileInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'UniqueName' =>
-                $options['uniqueName'],
-            'Networks' =>
-                Serialize::map($options['networks'], function ($e) { return $e; }),
-        ]);
-
+        $data = Values::of(['UniqueName' => $options['uniqueName'], 'Networks' => Serialize::map($options['networks'], function ($e) {
+            return $e;
+        })]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new NetworkAccessProfileInstance(
-            $this->version,
-            $payload
-        );
+        return new NetworkAccessProfileInstance($this->version, $payload);
     }
-
-
     /**
      * Reads NetworkAccessProfileInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -87,11 +67,10 @@ class NetworkAccessProfileList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return NetworkAccessProfileInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams NetworkAccessProfileInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -110,15 +89,12 @@ class NetworkAccessProfileList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of NetworkAccessProfileInstance records from the API.
      * Request is executed immediately
@@ -128,24 +104,12 @@ class NetworkAccessProfileList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return NetworkAccessProfilePage Page of NetworkAccessProfileInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): NetworkAccessProfilePage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : NetworkAccessProfilePage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new NetworkAccessProfilePage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of NetworkAccessProfileInstance records from the API.
      * Request is executed immediately
@@ -153,39 +117,26 @@ class NetworkAccessProfileList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return NetworkAccessProfilePage Page of NetworkAccessProfileInstance
      */
-    public function getPage(string $targetUrl): NetworkAccessProfilePage
+    public function getPage(string $targetUrl) : NetworkAccessProfilePage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new NetworkAccessProfilePage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a NetworkAccessProfileContext
      *
      * @param string $sid The SID of the Network Access Profile resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): NetworkAccessProfileContext
+    public function getContext(string $sid) : NetworkAccessProfileContext
     {
-        return new NetworkAccessProfileContext(
-            $this->version,
-            $sid
-        );
+        return new NetworkAccessProfileContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Supersim.V1.NetworkAccessProfileList]';
     }

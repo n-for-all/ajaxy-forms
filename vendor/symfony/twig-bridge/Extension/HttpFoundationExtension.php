@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Bridge\Twig\Extension;
 
-namespace Symfony\Bridge\Twig\Extension;
-
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\UrlHelper;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
-
+use Isolated\Symfony\Component\HttpFoundation\Request;
+use Isolated\Symfony\Component\HttpFoundation\UrlHelper;
+use Isolated\Twig\Extension\AbstractExtension;
+use Isolated\Twig\TwigFunction;
 /**
  * Twig extension for the Symfony HttpFoundation component.
  *
@@ -24,23 +22,17 @@ use Twig\TwigFunction;
 final class HttpFoundationExtension extends AbstractExtension
 {
     private $urlHelper;
-
     public function __construct(UrlHelper $urlHelper)
     {
         $this->urlHelper = $urlHelper;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getFunctions(): array
+    public function getFunctions() : array
     {
-        return [
-            new TwigFunction('absolute_url', [$this, 'generateAbsoluteUrl']),
-            new TwigFunction('relative_path', [$this, 'generateRelativePath']),
-        ];
+        return [new TwigFunction('absolute_url', [$this, 'generateAbsoluteUrl']), new TwigFunction('relative_path', [$this, 'generateRelativePath'])];
     }
-
     /**
      * Returns the absolute URL for the given absolute or relative path.
      *
@@ -48,11 +40,10 @@ final class HttpFoundationExtension extends AbstractExtension
      *
      * @see Request::getUriForPath()
      */
-    public function generateAbsoluteUrl(string $path): string
+    public function generateAbsoluteUrl(string $path) : string
     {
         return $this->urlHelper->getAbsoluteUrl($path);
     }
-
     /**
      * Returns a relative path based on the current Request.
      *
@@ -60,7 +51,7 @@ final class HttpFoundationExtension extends AbstractExtension
      *
      * @see Request::getRelativeUriForPath()
      */
-    public function generateRelativePath(string $path): string
+    public function generateRelativePath(string $path) : string
     {
         return $this->urlHelper->getRelativePath($path);
     }

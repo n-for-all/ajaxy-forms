@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\PasswordHasher\Hasher;
 
-namespace Symfony\Component\PasswordHasher\Hasher;
-
-use Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
-use Symfony\Component\PasswordHasher\LegacyPasswordHasherInterface;
-
+use Isolated\Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
+use Isolated\Symfony\Component\PasswordHasher\LegacyPasswordHasherInterface;
 /**
  * PlaintextPasswordHasher does not do any hashing but is useful in testing environments.
  *
@@ -24,59 +22,47 @@ use Symfony\Component\PasswordHasher\LegacyPasswordHasherInterface;
 class PlaintextPasswordHasher implements LegacyPasswordHasherInterface
 {
     use CheckPasswordLengthTrait;
-
     private $ignorePasswordCase;
-
     /**
      * @param bool $ignorePasswordCase Compare password case-insensitive
      */
-    public function __construct(bool $ignorePasswordCase = false)
+    public function __construct(bool $ignorePasswordCase = \false)
     {
         $this->ignorePasswordCase = $ignorePasswordCase;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function hash(string $plainPassword, ?string $salt = null): string
+    public function hash(string $plainPassword, ?string $salt = null) : string
     {
         if ($this->isPasswordTooLong($plainPassword)) {
             throw new InvalidPasswordException();
         }
-
         return $this->mergePasswordAndSalt($plainPassword, $salt);
     }
-
-    public function verify(string $hashedPassword, string $plainPassword, ?string $salt = null): bool
+    public function verify(string $hashedPassword, string $plainPassword, ?string $salt = null) : bool
     {
         if ($this->isPasswordTooLong($plainPassword)) {
-            return false;
+            return \false;
         }
-
         $pass2 = $this->mergePasswordAndSalt($plainPassword, $salt);
-
         if (!$this->ignorePasswordCase) {
-            return hash_equals($hashedPassword, $pass2);
+            return \hash_equals($hashedPassword, $pass2);
         }
-
-        return hash_equals(strtolower($hashedPassword), strtolower($pass2));
+        return \hash_equals(\strtolower($hashedPassword), \strtolower($pass2));
     }
-
-    public function needsRehash(string $hashedPassword): bool
+    public function needsRehash(string $hashedPassword) : bool
     {
-        return false;
+        return \false;
     }
-
-    private function mergePasswordAndSalt(string $password, ?string $salt): string
+    private function mergePasswordAndSalt(string $password, ?string $salt) : string
     {
         if (empty($salt)) {
             return $password;
         }
-
-        if (false !== strrpos($salt, '{') || false !== strrpos($salt, '}')) {
+        if (\false !== \strrpos($salt, '{') || \false !== \strrpos($salt, '}')) {
             throw new \InvalidArgumentException('Cannot use { or } in salt.');
         }
-
-        return $password.'{'.$salt.'}';
+        return $password . '{' . $salt . '}';
     }
 }

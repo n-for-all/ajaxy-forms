@@ -13,64 +13,48 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1;
 
-namespace Twilio\Rest\Conversations\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Conversations\V1\Configuration\WebhookList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Conversations\V1\Configuration\WebhookList;
 /**
  * @property WebhookList $webhooks
  * @method \Twilio\Rest\Conversations\V1\Configuration\WebhookContext webhooks()
  */
 class ConfigurationList extends ListResource
-    {
+{
     protected $_webhooks = null;
-
     /**
      * Construct the ConfigurationList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a ConfigurationContext
      */
-    public function getContext(
-        
-    ): ConfigurationContext
+    public function getContext() : ConfigurationContext
     {
-        return new ConfigurationContext(
-            $this->version
-        );
+        return new ConfigurationContext($this->version);
     }
-
     /**
      * Access the webhooks
      */
-    protected function getWebhooks(): WebhookList
+    protected function getWebhooks() : WebhookList
     {
         if (!$this->_webhooks) {
-            $this->_webhooks = new WebhookList(
-                $this->version
-            );
+            $this->_webhooks = new WebhookList($this->version);
         }
         return $this->_webhooks;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -82,12 +66,10 @@ class ConfigurationList extends ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -96,22 +78,20 @@ class ConfigurationList extends ListResource
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Conversations.V1.ConfigurationList]';
     }

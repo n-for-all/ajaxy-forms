@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class DomainHyphened extends DetailedReason
 {
@@ -8,7 +8,6 @@ class DomainHyphened extends DetailedReason
     {
         return 144;
     }
-
     public function description() : string
     {
         return 'S_HYPHEN found in domain';

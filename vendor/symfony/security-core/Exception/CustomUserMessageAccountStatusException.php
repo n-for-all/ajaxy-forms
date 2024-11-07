@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Core\Exception;
+namespace Isolated\Symfony\Component\Security\Core\Exception;
 
 /**
  * An authentication exception caused by the user account status
@@ -24,16 +23,12 @@ namespace Symfony\Component\Security\Core\Exception;
 class CustomUserMessageAccountStatusException extends AccountStatusException
 {
     private $messageKey;
-
     private $messageData = [];
-
     public function __construct(string $message = '', array $messageData = [], int $code = 0, ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
-
         $this->setSafeMessage($message, $messageData);
     }
-
     /**
      * Sets a message that will be shown to the user.
      *
@@ -45,29 +40,25 @@ class CustomUserMessageAccountStatusException extends AccountStatusException
         $this->messageKey = $messageKey;
         $this->messageData = $messageData;
     }
-
     public function getMessageKey()
     {
         return $this->messageKey;
     }
-
     public function getMessageData()
     {
         return $this->messageData;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function __serialize(): array
+    public function __serialize() : array
     {
         return [parent::__serialize(), $this->messageKey, $this->messageData];
     }
-
     /**
      * {@inheritdoc}
      */
-    public function __unserialize(array $data): void
+    public function __unserialize(array $data) : void
     {
         [$parentData, $this->messageKey, $this->messageData] = $data;
         parent::__unserialize($parentData);

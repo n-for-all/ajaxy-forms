@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Video\V1\Room;
 
-namespace Twilio\Rest\Video\V1\Room;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class RoomRecordingList extends ListResource
-    {
+{
     /**
      * Construct the RoomRecordingList
      *
      * @param Version $version Version that contains the resource
      * @param string $roomSid The SID of the room with the RoomRecording resource to delete.
      */
-    public function __construct(
-        Version $version,
-        string $roomSid
-    ) {
+    public function __construct(Version $version, string $roomSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'roomSid' =>
-            $roomSid,
-        
-        ];
-
-        $this->uri = '/Rooms/' . \rawurlencode($roomSid)
-        .'/Recordings';
+        $this->solution = ['roomSid' => $roomSid];
+        $this->uri = '/Rooms/' . \rawurlencode($roomSid) . '/Recordings';
     }
-
     /**
      * Reads RoomRecordingInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -65,11 +52,10 @@ class RoomRecordingList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return RoomRecordingInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams RoomRecordingInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -89,15 +75,12 @@ class RoomRecordingList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of RoomRecordingInstance records from the API.
      * Request is executed immediately
@@ -107,34 +90,13 @@ class RoomRecordingList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return RoomRecordingPage Page of RoomRecordingInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): RoomRecordingPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : RoomRecordingPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Status' =>
-                $options['status'],
-            'SourceSid' =>
-                $options['sourceSid'],
-            'DateCreatedAfter' =>
-                Serialize::iso8601DateTime($options['dateCreatedAfter']),
-            'DateCreatedBefore' =>
-                Serialize::iso8601DateTime($options['dateCreatedBefore']),
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Status' => $options['status'], 'SourceSid' => $options['sourceSid'], 'DateCreatedAfter' => Serialize::iso8601DateTime($options['dateCreatedAfter']), 'DateCreatedBefore' => Serialize::iso8601DateTime($options['dateCreatedBefore']), 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new RoomRecordingPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of RoomRecordingInstance records from the API.
      * Request is executed immediately
@@ -142,40 +104,26 @@ class RoomRecordingList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return RoomRecordingPage Page of RoomRecordingInstance
      */
-    public function getPage(string $targetUrl): RoomRecordingPage
+    public function getPage(string $targetUrl) : RoomRecordingPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new RoomRecordingPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a RoomRecordingContext
      *
      * @param string $sid The SID of the RoomRecording resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): RoomRecordingContext
+    public function getContext(string $sid) : RoomRecordingContext
     {
-        return new RoomRecordingContext(
-            $this->version,
-            $this->solution['roomSid'],
-            $sid
-        );
+        return new RoomRecordingContext($this->version, $this->solution['roomSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Video.V1.RoomRecordingList]';
     }

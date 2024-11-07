@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2\Transcript;
 
-
-namespace Twilio\Rest\Intelligence\V2\Transcript;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class MediaContext extends InstanceContext
-    {
+{
     /**
      * Initialize the MediaContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The unique SID identifier of the Transcript.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Transcripts/' . \rawurlencode($sid)
-        .'/Media';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Transcripts/' . \rawurlencode($sid) . '/Media';
     }
-
     /**
      * Fetch the MediaInstance
      *
@@ -56,36 +43,23 @@ class MediaContext extends InstanceContext
      * @return MediaInstance Fetched MediaInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): MediaInstance
+    public function fetch(array $options = []) : MediaInstance
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'Redacted' =>
-                Serialize::booleanToString($options['redacted']),
-        ]);
-
+        $params = Values::of(['Redacted' => Serialize::booleanToString($options['redacted'])]);
         $payload = $this->version->fetch('GET', $this->uri, $params, []);
-
-        return new MediaInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new MediaInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Intelligence.V2.MediaContext ' . \implode(' ', $context) . ']';
     }

@@ -13,68 +13,47 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2;
 
-
-namespace Twilio\Rest\Verify\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class FormContext extends InstanceContext
-    {
+{
     /**
      * Initialize the FormContext
      *
      * @param Version $version Version that contains the resource
      * @param string $formType The Type of this Form. Currently only `form-push` is supported.
      */
-    public function __construct(
-        Version $version,
-        $formType
-    ) {
+    public function __construct(Version $version, $formType)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'formType' =>
-            $formType,
-        ];
-
-        $this->uri = '/Forms/' . \rawurlencode($formType)
-        .'';
+        $this->solution = ['formType' => $formType];
+        $this->uri = '/Forms/' . \rawurlencode($formType) . '';
     }
-
     /**
      * Fetch the FormInstance
      *
      * @return FormInstance Fetched FormInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): FormInstance
+    public function fetch() : FormInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new FormInstance(
-            $this->version,
-            $payload,
-            $this->solution['formType']
-        );
+        return new FormInstance($this->version, $payload, $this->solution['formType']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Verify.V2.FormContext ' . \implode(' ', $context) . ']';
     }

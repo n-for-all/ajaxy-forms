@@ -13,15 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Video\V1\Room\Participant;
 
-namespace Twilio\Rest\Video\V1\Room\Participant;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class AnonymizeList extends ListResource
-    {
+{
     /**
      * Construct the AnonymizeList
      *
@@ -29,44 +26,25 @@ class AnonymizeList extends ListResource
      * @param string $roomSid The SID of the room with the participant to update.
      * @param string $sid The SID of the RoomParticipant resource to update.
      */
-    public function __construct(
-        Version $version,
-        string $roomSid,
-        string $sid
-    ) {
+    public function __construct(Version $version, string $roomSid, string $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'roomSid' =>
-            $roomSid,
-        
-        'sid' =>
-            $sid,
-        
-        ];
+        $this->solution = ['roomSid' => $roomSid, 'sid' => $sid];
     }
-
     /**
      * Constructs a AnonymizeContext
      */
-    public function getContext(
-        
-    ): AnonymizeContext
+    public function getContext() : AnonymizeContext
     {
-        return new AnonymizeContext(
-            $this->version,
-            $this->solution['roomSid'],
-            $this->solution['sid']
-        );
+        return new AnonymizeContext($this->version, $this->solution['roomSid'], $this->solution['sid']);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Video.V1.AnonymizeList]';
     }

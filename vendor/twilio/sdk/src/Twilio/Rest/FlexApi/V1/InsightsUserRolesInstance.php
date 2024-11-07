@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string[]|null $roles
  * @property string|null $url
@@ -39,33 +35,23 @@ class InsightsUserRolesInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'roles' => Values::array_get($payload, 'roles'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
+        $this->properties = ['roles' => Values::array_get($payload, 'roles'), 'url' => Values::array_get($payload, 'url')];
         $this->solution = [];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return InsightsUserRolesContext Context for this InsightsUserRolesInstance
      */
-    protected function proxy(): InsightsUserRolesContext
+    protected function proxy() : InsightsUserRolesContext
     {
         if (!$this->context) {
-            $this->context = new InsightsUserRolesContext(
-                $this->version
-            );
+            $this->context = new InsightsUserRolesContext($this->version);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the InsightsUserRolesInstance
      *
@@ -73,12 +59,10 @@ class InsightsUserRolesInstance extends InstanceResource
      * @return InsightsUserRolesInstance Fetched InsightsUserRolesInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): InsightsUserRolesInstance
+    public function fetch(array $options = []) : InsightsUserRolesInstance
     {
-
         return $this->proxy()->fetch($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -91,27 +75,23 @@ class InsightsUserRolesInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.InsightsUserRolesInstance ' . \implode(' ', $context) . ']';
     }
 }
-

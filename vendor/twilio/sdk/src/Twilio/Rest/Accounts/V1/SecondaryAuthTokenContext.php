@@ -13,75 +13,56 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Accounts\V1;
 
-
-namespace Twilio\Rest\Accounts\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class SecondaryAuthTokenContext extends InstanceContext
-    {
+{
     /**
      * Initialize the SecondaryAuthTokenContext
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/AuthTokens/Secondary';
     }
-
     /**
      * Create the SecondaryAuthTokenInstance
      *
      * @return SecondaryAuthTokenInstance Created SecondaryAuthTokenInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(): SecondaryAuthTokenInstance
+    public function create() : SecondaryAuthTokenInstance
     {
-
         $payload = $this->version->create('POST', $this->uri, [], []);
-
-        return new SecondaryAuthTokenInstance(
-            $this->version,
-            $payload
-        );
+        return new SecondaryAuthTokenInstance($this->version, $payload);
     }
-
-
     /**
      * Delete the SecondaryAuthTokenInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Accounts.V1.SecondaryAuthTokenContext ' . \implode(' ', $context) . ']';
     }

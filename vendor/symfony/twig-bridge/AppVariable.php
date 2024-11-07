@@ -8,16 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Bridge\Twig;
 
-namespace Symfony\Bridge\Twig;
-
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-
+use Isolated\Symfony\Component\HttpFoundation\Request;
+use Isolated\Symfony\Component\HttpFoundation\RequestStack;
+use Isolated\Symfony\Component\HttpFoundation\Session\Session;
+use Isolated\Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Isolated\Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Isolated\Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Exposes some Symfony parameters and services as an "app" global variable.
  *
@@ -29,27 +27,22 @@ class AppVariable
     private $requestStack;
     private $environment;
     private $debug;
-
     public function setTokenStorage(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
     }
-
     public function setRequestStack(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
     }
-
     public function setEnvironment(string $environment)
     {
         $this->environment = $environment;
     }
-
     public function setDebug(bool $debug)
     {
         $this->debug = $debug;
     }
-
     /**
      * Returns the current token.
      *
@@ -59,13 +52,11 @@ class AppVariable
      */
     public function getToken()
     {
-        if (null === $tokenStorage = $this->tokenStorage) {
+        if (null === ($tokenStorage = $this->tokenStorage)) {
             throw new \RuntimeException('The "app.token" variable is not available.');
         }
-
         return $tokenStorage->getToken();
     }
-
     /**
      * Returns the current user.
      *
@@ -75,20 +66,16 @@ class AppVariable
      */
     public function getUser()
     {
-        if (null === $tokenStorage = $this->tokenStorage) {
+        if (null === ($tokenStorage = $this->tokenStorage)) {
             throw new \RuntimeException('The "app.user" variable is not available.');
         }
-
-        if (!$token = $tokenStorage->getToken()) {
+        if (!($token = $tokenStorage->getToken())) {
             return null;
         }
-
         $user = $token->getUser();
-
         // @deprecated since Symfony 5.4, $user will always be a UserInterface instance
         return \is_object($user) ? $user : null;
     }
-
     /**
      * Returns the current request.
      *
@@ -99,10 +86,8 @@ class AppVariable
         if (null === $this->requestStack) {
             throw new \RuntimeException('The "app.request" variable is not available.');
         }
-
         return $this->requestStack->getCurrentRequest();
     }
-
     /**
      * Returns the current session.
      *
@@ -114,10 +99,8 @@ class AppVariable
             throw new \RuntimeException('The "app.session" variable is not available.');
         }
         $request = $this->getRequest();
-
         return $request && $request->hasSession() ? $request->getSession() : null;
     }
-
     /**
      * Returns the current app environment.
      *
@@ -128,10 +111,8 @@ class AppVariable
         if (null === $this->environment) {
             throw new \RuntimeException('The "app.environment" variable is not available.');
         }
-
         return $this->environment;
     }
-
     /**
      * Returns the current app debug mode.
      *
@@ -142,10 +123,8 @@ class AppVariable
         if (null === $this->debug) {
             throw new \RuntimeException('The "app.debug" variable is not available.');
         }
-
         return $this->debug;
     }
-
     /**
      * Returns some or all the existing flash messages:
      *  * getFlashes() returns all the flash messages
@@ -157,26 +136,22 @@ class AppVariable
     public function getFlashes($types = null)
     {
         try {
-            if (null === $session = $this->getSession()) {
+            if (null === ($session = $this->getSession())) {
                 return [];
             }
         } catch (\RuntimeException $e) {
             return [];
         }
-
         if (null === $types || '' === $types || [] === $types) {
             return $session->getFlashBag()->all();
         }
-
         if (\is_string($types)) {
             return $session->getFlashBag()->get($types);
         }
-
         $result = [];
         foreach ($types as $type) {
             $result[$type] = $session->getFlashBag()->get($type);
         }
-
         return $result;
     }
 }

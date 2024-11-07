@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service\Entity;
 
-
-namespace Twilio\Rest\Verify\V2\Service\Entity;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -54,71 +50,43 @@ class FactorInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $identity, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'entitySid' => Values::array_get($payload, 'entity_sid'),
-            'identity' => Values::array_get($payload, 'identity'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'status' => Values::array_get($payload, 'status'),
-            'factorType' => Values::array_get($payload, 'factor_type'),
-            'config' => Values::array_get($payload, 'config'),
-            'metadata' => Values::array_get($payload, 'metadata'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'identity' => $identity, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'entitySid' => Values::array_get($payload, 'entity_sid'), 'identity' => Values::array_get($payload, 'identity'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'status' => Values::array_get($payload, 'status'), 'factorType' => Values::array_get($payload, 'factor_type'), 'config' => Values::array_get($payload, 'config'), 'metadata' => Values::array_get($payload, 'metadata'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['serviceSid' => $serviceSid, 'identity' => $identity, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return FactorContext Context for this FactorInstance
      */
-    protected function proxy(): FactorContext
+    protected function proxy() : FactorContext
     {
         if (!$this->context) {
-            $this->context = new FactorContext(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['identity'],
-                $this->solution['sid']
-            );
+            $this->context = new FactorContext($this->version, $this->solution['serviceSid'], $this->solution['identity'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the FactorInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the FactorInstance
      *
      * @return FactorInstance Fetched FactorInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): FactorInstance
+    public function fetch() : FactorInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the FactorInstance
      *
@@ -126,12 +94,10 @@ class FactorInstance extends InstanceResource
      * @return FactorInstance Updated FactorInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): FactorInstance
+    public function update(array $options = []) : FactorInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -144,27 +110,23 @@ class FactorInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Verify.V2.FactorInstance ' . \implode(' ', $context) . ']';
     }
 }
-

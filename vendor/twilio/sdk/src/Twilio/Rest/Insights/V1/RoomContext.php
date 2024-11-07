@@ -13,81 +13,54 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Insights\V1;
 
-
-namespace Twilio\Rest\Insights\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Insights\V1\Room\ParticipantList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Insights\V1\Room\ParticipantList;
 /**
  * @property ParticipantList $participants
  * @method \Twilio\Rest\Insights\V1\Room\ParticipantContext participants(string $participantSid)
  */
 class RoomContext extends InstanceContext
-    {
+{
     protected $_participants;
-
     /**
      * Initialize the RoomContext
      *
      * @param Version $version Version that contains the resource
      * @param string $roomSid The SID of the Room resource.
      */
-    public function __construct(
-        Version $version,
-        $roomSid
-    ) {
+    public function __construct(Version $version, $roomSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'roomSid' =>
-            $roomSid,
-        ];
-
-        $this->uri = '/Video/Rooms/' . \rawurlencode($roomSid)
-        .'';
+        $this->solution = ['roomSid' => $roomSid];
+        $this->uri = '/Video/Rooms/' . \rawurlencode($roomSid) . '';
     }
-
     /**
      * Fetch the RoomInstance
      *
      * @return RoomInstance Fetched RoomInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): RoomInstance
+    public function fetch() : RoomInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new RoomInstance(
-            $this->version,
-            $payload,
-            $this->solution['roomSid']
-        );
+        return new RoomInstance($this->version, $payload, $this->solution['roomSid']);
     }
-
-
     /**
      * Access the participants
      */
-    protected function getParticipants(): ParticipantList
+    protected function getParticipants() : ParticipantList
     {
         if (!$this->_participants) {
-            $this->_participants = new ParticipantList(
-                $this->version,
-                $this->solution['roomSid']
-            );
+            $this->_participants = new ParticipantList($this->version, $this->solution['roomSid']);
         }
-
         return $this->_participants;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -95,16 +68,14 @@ class RoomContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -113,26 +84,24 @@ class RoomContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Insights.V1.RoomContext ' . \implode(' ', $context) . ']';
     }

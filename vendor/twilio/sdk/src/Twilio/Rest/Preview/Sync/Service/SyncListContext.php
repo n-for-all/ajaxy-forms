@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Sync\Service;
 
-
-namespace Twilio\Rest\Preview\Sync\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Preview\Sync\Service\SyncList\SyncListPermissionList;
-use Twilio\Rest\Preview\Sync\Service\SyncList\SyncListItemList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Preview\Sync\Service\SyncList\SyncListPermissionList;
+use Isolated\Twilio\Rest\Preview\Sync\Service\SyncList\SyncListItemList;
 /**
  * @property SyncListPermissionList $syncListPermissions
  * @property SyncListItemList $syncListItems
@@ -32,10 +28,9 @@ use Twilio\Rest\Preview\Sync\Service\SyncList\SyncListItemList;
  * @method \Twilio\Rest\Preview\Sync\Service\SyncList\SyncListItemContext syncListItems(string $index)
  */
 class SyncListContext extends InstanceContext
-    {
+{
     protected $_syncListPermissions;
     protected $_syncListItems;
-
     /**
      * Initialize the SyncListContext
      *
@@ -43,91 +38,54 @@ class SyncListContext extends InstanceContext
      * @param string $serviceSid 
      * @param string $sid 
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $serviceSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Lists/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Lists/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the SyncListInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the SyncListInstance
      *
      * @return SyncListInstance Fetched SyncListInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SyncListInstance
+    public function fetch() : SyncListInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new SyncListInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['sid']
-        );
+        return new SyncListInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['sid']);
     }
-
-
     /**
      * Access the syncListPermissions
      */
-    protected function getSyncListPermissions(): SyncListPermissionList
+    protected function getSyncListPermissions() : SyncListPermissionList
     {
         if (!$this->_syncListPermissions) {
-            $this->_syncListPermissions = new SyncListPermissionList(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['sid']
-            );
+            $this->_syncListPermissions = new SyncListPermissionList($this->version, $this->solution['serviceSid'], $this->solution['sid']);
         }
-
         return $this->_syncListPermissions;
     }
-
     /**
      * Access the syncListItems
      */
-    protected function getSyncListItems(): SyncListItemList
+    protected function getSyncListItems() : SyncListItemList
     {
         if (!$this->_syncListItems) {
-            $this->_syncListItems = new SyncListItemList(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['sid']
-            );
+            $this->_syncListItems = new SyncListItemList($this->version, $this->solution['serviceSid'], $this->solution['sid']);
         }
-
         return $this->_syncListItems;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -135,16 +93,14 @@ class SyncListContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -153,26 +109,24 @@ class SyncListContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.Sync.SyncListContext ' . \implode(' ', $context) . ']';
     }

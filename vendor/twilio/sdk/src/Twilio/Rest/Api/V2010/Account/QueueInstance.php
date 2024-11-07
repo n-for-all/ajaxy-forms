@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account;
 
-
-namespace Twilio\Rest\Api\V2010\Account;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Api\V2010\Account\Queue\MemberList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Api\V2010\Account\Queue\MemberList;
 /**
  * @property \DateTime|null $dateUpdated
  * @property int|null $currentSize
@@ -40,7 +36,6 @@ use Twilio\Rest\Api\V2010\Account\Queue\MemberList;
 class QueueInstance extends InstanceResource
 {
     protected $_members;
-
     /**
      * Initialize the QueueInstance
      *
@@ -52,66 +47,43 @@ class QueueInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $accountSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'currentSize' => Values::array_get($payload, 'current_size'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'uri' => Values::array_get($payload, 'uri'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'averageWaitTime' => Values::array_get($payload, 'average_wait_time'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'maxSize' => Values::array_get($payload, 'max_size'),
-        ];
-
-        $this->solution = ['accountSid' => $accountSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'currentSize' => Values::array_get($payload, 'current_size'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'uri' => Values::array_get($payload, 'uri'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'averageWaitTime' => Values::array_get($payload, 'average_wait_time'), 'sid' => Values::array_get($payload, 'sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'maxSize' => Values::array_get($payload, 'max_size')];
+        $this->solution = ['accountSid' => $accountSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return QueueContext Context for this QueueInstance
      */
-    protected function proxy(): QueueContext
+    protected function proxy() : QueueContext
     {
         if (!$this->context) {
-            $this->context = new QueueContext(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['sid']
-            );
+            $this->context = new QueueContext($this->version, $this->solution['accountSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the QueueInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the QueueInstance
      *
      * @return QueueInstance Fetched QueueInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): QueueInstance
+    public function fetch() : QueueInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the QueueInstance
      *
@@ -119,20 +91,17 @@ class QueueInstance extends InstanceResource
      * @return QueueInstance Updated QueueInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): QueueInstance
+    public function update(array $options = []) : QueueInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the members
      */
-    protected function getMembers(): MemberList
+    protected function getMembers() : MemberList
     {
         return $this->proxy()->members;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -145,27 +114,23 @@ class QueueInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.QueueInstance ' . \implode(' ', $context) . ']';
     }
 }
-

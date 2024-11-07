@@ -13,81 +13,56 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Events\V1;
 
-
-namespace Twilio\Rest\Events\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Events\V1\Subscription\SubscribedEventList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Events\V1\Subscription\SubscribedEventList;
 /**
  * @property SubscribedEventList $subscribedEvents
  * @method \Twilio\Rest\Events\V1\Subscription\SubscribedEventContext subscribedEvents(string $type)
  */
 class SubscriptionContext extends InstanceContext
-    {
+{
     protected $_subscribedEvents;
-
     /**
      * Initialize the SubscriptionContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid A 34 character string that uniquely identifies this Subscription.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Subscriptions/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Subscriptions/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the SubscriptionInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the SubscriptionInstance
      *
      * @return SubscriptionInstance Fetched SubscriptionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SubscriptionInstance
+    public function fetch() : SubscriptionInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new SubscriptionInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new SubscriptionInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the SubscriptionInstance
      *
@@ -95,43 +70,23 @@ class SubscriptionContext extends InstanceContext
      * @return SubscriptionInstance Updated SubscriptionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): SubscriptionInstance
+    public function update(array $options = []) : SubscriptionInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Description' =>
-                $options['description'],
-            'SinkSid' =>
-                $options['sinkSid'],
-        ]);
-
+        $data = Values::of(['Description' => $options['description'], 'SinkSid' => $options['sinkSid']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new SubscriptionInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new SubscriptionInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the subscribedEvents
      */
-    protected function getSubscribedEvents(): SubscribedEventList
+    protected function getSubscribedEvents() : SubscribedEventList
     {
         if (!$this->_subscribedEvents) {
-            $this->_subscribedEvents = new SubscribedEventList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_subscribedEvents = new SubscribedEventList($this->version, $this->solution['sid']);
         }
-
         return $this->_subscribedEvents;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -139,16 +94,14 @@ class SubscriptionContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -157,26 +110,24 @@ class SubscriptionContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Events.V1.SubscriptionContext ' . \implode(' ', $context) . ']';
     }

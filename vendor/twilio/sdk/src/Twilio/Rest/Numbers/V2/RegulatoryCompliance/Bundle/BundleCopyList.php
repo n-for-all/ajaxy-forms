@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle;
 
-namespace Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class BundleCopyList extends ListResource
-    {
+{
     /**
      * Construct the BundleCopyList
      *
      * @param Version $version Version that contains the resource
      * @param string $bundleSid The unique string that identifies the Bundle to be copied.
      */
-    public function __construct(
-        Version $version,
-        string $bundleSid
-    ) {
+    public function __construct(Version $version, string $bundleSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'bundleSid' =>
-            $bundleSid,
-        
-        ];
-
-        $this->uri = '/RegulatoryCompliance/Bundles/' . \rawurlencode($bundleSid)
-        .'/Copies';
+        $this->solution = ['bundleSid' => $bundleSid];
+        $this->uri = '/RegulatoryCompliance/Bundles/' . \rawurlencode($bundleSid) . '/Copies';
     }
-
     /**
      * Create the BundleCopyInstance
      *
@@ -56,26 +43,13 @@ class BundleCopyList extends ListResource
      * @return BundleCopyInstance Created BundleCopyInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): BundleCopyInstance
+    public function create(array $options = []) : BundleCopyInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new BundleCopyInstance(
-            $this->version,
-            $payload,
-            $this->solution['bundleSid']
-        );
+        return new BundleCopyInstance($this->version, $payload, $this->solution['bundleSid']);
     }
-
-
     /**
      * Reads BundleCopyInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -91,11 +65,10 @@ class BundleCopyList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return BundleCopyInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams BundleCopyInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -114,15 +87,12 @@ class BundleCopyList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of BundleCopyInstance records from the API.
      * Request is executed immediately
@@ -132,24 +102,12 @@ class BundleCopyList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return BundleCopyPage Page of BundleCopyInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): BundleCopyPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : BundleCopyPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new BundleCopyPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of BundleCopyInstance records from the API.
      * Request is executed immediately
@@ -157,23 +115,17 @@ class BundleCopyList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return BundleCopyPage Page of BundleCopyInstance
      */
-    public function getPage(string $targetUrl): BundleCopyPage
+    public function getPage(string $targetUrl) : BundleCopyPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new BundleCopyPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V2.BundleCopyList]';
     }

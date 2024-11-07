@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Lookups\V1;
 
-
-namespace Twilio\Rest\Lookups\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property array|null $callerName
  * @property string|null $countryCode
@@ -45,39 +41,23 @@ class PhoneNumberInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $phoneNumber = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'callerName' => Values::array_get($payload, 'caller_name'),
-            'countryCode' => Values::array_get($payload, 'country_code'),
-            'phoneNumber' => Values::array_get($payload, 'phone_number'),
-            'nationalFormat' => Values::array_get($payload, 'national_format'),
-            'carrier' => Values::array_get($payload, 'carrier'),
-            'addOns' => Values::array_get($payload, 'add_ons'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['phoneNumber' => $phoneNumber ?: $this->properties['phoneNumber'], ];
+        $this->properties = ['callerName' => Values::array_get($payload, 'caller_name'), 'countryCode' => Values::array_get($payload, 'country_code'), 'phoneNumber' => Values::array_get($payload, 'phone_number'), 'nationalFormat' => Values::array_get($payload, 'national_format'), 'carrier' => Values::array_get($payload, 'carrier'), 'addOns' => Values::array_get($payload, 'add_ons'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['phoneNumber' => $phoneNumber ?: $this->properties['phoneNumber']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return PhoneNumberContext Context for this PhoneNumberInstance
      */
-    protected function proxy(): PhoneNumberContext
+    protected function proxy() : PhoneNumberContext
     {
         if (!$this->context) {
-            $this->context = new PhoneNumberContext(
-                $this->version,
-                $this->solution['phoneNumber']
-            );
+            $this->context = new PhoneNumberContext($this->version, $this->solution['phoneNumber']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the PhoneNumberInstance
      *
@@ -85,12 +65,10 @@ class PhoneNumberInstance extends InstanceResource
      * @return PhoneNumberInstance Fetched PhoneNumberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): PhoneNumberInstance
+    public function fetch(array $options = []) : PhoneNumberInstance
     {
-
         return $this->proxy()->fetch($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -103,27 +81,23 @@ class PhoneNumberInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Lookups.V1.PhoneNumberInstance ' . \implode(' ', $context) . ']';
     }
 }
-

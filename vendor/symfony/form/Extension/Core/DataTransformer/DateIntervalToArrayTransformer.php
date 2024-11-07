@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\DataTransformer;
 
-namespace Symfony\Component\Form\Extension\Core\DataTransformer;
-
-use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
-
+use Isolated\Symfony\Component\Form\DataTransformerInterface;
+use Isolated\Symfony\Component\Form\Exception\TransformationFailedException;
+use Isolated\Symfony\Component\Form\Exception\UnexpectedTypeException;
 /**
  * Transforms between a normalized date interval and an interval string/array.
  *
@@ -29,29 +27,18 @@ class DateIntervalToArrayTransformer implements DataTransformerInterface
     public const MINUTES = 'minutes';
     public const SECONDS = 'seconds';
     public const INVERT = 'invert';
-
-    private const AVAILABLE_FIELDS = [
-        self::YEARS => 'y',
-        self::MONTHS => 'm',
-        self::DAYS => 'd',
-        self::HOURS => 'h',
-        self::MINUTES => 'i',
-        self::SECONDS => 's',
-        self::INVERT => 'r',
-    ];
+    private const AVAILABLE_FIELDS = [self::YEARS => 'y', self::MONTHS => 'm', self::DAYS => 'd', self::HOURS => 'h', self::MINUTES => 'i', self::SECONDS => 's', self::INVERT => 'r'];
     private $fields;
     private $pad;
-
     /**
      * @param string[]|null $fields The date fields
      * @param bool          $pad    Whether to use padding
      */
-    public function __construct(array $fields = null, bool $pad = false)
+    public function __construct(array $fields = null, bool $pad = \false)
     {
         $this->fields = $fields ?? ['years', 'months', 'days', 'hours', 'minutes', 'seconds', 'invert'];
         $this->pad = $pad;
     }
-
     /**
      * Transforms a normalized date interval into an interval array.
      *
@@ -64,40 +51,26 @@ class DateIntervalToArrayTransformer implements DataTransformerInterface
     public function transform($dateInterval)
     {
         if (null === $dateInterval) {
-            return array_intersect_key(
-                [
-                    'years' => '',
-                    'months' => '',
-                    'weeks' => '',
-                    'days' => '',
-                    'hours' => '',
-                    'minutes' => '',
-                    'seconds' => '',
-                    'invert' => false,
-                ],
-                array_flip($this->fields)
-            );
+            return \array_intersect_key(['years' => '', 'months' => '', 'weeks' => '', 'days' => '', 'hours' => '', 'minutes' => '', 'seconds' => '', 'invert' => \false], \array_flip($this->fields));
         }
         if (!$dateInterval instanceof \DateInterval) {
             throw new UnexpectedTypeException($dateInterval, \DateInterval::class);
         }
         $result = [];
         foreach (self::AVAILABLE_FIELDS as $field => $char) {
-            $result[$field] = $dateInterval->format('%'.($this->pad ? strtoupper($char) : $char));
+            $result[$field] = $dateInterval->format('%' . ($this->pad ? \strtoupper($char) : $char));
         }
-        if (\in_array('weeks', $this->fields, true)) {
+        if (\in_array('weeks', $this->fields, \true)) {
             $result['weeks'] = '0';
             if (isset($result['days']) && (int) $result['days'] >= 7) {
-                $result['weeks'] = (string) floor($result['days'] / 7);
+                $result['weeks'] = (string) \floor($result['days'] / 7);
                 $result['days'] = (string) ($result['days'] % 7);
             }
         }
         $result['invert'] = '-' === $result['invert'];
-        $result = array_intersect_key($result, array_flip($this->fields));
-
+        $result = \array_intersect_key($result, \array_flip($this->fields));
         return $result;
     }
-
     /**
      * Transforms an interval array into a normalized date interval.
      *
@@ -116,7 +89,7 @@ class DateIntervalToArrayTransformer implements DataTransformerInterface
         if (!\is_array($value)) {
             throw new UnexpectedTypeException($value, 'array');
         }
-        if ('' === implode('', $value)) {
+        if ('' === \implode('', $value)) {
             return null;
         }
         $emptyFields = [];
@@ -126,37 +99,21 @@ class DateIntervalToArrayTransformer implements DataTransformerInterface
             }
         }
         if (\count($emptyFields) > 0) {
-            throw new TransformationFailedException(sprintf('The fields "%s" should not be empty.', implode('", "', $emptyFields)));
+            throw new TransformationFailedException(\sprintf('The fields "%s" should not be empty.', \implode('", "', $emptyFields)));
         }
         if (isset($value['invert']) && !\is_bool($value['invert'])) {
             throw new TransformationFailedException('The value of "invert" must be boolean.');
         }
         foreach (self::AVAILABLE_FIELDS as $field => $char) {
-            if ('invert' !== $field && isset($value[$field]) && !ctype_digit((string) $value[$field])) {
-                throw new TransformationFailedException(sprintf('This amount of "%s" is invalid.', $field));
+            if ('invert' !== $field && isset($value[$field]) && !\ctype_digit((string) $value[$field])) {
+                throw new TransformationFailedException(\sprintf('This amount of "%s" is invalid.', $field));
             }
         }
         try {
             if (!empty($value['weeks'])) {
-                $interval = sprintf(
-                    'P%sY%sM%sWT%sH%sM%sS',
-                    empty($value['years']) ? '0' : $value['years'],
-                    empty($value['months']) ? '0' : $value['months'],
-                    empty($value['weeks']) ? '0' : $value['weeks'],
-                    empty($value['hours']) ? '0' : $value['hours'],
-                    empty($value['minutes']) ? '0' : $value['minutes'],
-                    empty($value['seconds']) ? '0' : $value['seconds']
-                );
+                $interval = \sprintf('P%sY%sM%sWT%sH%sM%sS', empty($value['years']) ? '0' : $value['years'], empty($value['months']) ? '0' : $value['months'], empty($value['weeks']) ? '0' : $value['weeks'], empty($value['hours']) ? '0' : $value['hours'], empty($value['minutes']) ? '0' : $value['minutes'], empty($value['seconds']) ? '0' : $value['seconds']);
             } else {
-                $interval = sprintf(
-                    'P%sY%sM%sDT%sH%sM%sS',
-                    empty($value['years']) ? '0' : $value['years'],
-                    empty($value['months']) ? '0' : $value['months'],
-                    empty($value['days']) ? '0' : $value['days'],
-                    empty($value['hours']) ? '0' : $value['hours'],
-                    empty($value['minutes']) ? '0' : $value['minutes'],
-                    empty($value['seconds']) ? '0' : $value['seconds']
-                );
+                $interval = \sprintf('P%sY%sM%sDT%sH%sM%sS', empty($value['years']) ? '0' : $value['years'], empty($value['months']) ? '0' : $value['months'], empty($value['days']) ? '0' : $value['days'], empty($value['hours']) ? '0' : $value['hours'], empty($value['minutes']) ? '0' : $value['minutes'], empty($value['seconds']) ? '0' : $value['seconds']);
             }
             $dateInterval = new \DateInterval($interval);
             if (isset($value['invert'])) {
@@ -165,7 +122,6 @@ class DateIntervalToArrayTransformer implements DataTransformerInterface
         } catch (\Exception $e) {
             throw new TransformationFailedException($e->getMessage(), $e->getCode(), $e);
         }
-
         return $dateInterval;
     }
 }

@@ -13,20 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Chat\V2\Service\Channel;
 
-
-namespace Twilio\Rest\Chat\V2\Service\Channel;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class WebhookContext extends InstanceContext
-    {
+{
     /**
      * Initialize the WebhookContext
      *
@@ -35,64 +31,34 @@ class WebhookContext extends InstanceContext
      * @param string $channelSid The SID of the [Channel](https://www.twilio.com/docs/chat/channels) the new Channel Webhook resource belongs to. This value can be the Channel resource's `sid` or `unique_name`.
      * @param string $sid The SID of the Channel Webhook resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $channelSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $serviceSid, $channelSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'channelSid' =>
-            $channelSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Channels/' . \rawurlencode($channelSid)
-        .'/Webhooks/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'channelSid' => $channelSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Channels/' . \rawurlencode($channelSid) . '/Webhooks/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the WebhookInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the WebhookInstance
      *
      * @return WebhookInstance Fetched WebhookInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): WebhookInstance
+    public function fetch() : WebhookInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new WebhookInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['channelSid'],
-            $this->solution['sid']
-        );
+        return new WebhookInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['channelSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the WebhookInstance
      *
@@ -100,48 +66,27 @@ class WebhookContext extends InstanceContext
      * @return WebhookInstance Updated WebhookInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): WebhookInstance
+    public function update(array $options = []) : WebhookInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Configuration.Url' =>
-                $options['configurationUrl'],
-            'Configuration.Method' =>
-                $options['configurationMethod'],
-            'Configuration.Filters' =>
-                Serialize::map($options['configurationFilters'], function ($e) { return $e; }),
-            'Configuration.Triggers' =>
-                Serialize::map($options['configurationTriggers'], function ($e) { return $e; }),
-            'Configuration.FlowSid' =>
-                $options['configurationFlowSid'],
-            'Configuration.RetryCount' =>
-                $options['configurationRetryCount'],
-        ]);
-
+        $data = Values::of(['Configuration.Url' => $options['configurationUrl'], 'Configuration.Method' => $options['configurationMethod'], 'Configuration.Filters' => Serialize::map($options['configurationFilters'], function ($e) {
+            return $e;
+        }), 'Configuration.Triggers' => Serialize::map($options['configurationTriggers'], function ($e) {
+            return $e;
+        }), 'Configuration.FlowSid' => $options['configurationFlowSid'], 'Configuration.RetryCount' => $options['configurationRetryCount']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new WebhookInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['channelSid'],
-            $this->solution['sid']
-        );
+        return new WebhookInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['channelSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Chat.V2.WebhookContext ' . \implode(' ', $context) . ']';
     }

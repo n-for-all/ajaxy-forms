@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Microvisor\V1\Device;
 
-
-namespace Twilio\Rest\Microvisor\V1\Device;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class DeviceSecretContext extends InstanceContext
-    {
+{
     /**
      * Initialize the DeviceSecretContext
      *
@@ -32,59 +28,34 @@ class DeviceSecretContext extends InstanceContext
      * @param string $deviceSid A 34-character string that uniquely identifies the Device.
      * @param string $key The secret key; up to 100 characters.
      */
-    public function __construct(
-        Version $version,
-        $deviceSid,
-        $key
-    ) {
+    public function __construct(Version $version, $deviceSid, $key)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'deviceSid' =>
-            $deviceSid,
-        'key' =>
-            $key,
-        ];
-
-        $this->uri = '/Devices/' . \rawurlencode($deviceSid)
-        .'/Secrets/' . \rawurlencode($key)
-        .'';
+        $this->solution = ['deviceSid' => $deviceSid, 'key' => $key];
+        $this->uri = '/Devices/' . \rawurlencode($deviceSid) . '/Secrets/' . \rawurlencode($key) . '';
     }
-
     /**
      * Delete the DeviceSecretInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the DeviceSecretInstance
      *
      * @return DeviceSecretInstance Fetched DeviceSecretInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DeviceSecretInstance
+    public function fetch() : DeviceSecretInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new DeviceSecretInstance(
-            $this->version,
-            $payload,
-            $this->solution['deviceSid'],
-            $this->solution['key']
-        );
+        return new DeviceSecretInstance($this->version, $payload, $this->solution['deviceSid'], $this->solution['key']);
     }
-
-
     /**
      * Update the DeviceSecretInstance
      *
@@ -92,35 +63,22 @@ class DeviceSecretContext extends InstanceContext
      * @return DeviceSecretInstance Updated DeviceSecretInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $value): DeviceSecretInstance
+    public function update(string $value) : DeviceSecretInstance
     {
-
-        $data = Values::of([
-            'Value' =>
-                $value,
-        ]);
-
+        $data = Values::of(['Value' => $value]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new DeviceSecretInstance(
-            $this->version,
-            $payload,
-            $this->solution['deviceSid'],
-            $this->solution['key']
-        );
+        return new DeviceSecretInstance($this->version, $payload, $this->solution['deviceSid'], $this->solution['key']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Microvisor.V1.DeviceSecretContext ' . \implode(' ', $context) . ']';
     }

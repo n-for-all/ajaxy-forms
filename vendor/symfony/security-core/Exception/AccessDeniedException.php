@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Core\Exception;
+namespace Isolated\Symfony\Component\Security\Core\Exception;
 
 /**
  * AccessDeniedException is thrown when the account has not the required role.
@@ -20,12 +19,10 @@ class AccessDeniedException extends RuntimeException
 {
     private $attributes = [];
     private $subject;
-
     public function __construct(string $message = 'Access Denied.', ?\Throwable $previous = null)
     {
         parent::__construct($message, 403, $previous);
     }
-
     /**
      * @return array
      */
@@ -33,7 +30,6 @@ class AccessDeniedException extends RuntimeException
     {
         return $this->attributes;
     }
-
     /**
      * @param array|string $attributes
      */
@@ -41,7 +37,6 @@ class AccessDeniedException extends RuntimeException
     {
         $this->attributes = (array) $attributes;
     }
-
     /**
      * @return mixed
      */
@@ -49,7 +44,6 @@ class AccessDeniedException extends RuntimeException
     {
         return $this->subject;
     }
-
     /**
      * @param mixed $subject
      */

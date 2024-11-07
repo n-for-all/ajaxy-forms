@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl;
 
-namespace Symfony\Component\Intl;
-
-use Symfony\Component\Intl\Exception\MissingResourceException;
-
+use Isolated\Symfony\Component\Intl\Exception\MissingResourceException;
 /**
  * Gives access to region-related ICU data.
  *
@@ -33,11 +31,10 @@ final class Countries extends ResourceBundle
      *
      * @return string[]
      */
-    public static function getCountryCodes(): array
+    public static function getCountryCodes() : array
     {
         return self::readEntry(['Regions'], 'meta');
     }
-
     /**
      * Returns all available countries (3 letters).
      *
@@ -47,73 +44,63 @@ final class Countries extends ResourceBundle
      *
      * @return string[]
      */
-    public static function getAlpha3Codes(): array
+    public static function getAlpha3Codes() : array
     {
         return self::readEntry(['Alpha2ToAlpha3'], 'meta');
     }
-
-    public static function getAlpha3Code(string $alpha2Code): string
+    public static function getAlpha3Code(string $alpha2Code) : string
     {
         return self::readEntry(['Alpha2ToAlpha3', $alpha2Code], 'meta');
     }
-
-    public static function getAlpha2Code(string $alpha3Code): string
+    public static function getAlpha2Code(string $alpha3Code) : string
     {
         return self::readEntry(['Alpha3ToAlpha2', $alpha3Code], 'meta');
     }
-
-    public static function exists(string $alpha2Code): bool
+    public static function exists(string $alpha2Code) : bool
     {
         try {
             self::readEntry(['Names', $alpha2Code]);
-
-            return true;
+            return \true;
         } catch (MissingResourceException $e) {
-            return false;
+            return \false;
         }
     }
-
-    public static function alpha3CodeExists(string $alpha3Code): bool
+    public static function alpha3CodeExists(string $alpha3Code) : bool
     {
         try {
             self::getAlpha2Code($alpha3Code);
-
-            return true;
+            return \true;
         } catch (MissingResourceException $e) {
-            return false;
+            return \false;
         }
     }
-
     /**
      * Gets the country name from its alpha2 code.
      *
      * @throws MissingResourceException if the country code does not exist
      */
-    public static function getName(string $country, ?string $displayLocale = null): string
+    public static function getName(string $country, ?string $displayLocale = null) : string
     {
         return self::readEntry(['Names', $country], $displayLocale);
     }
-
     /**
      * Gets the country name from its alpha3 code.
      *
      * @throws MissingResourceException if the country code does not exist
      */
-    public static function getAlpha3Name(string $alpha3Code, ?string $displayLocale = null): string
+    public static function getAlpha3Name(string $alpha3Code, ?string $displayLocale = null) : string
     {
         return self::getName(self::getAlpha2Code($alpha3Code), $displayLocale);
     }
-
     /**
      * Gets the list of country names indexed with alpha2 codes as keys.
      *
      * @return array<string, string>
      */
-    public static function getNames(?string $displayLocale = null): array
+    public static function getNames(?string $displayLocale = null) : array
     {
         return self::asort(self::readEntry(['Names'], $displayLocale), $displayLocale);
     }
-
     /**
      * Gets the list of country names indexed with alpha3 codes as keys.
      *
@@ -121,19 +108,17 @@ final class Countries extends ResourceBundle
      *
      * @return array<string, string>
      */
-    public static function getAlpha3Names(?string $displayLocale = null): array
+    public static function getAlpha3Names(?string $displayLocale = null) : array
     {
         $alpha2Names = self::getNames($displayLocale);
         $alpha3Names = [];
         foreach ($alpha2Names as $alpha2Code => $name) {
             $alpha3Names[self::getAlpha3Code($alpha2Code)] = $name;
         }
-
         return $alpha3Names;
     }
-
-    protected static function getPath(): string
+    protected static function getPath() : string
     {
-        return Intl::getDataDirectory().'/'.Intl::REGION_DIR;
+        return Intl::getDataDirectory() . '/' . Intl::REGION_DIR;
     }
 }

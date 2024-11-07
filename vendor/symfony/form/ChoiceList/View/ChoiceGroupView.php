@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form\ChoiceList\View;
+namespace Isolated\Symfony\Component\Form\ChoiceList\View;
 
 /**
  * Represents a group of choices in templates.
@@ -22,7 +21,6 @@ class ChoiceGroupView implements \IteratorAggregate
 {
     public $label;
     public $choices;
-
     /**
      * Creates a new choice group view.
      *
@@ -33,7 +31,6 @@ class ChoiceGroupView implements \IteratorAggregate
         $this->label = $label;
         $this->choices = $choices;
     }
-
     /**
      * {@inheritdoc}
      *

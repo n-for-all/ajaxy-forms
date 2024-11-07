@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Content\V1\Content;
 
-
-namespace Twilio\Rest\Content\V1\Content;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $name
  * @property string|null $category
@@ -43,20 +39,10 @@ class ApprovalCreateInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $contentSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'name' => Values::array_get($payload, 'name'),
-            'category' => Values::array_get($payload, 'category'),
-            'contentType' => Values::array_get($payload, 'content_type'),
-            'status' => Values::array_get($payload, 'status'),
-            'rejectionReason' => Values::array_get($payload, 'rejection_reason'),
-            'allowCategoryChange' => Values::array_get($payload, 'allow_category_change'),
-        ];
-
-        $this->solution = ['contentSid' => $contentSid, ];
+        $this->properties = ['name' => Values::array_get($payload, 'name'), 'category' => Values::array_get($payload, 'category'), 'contentType' => Values::array_get($payload, 'content_type'), 'status' => Values::array_get($payload, 'status'), 'rejectionReason' => Values::array_get($payload, 'rejection_reason'), 'allowCategoryChange' => Values::array_get($payload, 'allow_category_change')];
+        $this->solution = ['contentSid' => $contentSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -69,23 +55,19 @@ class ApprovalCreateInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Content.V1.ApprovalCreateInstance]';
     }
 }
-

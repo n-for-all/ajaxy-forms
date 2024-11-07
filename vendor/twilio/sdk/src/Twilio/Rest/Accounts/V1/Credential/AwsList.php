@@ -13,36 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Accounts\V1\Credential;
 
-namespace Twilio\Rest\Accounts\V1\Credential;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class AwsList extends ListResource
-    {
+{
     /**
      * Construct the AwsList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Credentials/AWS';
     }
-
     /**
      * Create the AwsInstance
      *
@@ -51,29 +43,13 @@ class AwsList extends ListResource
      * @return AwsInstance Created AwsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $credentials, array $options = []): AwsInstance
+    public function create(string $credentials, array $options = []) : AwsInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Credentials' =>
-                $credentials,
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'AccountSid' =>
-                $options['accountSid'],
-        ]);
-
+        $data = Values::of(['Credentials' => $credentials, 'FriendlyName' => $options['friendlyName'], 'AccountSid' => $options['accountSid']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new AwsInstance(
-            $this->version,
-            $payload
-        );
+        return new AwsInstance($this->version, $payload);
     }
-
-
     /**
      * Reads AwsInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -89,11 +65,10 @@ class AwsList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return AwsInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams AwsInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -112,15 +87,12 @@ class AwsList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of AwsInstance records from the API.
      * Request is executed immediately
@@ -130,24 +102,12 @@ class AwsList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return AwsPage Page of AwsInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): AwsPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : AwsPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new AwsPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of AwsInstance records from the API.
      * Request is executed immediately
@@ -155,39 +115,26 @@ class AwsList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return AwsPage Page of AwsInstance
      */
-    public function getPage(string $targetUrl): AwsPage
+    public function getPage(string $targetUrl) : AwsPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new AwsPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a AwsContext
      *
      * @param string $sid The Twilio-provided string that uniquely identifies the AWS resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): AwsContext
+    public function getContext(string $sid) : AwsContext
     {
-        return new AwsContext(
-            $this->version,
-            $sid
-        );
+        return new AwsContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Accounts.V1.AwsList]';
     }

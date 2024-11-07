@@ -6,37 +6,37 @@
  * | (_)\/(_)(_|\/| |(/_  v1.0.0
  * /       /
  */
+namespace Isolated\Twilio\TwiML\Voice;
 
-namespace Twilio\TwiML\Voice;
-
-use Twilio\TwiML\TwiML;
-
-class SsmlBreak extends TwiML {
+use Isolated\Twilio\TwiML\TwiML;
+class SsmlBreak extends TwiML
+{
     /**
      * SsmlBreak constructor.
      *
      * @param array $attributes Optional attributes
      */
-    public function __construct($attributes = []) {
+    public function __construct($attributes = [])
+    {
         parent::__construct('break', null, $attributes);
     }
-
     /**
      * Add Strength attribute.
      *
      * @param string $strength Set a pause based on strength
      */
-    public function setStrength($strength): self {
+    public function setStrength($strength) : self
+    {
         return $this->setAttribute('strength', $strength);
     }
-
     /**
      * Add Time attribute.
      *
      * @param string $time Set a pause to a specific length of time in seconds or
      *                     milliseconds, available values: [number]s, [number]ms
      */
-    public function setTime($time): self {
+    public function setTime($time) : self
+    {
         return $this->setAttribute('time', $time);
     }
 }

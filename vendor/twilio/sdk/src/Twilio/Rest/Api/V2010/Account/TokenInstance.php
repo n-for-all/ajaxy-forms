@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account;
 
-
-namespace Twilio\Rest\Api\V2010\Account;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property \DateTime|null $dateCreated
@@ -45,21 +41,10 @@ class TokenInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $accountSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'iceServers' => Values::array_get($payload, 'ice_servers'),
-            'password' => Values::array_get($payload, 'password'),
-            'ttl' => Values::array_get($payload, 'ttl'),
-            'username' => Values::array_get($payload, 'username'),
-        ];
-
-        $this->solution = ['accountSid' => $accountSid, ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'iceServers' => Values::array_get($payload, 'ice_servers'), 'password' => Values::array_get($payload, 'password'), 'ttl' => Values::array_get($payload, 'ttl'), 'username' => Values::array_get($payload, 'username')];
+        $this->solution = ['accountSid' => $accountSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -72,23 +57,19 @@ class TokenInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.TokenInstance]';
     }
 }
-

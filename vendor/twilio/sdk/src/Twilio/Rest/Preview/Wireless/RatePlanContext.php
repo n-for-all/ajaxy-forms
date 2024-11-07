@@ -13,73 +13,49 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Wireless;
 
-
-namespace Twilio\Rest\Preview\Wireless;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class RatePlanContext extends InstanceContext
-    {
+{
     /**
      * Initialize the RatePlanContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid 
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/RatePlans/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/RatePlans/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the RatePlanInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the RatePlanInstance
      *
      * @return RatePlanInstance Fetched RatePlanInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): RatePlanInstance
+    public function fetch() : RatePlanInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new RatePlanInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new RatePlanInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the RatePlanInstance
      *
@@ -87,38 +63,23 @@ class RatePlanContext extends InstanceContext
      * @return RatePlanInstance Updated RatePlanInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): RatePlanInstance
+    public function update(array $options = []) : RatePlanInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'UniqueName' =>
-                $options['uniqueName'],
-            'FriendlyName' =>
-                $options['friendlyName'],
-        ]);
-
+        $data = Values::of(['UniqueName' => $options['uniqueName'], 'FriendlyName' => $options['friendlyName']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new RatePlanInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new RatePlanInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.Wireless.RatePlanContext ' . \implode(' ', $context) . ']';
     }

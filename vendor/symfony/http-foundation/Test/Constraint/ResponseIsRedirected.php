@@ -8,48 +8,43 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\HttpFoundation\Test\Constraint;
 
-namespace Symfony\Component\HttpFoundation\Test\Constraint;
-
-use PHPUnit\Framework\Constraint\Constraint;
-use Symfony\Component\HttpFoundation\Response;
-
+use Isolated\PHPUnit\Framework\Constraint\Constraint;
+use Isolated\Symfony\Component\HttpFoundation\Response;
 final class ResponseIsRedirected extends Constraint
 {
     /**
      * {@inheritdoc}
      */
-    public function toString(): string
+    public function toString() : string
     {
         return 'is redirected';
     }
-
     /**
      * @param Response $response
      *
      * {@inheritdoc}
      */
-    protected function matches($response): bool
+    protected function matches($response) : bool
     {
         return $response->isRedirect();
     }
-
     /**
      * @param Response $response
      *
      * {@inheritdoc}
      */
-    protected function failureDescription($response): string
+    protected function failureDescription($response) : string
     {
-        return 'the Response '.$this->toString();
+        return 'the Response ' . $this->toString();
     }
-
     /**
      * @param Response $response
      *
      * {@inheritdoc}
      */
-    protected function additionalFailureDescription($response): string
+    protected function additionalFailureDescription($response) : string
     {
         return (string) $response;
     }

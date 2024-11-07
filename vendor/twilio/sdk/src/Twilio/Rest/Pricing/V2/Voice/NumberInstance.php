@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Pricing\V2\Voice;
 
-
-namespace Twilio\Rest\Pricing\V2\Voice;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $destinationNumber
  * @property string|null $originationNumber
@@ -46,40 +42,23 @@ class NumberInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $destinationNumber = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'destinationNumber' => Values::array_get($payload, 'destination_number'),
-            'originationNumber' => Values::array_get($payload, 'origination_number'),
-            'country' => Values::array_get($payload, 'country'),
-            'isoCountry' => Values::array_get($payload, 'iso_country'),
-            'outboundCallPrices' => Values::array_get($payload, 'outbound_call_prices'),
-            'inboundCallPrice' => Values::array_get($payload, 'inbound_call_price'),
-            'priceUnit' => Values::array_get($payload, 'price_unit'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['destinationNumber' => $destinationNumber ?: $this->properties['destinationNumber'], ];
+        $this->properties = ['destinationNumber' => Values::array_get($payload, 'destination_number'), 'originationNumber' => Values::array_get($payload, 'origination_number'), 'country' => Values::array_get($payload, 'country'), 'isoCountry' => Values::array_get($payload, 'iso_country'), 'outboundCallPrices' => Values::array_get($payload, 'outbound_call_prices'), 'inboundCallPrice' => Values::array_get($payload, 'inbound_call_price'), 'priceUnit' => Values::array_get($payload, 'price_unit'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['destinationNumber' => $destinationNumber ?: $this->properties['destinationNumber']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return NumberContext Context for this NumberInstance
      */
-    protected function proxy(): NumberContext
+    protected function proxy() : NumberContext
     {
         if (!$this->context) {
-            $this->context = new NumberContext(
-                $this->version,
-                $this->solution['destinationNumber']
-            );
+            $this->context = new NumberContext($this->version, $this->solution['destinationNumber']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the NumberInstance
      *
@@ -87,12 +66,10 @@ class NumberInstance extends InstanceResource
      * @return NumberInstance Fetched NumberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): NumberInstance
+    public function fetch(array $options = []) : NumberInstance
     {
-
         return $this->proxy()->fetch($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -105,27 +82,23 @@ class NumberInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Pricing.V2.NumberInstance ' . \implode(' ', $context) . ']';
     }
 }
-

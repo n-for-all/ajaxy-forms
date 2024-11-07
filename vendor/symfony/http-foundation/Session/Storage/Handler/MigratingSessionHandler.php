@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
+namespace Isolated\Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
 /**
  * Migrating session handler for migrating from one handler to another. It reads
@@ -26,12 +25,10 @@ class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdat
      * @var \SessionHandlerInterface&\SessionUpdateTimestampHandlerInterface
      */
     private $currentHandler;
-
     /**
      * @var \SessionHandlerInterface&\SessionUpdateTimestampHandlerInterface
      */
     private $writeOnlyHandler;
-
     public function __construct(\SessionHandlerInterface $currentHandler, \SessionHandlerInterface $writeOnlyHandler)
     {
         if (!$currentHandler instanceof \SessionUpdateTimestampHandlerInterface) {
@@ -40,11 +37,9 @@ class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdat
         if (!$writeOnlyHandler instanceof \SessionUpdateTimestampHandlerInterface) {
             $writeOnlyHandler = new StrictSessionHandler($writeOnlyHandler);
         }
-
         $this->currentHandler = $currentHandler;
         $this->writeOnlyHandler = $writeOnlyHandler;
     }
-
     /**
      * @return bool
      */
@@ -53,10 +48,8 @@ class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdat
     {
         $result = $this->currentHandler->close();
         $this->writeOnlyHandler->close();
-
         return $result;
     }
-
     /**
      * @return bool
      */
@@ -65,10 +58,8 @@ class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdat
     {
         $result = $this->currentHandler->destroy($sessionId);
         $this->writeOnlyHandler->destroy($sessionId);
-
         return $result;
     }
-
     /**
      * @return int|false
      */
@@ -77,10 +68,8 @@ class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdat
     {
         $result = $this->currentHandler->gc($maxlifetime);
         $this->writeOnlyHandler->gc($maxlifetime);
-
         return $result;
     }
-
     /**
      * @return bool
      */
@@ -89,10 +78,8 @@ class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdat
     {
         $result = $this->currentHandler->open($savePath, $sessionName);
         $this->writeOnlyHandler->open($savePath, $sessionName);
-
         return $result;
     }
-
     /**
      * @return string
      */
@@ -102,7 +89,6 @@ class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdat
         // No reading from new handler until switch-over
         return $this->currentHandler->read($sessionId);
     }
-
     /**
      * @return bool
      */
@@ -111,10 +97,8 @@ class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdat
     {
         $result = $this->currentHandler->write($sessionId, $sessionData);
         $this->writeOnlyHandler->write($sessionId, $sessionData);
-
         return $result;
     }
-
     /**
      * @return bool
      */
@@ -124,7 +108,6 @@ class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdat
         // No reading from new handler until switch-over
         return $this->currentHandler->validateId($sessionId);
     }
-
     /**
      * @return bool
      */
@@ -133,7 +116,6 @@ class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdat
     {
         $result = $this->currentHandler->updateTimestamp($sessionId, $sessionData);
         $this->writeOnlyHandler->updateTimestamp($sessionId, $sessionData);
-
         return $result;
     }
 }

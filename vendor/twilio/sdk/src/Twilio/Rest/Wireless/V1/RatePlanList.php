@@ -13,37 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Wireless\V1;
 
-namespace Twilio\Rest\Wireless\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class RatePlanList extends ListResource
-    {
+{
     /**
      * Construct the RatePlanList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/RatePlans';
     }
-
     /**
      * Create the RatePlanInstance
      *
@@ -51,45 +43,15 @@ class RatePlanList extends ListResource
      * @return RatePlanInstance Created RatePlanInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): RatePlanInstance
+    public function create(array $options = []) : RatePlanInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'UniqueName' =>
-                $options['uniqueName'],
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'DataEnabled' =>
-                Serialize::booleanToString($options['dataEnabled']),
-            'DataLimit' =>
-                $options['dataLimit'],
-            'DataMetering' =>
-                $options['dataMetering'],
-            'MessagingEnabled' =>
-                Serialize::booleanToString($options['messagingEnabled']),
-            'VoiceEnabled' =>
-                Serialize::booleanToString($options['voiceEnabled']),
-            'NationalRoamingEnabled' =>
-                Serialize::booleanToString($options['nationalRoamingEnabled']),
-            'InternationalRoaming' =>
-                Serialize::map($options['internationalRoaming'], function ($e) { return $e; }),
-            'NationalRoamingDataLimit' =>
-                $options['nationalRoamingDataLimit'],
-            'InternationalRoamingDataLimit' =>
-                $options['internationalRoamingDataLimit'],
-        ]);
-
+        $data = Values::of(['UniqueName' => $options['uniqueName'], 'FriendlyName' => $options['friendlyName'], 'DataEnabled' => Serialize::booleanToString($options['dataEnabled']), 'DataLimit' => $options['dataLimit'], 'DataMetering' => $options['dataMetering'], 'MessagingEnabled' => Serialize::booleanToString($options['messagingEnabled']), 'VoiceEnabled' => Serialize::booleanToString($options['voiceEnabled']), 'NationalRoamingEnabled' => Serialize::booleanToString($options['nationalRoamingEnabled']), 'InternationalRoaming' => Serialize::map($options['internationalRoaming'], function ($e) {
+            return $e;
+        }), 'NationalRoamingDataLimit' => $options['nationalRoamingDataLimit'], 'InternationalRoamingDataLimit' => $options['internationalRoamingDataLimit']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new RatePlanInstance(
-            $this->version,
-            $payload
-        );
+        return new RatePlanInstance($this->version, $payload);
     }
-
-
     /**
      * Reads RatePlanInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -105,11 +67,10 @@ class RatePlanList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return RatePlanInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams RatePlanInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -128,15 +89,12 @@ class RatePlanList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of RatePlanInstance records from the API.
      * Request is executed immediately
@@ -146,24 +104,12 @@ class RatePlanList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return RatePlanPage Page of RatePlanInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): RatePlanPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : RatePlanPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new RatePlanPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of RatePlanInstance records from the API.
      * Request is executed immediately
@@ -171,39 +117,26 @@ class RatePlanList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return RatePlanPage Page of RatePlanInstance
      */
-    public function getPage(string $targetUrl): RatePlanPage
+    public function getPage(string $targetUrl) : RatePlanPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new RatePlanPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a RatePlanContext
      *
      * @param string $sid The SID of the RatePlan resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): RatePlanContext
+    public function getContext(string $sid) : RatePlanContext
     {
-        return new RatePlanContext(
-            $this->version,
-            $sid
-        );
+        return new RatePlanContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Wireless.V1.RatePlanList]';
     }

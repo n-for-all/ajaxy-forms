@@ -13,52 +13,41 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Pricing\V1;
 
-namespace Twilio\Rest\Pricing\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Pricing\V1\PhoneNumber\CountryList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Pricing\V1\PhoneNumber\CountryList;
 /**
  * @property CountryList $countries
  * @method \Twilio\Rest\Pricing\V1\PhoneNumber\CountryContext countries(string $isoCountry)
  */
 class PhoneNumberList extends ListResource
-    {
+{
     protected $_countries = null;
-
     /**
      * Construct the PhoneNumberList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Access the countries
      */
-    protected function getCountries(): CountryList
+    protected function getCountries() : CountryList
     {
         if (!$this->_countries) {
-            $this->_countries = new CountryList(
-                $this->version
-            );
+            $this->_countries = new CountryList($this->version);
         }
         return $this->_countries;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -70,12 +59,10 @@ class PhoneNumberList extends ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -84,22 +71,20 @@ class PhoneNumberList extends ListResource
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Pricing.V1.PhoneNumberList]';
     }

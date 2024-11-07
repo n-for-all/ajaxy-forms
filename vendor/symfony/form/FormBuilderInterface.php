@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form;
+namespace Isolated\Symfony\Component\Form;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
@@ -31,7 +30,6 @@ interface FormBuilderInterface extends \Traversable, \Countable, FormConfigBuild
      * @return static
      */
     public function add($child, string $type = null, array $options = []);
-
     /**
      * Creates a form builder.
      *
@@ -42,7 +40,6 @@ interface FormBuilderInterface extends \Traversable, \Countable, FormConfigBuild
      * @return self
      */
     public function create(string $name, string $type = null, array $options = []);
-
     /**
      * Returns a child by name.
      *
@@ -51,28 +48,24 @@ interface FormBuilderInterface extends \Traversable, \Countable, FormConfigBuild
      * @throws Exception\InvalidArgumentException if the given child does not exist
      */
     public function get(string $name);
-
     /**
      * Removes the field with the given name.
      *
      * @return static
      */
     public function remove(string $name);
-
     /**
      * Returns whether a field with the given name exists.
      *
      * @return bool
      */
     public function has(string $name);
-
     /**
      * Returns the children.
      *
      * @return array<string, self>
      */
     public function all();
-
     /**
      * Creates the form.
      *

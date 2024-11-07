@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'AFN' => [
-            '؋',
-            'افغانی',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['AFN' => ['؋', 'افغانی']]];

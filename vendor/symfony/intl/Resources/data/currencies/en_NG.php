@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'NGN' => [
-            '₦',
-            'Nigerian Naira',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['NGN' => ['₦', 'Nigerian Naira']]];

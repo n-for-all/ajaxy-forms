@@ -13,30 +13,23 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V2;
 
-namespace Twilio\Rest\FlexApi\V2;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class FlexUserList extends ListResource
-    {
+{
     /**
      * Construct the FlexUserList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a FlexUserContext
      *
@@ -44,25 +37,16 @@ class FlexUserList extends ListResource
      *
      * @param string $flexUserSid The unique id for the flex user to be retrieved.
      */
-    public function getContext(
-        string $instanceSid
-        , string $flexUserSid
-        
-    ): FlexUserContext
+    public function getContext(string $instanceSid, string $flexUserSid) : FlexUserContext
     {
-        return new FlexUserContext(
-            $this->version,
-            $instanceSid,
-            $flexUserSid
-        );
+        return new FlexUserContext($this->version, $instanceSid, $flexUserSid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.FlexApi.V2.FlexUserList]';
     }

@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'CDF' => [
-            'FC',
-            'franc congolais',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['CDF' => ['FC', 'franc congolais']]];

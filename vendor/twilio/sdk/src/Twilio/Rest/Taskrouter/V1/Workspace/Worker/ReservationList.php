@@ -13,18 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace\Worker;
 
-namespace Twilio\Rest\Taskrouter\V1\Workspace\Worker;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class ReservationList extends ListResource
-    {
+{
     /**
      * Construct the ReservationList
      *
@@ -32,28 +29,13 @@ class ReservationList extends ListResource
      * @param string $workspaceSid The SID of the Workspace with the WorkerReservation resource to fetch.
      * @param string $workerSid The SID of the reserved Worker resource with the WorkerReservation resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        string $workspaceSid,
-        string $workerSid
-    ) {
+    public function __construct(Version $version, string $workspaceSid, string $workerSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'workspaceSid' =>
-            $workspaceSid,
-        
-        'workerSid' =>
-            $workerSid,
-        
-        ];
-
-        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid)
-        .'/Workers/' . \rawurlencode($workerSid)
-        .'/Reservations';
+        $this->solution = ['workspaceSid' => $workspaceSid, 'workerSid' => $workerSid];
+        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid) . '/Workers/' . \rawurlencode($workerSid) . '/Reservations';
     }
-
     /**
      * Reads ReservationInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -70,11 +52,10 @@ class ReservationList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return ReservationInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams ReservationInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -94,15 +75,12 @@ class ReservationList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of ReservationInstance records from the API.
      * Request is executed immediately
@@ -112,28 +90,13 @@ class ReservationList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return ReservationPage Page of ReservationInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): ReservationPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : ReservationPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'ReservationStatus' =>
-                $options['reservationStatus'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['ReservationStatus' => $options['reservationStatus'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new ReservationPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of ReservationInstance records from the API.
      * Request is executed immediately
@@ -141,41 +104,26 @@ class ReservationList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return ReservationPage Page of ReservationInstance
      */
-    public function getPage(string $targetUrl): ReservationPage
+    public function getPage(string $targetUrl) : ReservationPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new ReservationPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a ReservationContext
      *
      * @param string $sid The SID of the WorkerReservation resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): ReservationContext
+    public function getContext(string $sid) : ReservationContext
     {
-        return new ReservationContext(
-            $this->version,
-            $this->solution['workspaceSid'],
-            $this->solution['workerSid'],
-            $sid
-        );
+        return new ReservationContext($this->version, $this->solution['workspaceSid'], $this->solution['workerSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Taskrouter.V1.ReservationList]';
     }

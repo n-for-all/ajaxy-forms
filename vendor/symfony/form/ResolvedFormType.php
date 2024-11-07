@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form;
 
-namespace Symfony\Component\Form;
-
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
-use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\EventDispatcher\EventDispatcher;
+use Isolated\Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Isolated\Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * A wrapper for a form type and its extensions.
  *
@@ -27,22 +25,18 @@ class ResolvedFormType implements ResolvedFormTypeInterface
      * @var FormTypeInterface
      */
     private $innerType;
-
     /**
      * @var FormTypeExtensionInterface[]
      */
     private $typeExtensions;
-
     /**
      * @var ResolvedFormTypeInterface|null
      */
     private $parent;
-
     /**
      * @var OptionsResolver
      */
     private $optionsResolver;
-
     /**
      * @param FormTypeExtensionInterface[] $typeExtensions
      */
@@ -53,12 +47,10 @@ class ResolvedFormType implements ResolvedFormTypeInterface
                 throw new UnexpectedTypeException($extension, FormTypeExtensionInterface::class);
             }
         }
-
         $this->innerType = $innerType;
         $this->typeExtensions = $typeExtensions;
         $this->parent = $parent;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -66,7 +58,6 @@ class ResolvedFormType implements ResolvedFormTypeInterface
     {
         return $this->innerType->getBlockPrefix();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -74,7 +65,6 @@ class ResolvedFormType implements ResolvedFormTypeInterface
     {
         return $this->parent;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -82,7 +72,6 @@ class ResolvedFormType implements ResolvedFormTypeInterface
     {
         return $this->innerType;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -90,7 +79,6 @@ class ResolvedFormType implements ResolvedFormTypeInterface
     {
         return $this->typeExtensions;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -99,18 +87,14 @@ class ResolvedFormType implements ResolvedFormTypeInterface
         try {
             $options = $this->getOptionsResolver()->resolve($options);
         } catch (ExceptionInterface $e) {
-            throw new $e(sprintf('An error has occurred resolving the options of the form "%s": ', get_debug_type($this->getInnerType())).$e->getMessage(), $e->getCode(), $e);
+            throw new $e(\sprintf('An error has occurred resolving the options of the form "%s": ', \get_debug_type($this->getInnerType())) . $e->getMessage(), $e->getCode(), $e);
         }
-
         // Should be decoupled from the specific option at some point
         $dataClass = $options['data_class'] ?? null;
-
         $builder = $this->newBuilder($name, $dataClass, $factory, $options);
         $builder->setType($this);
-
         return $builder;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -118,7 +102,6 @@ class ResolvedFormType implements ResolvedFormTypeInterface
     {
         return $this->newView($parent);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -127,14 +110,11 @@ class ResolvedFormType implements ResolvedFormTypeInterface
         if (null !== $this->parent) {
             $this->parent->buildForm($builder, $options);
         }
-
         $this->innerType->buildForm($builder, $options);
-
         foreach ($this->typeExtensions as $extension) {
             $extension->buildForm($builder, $options);
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -143,14 +123,11 @@ class ResolvedFormType implements ResolvedFormTypeInterface
         if (null !== $this->parent) {
             $this->parent->buildView($view, $form, $options);
         }
-
         $this->innerType->buildView($view, $form, $options);
-
         foreach ($this->typeExtensions as $extension) {
             $extension->buildView($view, $form, $options);
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -159,15 +136,12 @@ class ResolvedFormType implements ResolvedFormTypeInterface
         if (null !== $this->parent) {
             $this->parent->finishView($view, $form, $options);
         }
-
         $this->innerType->finishView($view, $form, $options);
-
         foreach ($this->typeExtensions as $extension) {
             /* @var FormTypeExtensionInterface $extension */
             $extension->finishView($view, $form, $options);
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -179,17 +153,13 @@ class ResolvedFormType implements ResolvedFormTypeInterface
             } else {
                 $this->optionsResolver = new OptionsResolver();
             }
-
             $this->innerType->configureOptions($this->optionsResolver);
-
             foreach ($this->typeExtensions as $extension) {
                 $extension->configureOptions($this->optionsResolver);
             }
         }
-
         return $this->optionsResolver;
     }
-
     /**
      * Creates a new builder instance.
      *
@@ -202,14 +172,11 @@ class ResolvedFormType implements ResolvedFormTypeInterface
         if ($this->innerType instanceof ButtonTypeInterface) {
             return new ButtonBuilder($name, $options);
         }
-
         if ($this->innerType instanceof SubmitButtonTypeInterface) {
             return new SubmitButtonBuilder($name, $options);
         }
-
         return new FormBuilder($name, $dataClass, new EventDispatcher(), $factory, $options);
     }
-
     /**
      * Creates a new view instance.
      *

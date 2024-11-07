@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Core\Authentication\RememberMe;
+namespace Isolated\Symfony\Component\Security\Core\Authentication\RememberMe;
 
 /**
  * Interface to be implemented by persistent token classes (such as
@@ -27,28 +26,24 @@ interface PersistentTokenInterface
      * @return string
      */
     public function getClass();
-
     /**
      * Returns the series.
      *
      * @return string
      */
     public function getSeries();
-
     /**
      * Returns the token value.
      *
      * @return string
      */
     public function getTokenValue();
-
     /**
      * Returns the time the token was last used.
      *
      * @return \DateTime
      */
     public function getLastUsed();
-
     /**
      * @return string
      *

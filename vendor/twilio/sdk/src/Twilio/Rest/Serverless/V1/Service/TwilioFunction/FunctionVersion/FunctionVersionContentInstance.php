@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Serverless\V1\Service\TwilioFunction\FunctionVersion;
 
-
-namespace Twilio\Rest\Serverless\V1\Service\TwilioFunction\FunctionVersion;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -45,52 +41,33 @@ class FunctionVersionContentInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $functionSid, string $sid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'functionSid' => Values::array_get($payload, 'function_sid'),
-            'content' => Values::array_get($payload, 'content'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'functionSid' => $functionSid, 'sid' => $sid, ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'functionSid' => Values::array_get($payload, 'function_sid'), 'content' => Values::array_get($payload, 'content'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['serviceSid' => $serviceSid, 'functionSid' => $functionSid, 'sid' => $sid];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return FunctionVersionContentContext Context for this FunctionVersionContentInstance
      */
-    protected function proxy(): FunctionVersionContentContext
+    protected function proxy() : FunctionVersionContentContext
     {
         if (!$this->context) {
-            $this->context = new FunctionVersionContentContext(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['functionSid'],
-                $this->solution['sid']
-            );
+            $this->context = new FunctionVersionContentContext($this->version, $this->solution['serviceSid'], $this->solution['functionSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the FunctionVersionContentInstance
      *
      * @return FunctionVersionContentInstance Fetched FunctionVersionContentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): FunctionVersionContentInstance
+    public function fetch() : FunctionVersionContentInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -103,27 +80,23 @@ class FunctionVersionContentInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Serverless.V1.FunctionVersionContentInstance ' . \implode(' ', $context) . ']';
     }
 }
-

@@ -13,20 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2\Transcript;
 
-
-namespace Twilio\Rest\Intelligence\V2\Transcript;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class OperatorResultContext extends InstanceContext
-    {
+{
     /**
      * Initialize the OperatorResultContext
      *
@@ -34,26 +30,13 @@ class OperatorResultContext extends InstanceContext
      * @param string $transcriptSid A 34 character string that uniquely identifies this Transcript.
      * @param string $operatorSid A 34 character string that identifies this Language Understanding operator sid.
      */
-    public function __construct(
-        Version $version,
-        $transcriptSid,
-        $operatorSid
-    ) {
+    public function __construct(Version $version, $transcriptSid, $operatorSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'transcriptSid' =>
-            $transcriptSid,
-        'operatorSid' =>
-            $operatorSid,
-        ];
-
-        $this->uri = '/Transcripts/' . \rawurlencode($transcriptSid)
-        .'/OperatorResults/' . \rawurlencode($operatorSid)
-        .'';
+        $this->solution = ['transcriptSid' => $transcriptSid, 'operatorSid' => $operatorSid];
+        $this->uri = '/Transcripts/' . \rawurlencode($transcriptSid) . '/OperatorResults/' . \rawurlencode($operatorSid) . '';
     }
-
     /**
      * Fetch the OperatorResultInstance
      *
@@ -61,37 +44,23 @@ class OperatorResultContext extends InstanceContext
      * @return OperatorResultInstance Fetched OperatorResultInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): OperatorResultInstance
+    public function fetch(array $options = []) : OperatorResultInstance
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'Redacted' =>
-                Serialize::booleanToString($options['redacted']),
-        ]);
-
+        $params = Values::of(['Redacted' => Serialize::booleanToString($options['redacted'])]);
         $payload = $this->version->fetch('GET', $this->uri, $params, []);
-
-        return new OperatorResultInstance(
-            $this->version,
-            $payload,
-            $this->solution['transcriptSid'],
-            $this->solution['operatorSid']
-        );
+        return new OperatorResultInstance($this->version, $payload, $this->solution['transcriptSid'], $this->solution['operatorSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Intelligence.V2.OperatorResultContext ' . \implode(' ', $context) . ']';
     }

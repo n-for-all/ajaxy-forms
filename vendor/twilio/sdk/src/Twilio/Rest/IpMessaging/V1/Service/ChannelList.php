@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\IpMessaging\V1\Service;
 
-namespace Twilio\Rest\IpMessaging\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class ChannelList extends ListResource
-    {
+{
     /**
      * Construct the ChannelList
      *
      * @param Version $version Version that contains the resource
      * @param string $serviceSid 
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid
-    ) {
+    public function __construct(Version $version, string $serviceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Channels';
+        $this->solution = ['serviceSid' => $serviceSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Channels';
     }
-
     /**
      * Create the ChannelInstance
      *
@@ -56,32 +43,13 @@ class ChannelList extends ListResource
      * @return ChannelInstance Created ChannelInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): ChannelInstance
+    public function create(array $options = []) : ChannelInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'UniqueName' =>
-                $options['uniqueName'],
-            'Attributes' =>
-                $options['attributes'],
-            'Type' =>
-                $options['type'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName'], 'UniqueName' => $options['uniqueName'], 'Attributes' => $options['attributes'], 'Type' => $options['type']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new ChannelInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid']
-        );
+        return new ChannelInstance($this->version, $payload, $this->solution['serviceSid']);
     }
-
-
     /**
      * Reads ChannelInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -98,11 +66,10 @@ class ChannelList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return ChannelInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams ChannelInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -122,15 +89,12 @@ class ChannelList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of ChannelInstance records from the API.
      * Request is executed immediately
@@ -140,28 +104,13 @@ class ChannelList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return ChannelPage Page of ChannelInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): ChannelPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : ChannelPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Type' =>
-                $options['type'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Type' => $options['type'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new ChannelPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of ChannelInstance records from the API.
      * Request is executed immediately
@@ -169,40 +118,26 @@ class ChannelList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return ChannelPage Page of ChannelInstance
      */
-    public function getPage(string $targetUrl): ChannelPage
+    public function getPage(string $targetUrl) : ChannelPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new ChannelPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a ChannelContext
      *
      * @param string $sid 
      */
-    public function getContext(
-        string $sid
-        
-    ): ChannelContext
+    public function getContext(string $sid) : ChannelContext
     {
-        return new ChannelContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $sid
-        );
+        return new ChannelContext($this->version, $this->solution['serviceSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.IpMessaging.V1.ChannelList]';
     }

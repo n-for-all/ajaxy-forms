@@ -13,48 +13,36 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Accounts\V1;
 
-namespace Twilio\Rest\Accounts\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class AuthTokenPromotionList extends ListResource
-    {
+{
     /**
      * Construct the AuthTokenPromotionList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a AuthTokenPromotionContext
      */
-    public function getContext(
-        
-    ): AuthTokenPromotionContext
+    public function getContext() : AuthTokenPromotionContext
     {
-        return new AuthTokenPromotionContext(
-            $this->version
-        );
+        return new AuthTokenPromotionContext($this->version);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Accounts.V1.AuthTokenPromotionList]';
     }

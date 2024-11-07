@@ -13,48 +13,36 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2;
 
-namespace Twilio\Rest\Verify\V2;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class VerificationAttemptsSummaryList extends ListResource
-    {
+{
     /**
      * Construct the VerificationAttemptsSummaryList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a VerificationAttemptsSummaryContext
      */
-    public function getContext(
-        
-    ): VerificationAttemptsSummaryContext
+    public function getContext() : VerificationAttemptsSummaryContext
     {
-        return new VerificationAttemptsSummaryContext(
-            $this->version
-        );
+        return new VerificationAttemptsSummaryContext($this->version);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Verify.V2.VerificationAttemptsSummaryList]';
     }

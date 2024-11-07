@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Intl\Data\Bundle\Writer;
+namespace Isolated\Symfony\Component\Intl\Data\Bundle\Writer;
 
 /**
  * Writes resource bundle files.

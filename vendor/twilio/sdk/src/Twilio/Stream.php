@@ -1,18 +1,17 @@
 <?php
 
+namespace Isolated\Twilio;
 
-namespace Twilio;
-
-
-class Stream implements \Iterator {
+class Stream implements \Iterator
+{
     public $page;
     public $firstPage;
     public $limit;
     public $currentRecord;
     public $pageLimit;
     public $currentPage;
-
-    public function __construct(Page $page, $limit, $pageLimit) {
+    public function __construct(Page $page, $limit, $pageLimit)
+    {
         $this->page = $page;
         $this->firstPage = $page;
         $this->limit = $limit;
@@ -20,7 +19,6 @@ class Stream implements \Iterator {
         $this->pageLimit = $pageLimit;
         $this->currentPage = 1;
     }
-
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the current element
@@ -28,24 +26,23 @@ class Stream implements \Iterator {
      * @return mixed Can return any type.
      */
     #[\ReturnTypeWillChange]
-    public function current() {
+    public function current()
+    {
         return $this->page->current();
     }
-
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Move forward to next element
      * @link http://php.net/manual/en/iterator.next.php
      * @return void Any returned value is ignored.
      */
-    public function next(): void {
+    public function next() : void
+    {
         $this->page->next();
         $this->currentRecord++;
-
         if ($this->overLimit()) {
             return;
         }
-
         if (!$this->page->valid()) {
             if ($this->overPageLimit()) {
                 return;
@@ -54,7 +51,6 @@ class Stream implements \Iterator {
             $this->currentPage++;
         }
     }
-
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the key of the current element
@@ -62,10 +58,10 @@ class Stream implements \Iterator {
      * @return mixed scalar on success, or null on failure.
      */
     #[\ReturnTypeWillChange]
-    public function key() {
+    public function key()
+    {
         return $this->currentRecord;
     }
-
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Checks if current position is valid
@@ -73,33 +69,29 @@ class Stream implements \Iterator {
      * @return bool The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
      */
-    public function valid(): bool {
+    public function valid() : bool
+    {
         return $this->page && $this->page->valid() && !$this->overLimit() && !$this->overPageLimit();
     }
-
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Rewind the Iterator to the first element
      * @link http://php.net/manual/en/iterator.rewind.php
      * @return void Any returned value is ignored.
      */
-    public function rewind(): void {
+    public function rewind() : void
+    {
         $this->page = $this->firstPage;
         $this->page->rewind();
         $this->currentPage = 1;
         $this->currentRecord = 1;
     }
-
-    protected function overLimit(): bool {
-        return ($this->limit !== null
-            && $this->limit !== Values::NONE
-            && $this->limit < $this->currentRecord);
+    protected function overLimit() : bool
+    {
+        return $this->limit !== null && $this->limit !== Values::NONE && $this->limit < $this->currentRecord;
     }
-
-    protected function overPageLimit(): bool {
-        return ($this->pageLimit !== null
-            && $this->pageLimit !== Values::NONE
-            && $this->pageLimit < $this->currentPage);
+    protected function overPageLimit() : bool
+    {
+        return $this->pageLimit !== null && $this->pageLimit !== Values::NONE && $this->pageLimit < $this->currentPage;
     }
-
 }

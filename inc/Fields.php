@@ -2,6 +2,8 @@
 
 namespace Ajaxy\Forms\Inc;
 
+use Isolated\Symfony\Component\Form\AbstractType;
+
 class Fields
 {
     private $sections = [
@@ -448,8 +450,8 @@ class Fields
      */
     public function register($name, $properties)
     {
-        if (!isset($properties['class']) || !is_subclass_of($properties['class'], \Symfony\Component\Form\AbstractType::class)) {
-            throw new \Exception("Field properties class must be an instance of Symfony\Component\Form\AbstractType");
+        if (!isset($properties['class']) || !is_subclass_of($properties['class'], AbstractType::class)) {
+            throw new \Exception("Field properties class must be an instance of Isolated\Symfony\Component\Form\AbstractType");
         }
         $this->fields[$name] = $properties;
     }

@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1\Plugin;
 
-
-namespace Twilio\Rest\FlexApi\V1\Plugin;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class PluginVersionsContext extends InstanceContext
-    {
+{
     /**
      * Initialize the PluginVersionsContext
      *
@@ -33,26 +29,13 @@ class PluginVersionsContext extends InstanceContext
      * @param string $pluginSid The SID of the Flex Plugin the resource to belongs to.
      * @param string $sid The SID of the Flex Plugin Version resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $pluginSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $pluginSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'pluginSid' =>
-            $pluginSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/PluginService/Plugins/' . \rawurlencode($pluginSid)
-        .'/Versions/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['pluginSid' => $pluginSid, 'sid' => $sid];
+        $this->uri = '/PluginService/Plugins/' . \rawurlencode($pluginSid) . '/Versions/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the PluginVersionsInstance
      *
@@ -60,34 +43,23 @@ class PluginVersionsContext extends InstanceContext
      * @return PluginVersionsInstance Fetched PluginVersionsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): PluginVersionsInstance
+    public function fetch(array $options = []) : PluginVersionsInstance
     {
-
         $options = new Values($options);
-
         $headers = Values::of(['Flex-Metadata' => $options['flexMetadata']]);
-
         $payload = $this->version->fetch('GET', $this->uri, [], [], $headers);
-
-        return new PluginVersionsInstance(
-            $this->version,
-            $payload,
-            $this->solution['pluginSid'],
-            $this->solution['sid']
-        );
+        return new PluginVersionsInstance($this->version, $payload, $this->solution['pluginSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.PluginVersionsContext ' . \implode(' ', $context) . ']';
     }

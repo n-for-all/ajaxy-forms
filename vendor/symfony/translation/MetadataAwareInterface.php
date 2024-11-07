@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Translation;
+namespace Isolated\Symfony\Component\Translation;
 
 /**
  * MetadataAwareInterface.
@@ -28,14 +27,12 @@ interface MetadataAwareInterface
      * @return mixed The value that was set or an array with the domains/keys or null
      */
     public function getMetadata(string $key = '', string $domain = 'messages');
-
     /**
      * Adds metadata to a message domain.
      *
      * @param mixed $value
      */
     public function setMetadata(string $key, $value, string $domain = 'messages');
-
     /**
      * Deletes metadata for the given key and domain.
      *

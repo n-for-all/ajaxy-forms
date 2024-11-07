@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form;
+namespace Isolated\Symfony\Component\Form;
 
 /**
  * Adapter for rendering form templates with a specific templating engine.
@@ -25,8 +24,7 @@ interface FormRendererEngineInterface
      * @param mixed    $themes The theme(s). The type of these themes
      *                         is open to the implementation.
      */
-    public function setTheme(FormView $view, $themes, bool $useDefaultThemes = true);
-
+    public function setTheme(FormView $view, $themes, bool $useDefaultThemes = \true);
     /**
      * Returns the resource for a block name.
      *
@@ -44,7 +42,6 @@ interface FormRendererEngineInterface
      * @return mixed the renderer resource or false, if none was found
      */
     public function getResourceForBlockName(FormView $view, string $blockName);
-
     /**
      * Returns the resource for a block hierarchy.
      *
@@ -80,7 +77,6 @@ interface FormRendererEngineInterface
      * @return mixed The renderer resource or false, if none was found
      */
     public function getResourceForBlockNameHierarchy(FormView $view, array $blockNameHierarchy, int $hierarchyLevel);
-
     /**
      * Returns the hierarchy level at which a resource can be found.
      *
@@ -118,7 +114,6 @@ interface FormRendererEngineInterface
      * @return int|false
      */
     public function getResourceHierarchyLevel(FormView $view, array $blockNameHierarchy, int $hierarchyLevel);
-
     /**
      * Renders a block in the given renderer resource.
      *

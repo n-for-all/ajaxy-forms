@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2;
 
-
-namespace Twilio\Rest\Intelligence\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Intelligence\V2\Transcript\SentenceList;
-use Twilio\Rest\Intelligence\V2\Transcript\OperatorResultList;
-use Twilio\Rest\Intelligence\V2\Transcript\MediaList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Intelligence\V2\Transcript\SentenceList;
+use Isolated\Twilio\Rest\Intelligence\V2\Transcript\OperatorResultList;
+use Isolated\Twilio\Rest\Intelligence\V2\Transcript\MediaList;
 /**
  * @property SentenceList $sentences
  * @property OperatorResultList $operatorResults
@@ -34,110 +30,74 @@ use Twilio\Rest\Intelligence\V2\Transcript\MediaList;
  * @method \Twilio\Rest\Intelligence\V2\Transcript\OperatorResultContext operatorResults(string $operatorSid)
  */
 class TranscriptContext extends InstanceContext
-    {
+{
     protected $_sentences;
     protected $_operatorResults;
     protected $_media;
-
     /**
      * Initialize the TranscriptContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid A 34 character string that uniquely identifies this Transcript.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Transcripts/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Transcripts/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the TranscriptInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the TranscriptInstance
      *
      * @return TranscriptInstance Fetched TranscriptInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): TranscriptInstance
+    public function fetch() : TranscriptInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new TranscriptInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new TranscriptInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the sentences
      */
-    protected function getSentences(): SentenceList
+    protected function getSentences() : SentenceList
     {
         if (!$this->_sentences) {
-            $this->_sentences = new SentenceList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_sentences = new SentenceList($this->version, $this->solution['sid']);
         }
-
         return $this->_sentences;
     }
-
     /**
      * Access the operatorResults
      */
-    protected function getOperatorResults(): OperatorResultList
+    protected function getOperatorResults() : OperatorResultList
     {
         if (!$this->_operatorResults) {
-            $this->_operatorResults = new OperatorResultList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_operatorResults = new OperatorResultList($this->version, $this->solution['sid']);
         }
-
         return $this->_operatorResults;
     }
-
     /**
      * Access the media
      */
-    protected function getMedia(): MediaList
+    protected function getMedia() : MediaList
     {
         if (!$this->_media) {
-            $this->_media = new MediaList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_media = new MediaList($this->version, $this->solution['sid']);
         }
-
         return $this->_media;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -145,16 +105,14 @@ class TranscriptContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -163,26 +121,24 @@ class TranscriptContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Intelligence.V2.TranscriptContext ' . \implode(' ', $context) . ']';
     }

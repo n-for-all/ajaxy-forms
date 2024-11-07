@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'TTD' => [
-            '$',
-            'Trinidad & Tobago Dollar',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['TTD' => ['$', 'Trinidad & Tobago Dollar']]];

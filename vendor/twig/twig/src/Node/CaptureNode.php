@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node;
 
-namespace Twig\Node;
-
-use Twig\Attribute\YieldReady;
-use Twig\Compiler;
-
+use Isolated\Twig\Attribute\YieldReady;
+use Isolated\Twig\Compiler;
 /**
  * Represents a node for which we need to capture the output.
  *
@@ -24,25 +22,15 @@ class CaptureNode extends Node
 {
     public function __construct(Node $body, int $lineno, ?string $tag = null)
     {
-        parent::__construct(['body' => $body], ['raw' => false], $lineno, $tag);
+        parent::__construct(['body' => $body], ['raw' => \false], $lineno, $tag);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
         $useYield = $compiler->getEnvironment()->useYield();
-
         if (!$this->getAttribute('raw')) {
             $compiler->raw("('' === \$tmp = ");
         }
-        $compiler
-            ->raw($useYield ? "implode('', iterator_to_array(" : '\\Twig\\Extension\\CoreExtension::captureOutput(')
-            ->raw("(function () use (&\$context, \$macros, \$blocks) {\n")
-            ->indent()
-            ->subcompile($this->getNode('body'))
-            ->write("return; yield '';\n")
-            ->outdent()
-            ->write('})()')
-        ;
+        $compiler->raw($useYield ? "implode('', iterator_to_array(" : '\\Twig\\Extension\\CoreExtension::captureOutput(')->raw("(function () use (&\$context, \$macros, \$blocks) {\n")->indent()->subcompile($this->getNode('body'))->write("return; yield '';\n")->outdent()->write('})()');
         if ($useYield) {
             $compiler->raw(', false))');
         } else {

@@ -13,17 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Serverless\V1\Service\TwilioFunction;
 
-namespace Twilio\Rest\Serverless\V1\Service\TwilioFunction;
-
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class FunctionVersionList extends ListResource
-    {
+{
     /**
      * Construct the FunctionVersionList
      *
@@ -31,28 +28,13 @@ class FunctionVersionList extends ListResource
      * @param string $serviceSid The SID of the Service to fetch the Function Version resource from.
      * @param string $functionSid The SID of the function that is the parent of the Function Version resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid,
-        string $functionSid
-    ) {
+    public function __construct(Version $version, string $serviceSid, string $functionSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        'functionSid' =>
-            $functionSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Functions/' . \rawurlencode($functionSid)
-        .'/Versions';
+        $this->solution = ['serviceSid' => $serviceSid, 'functionSid' => $functionSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Functions/' . \rawurlencode($functionSid) . '/Versions';
     }
-
     /**
      * Reads FunctionVersionInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -68,11 +50,10 @@ class FunctionVersionList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return FunctionVersionInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams FunctionVersionInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -91,15 +72,12 @@ class FunctionVersionList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of FunctionVersionInstance records from the API.
      * Request is executed immediately
@@ -109,24 +87,12 @@ class FunctionVersionList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return FunctionVersionPage Page of FunctionVersionInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): FunctionVersionPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : FunctionVersionPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new FunctionVersionPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of FunctionVersionInstance records from the API.
      * Request is executed immediately
@@ -134,41 +100,26 @@ class FunctionVersionList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return FunctionVersionPage Page of FunctionVersionInstance
      */
-    public function getPage(string $targetUrl): FunctionVersionPage
+    public function getPage(string $targetUrl) : FunctionVersionPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new FunctionVersionPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a FunctionVersionContext
      *
      * @param string $sid The SID of the Function Version resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): FunctionVersionContext
+    public function getContext(string $sid) : FunctionVersionContext
     {
-        return new FunctionVersionContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $this->solution['functionSid'],
-            $sid
-        );
+        return new FunctionVersionContext($this->version, $this->solution['serviceSid'], $this->solution['functionSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Serverless.V1.FunctionVersionList]';
     }

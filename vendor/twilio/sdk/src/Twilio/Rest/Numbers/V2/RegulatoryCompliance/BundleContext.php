@@ -13,22 +13,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance;
 
-
-namespace Twilio\Rest\Numbers\V2\RegulatoryCompliance;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\ReplaceItemsList;
-use Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\EvaluationList;
-use Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\BundleCopyList;
-use Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\ItemAssignmentList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\ReplaceItemsList;
+use Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\EvaluationList;
+use Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\BundleCopyList;
+use Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\ItemAssignmentList;
 /**
  * @property ReplaceItemsList $replaceItems
  * @property EvaluationList $evaluations
@@ -38,66 +34,45 @@ use Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\ItemAssignmentList;
  * @method \Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\EvaluationContext evaluations(string $sid)
  */
 class BundleContext extends InstanceContext
-    {
+{
     protected $_replaceItems;
     protected $_evaluations;
     protected $_bundleCopies;
     protected $_itemAssignments;
-
     /**
      * Initialize the BundleContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The unique string that we created to identify the Bundle resource.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/RegulatoryCompliance/Bundles/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/RegulatoryCompliance/Bundles/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the BundleInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the BundleInstance
      *
      * @return BundleInstance Fetched BundleInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): BundleInstance
+    public function fetch() : BundleInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new BundleInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new BundleInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the BundleInstance
      *
@@ -105,92 +80,53 @@ class BundleContext extends InstanceContext
      * @return BundleInstance Updated BundleInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): BundleInstance
+    public function update(array $options = []) : BundleInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Status' =>
-                $options['status'],
-            'StatusCallback' =>
-                $options['statusCallback'],
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'Email' =>
-                $options['email'],
-        ]);
-
+        $data = Values::of(['Status' => $options['status'], 'StatusCallback' => $options['statusCallback'], 'FriendlyName' => $options['friendlyName'], 'Email' => $options['email']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new BundleInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new BundleInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the replaceItems
      */
-    protected function getReplaceItems(): ReplaceItemsList
+    protected function getReplaceItems() : ReplaceItemsList
     {
         if (!$this->_replaceItems) {
-            $this->_replaceItems = new ReplaceItemsList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_replaceItems = new ReplaceItemsList($this->version, $this->solution['sid']);
         }
-
         return $this->_replaceItems;
     }
-
     /**
      * Access the evaluations
      */
-    protected function getEvaluations(): EvaluationList
+    protected function getEvaluations() : EvaluationList
     {
         if (!$this->_evaluations) {
-            $this->_evaluations = new EvaluationList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_evaluations = new EvaluationList($this->version, $this->solution['sid']);
         }
-
         return $this->_evaluations;
     }
-
     /**
      * Access the bundleCopies
      */
-    protected function getBundleCopies(): BundleCopyList
+    protected function getBundleCopies() : BundleCopyList
     {
         if (!$this->_bundleCopies) {
-            $this->_bundleCopies = new BundleCopyList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_bundleCopies = new BundleCopyList($this->version, $this->solution['sid']);
         }
-
         return $this->_bundleCopies;
     }
-
     /**
      * Access the itemAssignments
      */
-    protected function getItemAssignments(): ItemAssignmentList
+    protected function getItemAssignments() : ItemAssignmentList
     {
         if (!$this->_itemAssignments) {
-            $this->_itemAssignments = new ItemAssignmentList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_itemAssignments = new ItemAssignmentList($this->version, $this->solution['sid']);
         }
-
         return $this->_itemAssignments;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -198,16 +134,14 @@ class BundleContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -216,26 +150,24 @@ class BundleContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Numbers.V2.BundleContext ' . \implode(' ', $context) . ']';
     }

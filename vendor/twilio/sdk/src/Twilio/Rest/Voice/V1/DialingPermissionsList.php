@@ -13,18 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Voice\V1;
 
-namespace Twilio\Rest\Voice\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Voice\V1\DialingPermissions\BulkCountryUpdateList;
-use Twilio\Rest\Voice\V1\DialingPermissions\CountryList;
-use Twilio\Rest\Voice\V1\DialingPermissions\SettingsList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Voice\V1\DialingPermissions\BulkCountryUpdateList;
+use Isolated\Twilio\Rest\Voice\V1\DialingPermissions\CountryList;
+use Isolated\Twilio\Rest\Voice\V1\DialingPermissions\SettingsList;
 /**
  * @property BulkCountryUpdateList $bulkCountryUpdates
  * @property CountryList $countries
@@ -33,65 +30,51 @@ use Twilio\Rest\Voice\V1\DialingPermissions\SettingsList;
  * @method \Twilio\Rest\Voice\V1\DialingPermissions\SettingsContext settings()
  */
 class DialingPermissionsList extends ListResource
-    {
+{
     protected $_bulkCountryUpdates = null;
     protected $_countries = null;
     protected $_settings = null;
-
     /**
      * Construct the DialingPermissionsList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Access the bulkCountryUpdates
      */
-    protected function getBulkCountryUpdates(): BulkCountryUpdateList
+    protected function getBulkCountryUpdates() : BulkCountryUpdateList
     {
         if (!$this->_bulkCountryUpdates) {
-            $this->_bulkCountryUpdates = new BulkCountryUpdateList(
-                $this->version
-            );
+            $this->_bulkCountryUpdates = new BulkCountryUpdateList($this->version);
         }
         return $this->_bulkCountryUpdates;
     }
-
     /**
      * Access the countries
      */
-    protected function getCountries(): CountryList
+    protected function getCountries() : CountryList
     {
         if (!$this->_countries) {
-            $this->_countries = new CountryList(
-                $this->version
-            );
+            $this->_countries = new CountryList($this->version);
         }
         return $this->_countries;
     }
-
     /**
      * Access the settings
      */
-    protected function getSettings(): SettingsList
+    protected function getSettings() : SettingsList
     {
         if (!$this->_settings) {
-            $this->_settings = new SettingsList(
-                $this->version
-            );
+            $this->_settings = new SettingsList($this->version);
         }
         return $this->_settings;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -103,12 +86,10 @@ class DialingPermissionsList extends ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -117,22 +98,20 @@ class DialingPermissionsList extends ListResource
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Voice.V1.DialingPermissionsList]';
     }

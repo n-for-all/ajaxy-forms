@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V1;
 
-
-namespace Twilio\Rest\Numbers\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $phoneNumber
  * @property string|null $accountSid
@@ -49,43 +45,23 @@ class PortingPortabilityInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $phoneNumber = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'phoneNumber' => Values::array_get($payload, 'phone_number'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'portable' => Values::array_get($payload, 'portable'),
-            'pinAndAccountNumberRequired' => Values::array_get($payload, 'pin_and_account_number_required'),
-            'notPortableReason' => Values::array_get($payload, 'not_portable_reason'),
-            'notPortableReasonCode' => Values::array_get($payload, 'not_portable_reason_code'),
-            'numberType' => Values::array_get($payload, 'number_type'),
-            'country' => Values::array_get($payload, 'country'),
-            'messagingCarrier' => Values::array_get($payload, 'messaging_carrier'),
-            'voiceCarrier' => Values::array_get($payload, 'voice_carrier'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['phoneNumber' => $phoneNumber ?: $this->properties['phoneNumber'], ];
+        $this->properties = ['phoneNumber' => Values::array_get($payload, 'phone_number'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'portable' => Values::array_get($payload, 'portable'), 'pinAndAccountNumberRequired' => Values::array_get($payload, 'pin_and_account_number_required'), 'notPortableReason' => Values::array_get($payload, 'not_portable_reason'), 'notPortableReasonCode' => Values::array_get($payload, 'not_portable_reason_code'), 'numberType' => Values::array_get($payload, 'number_type'), 'country' => Values::array_get($payload, 'country'), 'messagingCarrier' => Values::array_get($payload, 'messaging_carrier'), 'voiceCarrier' => Values::array_get($payload, 'voice_carrier'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['phoneNumber' => $phoneNumber ?: $this->properties['phoneNumber']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return PortingPortabilityContext Context for this PortingPortabilityInstance
      */
-    protected function proxy(): PortingPortabilityContext
+    protected function proxy() : PortingPortabilityContext
     {
         if (!$this->context) {
-            $this->context = new PortingPortabilityContext(
-                $this->version,
-                $this->solution['phoneNumber']
-            );
+            $this->context = new PortingPortabilityContext($this->version, $this->solution['phoneNumber']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the PortingPortabilityInstance
      *
@@ -93,12 +69,10 @@ class PortingPortabilityInstance extends InstanceResource
      * @return PortingPortabilityInstance Fetched PortingPortabilityInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): PortingPortabilityInstance
+    public function fetch(array $options = []) : PortingPortabilityInstance
     {
-
         return $this->proxy()->fetch($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -111,27 +85,23 @@ class PortingPortabilityInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Numbers.V1.PortingPortabilityInstance ' . \implode(' ', $context) . ']';
     }
 }
-

@@ -8,14 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\HttpFoundation\Session\Storage;
 
-namespace Symfony\Component\HttpFoundation\Session\Storage;
-
-use Symfony\Component\HttpFoundation\Request;
-
+use Isolated\Symfony\Component\HttpFoundation\Request;
 // Help opcache.preload discover always-needed symbols
-class_exists(MockFileSessionStorage::class);
-
+\class_exists(MockFileSessionStorage::class);
 /**
  * @author Jérémy Derussé <jeremy@derusse.com>
  */
@@ -24,7 +21,6 @@ class MockFileSessionStorageFactory implements SessionStorageFactoryInterface
     private $savePath;
     private $name;
     private $metaBag;
-
     /**
      * @see MockFileSessionStorage constructor.
      */
@@ -34,8 +30,7 @@ class MockFileSessionStorageFactory implements SessionStorageFactoryInterface
         $this->name = $name;
         $this->metaBag = $metaBag;
     }
-
-    public function createStorage(?Request $request): SessionStorageInterface
+    public function createStorage(?Request $request) : SessionStorageInterface
     {
         return new MockFileSessionStorage($this->savePath, $this->name, $this->metaBag);
     }

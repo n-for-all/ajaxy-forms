@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl\Data\Generator;
 
-namespace Symfony\Component\Intl\Data\Generator;
-
-use Symfony\Component\Intl\Data\Bundle\Writer\BundleWriterInterface;
-
+use Isolated\Symfony\Component\Intl\Data\Bundle\Writer\BundleWriterInterface;
 /**
  * Stores contextual information for resource bundle generation.
  *
@@ -24,18 +22,15 @@ class GeneratorConfig
 {
     private $sourceDir;
     private $icuVersion;
-
     /**
      * @var BundleWriterInterface[]
      */
     private $bundleWriters = [];
-
     public function __construct(string $sourceDir, string $icuVersion)
     {
         $this->sourceDir = $sourceDir;
         $this->icuVersion = $icuVersion;
     }
-
     /**
      * Adds a writer to be used during the data conversion.
      */
@@ -43,30 +38,27 @@ class GeneratorConfig
     {
         $this->bundleWriters[$targetDir] = $writer;
     }
-
     /**
      * Returns the writers indexed by their output directories.
      *
      * @return BundleWriterInterface[]
      */
-    public function getBundleWriters(): array
+    public function getBundleWriters() : array
     {
         return $this->bundleWriters;
     }
-
     /**
      * Returns the directory where the source versions of the resource bundles
      * are stored.
      */
-    public function getSourceDir(): string
+    public function getSourceDir() : string
     {
         return $this->sourceDir;
     }
-
     /**
      * Returns the ICU version of the bundles being converted.
      */
-    public function getIcuVersion(): string
+    public function getIcuVersion() : string
     {
         return $this->icuVersion;
     }

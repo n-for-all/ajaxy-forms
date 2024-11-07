@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2\Transcript;
 
-
-namespace Twilio\Rest\Intelligence\V2\Transcript;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string $operatorType
  * @property string|null $name
@@ -54,48 +50,23 @@ class OperatorResultInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $transcriptSid, string $operatorSid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'operatorType' => Values::array_get($payload, 'operator_type'),
-            'name' => Values::array_get($payload, 'name'),
-            'operatorSid' => Values::array_get($payload, 'operator_sid'),
-            'extractMatch' => Values::array_get($payload, 'extract_match'),
-            'matchProbability' => Values::array_get($payload, 'match_probability'),
-            'normalizedResult' => Values::array_get($payload, 'normalized_result'),
-            'utteranceResults' => Values::array_get($payload, 'utterance_results'),
-            'utteranceMatch' => Values::array_get($payload, 'utterance_match'),
-            'predictedLabel' => Values::array_get($payload, 'predicted_label'),
-            'predictedProbability' => Values::array_get($payload, 'predicted_probability'),
-            'labelProbabilities' => Values::array_get($payload, 'label_probabilities'),
-            'extractResults' => Values::array_get($payload, 'extract_results'),
-            'textGenerationResults' => Values::array_get($payload, 'text_generation_results'),
-            'transcriptSid' => Values::array_get($payload, 'transcript_sid'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['transcriptSid' => $transcriptSid, 'operatorSid' => $operatorSid ?: $this->properties['operatorSid'], ];
+        $this->properties = ['operatorType' => Values::array_get($payload, 'operator_type'), 'name' => Values::array_get($payload, 'name'), 'operatorSid' => Values::array_get($payload, 'operator_sid'), 'extractMatch' => Values::array_get($payload, 'extract_match'), 'matchProbability' => Values::array_get($payload, 'match_probability'), 'normalizedResult' => Values::array_get($payload, 'normalized_result'), 'utteranceResults' => Values::array_get($payload, 'utterance_results'), 'utteranceMatch' => Values::array_get($payload, 'utterance_match'), 'predictedLabel' => Values::array_get($payload, 'predicted_label'), 'predictedProbability' => Values::array_get($payload, 'predicted_probability'), 'labelProbabilities' => Values::array_get($payload, 'label_probabilities'), 'extractResults' => Values::array_get($payload, 'extract_results'), 'textGenerationResults' => Values::array_get($payload, 'text_generation_results'), 'transcriptSid' => Values::array_get($payload, 'transcript_sid'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['transcriptSid' => $transcriptSid, 'operatorSid' => $operatorSid ?: $this->properties['operatorSid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return OperatorResultContext Context for this OperatorResultInstance
      */
-    protected function proxy(): OperatorResultContext
+    protected function proxy() : OperatorResultContext
     {
         if (!$this->context) {
-            $this->context = new OperatorResultContext(
-                $this->version,
-                $this->solution['transcriptSid'],
-                $this->solution['operatorSid']
-            );
+            $this->context = new OperatorResultContext($this->version, $this->solution['transcriptSid'], $this->solution['operatorSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the OperatorResultInstance
      *
@@ -103,12 +74,10 @@ class OperatorResultInstance extends InstanceResource
      * @return OperatorResultInstance Fetched OperatorResultInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): OperatorResultInstance
+    public function fetch(array $options = []) : OperatorResultInstance
     {
-
         return $this->proxy()->fetch($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -121,27 +90,23 @@ class OperatorResultInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Intelligence.V2.OperatorResultInstance ' . \implode(' ', $context) . ']';
     }
 }
-

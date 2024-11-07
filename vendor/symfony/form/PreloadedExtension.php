@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form;
 
-namespace Symfony\Component\Form;
-
-use Symfony\Component\Form\Exception\InvalidArgumentException;
-
+use Isolated\Symfony\Component\Form\Exception\InvalidArgumentException;
 /**
  * A form extension with preloaded types, type extensions and type guessers.
  *
@@ -23,7 +21,6 @@ class PreloadedExtension implements FormExtensionInterface
     private $types = [];
     private $typeExtensions = [];
     private $typeGuesser;
-
     /**
      * Creates a new preloaded extension.
      *
@@ -34,24 +31,20 @@ class PreloadedExtension implements FormExtensionInterface
     {
         $this->typeExtensions = $typeExtensions;
         $this->typeGuesser = $typeGuesser;
-
         foreach ($types as $type) {
             $this->types[\get_class($type)] = $type;
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function getType(string $name)
     {
         if (!isset($this->types[$name])) {
-            throw new InvalidArgumentException(sprintf('The type "%s" cannot be loaded by this extension.', $name));
+            throw new InvalidArgumentException(\sprintf('The type "%s" cannot be loaded by this extension.', $name));
         }
-
         return $this->types[$name];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -59,16 +52,13 @@ class PreloadedExtension implements FormExtensionInterface
     {
         return isset($this->types[$name]);
     }
-
     /**
      * {@inheritdoc}
      */
     public function getTypeExtensions(string $name)
     {
-        return $this->typeExtensions[$name]
-            ?? [];
+        return $this->typeExtensions[$name] ?? [];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -76,7 +66,6 @@ class PreloadedExtension implements FormExtensionInterface
     {
         return !empty($this->typeExtensions[$name]);
     }
-
     /**
      * {@inheritdoc}
      */

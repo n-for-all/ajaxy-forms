@@ -13,30 +13,23 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class LinkshorteningMessagingServiceList extends ListResource
-    {
+{
     /**
      * Construct the LinkshorteningMessagingServiceList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a LinkshorteningMessagingServiceContext
      *
@@ -44,25 +37,16 @@ class LinkshorteningMessagingServiceList extends ListResource
      *
      * @param string $messagingServiceSid A messaging service SID to associate with a domain. With URL shortening enabled, links in messages sent with the provided messaging service will be shortened to the associated domain
      */
-    public function getContext(
-        string $domainSid
-        , string $messagingServiceSid
-        
-    ): LinkshorteningMessagingServiceContext
+    public function getContext(string $domainSid, string $messagingServiceSid) : LinkshorteningMessagingServiceContext
     {
-        return new LinkshorteningMessagingServiceContext(
-            $this->version,
-            $domainSid,
-            $messagingServiceSid
-        );
+        return new LinkshorteningMessagingServiceContext($this->version, $domainSid, $messagingServiceSid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Messaging.V1.LinkshorteningMessagingServiceList]';
     }

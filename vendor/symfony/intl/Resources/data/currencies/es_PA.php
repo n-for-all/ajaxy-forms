@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'PAB' => [
-            'B/.',
-            'balboa panameño',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['PAB' => ['B/.', 'balboa panameño']]];

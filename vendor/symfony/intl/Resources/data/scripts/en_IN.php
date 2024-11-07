@@ -1,8 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'Beng' => 'Bengali',
-        'Orya' => 'Oriya',
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['Beng' => 'Bengali', 'Orya' => 'Oriya']];

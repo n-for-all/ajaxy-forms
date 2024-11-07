@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form;
 
-namespace Symfony\Component\Form;
-
-use Symfony\Component\Form\Exception\InvalidArgumentException;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
-
+use Isolated\Symfony\Component\Form\Exception\InvalidArgumentException;
+use Isolated\Symfony\Component\Form\Exception\UnexpectedTypeException;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
@@ -25,28 +23,24 @@ abstract class AbstractExtension implements FormExtensionInterface
      * @var FormTypeInterface[]
      */
     private $types;
-
     /**
      * The type extensions provided by this extension.
      *
      * @var FormTypeExtensionInterface[][]
      */
     private $typeExtensions;
-
     /**
      * The type guesser provided by this extension.
      *
      * @var FormTypeGuesserInterface|null
      */
     private $typeGuesser;
-
     /**
      * Whether the type guesser has been loaded.
      *
      * @var bool
      */
-    private $typeGuesserLoaded = false;
-
+    private $typeGuesserLoaded = \false;
     /**
      * {@inheritdoc}
      */
@@ -55,14 +49,11 @@ abstract class AbstractExtension implements FormExtensionInterface
         if (null === $this->types) {
             $this->initTypes();
         }
-
         if (!isset($this->types[$name])) {
-            throw new InvalidArgumentException(sprintf('The type "%s" cannot be loaded by this extension.', $name));
+            throw new InvalidArgumentException(\sprintf('The type "%s" cannot be loaded by this extension.', $name));
         }
-
         return $this->types[$name];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -71,10 +62,8 @@ abstract class AbstractExtension implements FormExtensionInterface
         if (null === $this->types) {
             $this->initTypes();
         }
-
         return isset($this->types[$name]);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -83,11 +72,8 @@ abstract class AbstractExtension implements FormExtensionInterface
         if (null === $this->typeExtensions) {
             $this->initTypeExtensions();
         }
-
-        return $this->typeExtensions[$name]
-            ?? [];
+        return $this->typeExtensions[$name] ?? [];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -96,10 +82,8 @@ abstract class AbstractExtension implements FormExtensionInterface
         if (null === $this->typeExtensions) {
             $this->initTypeExtensions();
         }
-
         return isset($this->typeExtensions[$name]) && \count($this->typeExtensions[$name]) > 0;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -108,10 +92,8 @@ abstract class AbstractExtension implements FormExtensionInterface
         if (!$this->typeGuesserLoaded) {
             $this->initTypeGuesser();
         }
-
         return $this->typeGuesser;
     }
-
     /**
      * Registers the types.
      *
@@ -121,7 +103,6 @@ abstract class AbstractExtension implements FormExtensionInterface
     {
         return [];
     }
-
     /**
      * Registers the type extensions.
      *
@@ -131,7 +112,6 @@ abstract class AbstractExtension implements FormExtensionInterface
     {
         return [];
     }
-
     /**
      * Registers the type guesser.
      *
@@ -141,7 +121,6 @@ abstract class AbstractExtension implements FormExtensionInterface
     {
         return null;
     }
-
     /**
      * Initializes the types.
      *
@@ -150,16 +129,13 @@ abstract class AbstractExtension implements FormExtensionInterface
     private function initTypes()
     {
         $this->types = [];
-
         foreach ($this->loadTypes() as $type) {
             if (!$type instanceof FormTypeInterface) {
                 throw new UnexpectedTypeException($type, FormTypeInterface::class);
             }
-
             $this->types[\get_class($type)] = $type;
         }
     }
-
     /**
      * Initializes the type extensions.
      *
@@ -169,18 +145,15 @@ abstract class AbstractExtension implements FormExtensionInterface
     private function initTypeExtensions()
     {
         $this->typeExtensions = [];
-
         foreach ($this->loadTypeExtensions() as $extension) {
             if (!$extension instanceof FormTypeExtensionInterface) {
                 throw new UnexpectedTypeException($extension, FormTypeExtensionInterface::class);
             }
-
             foreach ($extension::getExtendedTypes() as $extendedType) {
                 $this->typeExtensions[$extendedType][] = $extension;
             }
         }
     }
-
     /**
      * Initializes the type guesser.
      *
@@ -188,8 +161,7 @@ abstract class AbstractExtension implements FormExtensionInterface
      */
     private function initTypeGuesser()
     {
-        $this->typeGuesserLoaded = true;
-
+        $this->typeGuesserLoaded = \true;
         $this->typeGuesser = $this->loadTypeGuesser();
         if (null !== $this->typeGuesser && !$this->typeGuesser instanceof FormTypeGuesserInterface) {
             throw new UnexpectedTypeException($this->typeGuesser, FormTypeGuesserInterface::class);

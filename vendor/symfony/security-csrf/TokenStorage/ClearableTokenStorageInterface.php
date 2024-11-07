@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Csrf\TokenStorage;
+namespace Isolated\Symfony\Component\Security\Csrf\TokenStorage;
 
 /**
  * @author Christian Flothmann <christian.flothmann@sensiolabs.de>

@@ -13,37 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance;
 
-namespace Twilio\Rest\Numbers\V2\RegulatoryCompliance;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class SupportingDocumentList extends ListResource
-    {
+{
     /**
      * Construct the SupportingDocumentList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/RegulatoryCompliance/SupportingDocuments';
     }
-
     /**
      * Create the SupportingDocumentInstance
      *
@@ -53,29 +45,13 @@ class SupportingDocumentList extends ListResource
      * @return SupportingDocumentInstance Created SupportingDocumentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $friendlyName, string $type, array $options = []): SupportingDocumentInstance
+    public function create(string $friendlyName, string $type, array $options = []) : SupportingDocumentInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $friendlyName,
-            'Type' =>
-                $type,
-            'Attributes' =>
-                Serialize::jsonObject($options['attributes']),
-        ]);
-
+        $data = Values::of(['FriendlyName' => $friendlyName, 'Type' => $type, 'Attributes' => Serialize::jsonObject($options['attributes'])]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new SupportingDocumentInstance(
-            $this->version,
-            $payload
-        );
+        return new SupportingDocumentInstance($this->version, $payload);
     }
-
-
     /**
      * Reads SupportingDocumentInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -91,11 +67,10 @@ class SupportingDocumentList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return SupportingDocumentInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams SupportingDocumentInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -114,15 +89,12 @@ class SupportingDocumentList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of SupportingDocumentInstance records from the API.
      * Request is executed immediately
@@ -132,24 +104,12 @@ class SupportingDocumentList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return SupportingDocumentPage Page of SupportingDocumentInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): SupportingDocumentPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : SupportingDocumentPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new SupportingDocumentPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of SupportingDocumentInstance records from the API.
      * Request is executed immediately
@@ -157,39 +117,26 @@ class SupportingDocumentList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return SupportingDocumentPage Page of SupportingDocumentInstance
      */
-    public function getPage(string $targetUrl): SupportingDocumentPage
+    public function getPage(string $targetUrl) : SupportingDocumentPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new SupportingDocumentPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a SupportingDocumentContext
      *
      * @param string $sid The unique string created by Twilio to identify the Supporting Document resource.
      */
-    public function getContext(
-        string $sid
-        
-    ): SupportingDocumentContext
+    public function getContext(string $sid) : SupportingDocumentContext
     {
-        return new SupportingDocumentContext(
-            $this->version,
-            $sid
-        );
+        return new SupportingDocumentContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V2.SupportingDocumentList]';
     }

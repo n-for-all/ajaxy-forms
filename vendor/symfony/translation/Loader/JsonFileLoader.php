@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Translation\Loader;
 
-namespace Symfony\Component\Translation\Loader;
-
-use Symfony\Component\Translation\Exception\InvalidResourceException;
-
+use Isolated\Symfony\Component\Translation\Exception\InvalidResourceException;
 /**
  * JsonFileLoader loads translations from an json file.
  *
@@ -26,21 +24,18 @@ class JsonFileLoader extends FileLoader
     protected function loadResource(string $resource)
     {
         $messages = [];
-        if ($data = file_get_contents($resource)) {
-            $messages = json_decode($data, true);
-
-            if (0 < $errorCode = json_last_error()) {
-                throw new InvalidResourceException('Error parsing JSON: '.$this->getJSONErrorMessage($errorCode));
+        if ($data = \file_get_contents($resource)) {
+            $messages = \json_decode($data, \true);
+            if (0 < ($errorCode = \json_last_error())) {
+                throw new InvalidResourceException('Error parsing JSON: ' . $this->getJSONErrorMessage($errorCode));
             }
         }
-
         return $messages;
     }
-
     /**
      * Translates JSON_ERROR_* constant into meaningful message.
      */
-    private function getJSONErrorMessage(int $errorCode): string
+    private function getJSONErrorMessage(int $errorCode) : string
     {
         switch ($errorCode) {
             case \JSON_ERROR_DEPTH:

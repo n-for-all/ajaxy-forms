@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'NIO' => [
-            'C$',
-            'córdoba nicaragüense',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['NIO' => ['C$', 'córdoba nicaragüense']]];

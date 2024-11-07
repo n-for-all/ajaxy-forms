@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2;
 
-
-namespace Twilio\Rest\Intelligence\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class OperatorAttachmentContext extends InstanceContext
-    {
+{
     /**
      * Initialize the OperatorAttachmentContext
      *
@@ -31,69 +27,44 @@ class OperatorAttachmentContext extends InstanceContext
      * @param string $serviceSid The unique SID identifier of the Service.
      * @param string $operatorSid The unique SID identifier of the Operator. Allows both Custom and Pre-built Operators.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $operatorSid
-    ) {
+    public function __construct(Version $version, $serviceSid, $operatorSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'operatorSid' =>
-            $operatorSid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Operators/' . \rawurlencode($operatorSid)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'operatorSid' => $operatorSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Operators/' . \rawurlencode($operatorSid) . '';
     }
-
     /**
      * Create the OperatorAttachmentInstance
      *
      * @return OperatorAttachmentInstance Created OperatorAttachmentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(): OperatorAttachmentInstance
+    public function create() : OperatorAttachmentInstance
     {
-
         $payload = $this->version->create('POST', $this->uri, [], []);
-
-        return new OperatorAttachmentInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['operatorSid']
-        );
+        return new OperatorAttachmentInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['operatorSid']);
     }
-
-
     /**
      * Delete the OperatorAttachmentInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Intelligence.V2.OperatorAttachmentContext ' . \implode(' ', $context) . ']';
     }

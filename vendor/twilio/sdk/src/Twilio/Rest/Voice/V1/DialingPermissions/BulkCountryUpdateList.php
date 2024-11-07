@@ -13,34 +13,26 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Voice\V1\DialingPermissions;
 
-namespace Twilio\Rest\Voice\V1\DialingPermissions;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class BulkCountryUpdateList extends ListResource
-    {
+{
     /**
      * Construct the BulkCountryUpdateList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/DialingPermissions/BulkCountryUpdates';
     }
-
     /**
      * Create the BulkCountryUpdateInstance
      *
@@ -48,29 +40,18 @@ class BulkCountryUpdateList extends ListResource
      * @return BulkCountryUpdateInstance Created BulkCountryUpdateInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $updateRequest): BulkCountryUpdateInstance
+    public function create(string $updateRequest) : BulkCountryUpdateInstance
     {
-
-        $data = Values::of([
-            'UpdateRequest' =>
-                $updateRequest,
-        ]);
-
+        $data = Values::of(['UpdateRequest' => $updateRequest]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new BulkCountryUpdateInstance(
-            $this->version,
-            $payload
-        );
+        return new BulkCountryUpdateInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Voice.V1.BulkCountryUpdateList]';
     }

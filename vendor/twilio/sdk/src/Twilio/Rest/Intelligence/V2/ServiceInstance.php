@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2;
 
-
-namespace Twilio\Rest\Intelligence\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property bool|null $autoRedaction
@@ -55,72 +51,43 @@ class ServiceInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'autoRedaction' => Values::array_get($payload, 'auto_redaction'),
-            'mediaRedaction' => Values::array_get($payload, 'media_redaction'),
-            'autoTranscribe' => Values::array_get($payload, 'auto_transcribe'),
-            'dataLogging' => Values::array_get($payload, 'data_logging'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'languageCode' => Values::array_get($payload, 'language_code'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'uniqueName' => Values::array_get($payload, 'unique_name'),
-            'url' => Values::array_get($payload, 'url'),
-            'webhookUrl' => Values::array_get($payload, 'webhook_url'),
-            'webhookHttpMethod' => Values::array_get($payload, 'webhook_http_method'),
-            'readOnlyAttachedOperatorSids' => Values::array_get($payload, 'read_only_attached_operator_sids'),
-            'version' => Values::array_get($payload, 'version'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'autoRedaction' => Values::array_get($payload, 'auto_redaction'), 'mediaRedaction' => Values::array_get($payload, 'media_redaction'), 'autoTranscribe' => Values::array_get($payload, 'auto_transcribe'), 'dataLogging' => Values::array_get($payload, 'data_logging'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'languageCode' => Values::array_get($payload, 'language_code'), 'sid' => Values::array_get($payload, 'sid'), 'uniqueName' => Values::array_get($payload, 'unique_name'), 'url' => Values::array_get($payload, 'url'), 'webhookUrl' => Values::array_get($payload, 'webhook_url'), 'webhookHttpMethod' => Values::array_get($payload, 'webhook_http_method'), 'readOnlyAttachedOperatorSids' => Values::array_get($payload, 'read_only_attached_operator_sids'), 'version' => Values::array_get($payload, 'version')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ServiceContext Context for this ServiceInstance
      */
-    protected function proxy(): ServiceContext
+    protected function proxy() : ServiceContext
     {
         if (!$this->context) {
-            $this->context = new ServiceContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new ServiceContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the ServiceInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the ServiceInstance
      *
      * @return ServiceInstance Fetched ServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ServiceInstance
+    public function fetch() : ServiceInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the ServiceInstance
      *
@@ -128,12 +95,10 @@ class ServiceInstance extends InstanceResource
      * @return ServiceInstance Updated ServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ServiceInstance
+    public function update(array $options = []) : ServiceInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -146,27 +111,23 @@ class ServiceInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Intelligence.V2.ServiceInstance ' . \implode(' ', $context) . ']';
     }
 }
-

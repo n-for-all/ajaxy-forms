@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Mapping\Loader;
 
-namespace Symfony\Component\Validator\Mapping\Loader;
-
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Exception\MappingException;
-
+use Isolated\Symfony\Component\Validator\Constraint;
+use Isolated\Symfony\Component\Validator\Exception\MappingException;
 /**
  * Base loader for validation metadata.
  *
@@ -31,9 +29,7 @@ abstract class AbstractLoader implements LoaderInterface
      * The namespace to load constraints from by default.
      */
     public const DEFAULT_NAMESPACE = '\\Symfony\\Component\\Validator\\Constraints\\';
-
     protected $namespaces = [];
-
     /**
      * Adds a namespace alias.
      *
@@ -48,7 +44,6 @@ abstract class AbstractLoader implements LoaderInterface
     {
         $this->namespaces[$alias] = $namespace;
     }
-
     /**
      * Creates a new constraint instance for the given constraint name.
      *
@@ -66,20 +61,17 @@ abstract class AbstractLoader implements LoaderInterface
      */
     protected function newConstraint(string $name, $options = null)
     {
-        if (str_contains($name, '\\') && class_exists($name)) {
+        if (\str_contains($name, '\\') && \class_exists($name)) {
             $className = $name;
-        } elseif (str_contains($name, ':')) {
-            [$prefix, $className] = explode(':', $name, 2);
-
+        } elseif (\str_contains($name, ':')) {
+            [$prefix, $className] = \explode(':', $name, 2);
             if (!isset($this->namespaces[$prefix])) {
-                throw new MappingException(sprintf('Undefined namespace prefix "%s".', $prefix));
+                throw new MappingException(\sprintf('Undefined namespace prefix "%s".', $prefix));
             }
-
-            $className = $this->namespaces[$prefix].$className;
+            $className = $this->namespaces[$prefix] . $className;
         } else {
-            $className = self::DEFAULT_NAMESPACE.$name;
+            $className = self::DEFAULT_NAMESPACE . $name;
         }
-
         return new $className($options);
     }
 }

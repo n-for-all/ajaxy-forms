@@ -1,14 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'CLP' => [
-            '$',
-            'Peso chileno',
-        ],
-        'USD' => [
-            'US$',
-            'dólar estadounidense',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['CLP' => ['$', 'Peso chileno'], 'USD' => ['US$', 'dólar estadounidense']]];

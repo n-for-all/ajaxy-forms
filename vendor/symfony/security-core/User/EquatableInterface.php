@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Core\User;
+namespace Isolated\Symfony\Component\Security\Core\User;
 
 /**
  * EquatableInterface used to test if two objects are equal in security

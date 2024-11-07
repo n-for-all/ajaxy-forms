@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Microvisor\V1\Device;
 
-
-namespace Twilio\Rest\Microvisor\V1\Device;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $deviceSid
  * @property string|null $key
@@ -43,61 +39,43 @@ class DeviceSecretInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $deviceSid, string $key = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'deviceSid' => Values::array_get($payload, 'device_sid'),
-            'key' => Values::array_get($payload, 'key'),
-            'dateRotated' => Deserialize::dateTime(Values::array_get($payload, 'date_rotated')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['deviceSid' => $deviceSid, 'key' => $key ?: $this->properties['key'], ];
+        $this->properties = ['deviceSid' => Values::array_get($payload, 'device_sid'), 'key' => Values::array_get($payload, 'key'), 'dateRotated' => Deserialize::dateTime(Values::array_get($payload, 'date_rotated')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['deviceSid' => $deviceSid, 'key' => $key ?: $this->properties['key']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return DeviceSecretContext Context for this DeviceSecretInstance
      */
-    protected function proxy(): DeviceSecretContext
+    protected function proxy() : DeviceSecretContext
     {
         if (!$this->context) {
-            $this->context = new DeviceSecretContext(
-                $this->version,
-                $this->solution['deviceSid'],
-                $this->solution['key']
-            );
+            $this->context = new DeviceSecretContext($this->version, $this->solution['deviceSid'], $this->solution['key']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the DeviceSecretInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the DeviceSecretInstance
      *
      * @return DeviceSecretInstance Fetched DeviceSecretInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DeviceSecretInstance
+    public function fetch() : DeviceSecretInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the DeviceSecretInstance
      *
@@ -105,12 +83,10 @@ class DeviceSecretInstance extends InstanceResource
      * @return DeviceSecretInstance Updated DeviceSecretInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $value): DeviceSecretInstance
+    public function update(string $value) : DeviceSecretInstance
     {
-
         return $this->proxy()->update($value);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -123,27 +99,23 @@ class DeviceSecretInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Microvisor.V1.DeviceSecretInstance ' . \implode(' ', $context) . ']';
     }
 }
-

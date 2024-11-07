@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class DotAtEnd implements Reason
 {
@@ -8,7 +8,6 @@ class DotAtEnd implements Reason
     {
         return 142;
     }
-
     public function description() : string
     {
         return 'Dot at the end';

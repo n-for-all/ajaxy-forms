@@ -13,17 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\IpMessaging\V1\Service\User;
 
-namespace Twilio\Rest\IpMessaging\V1\Service\User;
-
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class UserChannelList extends ListResource
-    {
+{
     /**
      * Construct the UserChannelList
      *
@@ -31,28 +28,13 @@ class UserChannelList extends ListResource
      * @param string $serviceSid 
      * @param string $userSid 
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid,
-        string $userSid
-    ) {
+    public function __construct(Version $version, string $serviceSid, string $userSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        'userSid' =>
-            $userSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Users/' . \rawurlencode($userSid)
-        .'/Channels';
+        $this->solution = ['serviceSid' => $serviceSid, 'userSid' => $userSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Users/' . \rawurlencode($userSid) . '/Channels';
     }
-
     /**
      * Reads UserChannelInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -68,11 +50,10 @@ class UserChannelList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return UserChannelInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams UserChannelInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -91,15 +72,12 @@ class UserChannelList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of UserChannelInstance records from the API.
      * Request is executed immediately
@@ -109,24 +87,12 @@ class UserChannelList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return UserChannelPage Page of UserChannelInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): UserChannelPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : UserChannelPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new UserChannelPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of UserChannelInstance records from the API.
      * Request is executed immediately
@@ -134,23 +100,17 @@ class UserChannelList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return UserChannelPage Page of UserChannelInstance
      */
-    public function getPage(string $targetUrl): UserChannelPage
+    public function getPage(string $targetUrl) : UserChannelPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new UserChannelPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.IpMessaging.V1.UserChannelList]';
     }

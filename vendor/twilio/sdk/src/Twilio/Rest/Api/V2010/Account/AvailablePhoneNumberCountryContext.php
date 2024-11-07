@@ -13,23 +13,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account;
 
-
-namespace Twilio\Rest\Api\V2010\Account;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\VoipList;
-use Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\NationalList;
-use Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\MobileList;
-use Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\MachineToMachineList;
-use Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\TollFreeList;
-use Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\SharedCostList;
-use Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\LocalList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\VoipList;
+use Isolated\Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\NationalList;
+use Isolated\Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\MobileList;
+use Isolated\Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\MachineToMachineList;
+use Isolated\Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\TollFreeList;
+use Isolated\Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\SharedCostList;
+use Isolated\Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\LocalList;
 /**
  * @property VoipList $voip
  * @property NationalList $national
@@ -40,7 +36,7 @@ use Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry\LocalList;
  * @property LocalList $local
  */
 class AvailablePhoneNumberCountryContext extends InstanceContext
-    {
+{
     protected $_voip;
     protected $_national;
     protected $_mobile;
@@ -48,7 +44,6 @@ class AvailablePhoneNumberCountryContext extends InstanceContext
     protected $_tollFree;
     protected $_sharedCost;
     protected $_local;
-
     /**
      * Initialize the AvailablePhoneNumberCountryContext
      *
@@ -56,158 +51,94 @@ class AvailablePhoneNumberCountryContext extends InstanceContext
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) requesting the available phone number Country resource.
      * @param string $countryCode The [ISO-3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code of the country to fetch available phone number information about.
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $countryCode
-    ) {
+    public function __construct(Version $version, $accountSid, $countryCode)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'countryCode' =>
-            $countryCode,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/AvailablePhoneNumbers/' . \rawurlencode($countryCode)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'countryCode' => $countryCode];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/AvailablePhoneNumbers/' . \rawurlencode($countryCode) . '.json';
     }
-
     /**
      * Fetch the AvailablePhoneNumberCountryInstance
      *
      * @return AvailablePhoneNumberCountryInstance Fetched AvailablePhoneNumberCountryInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): AvailablePhoneNumberCountryInstance
+    public function fetch() : AvailablePhoneNumberCountryInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new AvailablePhoneNumberCountryInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['countryCode']
-        );
+        return new AvailablePhoneNumberCountryInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['countryCode']);
     }
-
-
     /**
      * Access the voip
      */
-    protected function getVoip(): VoipList
+    protected function getVoip() : VoipList
     {
         if (!$this->_voip) {
-            $this->_voip = new VoipList(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['countryCode']
-            );
+            $this->_voip = new VoipList($this->version, $this->solution['accountSid'], $this->solution['countryCode']);
         }
-
         return $this->_voip;
     }
-
     /**
      * Access the national
      */
-    protected function getNational(): NationalList
+    protected function getNational() : NationalList
     {
         if (!$this->_national) {
-            $this->_national = new NationalList(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['countryCode']
-            );
+            $this->_national = new NationalList($this->version, $this->solution['accountSid'], $this->solution['countryCode']);
         }
-
         return $this->_national;
     }
-
     /**
      * Access the mobile
      */
-    protected function getMobile(): MobileList
+    protected function getMobile() : MobileList
     {
         if (!$this->_mobile) {
-            $this->_mobile = new MobileList(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['countryCode']
-            );
+            $this->_mobile = new MobileList($this->version, $this->solution['accountSid'], $this->solution['countryCode']);
         }
-
         return $this->_mobile;
     }
-
     /**
      * Access the machineToMachine
      */
-    protected function getMachineToMachine(): MachineToMachineList
+    protected function getMachineToMachine() : MachineToMachineList
     {
         if (!$this->_machineToMachine) {
-            $this->_machineToMachine = new MachineToMachineList(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['countryCode']
-            );
+            $this->_machineToMachine = new MachineToMachineList($this->version, $this->solution['accountSid'], $this->solution['countryCode']);
         }
-
         return $this->_machineToMachine;
     }
-
     /**
      * Access the tollFree
      */
-    protected function getTollFree(): TollFreeList
+    protected function getTollFree() : TollFreeList
     {
         if (!$this->_tollFree) {
-            $this->_tollFree = new TollFreeList(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['countryCode']
-            );
+            $this->_tollFree = new TollFreeList($this->version, $this->solution['accountSid'], $this->solution['countryCode']);
         }
-
         return $this->_tollFree;
     }
-
     /**
      * Access the sharedCost
      */
-    protected function getSharedCost(): SharedCostList
+    protected function getSharedCost() : SharedCostList
     {
         if (!$this->_sharedCost) {
-            $this->_sharedCost = new SharedCostList(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['countryCode']
-            );
+            $this->_sharedCost = new SharedCostList($this->version, $this->solution['accountSid'], $this->solution['countryCode']);
         }
-
         return $this->_sharedCost;
     }
-
     /**
      * Access the local
      */
-    protected function getLocal(): LocalList
+    protected function getLocal() : LocalList
     {
         if (!$this->_local) {
-            $this->_local = new LocalList(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['countryCode']
-            );
+            $this->_local = new LocalList($this->version, $this->solution['accountSid'], $this->solution['countryCode']);
         }
-
         return $this->_local;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -215,16 +146,14 @@ class AvailablePhoneNumberCountryContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -233,26 +162,24 @@ class AvailablePhoneNumberCountryContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.AvailablePhoneNumberCountryContext ' . \implode(' ', $context) . ']';
     }

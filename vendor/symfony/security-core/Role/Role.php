@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Core\Role;
+namespace Isolated\Symfony\Component\Security\Core\Role;
 
 /**
  * Allows migrating session payloads from v4.
@@ -19,12 +18,10 @@ namespace Symfony\Component\Security\Core\Role;
 class Role
 {
     private $role;
-
     private function __construct()
     {
     }
-
-    public function __toString(): string
+    public function __toString() : string
     {
         return $this->role;
     }

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\HttpFoundation;
 
-namespace Symfony\Component\Form\Extension\HttpFoundation;
-
-use Symfony\Component\Form\AbstractExtension;
-
+use Isolated\Symfony\Component\Form\AbstractExtension;
 /**
  * Integrates the HttpFoundation component with the Form library.
  *
@@ -22,8 +20,6 @@ class HttpFoundationExtension extends AbstractExtension
 {
     protected function loadTypeExtensions()
     {
-        return [
-            new Type\FormTypeHttpFoundationExtension(),
-        ];
+        return [new Type\FormTypeHttpFoundationExtension()];
     }
 }

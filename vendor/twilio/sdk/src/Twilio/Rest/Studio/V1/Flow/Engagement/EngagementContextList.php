@@ -13,15 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Studio\V1\Flow\Engagement;
 
-namespace Twilio\Rest\Studio\V1\Flow\Engagement;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class EngagementContextList extends ListResource
-    {
+{
     /**
      * Construct the EngagementContextList
      *
@@ -29,44 +26,25 @@ class EngagementContextList extends ListResource
      * @param string $flowSid The SID of the Flow.
      * @param string $engagementSid The SID of the Engagement.
      */
-    public function __construct(
-        Version $version,
-        string $flowSid,
-        string $engagementSid
-    ) {
+    public function __construct(Version $version, string $flowSid, string $engagementSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'flowSid' =>
-            $flowSid,
-        
-        'engagementSid' =>
-            $engagementSid,
-        
-        ];
+        $this->solution = ['flowSid' => $flowSid, 'engagementSid' => $engagementSid];
     }
-
     /**
      * Constructs a EngagementContextContext
      */
-    public function getContext(
-        
-    ): EngagementContextContext
+    public function getContext() : EngagementContextContext
     {
-        return new EngagementContextContext(
-            $this->version,
-            $this->solution['flowSid'],
-            $this->solution['engagementSid']
-        );
+        return new EngagementContextContext($this->version, $this->solution['flowSid'], $this->solution['engagementSid']);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Studio.V1.EngagementContextList]';
     }

@@ -13,68 +13,47 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Content\V1\Content;
 
-
-namespace Twilio\Rest\Content\V1\Content;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ApprovalFetchContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ApprovalFetchContext
      *
      * @param Version $version Version that contains the resource
      * @param string $contentSid The Twilio-provided string that uniquely identifies the Content resource whose approval information to fetch.
      */
-    public function __construct(
-        Version $version,
-        $contentSid
-    ) {
+    public function __construct(Version $version, $contentSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'contentSid' =>
-            $contentSid,
-        ];
-
-        $this->uri = '/Content/' . \rawurlencode($contentSid)
-        .'/ApprovalRequests';
+        $this->solution = ['contentSid' => $contentSid];
+        $this->uri = '/Content/' . \rawurlencode($contentSid) . '/ApprovalRequests';
     }
-
     /**
      * Fetch the ApprovalFetchInstance
      *
      * @return ApprovalFetchInstance Fetched ApprovalFetchInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ApprovalFetchInstance
+    public function fetch() : ApprovalFetchInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ApprovalFetchInstance(
-            $this->version,
-            $payload,
-            $this->solution['contentSid']
-        );
+        return new ApprovalFetchInstance($this->version, $payload, $this->solution['contentSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Content.V1.ApprovalFetchContext ' . \implode(' ', $context) . ']';
     }

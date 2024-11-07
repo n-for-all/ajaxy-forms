@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class UnclosedQuotedString implements Reason
 {
@@ -8,7 +8,6 @@ class UnclosedQuotedString implements Reason
     {
         return 145;
     }
-
     public function description() : string
     {
         return "Unclosed quoted string";

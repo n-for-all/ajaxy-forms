@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator;
 
-namespace Symfony\Component\Validator;
-
-use Symfony\Component\Validator\Constraints\ExpressionValidator;
-
+use Isolated\Symfony\Component\Validator\Constraints\ExpressionValidator;
 /**
  * Default implementation of the ConstraintValidatorFactoryInterface.
  *
@@ -25,24 +23,18 @@ use Symfony\Component\Validator\Constraints\ExpressionValidator;
 class ConstraintValidatorFactory implements ConstraintValidatorFactoryInterface
 {
     protected $validators = [];
-
     public function __construct()
     {
     }
-
     /**
      * {@inheritdoc}
      */
     public function getInstance(Constraint $constraint)
     {
         $className = $constraint->validatedBy();
-
         if (!isset($this->validators[$className])) {
-            $this->validators[$className] = 'validator.expression' === $className
-                ? new ExpressionValidator()
-                : new $className();
+            $this->validators[$className] = 'validator.expression' === $className ? new ExpressionValidator() : new $className();
         }
-
         return $this->validators[$className];
     }
 }

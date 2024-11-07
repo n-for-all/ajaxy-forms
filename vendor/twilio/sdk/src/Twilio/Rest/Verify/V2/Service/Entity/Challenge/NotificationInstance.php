@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service\Entity\Challenge;
 
-
-namespace Twilio\Rest\Verify\V2\Service\Entity\Challenge;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -49,23 +45,10 @@ class NotificationInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $identity, string $challengeSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'entitySid' => Values::array_get($payload, 'entity_sid'),
-            'identity' => Values::array_get($payload, 'identity'),
-            'challengeSid' => Values::array_get($payload, 'challenge_sid'),
-            'priority' => Values::array_get($payload, 'priority'),
-            'ttl' => Values::array_get($payload, 'ttl'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'identity' => $identity, 'challengeSid' => $challengeSid, ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'entitySid' => Values::array_get($payload, 'entity_sid'), 'identity' => Values::array_get($payload, 'identity'), 'challengeSid' => Values::array_get($payload, 'challenge_sid'), 'priority' => Values::array_get($payload, 'priority'), 'ttl' => Values::array_get($payload, 'ttl'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created'))];
+        $this->solution = ['serviceSid' => $serviceSid, 'identity' => $identity, 'challengeSid' => $challengeSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -78,23 +61,19 @@ class NotificationInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Verify.V2.NotificationInstance]';
     }
 }
-

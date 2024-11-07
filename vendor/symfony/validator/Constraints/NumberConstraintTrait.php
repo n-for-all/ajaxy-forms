@@ -8,13 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
-namespace Symfony\Component\Validator\Constraints;
-
-use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
-
+use Isolated\Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 trigger_deprecation('symfony/validator', '5.2', '%s is deprecated.', NumberConstraintTrait::class);
-
 /**
  * @author Jan Schädlich <jan.schaedlich@sensiolabs.de>
  *
@@ -22,24 +19,20 @@ trigger_deprecation('symfony/validator', '5.2', '%s is deprecated.', NumberConst
  */
 trait NumberConstraintTrait
 {
-    private function configureNumberConstraintOptions($options): array
+    private function configureNumberConstraintOptions($options) : array
     {
         if (null === $options) {
             $options = [];
         } elseif (!\is_array($options)) {
             $options = [$this->getDefaultOption() => $options];
         }
-
         if (isset($options['propertyPath'])) {
-            throw new ConstraintDefinitionException(sprintf('The "propertyPath" option of the "%s" constraint cannot be set.', static::class));
+            throw new ConstraintDefinitionException(\sprintf('The "propertyPath" option of the "%s" constraint cannot be set.', static::class));
         }
-
         if (isset($options['value'])) {
-            throw new ConstraintDefinitionException(sprintf('The "value" option of the "%s" constraint cannot be set.', static::class));
+            throw new ConstraintDefinitionException(\sprintf('The "value" option of the "%s" constraint cannot be set.', static::class));
         }
-
         $options['value'] = 0;
-
         return $options;
     }
 }

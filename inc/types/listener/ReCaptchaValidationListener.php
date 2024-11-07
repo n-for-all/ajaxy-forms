@@ -2,10 +2,10 @@
 
 namespace Ajaxy\Forms\Inc\Types\Listener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
+use Isolated\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Isolated\Symfony\Component\Form\FormError;
+use Isolated\Symfony\Component\Form\FormEvent;
+use Isolated\Symfony\Component\Form\FormEvents;
 
 class ReCaptchaValidationListener implements EventSubscriberInterface
 {

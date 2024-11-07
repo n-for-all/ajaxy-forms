@@ -6,18 +6,18 @@
  * | (_)\/(_)(_|\/| |(/_  v1.0.0
  * /       /
  */
+namespace Isolated\Twilio\TwiML\Video;
 
-namespace Twilio\TwiML\Video;
-
-use Twilio\TwiML\TwiML;
-
-class Room extends TwiML {
+use Isolated\Twilio\TwiML\TwiML;
+class Room extends TwiML
+{
     /**
      * Room constructor.
      * 
      * @param string $name Room name
      */
-    public function __construct($name) {
+    public function __construct($name)
+    {
         parent::__construct('Room', $name);
     }
 }

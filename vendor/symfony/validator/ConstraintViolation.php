@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator;
+namespace Isolated\Symfony\Component\Validator;
 
 /**
  * Default implementation of {@ConstraintViolationInterface}.
@@ -28,7 +27,6 @@ class ConstraintViolation implements ConstraintViolationInterface
     private $constraint;
     private $code;
     private $cause;
-
     /**
      * Creates a new constraint violation.
      *
@@ -51,10 +49,9 @@ class ConstraintViolation implements ConstraintViolationInterface
      */
     public function __construct($message, ?string $messageTemplate, array $parameters, $root, ?string $propertyPath, $invalidValue, ?int $plural = null, ?string $code = null, ?Constraint $constraint = null, $cause = null)
     {
-        if (!\is_string($message) && !(\is_object($message) && method_exists($message, '__toString'))) {
+        if (!\is_string($message) && !(\is_object($message) && \method_exists($message, '__toString'))) {
             throw new \TypeError('Constraint violation message should be a string or an object which implements the __toString() method.');
         }
-
         $this->message = $message;
         $this->messageTemplate = $messageTemplate;
         $this->parameters = $parameters;
@@ -66,7 +63,6 @@ class ConstraintViolation implements ConstraintViolationInterface
         $this->code = $code;
         $this->cause = $cause;
     }
-
     /**
      * Converts the violation into a string for debugging purposes.
      *
@@ -75,26 +71,21 @@ class ConstraintViolation implements ConstraintViolationInterface
     public function __toString()
     {
         if (\is_object($this->root)) {
-            $class = 'Object('.\get_class($this->root).')';
+            $class = 'Object(' . \get_class($this->root) . ')';
         } elseif (\is_array($this->root)) {
             $class = 'Array';
         } else {
             $class = (string) $this->root;
         }
-
         $propertyPath = (string) $this->propertyPath;
-
         if ('' !== $propertyPath && '[' !== $propertyPath[0] && '' !== $class) {
             $class .= '.';
         }
-
         if (null !== ($code = $this->code) && '' !== $code) {
-            $code = ' (code '.$code.')';
+            $code = ' (code ' . $code . ')';
         }
-
-        return $class.$propertyPath.":\n    ".$this->getMessage().$code;
+        return $class . $propertyPath . ":\n    " . $this->getMessage() . $code;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -102,7 +93,6 @@ class ConstraintViolation implements ConstraintViolationInterface
     {
         return (string) $this->messageTemplate;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -110,7 +100,6 @@ class ConstraintViolation implements ConstraintViolationInterface
     {
         return $this->parameters;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -118,7 +107,6 @@ class ConstraintViolation implements ConstraintViolationInterface
     {
         return $this->plural;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -126,7 +114,6 @@ class ConstraintViolation implements ConstraintViolationInterface
     {
         return $this->message;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -134,7 +121,6 @@ class ConstraintViolation implements ConstraintViolationInterface
     {
         return $this->root;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -142,7 +128,6 @@ class ConstraintViolation implements ConstraintViolationInterface
     {
         return (string) $this->propertyPath;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -150,7 +135,6 @@ class ConstraintViolation implements ConstraintViolationInterface
     {
         return $this->invalidValue;
     }
-
     /**
      * Returns the constraint whose validation caused the violation.
      *
@@ -160,7 +144,6 @@ class ConstraintViolation implements ConstraintViolationInterface
     {
         return $this->constraint;
     }
-
     /**
      * Returns the cause of the violation.
      *
@@ -170,7 +153,6 @@ class ConstraintViolation implements ConstraintViolationInterface
     {
         return $this->cause;
     }
-
     /**
      * {@inheritdoc}
      */

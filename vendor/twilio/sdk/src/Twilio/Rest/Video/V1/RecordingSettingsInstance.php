@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Video\V1;
 
-
-namespace Twilio\Rest\Video\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property string|null $friendlyName
@@ -45,39 +41,23 @@ class RecordingSettingsInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'awsCredentialsSid' => Values::array_get($payload, 'aws_credentials_sid'),
-            'awsS3Url' => Values::array_get($payload, 'aws_s3_url'),
-            'awsStorageEnabled' => Values::array_get($payload, 'aws_storage_enabled'),
-            'encryptionKeySid' => Values::array_get($payload, 'encryption_key_sid'),
-            'encryptionEnabled' => Values::array_get($payload, 'encryption_enabled'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'awsCredentialsSid' => Values::array_get($payload, 'aws_credentials_sid'), 'awsS3Url' => Values::array_get($payload, 'aws_s3_url'), 'awsStorageEnabled' => Values::array_get($payload, 'aws_storage_enabled'), 'encryptionKeySid' => Values::array_get($payload, 'encryption_key_sid'), 'encryptionEnabled' => Values::array_get($payload, 'encryption_enabled'), 'url' => Values::array_get($payload, 'url')];
         $this->solution = [];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return RecordingSettingsContext Context for this RecordingSettingsInstance
      */
-    protected function proxy(): RecordingSettingsContext
+    protected function proxy() : RecordingSettingsContext
     {
         if (!$this->context) {
-            $this->context = new RecordingSettingsContext(
-                $this->version
-            );
+            $this->context = new RecordingSettingsContext($this->version);
         }
-
         return $this->context;
     }
-
     /**
      * Create the RecordingSettingsInstance
      *
@@ -86,24 +66,20 @@ class RecordingSettingsInstance extends InstanceResource
      * @return RecordingSettingsInstance Created RecordingSettingsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $friendlyName, array $options = []): RecordingSettingsInstance
+    public function create(string $friendlyName, array $options = []) : RecordingSettingsInstance
     {
-
         return $this->proxy()->create($friendlyName, $options);
     }
-
     /**
      * Fetch the RecordingSettingsInstance
      *
      * @return RecordingSettingsInstance Fetched RecordingSettingsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): RecordingSettingsInstance
+    public function fetch() : RecordingSettingsInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -116,27 +92,23 @@ class RecordingSettingsInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Video.V1.RecordingSettingsInstance ' . \implode(' ', $context) . ']';
     }
 }
-

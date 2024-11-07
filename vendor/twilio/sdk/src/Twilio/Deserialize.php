@@ -1,12 +1,10 @@
 <?php
 
-namespace Twilio;
+namespace Isolated\Twilio;
 
-use Twilio\Base\PhoneNumberCapabilities;
-
+use Isolated\Twilio\Base\PhoneNumberCapabilities;
 class Deserialize
 {
-
     /**
      * Deserialize a string date into a DateTime object
      *
@@ -23,10 +21,8 @@ class Deserialize
         } catch (\Exception $e) {
             // no-op
         }
-
         return $s;
     }
-
     /**
      * Deserialize an array into a PhoneNumberCapabilities object
      *
@@ -38,14 +34,13 @@ class Deserialize
         try {
             if ($arr) {
                 $required = ["mms", "sms", "voice", "fax"];
-                if (count(array_intersect($required, array_keys($arr))) > 0) {
+                if (\count(\array_intersect($required, \array_keys($arr))) > 0) {
                     return new PhoneNumberCapabilities($arr);
                 }
             }
         } catch (\Exception $e) {
             // no-op
         }
-
         return $arr;
     }
 }

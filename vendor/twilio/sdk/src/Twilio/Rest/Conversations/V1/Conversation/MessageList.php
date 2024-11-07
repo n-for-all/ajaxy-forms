@@ -13,43 +13,30 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1\Conversation;
 
-namespace Twilio\Rest\Conversations\V1\Conversation;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class MessageList extends ListResource
-    {
+{
     /**
      * Construct the MessageList
      *
      * @param Version $version Version that contains the resource
      * @param string $conversationSid The unique ID of the [Conversation](https://www.twilio.com/docs/conversations/api/conversation-resource) for this message.
      */
-    public function __construct(
-        Version $version,
-        string $conversationSid
-    ) {
+    public function __construct(Version $version, string $conversationSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'conversationSid' =>
-            $conversationSid,
-        
-        ];
-
-        $this->uri = '/Conversations/' . \rawurlencode($conversationSid)
-        .'/Messages';
+        $this->solution = ['conversationSid' => $conversationSid];
+        $this->uri = '/Conversations/' . \rawurlencode($conversationSid) . '/Messages';
     }
-
     /**
      * Create the MessageInstance
      *
@@ -57,44 +44,14 @@ class MessageList extends ListResource
      * @return MessageInstance Created MessageInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): MessageInstance
+    public function create(array $options = []) : MessageInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Author' =>
-                $options['author'],
-            'Body' =>
-                $options['body'],
-            'DateCreated' =>
-                Serialize::iso8601DateTime($options['dateCreated']),
-            'DateUpdated' =>
-                Serialize::iso8601DateTime($options['dateUpdated']),
-            'Attributes' =>
-                $options['attributes'],
-            'MediaSid' =>
-                $options['mediaSid'],
-            'ContentSid' =>
-                $options['contentSid'],
-            'ContentVariables' =>
-                $options['contentVariables'],
-            'Subject' =>
-                $options['subject'],
-        ]);
-
+        $data = Values::of(['Author' => $options['author'], 'Body' => $options['body'], 'DateCreated' => Serialize::iso8601DateTime($options['dateCreated']), 'DateUpdated' => Serialize::iso8601DateTime($options['dateUpdated']), 'Attributes' => $options['attributes'], 'MediaSid' => $options['mediaSid'], 'ContentSid' => $options['contentSid'], 'ContentVariables' => $options['contentVariables'], 'Subject' => $options['subject']]);
         $headers = Values::of(['X-Twilio-Webhook-Enabled' => $options['xTwilioWebhookEnabled']]);
-
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new MessageInstance(
-            $this->version,
-            $payload,
-            $this->solution['conversationSid']
-        );
+        return new MessageInstance($this->version, $payload, $this->solution['conversationSid']);
     }
-
-
     /**
      * Reads MessageInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -111,11 +68,10 @@ class MessageList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return MessageInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams MessageInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -135,15 +91,12 @@ class MessageList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of MessageInstance records from the API.
      * Request is executed immediately
@@ -153,28 +106,13 @@ class MessageList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return MessagePage Page of MessageInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): MessagePage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : MessagePage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Order' =>
-                $options['order'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Order' => $options['order'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new MessagePage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of MessageInstance records from the API.
      * Request is executed immediately
@@ -182,40 +120,26 @@ class MessageList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return MessagePage Page of MessageInstance
      */
-    public function getPage(string $targetUrl): MessagePage
+    public function getPage(string $targetUrl) : MessagePage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new MessagePage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a MessageContext
      *
      * @param string $sid A 34 character string that uniquely identifies this resource.
      */
-    public function getContext(
-        string $sid
-        
-    ): MessageContext
+    public function getContext(string $sid) : MessageContext
     {
-        return new MessageContext(
-            $this->version,
-            $this->solution['conversationSid'],
-            $sid
-        );
+        return new MessageContext($this->version, $this->solution['conversationSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Conversations.V1.MessageList]';
     }

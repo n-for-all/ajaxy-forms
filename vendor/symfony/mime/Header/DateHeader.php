@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Mime\Header;
+namespace Isolated\Symfony\Component\Mime\Header;
 
 /**
  * A Date MIME Header.
@@ -19,14 +18,11 @@ namespace Symfony\Component\Mime\Header;
 final class DateHeader extends AbstractHeader
 {
     private $dateTime;
-
     public function __construct(string $name, \DateTimeInterface $date)
     {
         parent::__construct($name);
-
         $this->setDateTime($date);
     }
-
     /**
      * @param \DateTimeInterface $body
      */
@@ -34,17 +30,14 @@ final class DateHeader extends AbstractHeader
     {
         $this->setDateTime($body);
     }
-
-    public function getBody(): \DateTimeImmutable
+    public function getBody() : \DateTimeImmutable
     {
         return $this->getDateTime();
     }
-
-    public function getDateTime(): \DateTimeImmutable
+    public function getDateTime() : \DateTimeImmutable
     {
         return $this->dateTime;
     }
-
     /**
      * Set the date-time of the Date in this Header.
      *
@@ -53,13 +46,12 @@ final class DateHeader extends AbstractHeader
     public function setDateTime(\DateTimeInterface $dateTime)
     {
         if ($dateTime instanceof \DateTime) {
-            $immutable = new \DateTimeImmutable('@'.$dateTime->getTimestamp());
+            $immutable = new \DateTimeImmutable('@' . $dateTime->getTimestamp());
             $dateTime = $immutable->setTimezone($dateTime->getTimezone());
         }
         $this->dateTime = $dateTime;
     }
-
-    public function getBodyAsString(): string
+    public function getBodyAsString() : string
     {
         return $this->dateTime->format(\DateTime::RFC2822);
     }

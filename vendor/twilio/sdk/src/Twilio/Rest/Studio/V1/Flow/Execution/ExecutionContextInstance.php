@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Studio\V1\Flow\Execution;
 
-
-namespace Twilio\Rest\Studio\V1\Flow\Execution;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property array|null $context
@@ -43,50 +39,33 @@ class ExecutionContextInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $flowSid, string $executionSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'context' => Values::array_get($payload, 'context'),
-            'flowSid' => Values::array_get($payload, 'flow_sid'),
-            'executionSid' => Values::array_get($payload, 'execution_sid'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['flowSid' => $flowSid, 'executionSid' => $executionSid, ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'context' => Values::array_get($payload, 'context'), 'flowSid' => Values::array_get($payload, 'flow_sid'), 'executionSid' => Values::array_get($payload, 'execution_sid'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['flowSid' => $flowSid, 'executionSid' => $executionSid];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ExecutionContextContext Context for this ExecutionContextInstance
      */
-    protected function proxy(): ExecutionContextContext
+    protected function proxy() : ExecutionContextContext
     {
         if (!$this->context) {
-            $this->context = new ExecutionContextContext(
-                $this->version,
-                $this->solution['flowSid'],
-                $this->solution['executionSid']
-            );
+            $this->context = new ExecutionContextContext($this->version, $this->solution['flowSid'], $this->solution['executionSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the ExecutionContextInstance
      *
      * @return ExecutionContextInstance Fetched ExecutionContextInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ExecutionContextInstance
+    public function fetch() : ExecutionContextInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -99,27 +78,23 @@ class ExecutionContextInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Studio.V1.ExecutionContextInstance ' . \implode(' ', $context) . ']';
     }
 }
-

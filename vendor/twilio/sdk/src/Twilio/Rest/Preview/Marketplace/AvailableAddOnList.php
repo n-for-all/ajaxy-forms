@@ -13,34 +13,26 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Marketplace;
 
-namespace Twilio\Rest\Preview\Marketplace;
-
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class AvailableAddOnList extends ListResource
-    {
+{
     /**
      * Construct the AvailableAddOnList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/AvailableAddOns';
     }
-
     /**
      * Reads AvailableAddOnInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -56,11 +48,10 @@ class AvailableAddOnList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return AvailableAddOnInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams AvailableAddOnInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -79,15 +70,12 @@ class AvailableAddOnList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of AvailableAddOnInstance records from the API.
      * Request is executed immediately
@@ -97,24 +85,12 @@ class AvailableAddOnList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return AvailableAddOnPage Page of AvailableAddOnInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): AvailableAddOnPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : AvailableAddOnPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new AvailableAddOnPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of AvailableAddOnInstance records from the API.
      * Request is executed immediately
@@ -122,39 +98,26 @@ class AvailableAddOnList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return AvailableAddOnPage Page of AvailableAddOnInstance
      */
-    public function getPage(string $targetUrl): AvailableAddOnPage
+    public function getPage(string $targetUrl) : AvailableAddOnPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new AvailableAddOnPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a AvailableAddOnContext
      *
      * @param string $sid The SID of the AvailableAddOn resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): AvailableAddOnContext
+    public function getContext(string $sid) : AvailableAddOnContext
     {
-        return new AvailableAddOnContext(
-            $this->version,
-            $sid
-        );
+        return new AvailableAddOnContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Preview.Marketplace.AvailableAddOnList]';
     }

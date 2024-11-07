@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Wireless;
 
-
-namespace Twilio\Rest\Preview\Wireless;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Preview\Wireless\Sim\UsageList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Preview\Wireless\Sim\UsageList;
 /**
  * @property string|null $sid
  * @property string|null $uniqueName
@@ -53,7 +49,6 @@ use Twilio\Rest\Preview\Wireless\Sim\UsageList;
 class SimInstance extends InstanceResource
 {
     protected $_usage;
-
     /**
      * Initialize the SimInstance
      *
@@ -64,66 +59,33 @@ class SimInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'uniqueName' => Values::array_get($payload, 'unique_name'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'ratePlanSid' => Values::array_get($payload, 'rate_plan_sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'iccid' => Values::array_get($payload, 'iccid'),
-            'eId' => Values::array_get($payload, 'e_id'),
-            'status' => Values::array_get($payload, 'status'),
-            'commandsCallbackUrl' => Values::array_get($payload, 'commands_callback_url'),
-            'commandsCallbackMethod' => Values::array_get($payload, 'commands_callback_method'),
-            'smsFallbackMethod' => Values::array_get($payload, 'sms_fallback_method'),
-            'smsFallbackUrl' => Values::array_get($payload, 'sms_fallback_url'),
-            'smsMethod' => Values::array_get($payload, 'sms_method'),
-            'smsUrl' => Values::array_get($payload, 'sms_url'),
-            'voiceFallbackMethod' => Values::array_get($payload, 'voice_fallback_method'),
-            'voiceFallbackUrl' => Values::array_get($payload, 'voice_fallback_url'),
-            'voiceMethod' => Values::array_get($payload, 'voice_method'),
-            'voiceUrl' => Values::array_get($payload, 'voice_url'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'uniqueName' => Values::array_get($payload, 'unique_name'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'ratePlanSid' => Values::array_get($payload, 'rate_plan_sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'iccid' => Values::array_get($payload, 'iccid'), 'eId' => Values::array_get($payload, 'e_id'), 'status' => Values::array_get($payload, 'status'), 'commandsCallbackUrl' => Values::array_get($payload, 'commands_callback_url'), 'commandsCallbackMethod' => Values::array_get($payload, 'commands_callback_method'), 'smsFallbackMethod' => Values::array_get($payload, 'sms_fallback_method'), 'smsFallbackUrl' => Values::array_get($payload, 'sms_fallback_url'), 'smsMethod' => Values::array_get($payload, 'sms_method'), 'smsUrl' => Values::array_get($payload, 'sms_url'), 'voiceFallbackMethod' => Values::array_get($payload, 'voice_fallback_method'), 'voiceFallbackUrl' => Values::array_get($payload, 'voice_fallback_url'), 'voiceMethod' => Values::array_get($payload, 'voice_method'), 'voiceUrl' => Values::array_get($payload, 'voice_url'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return SimContext Context for this SimInstance
      */
-    protected function proxy(): SimContext
+    protected function proxy() : SimContext
     {
         if (!$this->context) {
-            $this->context = new SimContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new SimContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the SimInstance
      *
      * @return SimInstance Fetched SimInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SimInstance
+    public function fetch() : SimInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the SimInstance
      *
@@ -131,20 +93,17 @@ class SimInstance extends InstanceResource
      * @return SimInstance Updated SimInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): SimInstance
+    public function update(array $options = []) : SimInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the usage
      */
-    protected function getUsage(): UsageList
+    protected function getUsage() : UsageList
     {
         return $this->proxy()->usage;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -157,27 +116,23 @@ class SimInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.Wireless.SimInstance ' . \implode(' ', $context) . ']';
     }
 }
-

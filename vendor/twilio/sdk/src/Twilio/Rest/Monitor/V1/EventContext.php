@@ -13,68 +13,47 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Monitor\V1;
 
-
-namespace Twilio\Rest\Monitor\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class EventContext extends InstanceContext
-    {
+{
     /**
      * Initialize the EventContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The SID of the Event resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Events/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Events/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the EventInstance
      *
      * @return EventInstance Fetched EventInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): EventInstance
+    public function fetch() : EventInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new EventInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new EventInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Monitor.V1.EventContext ' . \implode(' ', $context) . ']';
     }

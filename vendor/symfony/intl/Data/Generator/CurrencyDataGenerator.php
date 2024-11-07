@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl\Data\Generator;
 
-namespace Symfony\Component\Intl\Data\Generator;
-
-use Symfony\Component\Intl\Data\Bundle\Compiler\BundleCompilerInterface;
-use Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReaderInterface;
-use Symfony\Component\Intl\Data\Util\ArrayAccessibleResourceBundle;
-use Symfony\Component\Intl\Data\Util\LocaleScanner;
-
+use Isolated\Symfony\Component\Intl\Data\Bundle\Compiler\BundleCompilerInterface;
+use Isolated\Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReaderInterface;
+use Isolated\Symfony\Component\Intl\Data\Util\ArrayAccessibleResourceBundle;
+use Isolated\Symfony\Component\Intl\Data\Util\LocaleScanner;
 /**
  * The rule for compiling the currency bundle.
  *
@@ -26,45 +24,53 @@ use Symfony\Component\Intl\Data\Util\LocaleScanner;
 class CurrencyDataGenerator extends AbstractDataGenerator
 {
     private const DENYLIST = [
-        'XBA' => true, // European Composite Unit
-        'XBB' => true, // European Monetary Unit
-        'XBC' => true, // European Unit of Account (XBC)
-        'XBD' => true, // European Unit of Account (XBD)
-        'XUA' => true, // ADB Unit of Account
-        'XAU' => true, // Gold
-        'XAG' => true, // Silver
-        'XPT' => true, // Platinum
-        'XPD' => true, // Palladium
-        'XSU' => true, // Sucre
-        'XDR' => true, // Special Drawing Rights
-        'XTS' => true, // Testing Currency Code
-        'XXX' => true, // Unknown Currency
+        'XBA' => \true,
+        // European Composite Unit
+        'XBB' => \true,
+        // European Monetary Unit
+        'XBC' => \true,
+        // European Unit of Account (XBC)
+        'XBD' => \true,
+        // European Unit of Account (XBD)
+        'XUA' => \true,
+        // ADB Unit of Account
+        'XAU' => \true,
+        // Gold
+        'XAG' => \true,
+        // Silver
+        'XPT' => \true,
+        // Platinum
+        'XPD' => \true,
+        // Palladium
+        'XSU' => \true,
+        // Sucre
+        'XDR' => \true,
+        // Special Drawing Rights
+        'XTS' => \true,
+        // Testing Currency Code
+        'XXX' => \true,
     ];
-
     /**
      * Collects all available currency codes.
      *
      * @var string[]
      */
     private $currencyCodes = [];
-
     /**
      * {@inheritdoc}
      */
-    protected function scanLocales(LocaleScanner $scanner, string $sourceDir): array
+    protected function scanLocales(LocaleScanner $scanner, string $sourceDir) : array
     {
-        return $scanner->scanLocales($sourceDir.'/curr');
+        return $scanner->scanLocales($sourceDir . '/curr');
     }
-
     /**
      * {@inheritdoc}
      */
     protected function compileTemporaryBundles(BundleCompilerInterface $compiler, string $sourceDir, string $tempDir)
     {
-        $compiler->compile($sourceDir.'/curr', $tempDir);
-        $compiler->compile($sourceDir.'/misc/currencyNumericCodes.txt', $tempDir);
+        $compiler->compile($sourceDir . '/curr', $tempDir);
+        $compiler->compile($sourceDir . '/misc/currencyNumericCodes.txt', $tempDir);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -72,108 +78,74 @@ class CurrencyDataGenerator extends AbstractDataGenerator
     {
         $this->currencyCodes = [];
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function generateDataForLocale(BundleEntryReaderInterface $reader, string $tempDir, string $displayLocale): ?array
+    protected function generateDataForLocale(BundleEntryReaderInterface $reader, string $tempDir, string $displayLocale) : ?array
     {
         $localeBundle = $reader->read($tempDir, $displayLocale);
-
         if (isset($localeBundle['Currencies']) && null !== $localeBundle['Currencies']) {
-            $data = [
-                'Names' => $this->generateSymbolNamePairs($localeBundle),
-            ];
-
-            $this->currencyCodes = array_merge($this->currencyCodes, array_keys($data['Names']));
-
+            $data = ['Names' => $this->generateSymbolNamePairs($localeBundle)];
+            $this->currencyCodes = \array_merge($this->currencyCodes, \array_keys($data['Names']));
             return $data;
         }
-
         return null;
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function generateDataForRoot(BundleEntryReaderInterface $reader, string $tempDir): ?array
+    protected function generateDataForRoot(BundleEntryReaderInterface $reader, string $tempDir) : ?array
     {
         $rootBundle = $reader->read($tempDir, 'root');
-
-        return [
-            'Names' => $this->generateSymbolNamePairs($rootBundle),
-        ];
+        return ['Names' => $this->generateSymbolNamePairs($rootBundle)];
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function generateDataForMeta(BundleEntryReaderInterface $reader, string $tempDir): ?array
+    protected function generateDataForMeta(BundleEntryReaderInterface $reader, string $tempDir) : ?array
     {
         $supplementalDataBundle = $reader->read($tempDir, 'supplementalData');
         $numericCodesBundle = $reader->read($tempDir, 'currencyNumericCodes');
-
-        $this->currencyCodes = array_unique($this->currencyCodes);
-
-        sort($this->currencyCodes);
-
-        $data = [
-            'Currencies' => $this->currencyCodes,
-            'Meta' => $this->generateCurrencyMeta($supplementalDataBundle),
-            'Alpha3ToNumeric' => $this->generateAlpha3ToNumericMapping($numericCodesBundle, $this->currencyCodes),
-        ];
-
+        $this->currencyCodes = \array_unique($this->currencyCodes);
+        \sort($this->currencyCodes);
+        $data = ['Currencies' => $this->currencyCodes, 'Meta' => $this->generateCurrencyMeta($supplementalDataBundle), 'Alpha3ToNumeric' => $this->generateAlpha3ToNumericMapping($numericCodesBundle, $this->currencyCodes)];
         $data['NumericToAlpha3'] = $this->generateNumericToAlpha3Mapping($data['Alpha3ToNumeric']);
-
         return $data;
     }
-
-    private function generateSymbolNamePairs(ArrayAccessibleResourceBundle $rootBundle): array
+    private function generateSymbolNamePairs(ArrayAccessibleResourceBundle $rootBundle) : array
     {
-        $symbolNamePairs = array_map(function ($pair) {
-            return \array_slice(iterator_to_array($pair), 0, 2);
-        }, iterator_to_array($rootBundle['Currencies']));
-
+        $symbolNamePairs = \array_map(function ($pair) {
+            return \array_slice(\iterator_to_array($pair), 0, 2);
+        }, \iterator_to_array($rootBundle['Currencies']));
         // Remove unwanted currencies
-        $symbolNamePairs = array_diff_key($symbolNamePairs, self::DENYLIST);
-
+        $symbolNamePairs = \array_diff_key($symbolNamePairs, self::DENYLIST);
         return $symbolNamePairs;
     }
-
-    private function generateCurrencyMeta(ArrayAccessibleResourceBundle $supplementalDataBundle): array
+    private function generateCurrencyMeta(ArrayAccessibleResourceBundle $supplementalDataBundle) : array
     {
         // The metadata is already de-duplicated. It contains one key "DEFAULT"
         // which is used for currencies that don't have dedicated entries.
-        return iterator_to_array($supplementalDataBundle['CurrencyMeta']);
+        return \iterator_to_array($supplementalDataBundle['CurrencyMeta']);
     }
-
-    private function generateAlpha3ToNumericMapping(ArrayAccessibleResourceBundle $numericCodesBundle, array $currencyCodes): array
+    private function generateAlpha3ToNumericMapping(ArrayAccessibleResourceBundle $numericCodesBundle, array $currencyCodes) : array
     {
-        $alpha3ToNumericMapping = iterator_to_array($numericCodesBundle['codeMap']);
-
-        asort($alpha3ToNumericMapping);
-
+        $alpha3ToNumericMapping = \iterator_to_array($numericCodesBundle['codeMap']);
+        \asort($alpha3ToNumericMapping);
         // Filter unknown currencies (e.g. "AYM")
-        $alpha3ToNumericMapping = array_intersect_key($alpha3ToNumericMapping, array_flip($currencyCodes));
-
+        $alpha3ToNumericMapping = \array_intersect_key($alpha3ToNumericMapping, \array_flip($currencyCodes));
         return $alpha3ToNumericMapping;
     }
-
-    private function generateNumericToAlpha3Mapping(array $alpha3ToNumericMapping): array
+    private function generateNumericToAlpha3Mapping(array $alpha3ToNumericMapping) : array
     {
         $numericToAlpha3Mapping = [];
-
         foreach ($alpha3ToNumericMapping as $alpha3 => $numeric) {
             // Make sure that the mapping is stored as table and not as array
             $numeric = (string) $numeric;
-
             if (!isset($numericToAlpha3Mapping[$numeric])) {
                 $numericToAlpha3Mapping[$numeric] = [];
             }
-
             $numericToAlpha3Mapping[$numeric][] = $alpha3;
         }
-
         return $numericToAlpha3Mapping;
     }
 }

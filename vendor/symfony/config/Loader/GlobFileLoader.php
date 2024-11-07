@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Config\Loader;
+namespace Isolated\Symfony\Component\Config\Loader;
 
 /**
  * GlobFileLoader loads files from a glob pattern.
@@ -25,7 +24,6 @@ class GlobFileLoader extends FileLoader
     {
         return $this->import($resource);
     }
-
     /**
      * {@inheritdoc}
      */

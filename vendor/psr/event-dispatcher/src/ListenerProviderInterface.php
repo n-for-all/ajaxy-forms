@@ -1,7 +1,7 @@
 <?php
-declare(strict_types=1);
 
-namespace Psr\EventDispatcher;
+declare (strict_types=1);
+namespace Isolated\Psr\EventDispatcher;
 
 /**
  * Mapper from an event to the listeners that are applicable to that event.

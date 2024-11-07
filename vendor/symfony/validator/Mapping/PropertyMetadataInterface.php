@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Mapping;
+namespace Isolated\Symfony\Component\Validator\Mapping;
 
 /**
  * Stores all metadata needed for validating the value of a class property.
@@ -35,7 +34,6 @@ interface PropertyMetadataInterface extends MetadataInterface
      * @return string
      */
     public function getPropertyName();
-
     /**
      * Extracts the value of the property from the given container.
      *

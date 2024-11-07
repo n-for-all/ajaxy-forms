@@ -13,61 +13,40 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class DomainConfigContext extends InstanceContext
-    {
+{
     /**
      * Initialize the DomainConfigContext
      *
      * @param Version $version Version that contains the resource
      * @param string $domainSid Unique string used to identify the domain that this config should be associated with.
      */
-    public function __construct(
-        Version $version,
-        $domainSid
-    ) {
+    public function __construct(Version $version, $domainSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'domainSid' =>
-            $domainSid,
-        ];
-
-        $this->uri = '/LinkShortening/Domains/' . \rawurlencode($domainSid)
-        .'/Config';
+        $this->solution = ['domainSid' => $domainSid];
+        $this->uri = '/LinkShortening/Domains/' . \rawurlencode($domainSid) . '/Config';
     }
-
     /**
      * Fetch the DomainConfigInstance
      *
      * @return DomainConfigInstance Fetched DomainConfigInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DomainConfigInstance
+    public function fetch() : DomainConfigInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new DomainConfigInstance(
-            $this->version,
-            $payload,
-            $this->solution['domainSid']
-        );
+        return new DomainConfigInstance($this->version, $payload, $this->solution['domainSid']);
     }
-
-
     /**
      * Update the DomainConfigInstance
      *
@@ -75,42 +54,23 @@ class DomainConfigContext extends InstanceContext
      * @return DomainConfigInstance Updated DomainConfigInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): DomainConfigInstance
+    public function update(array $options = []) : DomainConfigInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FallbackUrl' =>
-                $options['fallbackUrl'],
-            'CallbackUrl' =>
-                $options['callbackUrl'],
-            'ContinueOnFailure' =>
-                Serialize::booleanToString($options['continueOnFailure']),
-            'DisableHttps' =>
-                Serialize::booleanToString($options['disableHttps']),
-        ]);
-
+        $data = Values::of(['FallbackUrl' => $options['fallbackUrl'], 'CallbackUrl' => $options['callbackUrl'], 'ContinueOnFailure' => Serialize::booleanToString($options['continueOnFailure']), 'DisableHttps' => Serialize::booleanToString($options['disableHttps'])]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new DomainConfigInstance(
-            $this->version,
-            $payload,
-            $this->solution['domainSid']
-        );
+        return new DomainConfigInstance($this->version, $payload, $this->solution['domainSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.DomainConfigContext ' . \implode(' ', $context) . ']';
     }

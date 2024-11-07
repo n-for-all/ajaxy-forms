@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Voice\V1;
 
-
-namespace Twilio\Rest\Voice\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Voice\V1\ConnectionPolicy\ConnectionPolicyTargetList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Voice\V1\ConnectionPolicy\ConnectionPolicyTargetList;
 /**
  * @property string|null $accountSid
  * @property string|null $sid
@@ -38,7 +34,6 @@ use Twilio\Rest\Voice\V1\ConnectionPolicy\ConnectionPolicyTargetList;
 class ConnectionPolicyInstance extends InstanceResource
 {
     protected $_targets;
-
     /**
      * Initialize the ConnectionPolicyInstance
      *
@@ -49,63 +44,43 @@ class ConnectionPolicyInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'sid' => Values::array_get($payload, 'sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ConnectionPolicyContext Context for this ConnectionPolicyInstance
      */
-    protected function proxy(): ConnectionPolicyContext
+    protected function proxy() : ConnectionPolicyContext
     {
         if (!$this->context) {
-            $this->context = new ConnectionPolicyContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new ConnectionPolicyContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the ConnectionPolicyInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the ConnectionPolicyInstance
      *
      * @return ConnectionPolicyInstance Fetched ConnectionPolicyInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ConnectionPolicyInstance
+    public function fetch() : ConnectionPolicyInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the ConnectionPolicyInstance
      *
@@ -113,20 +88,17 @@ class ConnectionPolicyInstance extends InstanceResource
      * @return ConnectionPolicyInstance Updated ConnectionPolicyInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ConnectionPolicyInstance
+    public function update(array $options = []) : ConnectionPolicyInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the targets
      */
-    protected function getTargets(): ConnectionPolicyTargetList
+    protected function getTargets() : ConnectionPolicyTargetList
     {
         return $this->proxy()->targets;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -139,27 +111,23 @@ class ConnectionPolicyInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Voice.V1.ConnectionPolicyInstance ' . \implode(' ', $context) . ']';
     }
 }
-

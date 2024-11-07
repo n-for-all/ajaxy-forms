@@ -13,52 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V1;
 
-namespace Twilio\Rest\Numbers\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class PortingPortabilityList extends ListResource
-    {
+{
     /**
      * Construct the PortingPortabilityList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a PortingPortabilityContext
      *
      * @param string $phoneNumber The phone number which portability is to be checked. Phone numbers are in E.164 format (e.g. +16175551212).
      */
-    public function getContext(
-        string $phoneNumber
-        
-    ): PortingPortabilityContext
+    public function getContext(string $phoneNumber) : PortingPortabilityContext
     {
-        return new PortingPortabilityContext(
-            $this->version,
-            $phoneNumber
-        );
+        return new PortingPortabilityContext($this->version, $phoneNumber);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V1.PortingPortabilityList]';
     }

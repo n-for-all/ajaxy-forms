@@ -13,15 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace\Worker;
 
-namespace Twilio\Rest\Taskrouter\V1\Workspace\Worker;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class WorkerStatisticsList extends ListResource
-    {
+{
     /**
      * Construct the WorkerStatisticsList
      *
@@ -29,44 +26,25 @@ class WorkerStatisticsList extends ListResource
      * @param string $workspaceSid The SID of the Workspace with the WorkerChannel to fetch.
      * @param string $workerSid The SID of the Worker with the WorkerChannel to fetch.
      */
-    public function __construct(
-        Version $version,
-        string $workspaceSid,
-        string $workerSid
-    ) {
+    public function __construct(Version $version, string $workspaceSid, string $workerSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'workspaceSid' =>
-            $workspaceSid,
-        
-        'workerSid' =>
-            $workerSid,
-        
-        ];
+        $this->solution = ['workspaceSid' => $workspaceSid, 'workerSid' => $workerSid];
     }
-
     /**
      * Constructs a WorkerStatisticsContext
      */
-    public function getContext(
-        
-    ): WorkerStatisticsContext
+    public function getContext() : WorkerStatisticsContext
     {
-        return new WorkerStatisticsContext(
-            $this->version,
-            $this->solution['workspaceSid'],
-            $this->solution['workerSid']
-        );
+        return new WorkerStatisticsContext($this->version, $this->solution['workspaceSid'], $this->solution['workerSid']);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Taskrouter.V1.WorkerStatisticsList]';
     }

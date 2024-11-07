@@ -13,68 +13,47 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2;
 
-
-namespace Twilio\Rest\Intelligence\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class OperatorContext extends InstanceContext
-    {
+{
     /**
      * Initialize the OperatorContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid A 34 character string that uniquely identifies this Operator.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Operators/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Operators/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the OperatorInstance
      *
      * @return OperatorInstance Fetched OperatorInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): OperatorInstance
+    public function fetch() : OperatorInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new OperatorInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new OperatorInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Intelligence.V2.OperatorContext ' . \implode(' ', $context) . ']';
     }

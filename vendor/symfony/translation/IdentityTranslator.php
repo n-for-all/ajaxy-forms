@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Translation;
 
-namespace Symfony\Component\Translation;
-
-use Symfony\Contracts\Translation\LocaleAwareInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Contracts\Translation\TranslatorTrait;
-
+use Isolated\Symfony\Contracts\Translation\LocaleAwareInterface;
+use Isolated\Symfony\Contracts\Translation\TranslatorInterface;
+use Isolated\Symfony\Contracts\Translation\TranslatorTrait;
 /**
  * IdentityTranslator does not translate anything.
  *

@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\User;
 
-namespace Symfony\Component\Security\Core\User;
-
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UserNotFoundException;
-
+use Isolated\Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Isolated\Symfony\Component\Security\Core\Exception\UserNotFoundException;
 /**
  * Represents a class that loads UserInterface objects from some source for the authentication system.
  *
@@ -50,14 +48,12 @@ interface UserProviderInterface
      * @throws UserNotFoundException    if the user is not found
      */
     public function refreshUser(UserInterface $user);
-
     /**
      * Whether this provider supports the given user class.
      *
      * @return bool
      */
     public function supportsClass(string $class);
-
     /**
      * @return UserInterface
      *

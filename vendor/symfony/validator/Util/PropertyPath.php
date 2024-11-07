@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Util;
+namespace Isolated\Symfony\Component\Validator\Util;
 
 /**
  * Contains utility methods for dealing with property paths.
@@ -35,15 +34,12 @@ class PropertyPath
     {
         if ('' !== $subPath) {
             if ('[' === $subPath[0]) {
-                return $basePath.$subPath;
+                return $basePath . $subPath;
             }
-
-            return '' !== $basePath ? $basePath.'.'.$subPath : $subPath;
+            return '' !== $basePath ? $basePath . '.' . $subPath : $subPath;
         }
-
         return $basePath;
     }
-
     /**
      * Not instantiable.
      */

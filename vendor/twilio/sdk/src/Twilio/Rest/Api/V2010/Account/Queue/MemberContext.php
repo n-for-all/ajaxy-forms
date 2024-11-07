@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Queue;
 
-
-namespace Twilio\Rest\Api\V2010\Account\Queue;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class MemberContext extends InstanceContext
-    {
+{
     /**
      * Initialize the MemberContext
      *
@@ -34,51 +30,24 @@ class MemberContext extends InstanceContext
      * @param string $queueSid The SID of the Queue in which to find the members to fetch.
      * @param string $callSid The [Call](https://www.twilio.com/docs/voice/api/call-resource) SID of the resource(s) to fetch.
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $queueSid,
-        $callSid
-    ) {
+    public function __construct(Version $version, $accountSid, $queueSid, $callSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'queueSid' =>
-            $queueSid,
-        'callSid' =>
-            $callSid,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Queues/' . \rawurlencode($queueSid)
-        .'/Members/' . \rawurlencode($callSid)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'queueSid' => $queueSid, 'callSid' => $callSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Queues/' . \rawurlencode($queueSid) . '/Members/' . \rawurlencode($callSid) . '.json';
     }
-
     /**
      * Fetch the MemberInstance
      *
      * @return MemberInstance Fetched MemberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): MemberInstance
+    public function fetch() : MemberInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new MemberInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['queueSid'],
-            $this->solution['callSid']
-        );
+        return new MemberInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['queueSid'], $this->solution['callSid']);
     }
-
-
     /**
      * Update the MemberInstance
      *
@@ -87,40 +56,23 @@ class MemberContext extends InstanceContext
      * @return MemberInstance Updated MemberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $url, array $options = []): MemberInstance
+    public function update(string $url, array $options = []) : MemberInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Url' =>
-                $url,
-            'Method' =>
-                $options['method'],
-        ]);
-
+        $data = Values::of(['Url' => $url, 'Method' => $options['method']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new MemberInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['queueSid'],
-            $this->solution['callSid']
-        );
+        return new MemberInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['queueSid'], $this->solution['callSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.MemberContext ' . \implode(' ', $context) . ']';
     }

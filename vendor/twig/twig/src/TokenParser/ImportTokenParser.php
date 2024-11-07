@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\TokenParser;
 
-namespace Twig\TokenParser;
-
-use Twig\Node\Expression\AssignNameExpression;
-use Twig\Node\ImportNode;
-use Twig\Node\Node;
-use Twig\Token;
-
+use Isolated\Twig\Node\Expression\AssignNameExpression;
+use Isolated\Twig\Node\ImportNode;
+use Isolated\Twig\Node\Node;
+use Isolated\Twig\Token;
 /**
  * Imports macros.
  *
@@ -25,19 +23,26 @@ use Twig\Token;
  */
 final class ImportTokenParser extends AbstractTokenParser
 {
-    public function parse(Token $token): Node
+    public function parse(Token $token) : Node
     {
         $macro = $this->parser->getExpressionParser()->parseExpression();
-        $this->parser->getStream()->expect(/* Token::NAME_TYPE */ 5, 'as');
-        $var = new AssignNameExpression($this->parser->getStream()->expect(/* Token::NAME_TYPE */ 5)->getValue(), $token->getLine());
-        $this->parser->getStream()->expect(/* Token::BLOCK_END_TYPE */ 3);
-
+        $this->parser->getStream()->expect(
+            /* Token::NAME_TYPE */
+            5,
+            'as'
+        );
+        $var = new AssignNameExpression($this->parser->getStream()->expect(
+            /* Token::NAME_TYPE */
+            5
+        )->getValue(), $token->getLine());
+        $this->parser->getStream()->expect(
+            /* Token::BLOCK_END_TYPE */
+            3
+        );
         $this->parser->addImportedSymbol('template', $var->getAttribute('name'));
-
         return new ImportNode($macro, $var, $token->getLine(), $this->getTag(), $this->parser->isMainScope());
     }
-
-    public function getTag(): string
+    public function getTag() : string
     {
         return 'import';
     }

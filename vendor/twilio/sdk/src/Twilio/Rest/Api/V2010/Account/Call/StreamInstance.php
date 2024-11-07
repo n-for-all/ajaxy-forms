@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Call;
 
-
-namespace Twilio\Rest\Api\V2010\Account\Call;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -48,41 +44,23 @@ class StreamInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $accountSid, string $callSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'callSid' => Values::array_get($payload, 'call_sid'),
-            'name' => Values::array_get($payload, 'name'),
-            'status' => Values::array_get($payload, 'status'),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'uri' => Values::array_get($payload, 'uri'),
-        ];
-
-        $this->solution = ['accountSid' => $accountSid, 'callSid' => $callSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'callSid' => Values::array_get($payload, 'call_sid'), 'name' => Values::array_get($payload, 'name'), 'status' => Values::array_get($payload, 'status'), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'uri' => Values::array_get($payload, 'uri')];
+        $this->solution = ['accountSid' => $accountSid, 'callSid' => $callSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return StreamContext Context for this StreamInstance
      */
-    protected function proxy(): StreamContext
+    protected function proxy() : StreamContext
     {
         if (!$this->context) {
-            $this->context = new StreamContext(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['callSid'],
-                $this->solution['sid']
-            );
+            $this->context = new StreamContext($this->version, $this->solution['accountSid'], $this->solution['callSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Update the StreamInstance
      *
@@ -90,12 +68,10 @@ class StreamInstance extends InstanceResource
      * @return StreamInstance Updated StreamInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $status): StreamInstance
+    public function update(string $status) : StreamInstance
     {
-
         return $this->proxy()->update($status);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -108,27 +84,23 @@ class StreamInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.StreamInstance ' . \implode(' ', $context) . ']';
     }
 }
-

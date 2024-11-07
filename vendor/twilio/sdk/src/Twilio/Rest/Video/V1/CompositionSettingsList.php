@@ -13,48 +13,36 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Video\V1;
 
-namespace Twilio\Rest\Video\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class CompositionSettingsList extends ListResource
-    {
+{
     /**
      * Construct the CompositionSettingsList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a CompositionSettingsContext
      */
-    public function getContext(
-        
-    ): CompositionSettingsContext
+    public function getContext() : CompositionSettingsContext
     {
-        return new CompositionSettingsContext(
-            $this->version
-        );
+        return new CompositionSettingsContext($this->version);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Video.V1.CompositionSettingsList]';
     }

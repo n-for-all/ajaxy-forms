@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Serverless\V1\Service\Environment;
 
-
-namespace Twilio\Rest\Serverless\V1\Service\Environment;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -52,58 +48,33 @@ class LogInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $environmentSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'environmentSid' => Values::array_get($payload, 'environment_sid'),
-            'buildSid' => Values::array_get($payload, 'build_sid'),
-            'deploymentSid' => Values::array_get($payload, 'deployment_sid'),
-            'functionSid' => Values::array_get($payload, 'function_sid'),
-            'requestSid' => Values::array_get($payload, 'request_sid'),
-            'level' => Values::array_get($payload, 'level'),
-            'message' => Values::array_get($payload, 'message'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'environmentSid' => $environmentSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'environmentSid' => Values::array_get($payload, 'environment_sid'), 'buildSid' => Values::array_get($payload, 'build_sid'), 'deploymentSid' => Values::array_get($payload, 'deployment_sid'), 'functionSid' => Values::array_get($payload, 'function_sid'), 'requestSid' => Values::array_get($payload, 'request_sid'), 'level' => Values::array_get($payload, 'level'), 'message' => Values::array_get($payload, 'message'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['serviceSid' => $serviceSid, 'environmentSid' => $environmentSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return LogContext Context for this LogInstance
      */
-    protected function proxy(): LogContext
+    protected function proxy() : LogContext
     {
         if (!$this->context) {
-            $this->context = new LogContext(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['environmentSid'],
-                $this->solution['sid']
-            );
+            $this->context = new LogContext($this->version, $this->solution['serviceSid'], $this->solution['environmentSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the LogInstance
      *
      * @return LogInstance Fetched LogInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): LogInstance
+    public function fetch() : LogInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -116,27 +87,23 @@ class LogInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Serverless.V1.LogInstance ' . \implode(' ', $context) . ']';
     }
 }
-

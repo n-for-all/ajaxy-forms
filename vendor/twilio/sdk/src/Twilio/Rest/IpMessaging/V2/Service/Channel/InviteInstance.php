@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\IpMessaging\V2\Service\Channel;
 
-
-namespace Twilio\Rest\IpMessaging\V2\Service\Channel;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -50,68 +46,43 @@ class InviteInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $channelSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'channelSid' => Values::array_get($payload, 'channel_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'identity' => Values::array_get($payload, 'identity'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'roleSid' => Values::array_get($payload, 'role_sid'),
-            'createdBy' => Values::array_get($payload, 'created_by'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'channelSid' => $channelSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'channelSid' => Values::array_get($payload, 'channel_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'identity' => Values::array_get($payload, 'identity'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'roleSid' => Values::array_get($payload, 'role_sid'), 'createdBy' => Values::array_get($payload, 'created_by'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['serviceSid' => $serviceSid, 'channelSid' => $channelSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return InviteContext Context for this InviteInstance
      */
-    protected function proxy(): InviteContext
+    protected function proxy() : InviteContext
     {
         if (!$this->context) {
-            $this->context = new InviteContext(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['channelSid'],
-                $this->solution['sid']
-            );
+            $this->context = new InviteContext($this->version, $this->solution['serviceSid'], $this->solution['channelSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the InviteInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the InviteInstance
      *
      * @return InviteInstance Fetched InviteInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): InviteInstance
+    public function fetch() : InviteInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -124,27 +95,23 @@ class InviteInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.IpMessaging.V2.InviteInstance ' . \implode(' ', $context) . ']';
     }
 }
-

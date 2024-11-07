@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Intl\DateFormatter\DateFormat;
+namespace Isolated\Symfony\Component\Intl\DateFormatter\DateFormat;
 
 /**
  * Parser and formatter for day of week format.
@@ -25,7 +24,7 @@ class DayOfWeekTransformer extends Transformer
     /**
      * {@inheritdoc}
      */
-    public function format(\DateTime $dateTime, int $length): string
+    public function format(\DateTime $dateTime, int $length) : string
     {
         $dayOfWeek = $dateTime->format('l');
         switch ($length) {
@@ -34,16 +33,15 @@ class DayOfWeekTransformer extends Transformer
             case 5:
                 return $dayOfWeek[0];
             case 6:
-                return substr($dayOfWeek, 0, 2);
+                return \substr($dayOfWeek, 0, 2);
             default:
-                return substr($dayOfWeek, 0, 3);
+                return \substr($dayOfWeek, 0, 3);
         }
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getReverseMatchingRegExp(int $length): string
+    public function getReverseMatchingRegExp(int $length) : string
     {
         switch ($length) {
             case 4:
@@ -56,11 +54,10 @@ class DayOfWeekTransformer extends Transformer
                 return 'Mon|Tue|Wed|Thu|Fri|Sat|Sun';
         }
     }
-
     /**
      * {@inheritdoc}
      */
-    public function extractDateOptions(string $matched, int $length): array
+    public function extractDateOptions(string $matched, int $length) : array
     {
         return [];
     }

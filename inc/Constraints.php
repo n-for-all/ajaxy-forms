@@ -2,7 +2,7 @@
 
 namespace Ajaxy\Forms\Inc;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use Isolated\Symfony\Component\Validator\Constraints as Assert;
 
 class Constraints
 {

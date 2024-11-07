@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1\CustomerProfiles;
 
-
-namespace Twilio\Rest\Trusthub\V1\CustomerProfiles;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class CustomerProfilesEvaluationsContext extends InstanceContext
-    {
+{
     /**
      * Initialize the CustomerProfilesEvaluationsContext
      *
@@ -31,56 +27,34 @@ class CustomerProfilesEvaluationsContext extends InstanceContext
      * @param string $customerProfileSid The unique string that we created to identify the CustomerProfile resource.
      * @param string $sid The unique string that identifies the Evaluation resource.
      */
-    public function __construct(
-        Version $version,
-        $customerProfileSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $customerProfileSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'customerProfileSid' =>
-            $customerProfileSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/CustomerProfiles/' . \rawurlencode($customerProfileSid)
-        .'/Evaluations/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['customerProfileSid' => $customerProfileSid, 'sid' => $sid];
+        $this->uri = '/CustomerProfiles/' . \rawurlencode($customerProfileSid) . '/Evaluations/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the CustomerProfilesEvaluationsInstance
      *
      * @return CustomerProfilesEvaluationsInstance Fetched CustomerProfilesEvaluationsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): CustomerProfilesEvaluationsInstance
+    public function fetch() : CustomerProfilesEvaluationsInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new CustomerProfilesEvaluationsInstance(
-            $this->version,
-            $payload,
-            $this->solution['customerProfileSid'],
-            $this->solution['sid']
-        );
+        return new CustomerProfilesEvaluationsInstance($this->version, $payload, $this->solution['customerProfileSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Trusthub.V1.CustomerProfilesEvaluationsContext ' . \implode(' ', $context) . ']';
     }

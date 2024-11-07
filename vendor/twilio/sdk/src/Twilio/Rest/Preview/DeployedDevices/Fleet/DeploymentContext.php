@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\DeployedDevices\Fleet;
 
-
-namespace Twilio\Rest\Preview\DeployedDevices\Fleet;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class DeploymentContext extends InstanceContext
-    {
+{
     /**
      * Initialize the DeploymentContext
      *
@@ -33,59 +29,34 @@ class DeploymentContext extends InstanceContext
      * @param string $fleetSid 
      * @param string $sid Provides a 34 character string that uniquely identifies the requested Deployment resource.
      */
-    public function __construct(
-        Version $version,
-        $fleetSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $fleetSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'fleetSid' =>
-            $fleetSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Fleets/' . \rawurlencode($fleetSid)
-        .'/Deployments/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['fleetSid' => $fleetSid, 'sid' => $sid];
+        $this->uri = '/Fleets/' . \rawurlencode($fleetSid) . '/Deployments/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the DeploymentInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the DeploymentInstance
      *
      * @return DeploymentInstance Fetched DeploymentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DeploymentInstance
+    public function fetch() : DeploymentInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new DeploymentInstance(
-            $this->version,
-            $payload,
-            $this->solution['fleetSid'],
-            $this->solution['sid']
-        );
+        return new DeploymentInstance($this->version, $payload, $this->solution['fleetSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the DeploymentInstance
      *
@@ -93,39 +64,23 @@ class DeploymentContext extends InstanceContext
      * @return DeploymentInstance Updated DeploymentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): DeploymentInstance
+    public function update(array $options = []) : DeploymentInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'SyncServiceSid' =>
-                $options['syncServiceSid'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName'], 'SyncServiceSid' => $options['syncServiceSid']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new DeploymentInstance(
-            $this->version,
-            $payload,
-            $this->solution['fleetSid'],
-            $this->solution['sid']
-        );
+        return new DeploymentInstance($this->version, $payload, $this->solution['fleetSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.DeployedDevices.DeploymentContext ' . \implode(' ', $context) . ']';
     }

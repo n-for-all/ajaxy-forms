@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Sync\V1\Service;
 
-
-namespace Twilio\Rest\Sync\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Sync\V1\Service\Document\DocumentPermissionList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Sync\V1\Service\Document\DocumentPermissionList;
 /**
  * @property string|null $sid
  * @property string|null $uniqueName
@@ -43,7 +39,6 @@ use Twilio\Rest\Sync\V1\Service\Document\DocumentPermissionList;
 class DocumentInstance extends InstanceResource
 {
     protected $_documentPermissions;
-
     /**
      * Initialize the DocumentInstance
      *
@@ -55,69 +50,43 @@ class DocumentInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'uniqueName' => Values::array_get($payload, 'unique_name'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-            'revision' => Values::array_get($payload, 'revision'),
-            'data' => Values::array_get($payload, 'data'),
-            'dateExpires' => Deserialize::dateTime(Values::array_get($payload, 'date_expires')),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'createdBy' => Values::array_get($payload, 'created_by'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'uniqueName' => Values::array_get($payload, 'unique_name'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links'), 'revision' => Values::array_get($payload, 'revision'), 'data' => Values::array_get($payload, 'data'), 'dateExpires' => Deserialize::dateTime(Values::array_get($payload, 'date_expires')), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'createdBy' => Values::array_get($payload, 'created_by')];
+        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return DocumentContext Context for this DocumentInstance
      */
-    protected function proxy(): DocumentContext
+    protected function proxy() : DocumentContext
     {
         if (!$this->context) {
-            $this->context = new DocumentContext(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['sid']
-            );
+            $this->context = new DocumentContext($this->version, $this->solution['serviceSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the DocumentInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the DocumentInstance
      *
      * @return DocumentInstance Fetched DocumentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DocumentInstance
+    public function fetch() : DocumentInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the DocumentInstance
      *
@@ -125,20 +94,17 @@ class DocumentInstance extends InstanceResource
      * @return DocumentInstance Updated DocumentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): DocumentInstance
+    public function update(array $options = []) : DocumentInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the documentPermissions
      */
-    protected function getDocumentPermissions(): DocumentPermissionList
+    protected function getDocumentPermissions() : DocumentPermissionList
     {
         return $this->proxy()->documentPermissions;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -151,27 +117,23 @@ class DocumentInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Sync.V1.DocumentInstance ' . \implode(' ', $context) . ']';
     }
 }
-

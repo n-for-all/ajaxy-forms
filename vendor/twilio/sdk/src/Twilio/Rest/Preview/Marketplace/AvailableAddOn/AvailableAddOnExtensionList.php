@@ -13,40 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Marketplace\AvailableAddOn;
 
-namespace Twilio\Rest\Preview\Marketplace\AvailableAddOn;
-
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class AvailableAddOnExtensionList extends ListResource
-    {
+{
     /**
      * Construct the AvailableAddOnExtensionList
      *
      * @param Version $version Version that contains the resource
      * @param string $availableAddOnSid The SID of the AvailableAddOn resource with the extension to fetch.
      */
-    public function __construct(
-        Version $version,
-        string $availableAddOnSid
-    ) {
+    public function __construct(Version $version, string $availableAddOnSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'availableAddOnSid' =>
-            $availableAddOnSid,
-        
-        ];
-
-        $this->uri = '/AvailableAddOns/' . \rawurlencode($availableAddOnSid)
-        .'/Extensions';
+        $this->solution = ['availableAddOnSid' => $availableAddOnSid];
+        $this->uri = '/AvailableAddOns/' . \rawurlencode($availableAddOnSid) . '/Extensions';
     }
-
     /**
      * Reads AvailableAddOnExtensionInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -62,11 +49,10 @@ class AvailableAddOnExtensionList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return AvailableAddOnExtensionInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams AvailableAddOnExtensionInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -85,15 +71,12 @@ class AvailableAddOnExtensionList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of AvailableAddOnExtensionInstance records from the API.
      * Request is executed immediately
@@ -103,24 +86,12 @@ class AvailableAddOnExtensionList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return AvailableAddOnExtensionPage Page of AvailableAddOnExtensionInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): AvailableAddOnExtensionPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : AvailableAddOnExtensionPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new AvailableAddOnExtensionPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of AvailableAddOnExtensionInstance records from the API.
      * Request is executed immediately
@@ -128,40 +99,26 @@ class AvailableAddOnExtensionList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return AvailableAddOnExtensionPage Page of AvailableAddOnExtensionInstance
      */
-    public function getPage(string $targetUrl): AvailableAddOnExtensionPage
+    public function getPage(string $targetUrl) : AvailableAddOnExtensionPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new AvailableAddOnExtensionPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a AvailableAddOnExtensionContext
      *
      * @param string $sid The SID of the AvailableAddOn Extension resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): AvailableAddOnExtensionContext
+    public function getContext(string $sid) : AvailableAddOnExtensionContext
     {
-        return new AvailableAddOnExtensionContext(
-            $this->version,
-            $this->solution['availableAddOnSid'],
-            $sid
-        );
+        return new AvailableAddOnExtensionContext($this->version, $this->solution['availableAddOnSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Preview.Marketplace.AvailableAddOnExtensionList]';
     }

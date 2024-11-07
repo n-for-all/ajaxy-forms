@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Twig;
+namespace Isolated\Twig;
 
 /**
  * Exposes a template to userland.
@@ -20,10 +19,9 @@ final class TemplateWrapper
 {
     private $env;
     private $template;
-
     /**
      * This method is for internal use only and should never be called
-     * directly (use Twig\Environment::load() instead).
+     * directly (use \\Isolated\\Twig\\Environment::load() instead).
      *
      * @internal
      */
@@ -32,37 +30,31 @@ final class TemplateWrapper
         $this->env = $env;
         $this->template = $template;
     }
-
-    public function render(array $context = []): string
+    public function render(array $context = []) : string
     {
         return $this->template->render($context);
     }
-
     public function display(array $context = [])
     {
         // using func_get_args() allows to not expose the blocks argument
         // as it should only be used by internal code
         $this->template->display($context, \func_get_args()[1] ?? []);
     }
-
-    public function hasBlock(string $name, array $context = []): bool
+    public function hasBlock(string $name, array $context = []) : bool
     {
         return $this->template->hasBlock($name, $context);
     }
-
     /**
      * @return string[] An array of defined template block names
      */
-    public function getBlockNames(array $context = []): array
+    public function getBlockNames(array $context = []) : array
     {
         return $this->template->getBlockNames($context);
     }
-
-    public function renderBlock(string $name, array $context = []): string
+    public function renderBlock(string $name, array $context = []) : string
     {
         return $this->template->renderBlock($name, $this->env->mergeGlobals($context));
     }
-
     public function displayBlock(string $name, array $context = [])
     {
         $context = $this->env->mergeGlobals($context);
@@ -70,17 +62,14 @@ final class TemplateWrapper
             echo $data;
         }
     }
-
-    public function getSourceContext(): Source
+    public function getSourceContext() : Source
     {
         return $this->template->getSourceContext();
     }
-
-    public function getTemplateName(): string
+    public function getTemplateName() : string
     {
         return $this->template->getTemplateName();
     }
-
     /**
      * @internal
      *

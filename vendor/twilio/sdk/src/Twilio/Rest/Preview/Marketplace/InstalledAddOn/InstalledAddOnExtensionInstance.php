@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Marketplace\InstalledAddOn;
 
-
-namespace Twilio\Rest\Preview\Marketplace\InstalledAddOn;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $sid
  * @property string|null $installedAddOnSid
@@ -45,52 +41,33 @@ class InstalledAddOnExtensionInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $installedAddOnSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'installedAddOnSid' => Values::array_get($payload, 'installed_add_on_sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'productName' => Values::array_get($payload, 'product_name'),
-            'uniqueName' => Values::array_get($payload, 'unique_name'),
-            'enabled' => Values::array_get($payload, 'enabled'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['installedAddOnSid' => $installedAddOnSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'installedAddOnSid' => Values::array_get($payload, 'installed_add_on_sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'productName' => Values::array_get($payload, 'product_name'), 'uniqueName' => Values::array_get($payload, 'unique_name'), 'enabled' => Values::array_get($payload, 'enabled'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['installedAddOnSid' => $installedAddOnSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return InstalledAddOnExtensionContext Context for this InstalledAddOnExtensionInstance
      */
-    protected function proxy(): InstalledAddOnExtensionContext
+    protected function proxy() : InstalledAddOnExtensionContext
     {
         if (!$this->context) {
-            $this->context = new InstalledAddOnExtensionContext(
-                $this->version,
-                $this->solution['installedAddOnSid'],
-                $this->solution['sid']
-            );
+            $this->context = new InstalledAddOnExtensionContext($this->version, $this->solution['installedAddOnSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the InstalledAddOnExtensionInstance
      *
      * @return InstalledAddOnExtensionInstance Fetched InstalledAddOnExtensionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): InstalledAddOnExtensionInstance
+    public function fetch() : InstalledAddOnExtensionInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the InstalledAddOnExtensionInstance
      *
@@ -98,12 +75,10 @@ class InstalledAddOnExtensionInstance extends InstanceResource
      * @return InstalledAddOnExtensionInstance Updated InstalledAddOnExtensionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(bool $enabled): InstalledAddOnExtensionInstance
+    public function update(bool $enabled) : InstalledAddOnExtensionInstance
     {
-
         return $this->proxy()->update($enabled);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -116,27 +91,23 @@ class InstalledAddOnExtensionInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.Marketplace.InstalledAddOnExtensionInstance ' . \implode(' ', $context) . ']';
     }
 }
-

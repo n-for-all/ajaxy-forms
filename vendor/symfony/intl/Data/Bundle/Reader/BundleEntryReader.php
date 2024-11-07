@@ -8,15 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl\Data\Bundle\Reader;
 
-namespace Symfony\Component\Intl\Data\Bundle\Reader;
-
-use Symfony\Component\Intl\Data\Util\RecursiveArrayAccess;
-use Symfony\Component\Intl\Exception\MissingResourceException;
-use Symfony\Component\Intl\Exception\OutOfBoundsException;
-use Symfony\Component\Intl\Exception\ResourceBundleNotFoundException;
-use Symfony\Component\Intl\Locale;
-
+use Isolated\Symfony\Component\Intl\Data\Util\RecursiveArrayAccess;
+use Isolated\Symfony\Component\Intl\Exception\MissingResourceException;
+use Isolated\Symfony\Component\Intl\Exception\OutOfBoundsException;
+use Isolated\Symfony\Component\Intl\Exception\ResourceBundleNotFoundException;
+use Isolated\Symfony\Component\Intl\Locale;
 /**
  * Default implementation of {@link BundleEntryReaderInterface}.
  *
@@ -29,12 +27,10 @@ use Symfony\Component\Intl\Locale;
 class BundleEntryReader implements BundleEntryReaderInterface
 {
     private $reader;
-
     /**
      * A mapping of locale aliases to locales.
      */
     private $localeAliases = [];
-
     /**
      * Creates an entry reader based on the given resource bundle reader.
      */
@@ -42,7 +38,6 @@ class BundleEntryReader implements BundleEntryReaderInterface
     {
         $this->reader = $reader;
     }
-
     /**
      * Stores a mapping of locale aliases to locales.
      *
@@ -57,7 +52,6 @@ class BundleEntryReader implements BundleEntryReaderInterface
     {
         $this->localeAliases = $localeAliases;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -65,58 +59,48 @@ class BundleEntryReader implements BundleEntryReaderInterface
     {
         return $this->reader->read($path, $locale);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function readEntry(string $path, string $locale, array $indices, bool $fallback = true)
+    public function readEntry(string $path, string $locale, array $indices, bool $fallback = \true)
     {
         $entry = null;
-        $isMultiValued = false;
-        $readSucceeded = false;
+        $isMultiValued = \false;
+        $readSucceeded = \false;
         $exception = null;
         $currentLocale = $locale;
         $testedLocales = [];
-
         while (null !== $currentLocale) {
             // Resolve any aliases to their target locales
             if (isset($this->localeAliases[$currentLocale])) {
                 $currentLocale = $this->localeAliases[$currentLocale];
             }
-
             try {
                 $data = $this->reader->read($path, $currentLocale);
                 $currentEntry = RecursiveArrayAccess::get($data, $indices);
-                $readSucceeded = true;
-
+                $readSucceeded = \true;
                 $isCurrentTraversable = $currentEntry instanceof \Traversable;
                 $isCurrentMultiValued = $isCurrentTraversable || \is_array($currentEntry);
-
                 // Return immediately if fallback is disabled or we are dealing
                 // with a scalar non-null entry
-                if (!$fallback || (!$isCurrentMultiValued && null !== $currentEntry)) {
+                if (!$fallback || !$isCurrentMultiValued && null !== $currentEntry) {
                     return $currentEntry;
                 }
-
                 // =========================================================
                 // Fallback is enabled, entry is either multi-valued or NULL
                 // =========================================================
-
                 // If entry is multi-valued, convert to array
                 if ($isCurrentTraversable) {
-                    $currentEntry = iterator_to_array($currentEntry);
+                    $currentEntry = \iterator_to_array($currentEntry);
                 }
-
                 // If previously read entry was multi-valued too, merge them
                 if ($isCurrentMultiValued && $isMultiValued) {
-                    $currentEntry = array_merge($currentEntry, $entry);
+                    $currentEntry = \array_merge($currentEntry, $entry);
                 }
-
                 // Keep the previous entry if the current entry is NULL
                 if (null !== $currentEntry) {
                     $entry = $currentEntry;
                 }
-
                 // If this or the previous entry was multi-valued, we are dealing
                 // with a merged, multi-valued entry now
                 $isMultiValued = $isMultiValued || $isCurrentMultiValued;
@@ -129,49 +113,32 @@ class BundleEntryReader implements BundleEntryReaderInterface
                 // the fallback locales either
                 $exception = $e;
             }
-
             // Remember which locales we tried
             $testedLocales[] = $currentLocale;
-
             // Check whether fallback is allowed
             if (!$fallback) {
                 break;
             }
-
             // Then determine fallback locale
             $currentLocale = Locale::getFallback($currentLocale);
         }
-
         // Multi-valued entry was merged
         if ($isMultiValued) {
             return $entry;
         }
-
         // Entry is still NULL, but no read error occurred
         if ($readSucceeded) {
             return $entry;
         }
-
         // Entry is still NULL, read error occurred. Throw an exception
         // containing the detailed path and locale
-        $errorMessage = sprintf(
-            'Couldn\'t read the indices [%s] for the locale "%s" in "%s".',
-            implode('][', $indices),
-            $locale,
-            $path
-        );
-
+        $errorMessage = \sprintf('Couldn\'t read the indices [%s] for the locale "%s" in "%s".', \implode('][', $indices), $locale, $path);
         // Append fallback locales, if any
         if (\count($testedLocales) > 1) {
             // Remove original locale
-            array_shift($testedLocales);
-
-            $errorMessage .= sprintf(
-                ' The indices also couldn\'t be found for the fallback locale(s) "%s".',
-                implode('", "', $testedLocales)
-            );
+            \array_shift($testedLocales);
+            $errorMessage .= \sprintf(' The indices also couldn\'t be found for the fallback locale(s) "%s".', \implode('", "', $testedLocales));
         }
-
         throw new MissingResourceException($errorMessage, 0, $exception);
     }
 }

@@ -13,35 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Oauth\V1;
 
-namespace Twilio\Rest\Oauth\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class TokenList extends ListResource
-    {
+{
     /**
      * Construct the TokenList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/token';
     }
-
     /**
      * Create the TokenInstance
      *
@@ -51,45 +43,19 @@ class TokenList extends ListResource
      * @return TokenInstance Created TokenInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $grantType, string $clientId, array $options = []): TokenInstance
+    public function create(string $grantType, string $clientId, array $options = []) : TokenInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'GrantType' =>
-                $grantType,
-            'ClientId' =>
-                $clientId,
-            'ClientSecret' =>
-                $options['clientSecret'],
-            'Code' =>
-                $options['code'],
-            'RedirectUri' =>
-                $options['redirectUri'],
-            'Audience' =>
-                $options['audience'],
-            'RefreshToken' =>
-                $options['refreshToken'],
-            'Scope' =>
-                $options['scope'],
-        ]);
-
+        $data = Values::of(['GrantType' => $grantType, 'ClientId' => $clientId, 'ClientSecret' => $options['clientSecret'], 'Code' => $options['code'], 'RedirectUri' => $options['redirectUri'], 'Audience' => $options['audience'], 'RefreshToken' => $options['refreshToken'], 'Scope' => $options['scope']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new TokenInstance(
-            $this->version,
-            $payload
-        );
+        return new TokenInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Oauth.V1.TokenList]';
     }

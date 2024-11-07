@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\Type;
 
-namespace Symfony\Component\Form\Extension\Core\Type;
-
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\Form\AbstractType;
+use Isolated\Symfony\Component\OptionsResolver\Options;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 class TelType extends AbstractType
 {
     /**
@@ -22,15 +20,10 @@ class TelType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'invalid_message' => function (Options $options, $previousValue) {
-                return ($options['legacy_error_messages'] ?? true)
-                    ? $previousValue
-                    : 'Please provide a valid phone number.';
-            },
-        ]);
+        $resolver->setDefaults(['invalid_message' => function (Options $options, $previousValue) {
+            return $options['legacy_error_messages'] ?? \true ? $previousValue : 'Please provide a valid phone number.';
+        }]);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -38,7 +31,6 @@ class TelType extends AbstractType
     {
         return TextType::class;
     }
-
     /**
      * {@inheritdoc}
      */

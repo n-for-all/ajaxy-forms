@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Config\Resource;
 
-namespace Symfony\Component\Config\Resource;
-
-use Symfony\Component\Config\ResourceCheckerInterface;
-
+use Isolated\Symfony\Component\Config\ResourceCheckerInterface;
 /**
  * Resource checker for instances of SelfCheckingResourceInterface.
  *
@@ -28,19 +26,16 @@ class SelfCheckingResourceChecker implements ResourceCheckerInterface
     // and the container have their own cache. But they may check the very same
     // resources
     private static $cache = [];
-
     public function supports(ResourceInterface $metadata)
     {
         return $metadata instanceof SelfCheckingResourceInterface;
     }
-
     /**
      * @param SelfCheckingResourceInterface $resource
      */
     public function isFresh(ResourceInterface $resource, int $timestamp)
     {
-        $key = "$resource:$timestamp";
-
-        return self::$cache[$key] ?? self::$cache[$key] = $resource->isFresh($timestamp);
+        $key = "{$resource}:{$timestamp}";
+        return self::$cache[$key] ?? (self::$cache[$key] = $resource->isFresh($timestamp));
     }
 }

@@ -13,21 +13,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace;
 
-
-namespace Twilio\Rest\Taskrouter\V1\Workspace;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue\TaskQueueCumulativeStatisticsList;
-use Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue\TaskQueueStatisticsList;
-use Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue\TaskQueueRealTimeStatisticsList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue\TaskQueueCumulativeStatisticsList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue\TaskQueueStatisticsList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue\TaskQueueRealTimeStatisticsList;
 /**
  * @property string|null $accountSid
  * @property string|null $assignmentActivitySid
@@ -50,7 +46,6 @@ class TaskQueueInstance extends InstanceResource
     protected $_cumulativeStatistics;
     protected $_statistics;
     protected $_realTimeStatistics;
-
     /**
      * Initialize the TaskQueueInstance
      *
@@ -62,72 +57,43 @@ class TaskQueueInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $workspaceSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'assignmentActivitySid' => Values::array_get($payload, 'assignment_activity_sid'),
-            'assignmentActivityName' => Values::array_get($payload, 'assignment_activity_name'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'maxReservedWorkers' => Values::array_get($payload, 'max_reserved_workers'),
-            'reservationActivitySid' => Values::array_get($payload, 'reservation_activity_sid'),
-            'reservationActivityName' => Values::array_get($payload, 'reservation_activity_name'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'targetWorkers' => Values::array_get($payload, 'target_workers'),
-            'taskOrder' => Values::array_get($payload, 'task_order'),
-            'url' => Values::array_get($payload, 'url'),
-            'workspaceSid' => Values::array_get($payload, 'workspace_sid'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['workspaceSid' => $workspaceSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'assignmentActivitySid' => Values::array_get($payload, 'assignment_activity_sid'), 'assignmentActivityName' => Values::array_get($payload, 'assignment_activity_name'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'maxReservedWorkers' => Values::array_get($payload, 'max_reserved_workers'), 'reservationActivitySid' => Values::array_get($payload, 'reservation_activity_sid'), 'reservationActivityName' => Values::array_get($payload, 'reservation_activity_name'), 'sid' => Values::array_get($payload, 'sid'), 'targetWorkers' => Values::array_get($payload, 'target_workers'), 'taskOrder' => Values::array_get($payload, 'task_order'), 'url' => Values::array_get($payload, 'url'), 'workspaceSid' => Values::array_get($payload, 'workspace_sid'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['workspaceSid' => $workspaceSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return TaskQueueContext Context for this TaskQueueInstance
      */
-    protected function proxy(): TaskQueueContext
+    protected function proxy() : TaskQueueContext
     {
         if (!$this->context) {
-            $this->context = new TaskQueueContext(
-                $this->version,
-                $this->solution['workspaceSid'],
-                $this->solution['sid']
-            );
+            $this->context = new TaskQueueContext($this->version, $this->solution['workspaceSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the TaskQueueInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the TaskQueueInstance
      *
      * @return TaskQueueInstance Fetched TaskQueueInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): TaskQueueInstance
+    public function fetch() : TaskQueueInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the TaskQueueInstance
      *
@@ -135,36 +101,31 @@ class TaskQueueInstance extends InstanceResource
      * @return TaskQueueInstance Updated TaskQueueInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): TaskQueueInstance
+    public function update(array $options = []) : TaskQueueInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the cumulativeStatistics
      */
-    protected function getCumulativeStatistics(): TaskQueueCumulativeStatisticsList
+    protected function getCumulativeStatistics() : TaskQueueCumulativeStatisticsList
     {
         return $this->proxy()->cumulativeStatistics;
     }
-
     /**
      * Access the statistics
      */
-    protected function getStatistics(): TaskQueueStatisticsList
+    protected function getStatistics() : TaskQueueStatisticsList
     {
         return $this->proxy()->statistics;
     }
-
     /**
      * Access the realTimeStatistics
      */
-    protected function getRealTimeStatistics(): TaskQueueRealTimeStatisticsList
+    protected function getRealTimeStatistics() : TaskQueueRealTimeStatisticsList
     {
         return $this->proxy()->realTimeStatistics;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -177,27 +138,23 @@ class TaskQueueInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Taskrouter.V1.TaskQueueInstance ' . \implode(' ', $context) . ']';
     }
 }
-

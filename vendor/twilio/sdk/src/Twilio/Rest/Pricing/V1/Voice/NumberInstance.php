@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Pricing\V1\Voice;
 
-
-namespace Twilio\Rest\Pricing\V1\Voice;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $number
  * @property string|null $country
@@ -44,51 +40,33 @@ class NumberInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $number = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'number' => Values::array_get($payload, 'number'),
-            'country' => Values::array_get($payload, 'country'),
-            'isoCountry' => Values::array_get($payload, 'iso_country'),
-            'outboundCallPrice' => Values::array_get($payload, 'outbound_call_price'),
-            'inboundCallPrice' => Values::array_get($payload, 'inbound_call_price'),
-            'priceUnit' => Values::array_get($payload, 'price_unit'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['number' => $number ?: $this->properties['number'], ];
+        $this->properties = ['number' => Values::array_get($payload, 'number'), 'country' => Values::array_get($payload, 'country'), 'isoCountry' => Values::array_get($payload, 'iso_country'), 'outboundCallPrice' => Values::array_get($payload, 'outbound_call_price'), 'inboundCallPrice' => Values::array_get($payload, 'inbound_call_price'), 'priceUnit' => Values::array_get($payload, 'price_unit'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['number' => $number ?: $this->properties['number']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return NumberContext Context for this NumberInstance
      */
-    protected function proxy(): NumberContext
+    protected function proxy() : NumberContext
     {
         if (!$this->context) {
-            $this->context = new NumberContext(
-                $this->version,
-                $this->solution['number']
-            );
+            $this->context = new NumberContext($this->version, $this->solution['number']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the NumberInstance
      *
      * @return NumberInstance Fetched NumberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): NumberInstance
+    public function fetch() : NumberInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -101,27 +79,23 @@ class NumberInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Pricing.V1.NumberInstance ' . \implode(' ', $context) . ']';
     }
 }
-

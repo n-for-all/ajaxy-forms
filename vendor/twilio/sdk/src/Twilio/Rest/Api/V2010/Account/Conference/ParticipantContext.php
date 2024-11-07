@@ -13,20 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Conference;
 
-
-namespace Twilio\Rest\Api\V2010\Account\Conference;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class ParticipantContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ParticipantContext
      *
@@ -35,64 +31,34 @@ class ParticipantContext extends InstanceContext
      * @param string $conferenceSid The SID of the participant's conference.
      * @param string $callSid The [Call](https://www.twilio.com/docs/voice/api/call-resource) SID or label of the participant to delete. Non URL safe characters in a label must be percent encoded, for example, a space character is represented as %20.
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $conferenceSid,
-        $callSid
-    ) {
+    public function __construct(Version $version, $accountSid, $conferenceSid, $callSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'conferenceSid' =>
-            $conferenceSid,
-        'callSid' =>
-            $callSid,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Conferences/' . \rawurlencode($conferenceSid)
-        .'/Participants/' . \rawurlencode($callSid)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'conferenceSid' => $conferenceSid, 'callSid' => $callSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Conferences/' . \rawurlencode($conferenceSid) . '/Participants/' . \rawurlencode($callSid) . '.json';
     }
-
     /**
      * Delete the ParticipantInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the ParticipantInstance
      *
      * @return ParticipantInstance Fetched ParticipantInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ParticipantInstance
+    public function fetch() : ParticipantInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ParticipantInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['conferenceSid'],
-            $this->solution['callSid']
-        );
+        return new ParticipantInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['conferenceSid'], $this->solution['callSid']);
     }
-
-
     /**
      * Update the ParticipantInstance
      *
@@ -100,60 +66,23 @@ class ParticipantContext extends InstanceContext
      * @return ParticipantInstance Updated ParticipantInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ParticipantInstance
+    public function update(array $options = []) : ParticipantInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Muted' =>
-                Serialize::booleanToString($options['muted']),
-            'Hold' =>
-                Serialize::booleanToString($options['hold']),
-            'HoldUrl' =>
-                $options['holdUrl'],
-            'HoldMethod' =>
-                $options['holdMethod'],
-            'AnnounceUrl' =>
-                $options['announceUrl'],
-            'AnnounceMethod' =>
-                $options['announceMethod'],
-            'WaitUrl' =>
-                $options['waitUrl'],
-            'WaitMethod' =>
-                $options['waitMethod'],
-            'BeepOnExit' =>
-                Serialize::booleanToString($options['beepOnExit']),
-            'EndConferenceOnExit' =>
-                Serialize::booleanToString($options['endConferenceOnExit']),
-            'Coaching' =>
-                Serialize::booleanToString($options['coaching']),
-            'CallSidToCoach' =>
-                $options['callSidToCoach'],
-        ]);
-
+        $data = Values::of(['Muted' => Serialize::booleanToString($options['muted']), 'Hold' => Serialize::booleanToString($options['hold']), 'HoldUrl' => $options['holdUrl'], 'HoldMethod' => $options['holdMethod'], 'AnnounceUrl' => $options['announceUrl'], 'AnnounceMethod' => $options['announceMethod'], 'WaitUrl' => $options['waitUrl'], 'WaitMethod' => $options['waitMethod'], 'BeepOnExit' => Serialize::booleanToString($options['beepOnExit']), 'EndConferenceOnExit' => Serialize::booleanToString($options['endConferenceOnExit']), 'Coaching' => Serialize::booleanToString($options['coaching']), 'CallSidToCoach' => $options['callSidToCoach']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new ParticipantInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['conferenceSid'],
-            $this->solution['callSid']
-        );
+        return new ParticipantInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['conferenceSid'], $this->solution['callSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.ParticipantContext ' . \implode(' ', $context) . ']';
     }

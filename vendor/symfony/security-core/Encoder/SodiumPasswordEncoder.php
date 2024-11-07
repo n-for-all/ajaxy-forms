@@ -8,13 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Encoder;
 
-namespace Symfony\Component\Security\Core\Encoder;
-
-use Symfony\Component\PasswordHasher\Hasher\SodiumPasswordHasher;
-
+use Isolated\Symfony\Component\PasswordHasher\Hasher\SodiumPasswordHasher;
 trigger_deprecation('symfony/security-core', '5.3', 'The "%s" class is deprecated, use "%s" instead.', SodiumPasswordEncoder::class, SodiumPasswordHasher::class);
-
 /**
  * Hashes passwords using libsodium.
  *
@@ -27,13 +24,11 @@ trigger_deprecation('symfony/security-core', '5.3', 'The "%s" class is deprecate
 final class SodiumPasswordEncoder implements PasswordEncoderInterface, SelfSaltingEncoderInterface
 {
     use LegacyEncoderTrait;
-
     public function __construct(?int $opsLimit = null, ?int $memLimit = null)
     {
         $this->hasher = new SodiumPasswordHasher($opsLimit, $memLimit);
     }
-
-    public static function isSupported(): bool
+    public static function isSupported() : bool
     {
         return SodiumPasswordHasher::isSupported();
     }

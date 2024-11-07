@@ -8,84 +8,81 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Extension;
 
-namespace Twig\Extension;
-
-use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\ExpressionParser;
-use Twig\Markup;
-use Twig\Node\Expression\Binary\AddBinary;
-use Twig\Node\Expression\Binary\AndBinary;
-use Twig\Node\Expression\Binary\BitwiseAndBinary;
-use Twig\Node\Expression\Binary\BitwiseOrBinary;
-use Twig\Node\Expression\Binary\BitwiseXorBinary;
-use Twig\Node\Expression\Binary\ConcatBinary;
-use Twig\Node\Expression\Binary\DivBinary;
-use Twig\Node\Expression\Binary\EndsWithBinary;
-use Twig\Node\Expression\Binary\EqualBinary;
-use Twig\Node\Expression\Binary\FloorDivBinary;
-use Twig\Node\Expression\Binary\GreaterBinary;
-use Twig\Node\Expression\Binary\GreaterEqualBinary;
-use Twig\Node\Expression\Binary\HasEveryBinary;
-use Twig\Node\Expression\Binary\HasSomeBinary;
-use Twig\Node\Expression\Binary\InBinary;
-use Twig\Node\Expression\Binary\LessBinary;
-use Twig\Node\Expression\Binary\LessEqualBinary;
-use Twig\Node\Expression\Binary\MatchesBinary;
-use Twig\Node\Expression\Binary\ModBinary;
-use Twig\Node\Expression\Binary\MulBinary;
-use Twig\Node\Expression\Binary\NotEqualBinary;
-use Twig\Node\Expression\Binary\NotInBinary;
-use Twig\Node\Expression\Binary\OrBinary;
-use Twig\Node\Expression\Binary\PowerBinary;
-use Twig\Node\Expression\Binary\RangeBinary;
-use Twig\Node\Expression\Binary\SpaceshipBinary;
-use Twig\Node\Expression\Binary\StartsWithBinary;
-use Twig\Node\Expression\Binary\SubBinary;
-use Twig\Node\Expression\Filter\DefaultFilter;
-use Twig\Node\Expression\NullCoalesceExpression;
-use Twig\Node\Expression\Test\ConstantTest;
-use Twig\Node\Expression\Test\DefinedTest;
-use Twig\Node\Expression\Test\DivisiblebyTest;
-use Twig\Node\Expression\Test\EvenTest;
-use Twig\Node\Expression\Test\NullTest;
-use Twig\Node\Expression\Test\OddTest;
-use Twig\Node\Expression\Test\SameasTest;
-use Twig\Node\Expression\Unary\NegUnary;
-use Twig\Node\Expression\Unary\NotUnary;
-use Twig\Node\Expression\Unary\PosUnary;
-use Twig\NodeVisitor\MacroAutoImportNodeVisitor;
-use Twig\Source;
-use Twig\Template;
-use Twig\TemplateWrapper;
-use Twig\TokenParser\ApplyTokenParser;
-use Twig\TokenParser\BlockTokenParser;
-use Twig\TokenParser\DeprecatedTokenParser;
-use Twig\TokenParser\DoTokenParser;
-use Twig\TokenParser\EmbedTokenParser;
-use Twig\TokenParser\ExtendsTokenParser;
-use Twig\TokenParser\FlushTokenParser;
-use Twig\TokenParser\ForTokenParser;
-use Twig\TokenParser\FromTokenParser;
-use Twig\TokenParser\IfTokenParser;
-use Twig\TokenParser\ImportTokenParser;
-use Twig\TokenParser\IncludeTokenParser;
-use Twig\TokenParser\MacroTokenParser;
-use Twig\TokenParser\SetTokenParser;
-use Twig\TokenParser\UseTokenParser;
-use Twig\TokenParser\WithTokenParser;
-use Twig\TwigFilter;
-use Twig\TwigFunction;
-use Twig\TwigTest;
-
+use Isolated\Twig\Environment;
+use Isolated\Twig\Error\LoaderError;
+use Isolated\Twig\Error\RuntimeError;
+use Isolated\Twig\ExpressionParser;
+use Isolated\Twig\Markup;
+use Isolated\Twig\Node\Expression\Binary\AddBinary;
+use Isolated\Twig\Node\Expression\Binary\AndBinary;
+use Isolated\Twig\Node\Expression\Binary\BitwiseAndBinary;
+use Isolated\Twig\Node\Expression\Binary\BitwiseOrBinary;
+use Isolated\Twig\Node\Expression\Binary\BitwiseXorBinary;
+use Isolated\Twig\Node\Expression\Binary\ConcatBinary;
+use Isolated\Twig\Node\Expression\Binary\DivBinary;
+use Isolated\Twig\Node\Expression\Binary\EndsWithBinary;
+use Isolated\Twig\Node\Expression\Binary\EqualBinary;
+use Isolated\Twig\Node\Expression\Binary\FloorDivBinary;
+use Isolated\Twig\Node\Expression\Binary\GreaterBinary;
+use Isolated\Twig\Node\Expression\Binary\GreaterEqualBinary;
+use Isolated\Twig\Node\Expression\Binary\HasEveryBinary;
+use Isolated\Twig\Node\Expression\Binary\HasSomeBinary;
+use Isolated\Twig\Node\Expression\Binary\InBinary;
+use Isolated\Twig\Node\Expression\Binary\LessBinary;
+use Isolated\Twig\Node\Expression\Binary\LessEqualBinary;
+use Isolated\Twig\Node\Expression\Binary\MatchesBinary;
+use Isolated\Twig\Node\Expression\Binary\ModBinary;
+use Isolated\Twig\Node\Expression\Binary\MulBinary;
+use Isolated\Twig\Node\Expression\Binary\NotEqualBinary;
+use Isolated\Twig\Node\Expression\Binary\NotInBinary;
+use Isolated\Twig\Node\Expression\Binary\OrBinary;
+use Isolated\Twig\Node\Expression\Binary\PowerBinary;
+use Isolated\Twig\Node\Expression\Binary\RangeBinary;
+use Isolated\Twig\Node\Expression\Binary\SpaceshipBinary;
+use Isolated\Twig\Node\Expression\Binary\StartsWithBinary;
+use Isolated\Twig\Node\Expression\Binary\SubBinary;
+use Isolated\Twig\Node\Expression\Filter\DefaultFilter;
+use Isolated\Twig\Node\Expression\NullCoalesceExpression;
+use Isolated\Twig\Node\Expression\Test\ConstantTest;
+use Isolated\Twig\Node\Expression\Test\DefinedTest;
+use Isolated\Twig\Node\Expression\Test\DivisiblebyTest;
+use Isolated\Twig\Node\Expression\Test\EvenTest;
+use Isolated\Twig\Node\Expression\Test\NullTest;
+use Isolated\Twig\Node\Expression\Test\OddTest;
+use Isolated\Twig\Node\Expression\Test\SameasTest;
+use Isolated\Twig\Node\Expression\Unary\NegUnary;
+use Isolated\Twig\Node\Expression\Unary\NotUnary;
+use Isolated\Twig\Node\Expression\Unary\PosUnary;
+use Isolated\Twig\NodeVisitor\MacroAutoImportNodeVisitor;
+use Isolated\Twig\Source;
+use Isolated\Twig\Template;
+use Isolated\Twig\TemplateWrapper;
+use Isolated\Twig\TokenParser\ApplyTokenParser;
+use Isolated\Twig\TokenParser\BlockTokenParser;
+use Isolated\Twig\TokenParser\DeprecatedTokenParser;
+use Isolated\Twig\TokenParser\DoTokenParser;
+use Isolated\Twig\TokenParser\EmbedTokenParser;
+use Isolated\Twig\TokenParser\ExtendsTokenParser;
+use Isolated\Twig\TokenParser\FlushTokenParser;
+use Isolated\Twig\TokenParser\ForTokenParser;
+use Isolated\Twig\TokenParser\FromTokenParser;
+use Isolated\Twig\TokenParser\IfTokenParser;
+use Isolated\Twig\TokenParser\ImportTokenParser;
+use Isolated\Twig\TokenParser\IncludeTokenParser;
+use Isolated\Twig\TokenParser\MacroTokenParser;
+use Isolated\Twig\TokenParser\SetTokenParser;
+use Isolated\Twig\TokenParser\UseTokenParser;
+use Isolated\Twig\TokenParser\WithTokenParser;
+use Isolated\Twig\TwigFilter;
+use Isolated\Twig\TwigFunction;
+use Isolated\Twig\TwigTest;
 final class CoreExtension extends AbstractExtension
 {
     private $dateFormats = ['F j, Y H:i', '%d days'];
     private $numberFormat = [0, '.', ','];
     private $timezone = null;
-
     /**
      * Sets the default format to be used by the date filter.
      *
@@ -97,12 +94,10 @@ final class CoreExtension extends AbstractExtension
         if (null !== $format) {
             $this->dateFormats[0] = $format;
         }
-
         if (null !== $dateIntervalFormat) {
             $this->dateFormats[1] = $dateIntervalFormat;
         }
     }
-
     /**
      * Gets the default format to be used by the date filter.
      *
@@ -112,7 +107,6 @@ final class CoreExtension extends AbstractExtension
     {
         return $this->dateFormats;
     }
-
     /**
      * Sets the default timezone to be used by the date filter.
      *
@@ -122,7 +116,6 @@ final class CoreExtension extends AbstractExtension
     {
         $this->timezone = $timezone instanceof \DateTimeZone ? $timezone : new \DateTimeZone($timezone);
     }
-
     /**
      * Gets the default timezone to be used by the date filter.
      *
@@ -131,12 +124,10 @@ final class CoreExtension extends AbstractExtension
     public function getTimezone()
     {
         if (null === $this->timezone) {
-            $this->timezone = new \DateTimeZone(date_default_timezone_get());
+            $this->timezone = new \DateTimeZone(\date_default_timezone_get());
         }
-
         return $this->timezone;
     }
-
     /**
      * Sets the default format to be used by the number_format filter.
      *
@@ -148,7 +139,6 @@ final class CoreExtension extends AbstractExtension
     {
         $this->numberFormat = [$decimal, $decimalPoint, $thousandSep];
     }
-
     /**
      * Get the default format used by the number_format filter.
      *
@@ -158,30 +148,11 @@ final class CoreExtension extends AbstractExtension
     {
         return $this->numberFormat;
     }
-
-    public function getTokenParsers(): array
+    public function getTokenParsers() : array
     {
-        return [
-            new ApplyTokenParser(),
-            new ForTokenParser(),
-            new IfTokenParser(),
-            new ExtendsTokenParser(),
-            new IncludeTokenParser(),
-            new BlockTokenParser(),
-            new UseTokenParser(),
-            new MacroTokenParser(),
-            new ImportTokenParser(),
-            new FromTokenParser(),
-            new SetTokenParser(),
-            new FlushTokenParser(),
-            new DoTokenParser(),
-            new EmbedTokenParser(),
-            new WithTokenParser(),
-            new DeprecatedTokenParser(),
-        ];
+        return [new ApplyTokenParser(), new ForTokenParser(), new IfTokenParser(), new ExtendsTokenParser(), new IncludeTokenParser(), new BlockTokenParser(), new UseTokenParser(), new MacroTokenParser(), new ImportTokenParser(), new FromTokenParser(), new SetTokenParser(), new FlushTokenParser(), new DoTokenParser(), new EmbedTokenParser(), new WithTokenParser(), new DeprecatedTokenParser()];
     }
-
-    public function getFilters(): array
+    public function getFilters() : array
     {
         return [
             // formatting filters
@@ -192,130 +163,58 @@ final class CoreExtension extends AbstractExtension
             new TwigFilter('number_format', [$this, 'formatNumber']),
             new TwigFilter('abs', 'abs'),
             new TwigFilter('round', [self::class, 'round']),
-
             // encoding
             new TwigFilter('url_encode', [self::class, 'urlencode']),
             new TwigFilter('json_encode', 'json_encode'),
             new TwigFilter('convert_encoding', [self::class, 'convertEncoding']),
-
             // string filters
-            new TwigFilter('title', [self::class, 'titleCase'], ['needs_charset' => true]),
-            new TwigFilter('capitalize', [self::class, 'capitalize'], ['needs_charset' => true]),
-            new TwigFilter('upper', [self::class, 'upper'], ['needs_charset' => true]),
-            new TwigFilter('lower', [self::class, 'lower'], ['needs_charset' => true]),
+            new TwigFilter('title', [self::class, 'titleCase'], ['needs_charset' => \true]),
+            new TwigFilter('capitalize', [self::class, 'capitalize'], ['needs_charset' => \true]),
+            new TwigFilter('upper', [self::class, 'upper'], ['needs_charset' => \true]),
+            new TwigFilter('lower', [self::class, 'lower'], ['needs_charset' => \true]),
             new TwigFilter('striptags', [self::class, 'striptags']),
             new TwigFilter('trim', [self::class, 'trim']),
             new TwigFilter('nl2br', [self::class, 'nl2br'], ['pre_escape' => 'html', 'is_safe' => ['html']]),
             new TwigFilter('spaceless', [self::class, 'spaceless'], ['is_safe' => ['html']]),
-
             // array helpers
             new TwigFilter('join', [self::class, 'join']),
-            new TwigFilter('split', [self::class, 'split'], ['needs_charset' => true]),
-            new TwigFilter('sort', [self::class, 'sort'], ['needs_environment' => true]),
+            new TwigFilter('split', [self::class, 'split'], ['needs_charset' => \true]),
+            new TwigFilter('sort', [self::class, 'sort'], ['needs_environment' => \true]),
             new TwigFilter('merge', [self::class, 'merge']),
             new TwigFilter('batch', [self::class, 'batch']),
             new TwigFilter('column', [self::class, 'column']),
-            new TwigFilter('filter', [self::class, 'filter'], ['needs_environment' => true]),
-            new TwigFilter('map', [self::class, 'map'], ['needs_environment' => true]),
-            new TwigFilter('reduce', [self::class, 'reduce'], ['needs_environment' => true]),
-            new TwigFilter('find', [self::class, 'find'], ['needs_environment' => true]),
-
+            new TwigFilter('filter', [self::class, 'filter'], ['needs_environment' => \true]),
+            new TwigFilter('map', [self::class, 'map'], ['needs_environment' => \true]),
+            new TwigFilter('reduce', [self::class, 'reduce'], ['needs_environment' => \true]),
+            new TwigFilter('find', [self::class, 'find'], ['needs_environment' => \true]),
             // string/array filters
-            new TwigFilter('reverse', [self::class, 'reverse'], ['needs_charset' => true]),
-            new TwigFilter('shuffle', [self::class, 'shuffle'], ['needs_charset' => true]),
-            new TwigFilter('length', [self::class, 'length'], ['needs_charset' => true]),
-            new TwigFilter('slice', [self::class, 'slice'], ['needs_charset' => true]),
-            new TwigFilter('first', [self::class, 'first'], ['needs_charset' => true]),
-            new TwigFilter('last', [self::class, 'last'], ['needs_charset' => true]),
-
+            new TwigFilter('reverse', [self::class, 'reverse'], ['needs_charset' => \true]),
+            new TwigFilter('shuffle', [self::class, 'shuffle'], ['needs_charset' => \true]),
+            new TwigFilter('length', [self::class, 'length'], ['needs_charset' => \true]),
+            new TwigFilter('slice', [self::class, 'slice'], ['needs_charset' => \true]),
+            new TwigFilter('first', [self::class, 'first'], ['needs_charset' => \true]),
+            new TwigFilter('last', [self::class, 'last'], ['needs_charset' => \true]),
             // iteration and runtime
             new TwigFilter('default', [self::class, 'default'], ['node_class' => DefaultFilter::class]),
             new TwigFilter('keys', [self::class, 'keys']),
         ];
     }
-
-    public function getFunctions(): array
+    public function getFunctions() : array
     {
-        return [
-            new TwigFunction('max', 'max'),
-            new TwigFunction('min', 'min'),
-            new TwigFunction('range', 'range'),
-            new TwigFunction('constant', [self::class, 'constant']),
-            new TwigFunction('cycle', [self::class, 'cycle']),
-            new TwigFunction('random', [self::class, 'random'], ['needs_charset' => true]),
-            new TwigFunction('date', [$this, 'convertDate']),
-            new TwigFunction('include', [self::class, 'include'], ['needs_environment' => true, 'needs_context' => true, 'is_safe' => ['all']]),
-            new TwigFunction('source', [self::class, 'source'], ['needs_environment' => true, 'is_safe' => ['all']]),
-        ];
+        return [new TwigFunction('max', 'max'), new TwigFunction('min', 'min'), new TwigFunction('range', 'range'), new TwigFunction('constant', [self::class, 'constant']), new TwigFunction('cycle', [self::class, 'cycle']), new TwigFunction('random', [self::class, 'random'], ['needs_charset' => \true]), new TwigFunction('date', [$this, 'convertDate']), new TwigFunction('include', [self::class, 'include'], ['needs_environment' => \true, 'needs_context' => \true, 'is_safe' => ['all']]), new TwigFunction('source', [self::class, 'source'], ['needs_environment' => \true, 'is_safe' => ['all']])];
     }
-
-    public function getTests(): array
+    public function getTests() : array
     {
-        return [
-            new TwigTest('even', null, ['node_class' => EvenTest::class]),
-            new TwigTest('odd', null, ['node_class' => OddTest::class]),
-            new TwigTest('defined', null, ['node_class' => DefinedTest::class]),
-            new TwigTest('same as', null, ['node_class' => SameasTest::class, 'one_mandatory_argument' => true]),
-            new TwigTest('none', null, ['node_class' => NullTest::class]),
-            new TwigTest('null', null, ['node_class' => NullTest::class]),
-            new TwigTest('divisible by', null, ['node_class' => DivisiblebyTest::class, 'one_mandatory_argument' => true]),
-            new TwigTest('constant', null, ['node_class' => ConstantTest::class]),
-            new TwigTest('empty', [self::class, 'testEmpty']),
-            new TwigTest('iterable', 'is_iterable'),
-            new TwigTest('sequence', [self::class, 'testSequence']),
-            new TwigTest('mapping', [self::class, 'testMapping']),
-        ];
+        return [new TwigTest('even', null, ['node_class' => EvenTest::class]), new TwigTest('odd', null, ['node_class' => OddTest::class]), new TwigTest('defined', null, ['node_class' => DefinedTest::class]), new TwigTest('same as', null, ['node_class' => SameasTest::class, 'one_mandatory_argument' => \true]), new TwigTest('none', null, ['node_class' => NullTest::class]), new TwigTest('null', null, ['node_class' => NullTest::class]), new TwigTest('divisible by', null, ['node_class' => DivisiblebyTest::class, 'one_mandatory_argument' => \true]), new TwigTest('constant', null, ['node_class' => ConstantTest::class]), new TwigTest('empty', [self::class, 'testEmpty']), new TwigTest('iterable', 'is_iterable'), new TwigTest('sequence', [self::class, 'testSequence']), new TwigTest('mapping', [self::class, 'testMapping'])];
     }
-
-    public function getNodeVisitors(): array
+    public function getNodeVisitors() : array
     {
         return [new MacroAutoImportNodeVisitor()];
     }
-
-    public function getOperators(): array
+    public function getOperators() : array
     {
-        return [
-            [
-                'not' => ['precedence' => 50, 'class' => NotUnary::class],
-                '-' => ['precedence' => 500, 'class' => NegUnary::class],
-                '+' => ['precedence' => 500, 'class' => PosUnary::class],
-            ],
-            [
-                'or' => ['precedence' => 10, 'class' => OrBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'and' => ['precedence' => 15, 'class' => AndBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'b-or' => ['precedence' => 16, 'class' => BitwiseOrBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'b-xor' => ['precedence' => 17, 'class' => BitwiseXorBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'b-and' => ['precedence' => 18, 'class' => BitwiseAndBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '==' => ['precedence' => 20, 'class' => EqualBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '!=' => ['precedence' => 20, 'class' => NotEqualBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '<=>' => ['precedence' => 20, 'class' => SpaceshipBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '<' => ['precedence' => 20, 'class' => LessBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '>' => ['precedence' => 20, 'class' => GreaterBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '>=' => ['precedence' => 20, 'class' => GreaterEqualBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '<=' => ['precedence' => 20, 'class' => LessEqualBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'not in' => ['precedence' => 20, 'class' => NotInBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'in' => ['precedence' => 20, 'class' => InBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'matches' => ['precedence' => 20, 'class' => MatchesBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'starts with' => ['precedence' => 20, 'class' => StartsWithBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'ends with' => ['precedence' => 20, 'class' => EndsWithBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'has some' => ['precedence' => 20, 'class' => HasSomeBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'has every' => ['precedence' => 20, 'class' => HasEveryBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '..' => ['precedence' => 25, 'class' => RangeBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '+' => ['precedence' => 30, 'class' => AddBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '-' => ['precedence' => 30, 'class' => SubBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '~' => ['precedence' => 40, 'class' => ConcatBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '*' => ['precedence' => 60, 'class' => MulBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '/' => ['precedence' => 60, 'class' => DivBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '//' => ['precedence' => 60, 'class' => FloorDivBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '%' => ['precedence' => 60, 'class' => ModBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'is' => ['precedence' => 100, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                'is not' => ['precedence' => 100, 'associativity' => ExpressionParser::OPERATOR_LEFT],
-                '**' => ['precedence' => 200, 'class' => PowerBinary::class, 'associativity' => ExpressionParser::OPERATOR_RIGHT],
-                '??' => ['precedence' => 300, 'class' => NullCoalesceExpression::class, 'associativity' => ExpressionParser::OPERATOR_RIGHT],
-            ],
-        ];
+        return [['not' => ['precedence' => 50, 'class' => NotUnary::class], '-' => ['precedence' => 500, 'class' => NegUnary::class], '+' => ['precedence' => 500, 'class' => PosUnary::class]], ['or' => ['precedence' => 10, 'class' => OrBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'and' => ['precedence' => 15, 'class' => AndBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'b-or' => ['precedence' => 16, 'class' => BitwiseOrBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'b-xor' => ['precedence' => 17, 'class' => BitwiseXorBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'b-and' => ['precedence' => 18, 'class' => BitwiseAndBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '==' => ['precedence' => 20, 'class' => EqualBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '!=' => ['precedence' => 20, 'class' => NotEqualBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '<=>' => ['precedence' => 20, 'class' => SpaceshipBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '<' => ['precedence' => 20, 'class' => LessBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '>' => ['precedence' => 20, 'class' => GreaterBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '>=' => ['precedence' => 20, 'class' => GreaterEqualBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '<=' => ['precedence' => 20, 'class' => LessEqualBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'not in' => ['precedence' => 20, 'class' => NotInBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'in' => ['precedence' => 20, 'class' => InBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'matches' => ['precedence' => 20, 'class' => MatchesBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'starts with' => ['precedence' => 20, 'class' => StartsWithBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'ends with' => ['precedence' => 20, 'class' => EndsWithBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'has some' => ['precedence' => 20, 'class' => HasSomeBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'has every' => ['precedence' => 20, 'class' => HasEveryBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '..' => ['precedence' => 25, 'class' => RangeBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '+' => ['precedence' => 30, 'class' => AddBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '-' => ['precedence' => 30, 'class' => SubBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '~' => ['precedence' => 40, 'class' => ConcatBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '*' => ['precedence' => 60, 'class' => MulBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '/' => ['precedence' => 60, 'class' => DivBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '//' => ['precedence' => 60, 'class' => FloorDivBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '%' => ['precedence' => 60, 'class' => ModBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'is' => ['precedence' => 100, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'is not' => ['precedence' => 100, 'associativity' => ExpressionParser::OPERATOR_LEFT], '**' => ['precedence' => 200, 'class' => PowerBinary::class, 'associativity' => ExpressionParser::OPERATOR_RIGHT], '??' => ['precedence' => 300, 'class' => NullCoalesceExpression::class, 'associativity' => ExpressionParser::OPERATOR_RIGHT]]];
     }
-
     /**
      * Cycles over a value.
      *
@@ -326,19 +225,16 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function cycle($values, $position): string
+    public static function cycle($values, $position) : string
     {
         if (!\is_array($values) && !$values instanceof \ArrayAccess) {
             return $values;
         }
-
         if (!\count($values)) {
             throw new RuntimeError('The "cycle" function does not work on empty sequences/mappings.');
         }
-
         return $values[$position % \count($values)];
     }
-
     /**
      * Returns a random value depending on the supplied parameter type:
      * - a random item from a \Traversable or array
@@ -357,9 +253,8 @@ final class CoreExtension extends AbstractExtension
     public static function random(string $charset, $values = null, $max = null)
     {
         if (null === $values) {
-            return null === $max ? mt_rand() : mt_rand(0, (int) $max);
+            return null === $max ? \mt_rand() : \mt_rand(0, (int) $max);
         }
-
         if (\is_int($values) || \is_float($values)) {
             if (null === $max) {
                 if ($values < 0) {
@@ -372,43 +267,33 @@ final class CoreExtension extends AbstractExtension
             } else {
                 $min = $values;
             }
-
-            return mt_rand((int) $min, (int) $max);
+            return \mt_rand((int) $min, (int) $max);
         }
-
         if (\is_string($values)) {
             if ('' === $values) {
                 return '';
             }
-
             if ('UTF-8' !== $charset) {
                 $values = self::convertEncoding($values, 'UTF-8', $charset);
             }
-
             // unicode version of str_split()
             // split at all positions, but not after the start and not before the end
-            $values = preg_split('/(?<!^)(?!$)/u', $values);
-
+            $values = \preg_split('/(?<!^)(?!$)/u', $values);
             if ('UTF-8' !== $charset) {
                 foreach ($values as $i => $value) {
                     $values[$i] = self::convertEncoding($value, $charset, 'UTF-8');
                 }
             }
         }
-
-        if (!is_iterable($values)) {
+        if (!\is_iterable($values)) {
             return $values;
         }
-
         $values = self::toArray($values);
-
         if (0 === \count($values)) {
             throw new RuntimeError('The random function cannot pick from an empty sequence/mapping.');
         }
-
-        return $values[array_rand($values, 1)];
+        return $values[\array_rand($values, 1)];
     }
-
     /**
      * Formats a date.
      *
@@ -418,20 +303,17 @@ final class CoreExtension extends AbstractExtension
      * @param string|null                             $format   The target format, null to use the default
      * @param \DateTimeZone|string|false|null         $timezone The target timezone, null to use the default, false to leave unchanged
      */
-    public function formatDate($date, $format = null, $timezone = null): string
+    public function formatDate($date, $format = null, $timezone = null) : string
     {
         if (null === $format) {
             $formats = $this->getDateFormat();
             $format = $date instanceof \DateInterval ? $formats[1] : $formats[0];
         }
-
         if ($date instanceof \DateInterval) {
             return $date->format($format);
         }
-
         return $this->convertDate($date, $timezone)->format($format);
     }
-
     /**
      * Returns a new date object modified.
      *
@@ -446,9 +328,8 @@ final class CoreExtension extends AbstractExtension
      */
     public function modifyDate($date, $modifier)
     {
-        return $this->convertDate($date, false)->modify($modifier);
+        return $this->convertDate($date, \false)->modify($modifier);
     }
-
     /**
      * Returns a formatted string.
      *
@@ -457,19 +338,17 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function sprintf($format, ...$values): string
+    public static function sprintf($format, ...$values) : string
     {
         return \sprintf($format ?? '', ...$values);
     }
-
     /**
      * @internal
      */
-    public static function dateConverter(Environment $env, $date, $format = null, $timezone = null): string
+    public static function dateConverter(Environment $env, $date, $format = null, $timezone = null) : string
     {
         return $env->getExtension(self::class)->formatDate($date, $format, $timezone);
     }
-
     /**
      * Converts an input to a \DateTime instance.
      *
@@ -485,50 +364,41 @@ final class CoreExtension extends AbstractExtension
     public function convertDate($date = null, $timezone = null)
     {
         // determine the timezone
-        if (false !== $timezone) {
+        if (\false !== $timezone) {
             if (null === $timezone) {
                 $timezone = $this->getTimezone();
             } elseif (!$timezone instanceof \DateTimeZone) {
                 $timezone = new \DateTimeZone($timezone);
             }
         }
-
         // immutable dates
         if ($date instanceof \DateTimeImmutable) {
-            return false !== $timezone ? $date->setTimezone($timezone) : $date;
+            return \false !== $timezone ? $date->setTimezone($timezone) : $date;
         }
-
         if ($date instanceof \DateTime) {
             $date = clone $date;
-            if (false !== $timezone) {
+            if (\false !== $timezone) {
                 $date->setTimezone($timezone);
             }
-
             return $date;
         }
-
         if (null === $date || 'now' === $date) {
             if (null === $date) {
                 $date = 'now';
             }
-
-            return new \DateTime($date, false !== $timezone ? $timezone : $this->getTimezone());
+            return new \DateTime($date, \false !== $timezone ? $timezone : $this->getTimezone());
         }
-
         $asString = (string) $date;
-        if (ctype_digit($asString) || (!empty($asString) && '-' === $asString[0] && ctype_digit(substr($asString, 1)))) {
-            $date = new \DateTime('@'.$date);
+        if (\ctype_digit($asString) || !empty($asString) && '-' === $asString[0] && \ctype_digit(\substr($asString, 1))) {
+            $date = new \DateTime('@' . $date);
         } else {
             $date = new \DateTime($date, $this->getTimezone());
         }
-
-        if (false !== $timezone) {
+        if (\false !== $timezone) {
             $date->setTimezone($timezone);
         }
-
         return $date;
     }
-
     /**
      * Replaces strings within a string.
      *
@@ -537,15 +407,13 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function replace($str, $from): string
+    public static function replace($str, $from) : string
     {
-        if (!is_iterable($from)) {
+        if (!\is_iterable($from)) {
             throw new RuntimeError(\sprintf('The "replace" filter expects a sequence/mapping or "Traversable" as replace values, got "%s".', \is_object($from) ? \get_class($from) : \gettype($from)));
         }
-
-        return strtr($str ?? '', self::toArray($from));
+        return \strtr($str ?? '', self::toArray($from));
     }
-
     /**
      * Rounds a number.
      *
@@ -560,18 +428,14 @@ final class CoreExtension extends AbstractExtension
     public static function round($value, $precision = 0, $method = 'common')
     {
         $value = (float) $value;
-
         if ('common' === $method) {
-            return round($value, $precision);
+            return \round($value, $precision);
         }
-
         if ('ceil' !== $method && 'floor' !== $method) {
             throw new RuntimeError('The round filter only supports the "common", "ceil", and "floor" methods.');
         }
-
         return $method($value * 10 ** $precision) / 10 ** $precision;
     }
-
     /**
      * Formats a number.
      *
@@ -584,24 +448,20 @@ final class CoreExtension extends AbstractExtension
      * @param string|null $decimalPoint the character(s) to use for the decimal point
      * @param string|null $thousandSep  the character(s) to use for the thousands separator
      */
-    public function formatNumber($number, $decimal = null, $decimalPoint = null, $thousandSep = null): string
+    public function formatNumber($number, $decimal = null, $decimalPoint = null, $thousandSep = null) : string
     {
         $defaults = $this->getNumberFormat();
         if (null === $decimal) {
             $decimal = $defaults[0];
         }
-
         if (null === $decimalPoint) {
             $decimalPoint = $defaults[1];
         }
-
         if (null === $thousandSep) {
             $thousandSep = $defaults[2];
         }
-
-        return number_format((float) $number, $decimal, $decimalPoint, $thousandSep);
+        return \number_format((float) $number, $decimal, $decimalPoint, $thousandSep);
     }
-
     /**
      * URL encodes (RFC 3986) a string as a path segment or an array as a query string.
      *
@@ -609,15 +469,13 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function urlencode($url): string
+    public static function urlencode($url) : string
     {
         if (\is_array($url)) {
-            return http_build_query($url, '', '&', \PHP_QUERY_RFC3986);
+            return \http_build_query($url, '', '&', \PHP_QUERY_RFC3986);
         }
-
-        return rawurlencode($url ?? '');
+        return \rawurlencode($url ?? '');
     }
-
     /**
      * Merges any number of arrays or Traversable objects.
      *
@@ -631,21 +489,17 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function merge(...$arrays): array
+    public static function merge(...$arrays) : array
     {
         $result = [];
-
         foreach ($arrays as $argNumber => $array) {
-            if (!is_iterable($array)) {
+            if (!\is_iterable($array)) {
                 throw new RuntimeError(\sprintf('The merge filter only works with sequences/mappings or "Traversable", got "%s" for argument %d.', \gettype($array), $argNumber + 1));
             }
-
-            $result = array_merge($result, self::toArray($array));
+            $result = \array_merge($result, self::toArray($array));
         }
-
         return $result;
     }
-
     /**
      * Slices a variable.
      *
@@ -658,31 +512,26 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function slice(string $charset, $item, $start, $length = null, $preserveKeys = false)
+    public static function slice(string $charset, $item, $start, $length = null, $preserveKeys = \false)
     {
         if ($item instanceof \Traversable) {
             while ($item instanceof \IteratorAggregate) {
                 $item = $item->getIterator();
             }
-
             if ($start >= 0 && $length >= 0 && $item instanceof \Iterator) {
                 try {
-                    return iterator_to_array(new \LimitIterator($item, $start, $length ?? -1), $preserveKeys);
+                    return \iterator_to_array(new \LimitIterator($item, $start, $length ?? -1), $preserveKeys);
                 } catch (\OutOfBoundsException $e) {
                     return [];
                 }
             }
-
-            $item = iterator_to_array($item, $preserveKeys);
+            $item = \iterator_to_array($item, $preserveKeys);
         }
-
         if (\is_array($item)) {
             return \array_slice($item, $start, $length, $preserveKeys);
         }
-
-        return mb_substr((string) $item, $start, $length, $charset);
+        return \mb_substr((string) $item, $start, $length, $charset);
     }
-
     /**
      * Returns the first element of the item.
      *
@@ -694,11 +543,9 @@ final class CoreExtension extends AbstractExtension
      */
     public static function first(string $charset, $item)
     {
-        $elements = self::slice($charset, $item, 0, 1, false);
-
-        return \is_string($elements) ? $elements : current($elements);
+        $elements = self::slice($charset, $item, 0, 1, \false);
+        return \is_string($elements) ? $elements : \current($elements);
     }
-
     /**
      * Returns the last element of the item.
      *
@@ -710,11 +557,9 @@ final class CoreExtension extends AbstractExtension
      */
     public static function last(string $charset, $item)
     {
-        $elements = self::slice($charset, $item, -1, 1, false);
-
-        return \is_string($elements) ? $elements : current($elements);
+        $elements = self::slice($charset, $item, -1, 1, \false);
+        return \is_string($elements) ? $elements : \current($elements);
     }
-
     /**
      * Joins the values to a string.
      *
@@ -735,29 +580,23 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function join($value, $glue = '', $and = null): string
+    public static function join($value, $glue = '', $and = null) : string
     {
-        if (!is_iterable($value)) {
+        if (!\is_iterable($value)) {
             $value = (array) $value;
         }
-
-        $value = self::toArray($value, false);
-
+        $value = self::toArray($value, \false);
         if (0 === \count($value)) {
             return '';
         }
-
         if (null === $and || $and === $glue) {
-            return implode($glue, $value);
+            return \implode($glue, $value);
         }
-
         if (1 === \count($value)) {
             return $value[0];
         }
-
-        return implode($glue, \array_slice($value, 0, -1)).$and.$value[\count($value) - 1];
+        return \implode($glue, \array_slice($value, 0, -1)) . $and . $value[\count($value) - 1];
     }
-
     /**
      * Splits the string into an array.
      *
@@ -779,31 +618,25 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function split(string $charset, $value, $delimiter, $limit = null): array
+    public static function split(string $charset, $value, $delimiter, $limit = null) : array
     {
         $value = $value ?? '';
-
         if ('' !== $delimiter) {
-            return null === $limit ? explode($delimiter, $value) : explode($delimiter, $value, $limit);
+            return null === $limit ? \explode($delimiter, $value) : \explode($delimiter, $value, $limit);
         }
-
         if ($limit <= 1) {
-            return preg_split('/(?<!^)(?!$)/u', $value);
+            return \preg_split('/(?<!^)(?!$)/u', $value);
         }
-
-        $length = mb_strlen($value, $charset);
+        $length = \mb_strlen($value, $charset);
         if ($length < $limit) {
             return [$value];
         }
-
         $r = [];
         for ($i = 0; $i < $length; $i += $limit) {
-            $r[] = mb_substr($value, $i, $limit, $charset);
+            $r[] = \mb_substr($value, $i, $limit, $charset);
         }
-
         return $r;
     }
-
     // The '_default' filter is used internally to avoid using the ternary operator
     // which costs a lot for big contexts (before PHP 5.4). So, on average,
     // a function call is cheaper.
@@ -815,10 +648,8 @@ final class CoreExtension extends AbstractExtension
         if (self::testEmpty($value)) {
             return $default;
         }
-
         return $value;
     }
-
     /**
      * Returns the keys for the given array.
      *
@@ -830,13 +661,12 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function keys($array): array
+    public static function keys($array) : array
     {
         if ($array instanceof \Traversable) {
             while ($array instanceof \IteratorAggregate) {
                 $array = $array->getIterator();
             }
-
             $keys = [];
             if ($array instanceof \Iterator) {
                 $array->rewind();
@@ -844,24 +674,18 @@ final class CoreExtension extends AbstractExtension
                     $keys[] = $array->key();
                     $array->next();
                 }
-
                 return $keys;
             }
-
             foreach ($array as $key => $item) {
                 $keys[] = $key;
             }
-
             return $keys;
         }
-
         if (!\is_array($array)) {
             return [];
         }
-
-        return array_keys($array);
+        return \array_keys($array);
     }
-
     /**
      * Reverses a variable.
      *
@@ -872,33 +696,25 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function reverse(string $charset, $item, $preserveKeys = false)
+    public static function reverse(string $charset, $item, $preserveKeys = \false)
     {
         if ($item instanceof \Traversable) {
-            return array_reverse(iterator_to_array($item), $preserveKeys);
+            return \array_reverse(\iterator_to_array($item), $preserveKeys);
         }
-
         if (\is_array($item)) {
-            return array_reverse($item, $preserveKeys);
+            return \array_reverse($item, $preserveKeys);
         }
-
         $string = (string) $item;
-
         if ('UTF-8' !== $charset) {
             $string = self::convertEncoding($string, 'UTF-8', $charset);
         }
-
-        preg_match_all('/./us', $string, $matches);
-
-        $string = implode('', array_reverse($matches[0]));
-
+        \preg_match_all('/./us', $string, $matches);
+        $string = \implode('', \array_reverse($matches[0]));
         if ('UTF-8' !== $charset) {
             $string = self::convertEncoding($string, $charset, 'UTF-8');
         }
-
         return $string;
     }
-
     /**
      * Shuffles an array, a \Traversable instance, or a string.
      * The function does not preserve keys.
@@ -915,26 +731,20 @@ final class CoreExtension extends AbstractExtension
             if ('UTF-8' !== $charset) {
                 $item = self::convertEncoding($item, 'UTF-8', $charset);
             }
-
-            $item = preg_split('/(?<!^)(?!$)/u', $item, -1);
-            shuffle($item);
-            $item = implode('', $item);
-
+            $item = \preg_split('/(?<!^)(?!$)/u', $item, -1);
+            \shuffle($item);
+            $item = \implode('', $item);
             if ('UTF-8' !== $charset) {
                 $item = self::convertEncoding($item, $charset, 'UTF-8');
             }
-
             return $item;
         }
-
-        if (is_iterable($item)) {
-            $item = self::toArray($item, false);
-            shuffle($item);
+        if (\is_iterable($item)) {
+            $item = self::toArray($item, \false);
+            \shuffle($item);
         }
-
         return $item;
     }
-
     /**
      * Sorts an array.
      *
@@ -942,25 +752,21 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function sort(Environment $env, $array, $arrow = null): array
+    public static function sort(Environment $env, $array, $arrow = null) : array
     {
         if ($array instanceof \Traversable) {
-            $array = iterator_to_array($array);
+            $array = \iterator_to_array($array);
         } elseif (!\is_array($array)) {
             throw new RuntimeError(\sprintf('The sort filter only works with sequences/mappings or "Traversable", got "%s".', \gettype($array)));
         }
-
         if (null !== $arrow) {
             self::checkArrowInSandbox($env, $arrow, 'sort', 'filter');
-
-            uasort($array, $arrow);
+            \uasort($array, $arrow);
         } else {
-            asort($array);
+            \asort($array);
         }
-
         return $array;
     }
-
     /**
      * @internal
      */
@@ -972,42 +778,33 @@ final class CoreExtension extends AbstractExtension
         if ($compare instanceof Markup) {
             $compare = (string) $compare;
         }
-
         if (\is_string($compare)) {
             if (\is_string($value) || \is_int($value) || \is_float($value)) {
-                return '' === $value || str_contains($compare, (string) $value);
+                return '' === $value || \str_contains($compare, (string) $value);
             }
-
-            return false;
+            return \false;
         }
-
-        if (!is_iterable($compare)) {
-            return false;
+        if (!\is_iterable($compare)) {
+            return \false;
         }
-
         if (\is_object($value) || \is_resource($value)) {
             if (!\is_array($compare)) {
                 foreach ($compare as $item) {
                     if ($item === $value) {
-                        return true;
+                        return \true;
                     }
                 }
-
-                return false;
+                return \false;
             }
-
-            return \in_array($value, $compare, true);
+            return \in_array($value, $compare, \true);
         }
-
         foreach ($compare as $item) {
             if (0 === self::compare($value, $item)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Compares two values using a more strict version of the PHP non-strict comparison operator.
      *
@@ -1020,8 +817,8 @@ final class CoreExtension extends AbstractExtension
     {
         // int <=> string
         if (\is_int($a) && \is_string($b)) {
-            $bTrim = trim($b, " \t\n\r\v\f");
-            if (!is_numeric($bTrim)) {
+            $bTrim = \trim($b, " \t\n\r\v\f");
+            if (!\is_numeric($bTrim)) {
                 return (string) $a <=> $b;
             }
             if ((int) $bTrim == $bTrim) {
@@ -1031,8 +828,8 @@ final class CoreExtension extends AbstractExtension
             }
         }
         if (\is_string($a) && \is_int($b)) {
-            $aTrim = trim($a, " \t\n\r\v\f");
-            if (!is_numeric($aTrim)) {
+            $aTrim = \trim($a, " \t\n\r\v\f");
+            if (!\is_numeric($aTrim)) {
                 return $a <=> (string) $b;
             }
             if ((int) $aTrim == $aTrim) {
@@ -1041,52 +838,46 @@ final class CoreExtension extends AbstractExtension
                 return (float) $aTrim <=> (float) $b;
             }
         }
-
         // float <=> string
         if (\is_float($a) && \is_string($b)) {
-            if (is_nan($a)) {
+            if (\is_nan($a)) {
                 return 1;
             }
-            $bTrim = trim($b, " \t\n\r\v\f");
-            if (!is_numeric($bTrim)) {
+            $bTrim = \trim($b, " \t\n\r\v\f");
+            if (!\is_numeric($bTrim)) {
                 return (string) $a <=> $b;
             }
-
             return $a <=> (float) $bTrim;
         }
         if (\is_string($a) && \is_float($b)) {
-            if (is_nan($b)) {
+            if (\is_nan($b)) {
                 return 1;
             }
-            $aTrim = trim($a, " \t\n\r\v\f");
-            if (!is_numeric($aTrim)) {
+            $aTrim = \trim($a, " \t\n\r\v\f");
+            if (!\is_numeric($aTrim)) {
                 return $a <=> (string) $b;
             }
-
             return (float) $aTrim <=> $b;
         }
-
         // fallback to <=>
         return $a <=> $b;
     }
-
     /**
      * @throws RuntimeError When an invalid pattern is used
      *
      * @internal
      */
-    public static function matches(string $regexp, ?string $str): int
+    public static function matches(string $regexp, ?string $str) : int
     {
-        set_error_handler(function ($t, $m) use ($regexp) {
-            throw new RuntimeError(\sprintf('Regexp "%s" passed to "matches" is not valid', $regexp).substr($m, 12));
+        \set_error_handler(function ($t, $m) use($regexp) {
+            throw new RuntimeError(\sprintf('Regexp "%s" passed to "matches" is not valid', $regexp) . \substr($m, 12));
         });
         try {
-            return preg_match($regexp, $str ?? '');
+            return \preg_match($regexp, $str ?? '');
         } finally {
-            restore_error_handler();
+            \restore_error_handler();
         }
     }
-
     /**
      * Returns a trimmed string.
      *
@@ -1098,24 +889,22 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function trim($string, $characterMask = null, $side = 'both'): string
+    public static function trim($string, $characterMask = null, $side = 'both') : string
     {
         if (null === $characterMask) {
-            $characterMask = " \t\n\r\0\x0B";
+            $characterMask = " \t\n\r\x00\v";
         }
-
         switch ($side) {
             case 'both':
-                return trim($string ?? '', $characterMask);
+                return \trim($string ?? '', $characterMask);
             case 'left':
-                return ltrim($string ?? '', $characterMask);
+                return \ltrim($string ?? '', $characterMask);
             case 'right':
-                return rtrim($string ?? '', $characterMask);
+                return \rtrim($string ?? '', $characterMask);
             default:
                 throw new RuntimeError('Trimming side must be "left", "right" or "both".');
         }
     }
-
     /**
      * Inserts HTML line breaks before all newlines in a string.
      *
@@ -1123,11 +912,10 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function nl2br($string): string
+    public static function nl2br($string) : string
     {
-        return nl2br($string ?? '');
+        return \nl2br($string ?? '');
     }
-
     /**
      * Removes whitespaces between HTML tags.
      *
@@ -1135,11 +923,10 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function spaceless($content): string
+    public static function spaceless($content) : string
     {
-        return trim(preg_replace('/>\s+</', '><', $content ?? ''));
+        return \trim(\preg_replace('/>\\s+</', '><', $content ?? ''));
     }
-
     /**
      * @param string|null $string
      * @param string      $to
@@ -1147,15 +934,13 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function convertEncoding($string, $to, $from): string
+    public static function convertEncoding($string, $to, $from) : string
     {
         if (!\function_exists('iconv')) {
             throw new RuntimeError('Unable to convert encoding: required function iconv() does not exist. You should install ext-iconv or symfony/polyfill-iconv.');
         }
-
-        return iconv($from, $to, $string ?? '');
+        return \iconv($from, $to, $string ?? '');
     }
-
     /**
      * Returns the length of a variable.
      *
@@ -1163,31 +948,25 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function length(string $charset, $thing): int
+    public static function length(string $charset, $thing) : int
     {
         if (null === $thing) {
             return 0;
         }
-
         if (\is_scalar($thing)) {
-            return mb_strlen($thing, $charset);
+            return \mb_strlen($thing, $charset);
         }
-
         if ($thing instanceof \Countable || \is_array($thing) || $thing instanceof \SimpleXMLElement) {
             return \count($thing);
         }
-
         if ($thing instanceof \Traversable) {
-            return iterator_count($thing);
+            return \iterator_count($thing);
         }
-
-        if (method_exists($thing, '__toString')) {
-            return mb_strlen((string) $thing, $charset);
+        if (\method_exists($thing, '__toString')) {
+            return \mb_strlen((string) $thing, $charset);
         }
-
         return 1;
     }
-
     /**
      * Converts a string to uppercase.
      *
@@ -1195,11 +974,10 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function upper(string $charset, $string): string
+    public static function upper(string $charset, $string) : string
     {
-        return mb_strtoupper($string ?? '', $charset);
+        return \mb_strtoupper($string ?? '', $charset);
     }
-
     /**
      * Converts a string to lowercase.
      *
@@ -1207,11 +985,10 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function lower(string $charset, $string): string
+    public static function lower(string $charset, $string) : string
     {
-        return mb_strtolower($string ?? '', $charset);
+        return \mb_strtolower($string ?? '', $charset);
     }
-
     /**
      * Strips HTML and PHP tags from a string.
      *
@@ -1220,11 +997,10 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function striptags($string, $allowable_tags = null): string
+    public static function striptags($string, $allowable_tags = null) : string
     {
-        return strip_tags($string ?? '', $allowable_tags);
+        return \strip_tags($string ?? '', $allowable_tags);
     }
-
     /**
      * Returns a titlecased string.
      *
@@ -1232,11 +1008,10 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function titleCase(string $charset, $string): string
+    public static function titleCase(string $charset, $string) : string
     {
-        return mb_convert_case($string ?? '', \MB_CASE_TITLE, $charset);
+        return \mb_convert_case($string ?? '', \MB_CASE_TITLE, $charset);
     }
-
     /**
      * Returns a capitalized string.
      *
@@ -1244,58 +1019,49 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function capitalize(string $charset, $string): string
+    public static function capitalize(string $charset, $string) : string
     {
-        return mb_strtoupper(mb_substr($string ?? '', 0, 1, $charset), $charset).mb_strtolower(mb_substr($string ?? '', 1, null, $charset), $charset);
+        return \mb_strtoupper(\mb_substr($string ?? '', 0, 1, $charset), $charset) . \mb_strtolower(\mb_substr($string ?? '', 1, null, $charset), $charset);
     }
-
     /**
      * @internal
      */
     public static function callMacro(Template $template, string $method, array $args, int $lineno, array $context, Source $source)
     {
-        if (!method_exists($template, $method)) {
+        if (!\method_exists($template, $method)) {
             $parent = $template;
             while ($parent = $parent->getParent($context)) {
-                if (method_exists($parent, $method)) {
-                    return $parent->$method(...$args);
+                if (\method_exists($parent, $method)) {
+                    return $parent->{$method}(...$args);
                 }
             }
-
-            throw new RuntimeError(\sprintf('Macro "%s" is not defined in template "%s".', substr($method, \strlen('macro_')), $template->getTemplateName()), $lineno, $source);
+            throw new RuntimeError(\sprintf('Macro "%s" is not defined in template "%s".', \substr($method, \strlen('macro_')), $template->getTemplateName()), $lineno, $source);
         }
-
-        return $template->$method(...$args);
+        return $template->{$method}(...$args);
     }
-
     /**
      * @internal
      */
     public static function ensureTraversable($seq)
     {
-        if (is_iterable($seq)) {
+        if (\is_iterable($seq)) {
             return $seq;
         }
-
         return [];
     }
-
     /**
      * @internal
      */
-    public static function toArray($seq, $preserveKeys = true)
+    public static function toArray($seq, $preserveKeys = \true)
     {
         if ($seq instanceof \Traversable) {
-            return iterator_to_array($seq, $preserveKeys);
+            return \iterator_to_array($seq, $preserveKeys);
         }
-
         if (!\is_array($seq)) {
             return $seq;
         }
-
-        return $preserveKeys ? $seq : array_values($seq);
+        return $preserveKeys ? $seq : \array_values($seq);
     }
-
     /**
      * Checks if a variable is empty.
      *
@@ -1308,23 +1074,19 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function testEmpty($value): bool
+    public static function testEmpty($value) : bool
     {
         if ($value instanceof \Countable) {
             return 0 === \count($value);
         }
-
         if ($value instanceof \Traversable) {
-            return !iterator_count($value);
+            return !\iterator_count($value);
         }
-
-        if (\is_object($value) && method_exists($value, '__toString')) {
+        if (\is_object($value) && \method_exists($value, '__toString')) {
             return '' === (string) $value;
         }
-
-        return '' === $value || false === $value || null === $value || [] === $value;
+        return '' === $value || \false === $value || null === $value || [] === $value;
     }
-
     /**
      * Checks if a variable is a sequence.
      *
@@ -1337,19 +1099,16 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function testSequence($value): bool
+    public static function testSequence($value) : bool
     {
         if ($value instanceof \ArrayObject) {
             $value = $value->getArrayCopy();
         }
-
         if ($value instanceof \Traversable) {
-            $value = iterator_to_array($value);
+            $value = \iterator_to_array($value);
         }
-
-        return \is_array($value) && array_is_list($value);
+        return \is_array($value) && \array_is_list($value);
     }
-
     /**
      * Checks if a variable is a mapping.
      *
@@ -1362,19 +1121,16 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function testMapping($value): bool
+    public static function testMapping($value) : bool
     {
         if ($value instanceof \ArrayObject) {
             $value = $value->getArrayCopy();
         }
-
         if ($value instanceof \Traversable) {
-            $value = iterator_to_array($value);
+            $value = \iterator_to_array($value);
         }
-
-        return (\is_array($value) && !array_is_list($value)) || \is_object($value);
+        return \is_array($value) && !\array_is_list($value) || \is_object($value);
     }
-
     /**
      * Renders a template.
      *
@@ -1387,28 +1143,25 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function include(Environment $env, $context, $template, $variables = [], $withContext = true, $ignoreMissing = false, $sandboxed = false): string
+    public static function include(Environment $env, $context, $template, $variables = [], $withContext = \true, $ignoreMissing = \false, $sandboxed = \false) : string
     {
-        $alreadySandboxed = false;
+        $alreadySandboxed = \false;
         $sandbox = null;
         if ($withContext) {
-            $variables = array_merge($context, $variables);
+            $variables = \array_merge($context, $variables);
         }
-
         if ($isSandboxed = $sandboxed && $env->hasExtension(SandboxExtension::class)) {
             $sandbox = $env->getExtension(SandboxExtension::class);
-            if (!$alreadySandboxed = $sandbox->isSandboxed()) {
+            if (!($alreadySandboxed = $sandbox->isSandboxed())) {
                 $sandbox->enableSandbox();
             }
-
-            foreach ((\is_array($template) ? $template : [$template]) as $name) {
+            foreach (\is_array($template) ? $template : [$template] as $name) {
                 // if a Template instance is passed, it might have been instantiated outside of a sandbox, check security
                 if ($name instanceof TemplateWrapper || $name instanceof Template) {
                     $name->unwrap()->checkSecurity();
                 }
             }
         }
-
         try {
             $loaded = null;
             try {
@@ -1418,7 +1171,6 @@ final class CoreExtension extends AbstractExtension
                     throw $e;
                 }
             }
-
             return $loaded ? $loaded->render($variables) : '';
         } finally {
             if ($isSandboxed && !$alreadySandboxed) {
@@ -1426,7 +1178,6 @@ final class CoreExtension extends AbstractExtension
             }
         }
     }
-
     /**
      * Returns a template content without rendering it.
      *
@@ -1435,7 +1186,7 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function source(Environment $env, $name, $ignoreMissing = false): string
+    public static function source(Environment $env, $name, $ignoreMissing = \false) : string
     {
         $loader = $env->getLoader();
         try {
@@ -1444,11 +1195,9 @@ final class CoreExtension extends AbstractExtension
             if (!$ignoreMissing) {
                 throw $e;
             }
-
             return '';
         }
     }
-
     /**
      * Provides the ability to get constants from instances as well as class/global constants.
      *
@@ -1466,21 +1215,16 @@ final class CoreExtension extends AbstractExtension
             if ('class' === $constant) {
                 return \get_class($object);
             }
-
-            $constant = \get_class($object).'::'.$constant;
+            $constant = \get_class($object) . '::' . $constant;
         }
-
         if (!\defined($constant)) {
-            if ('::class' === strtolower(substr($constant, -7))) {
+            if ('::class' === \strtolower(\substr($constant, -7))) {
                 throw new RuntimeError(\sprintf('You cannot use the Twig function "constant()" to access "%s". You could provide an object and call constant("class", $object) or use the class name directly as a string.', $constant));
             }
-
             throw new RuntimeError(\sprintf('Constant "%s" is undefined.', $constant));
         }
-
         return \constant($constant);
     }
-
     /**
      * Checks if a constant exists.
      *
@@ -1489,19 +1233,16 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function constantIsDefined($constant, $object = null): bool
+    public static function constantIsDefined($constant, $object = null) : bool
     {
         if (null !== $object) {
             if ('class' === $constant) {
-                return true;
+                return \true;
             }
-
-            $constant = \get_class($object).'::'.$constant;
+            $constant = \get_class($object) . '::' . $constant;
         }
-
         return \defined($constant);
     }
-
     /**
      * Batches item.
      *
@@ -1511,16 +1252,13 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function batch($items, $size, $fill = null, $preserveKeys = true): array
+    public static function batch($items, $size, $fill = null, $preserveKeys = \true) : array
     {
-        if (!is_iterable($items)) {
+        if (!\is_iterable($items)) {
             throw new RuntimeError(\sprintf('The "batch" filter expects a sequence/mapping or "Traversable", got "%s".', \is_object($items) ? \get_class($items) : \gettype($items)));
         }
-
-        $size = (int) ceil($size);
-
-        $result = array_chunk(self::toArray($items, $preserveKeys), $size, $preserveKeys);
-
+        $size = (int) \ceil($size);
+        $result = \array_chunk(self::toArray($items, $preserveKeys), $size, $preserveKeys);
         if (null !== $fill && $result) {
             $last = \count($result) - 1;
             if ($fillCount = $size - \count($result[$last])) {
@@ -1529,10 +1267,8 @@ final class CoreExtension extends AbstractExtension
                 }
             }
         }
-
         return $result;
     }
-
     /**
      * Returns the attribute value for a given array/object.
      *
@@ -1550,31 +1286,24 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function getAttribute(Environment $env, Source $source, $object, $item, array $arguments = [], $type = /* Template::ANY_CALL */ 'any', $isDefinedTest = false, $ignoreStrictCheck = false, $sandboxed = false, int $lineno = -1)
+    public static function getAttribute(Environment $env, Source $source, $object, $item, array $arguments = [], $type = 'any', $isDefinedTest = \false, $ignoreStrictCheck = \false, $sandboxed = \false, int $lineno = -1)
     {
         // array
-        if (/* Template::METHOD_CALL */ 'method' !== $type) {
+        if ('method' !== $type) {
             $arrayItem = \is_bool($item) || \is_float($item) ? (int) $item : $item;
-
-            if (((\is_array($object) || $object instanceof \ArrayObject) && (isset($object[$arrayItem]) || \array_key_exists($arrayItem, (array) $object)))
-                || ($object instanceof \ArrayAccess && isset($object[$arrayItem]))
-            ) {
+            if ((\is_array($object) || $object instanceof \ArrayObject) && (isset($object[$arrayItem]) || \array_key_exists($arrayItem, (array) $object)) || $object instanceof \ArrayAccess && isset($object[$arrayItem])) {
                 if ($isDefinedTest) {
-                    return true;
+                    return \true;
                 }
-
                 return $object[$arrayItem];
             }
-
-            if (/* Template::ARRAY_CALL */ 'array' === $type || !\is_object($object)) {
+            if ('array' === $type || !\is_object($object)) {
                 if ($isDefinedTest) {
-                    return false;
+                    return \false;
                 }
-
                 if ($ignoreStrictCheck || !$env->isStrictVariables()) {
                     return;
                 }
-
                 if ($object instanceof \ArrayAccess) {
                     $message = \sprintf('Key "%s" in object with ArrayAccess of class "%s" does not exist.', $arrayItem, \get_class($object));
                 } elseif (\is_object($object)) {
@@ -1583,9 +1312,9 @@ final class CoreExtension extends AbstractExtension
                     if (empty($object)) {
                         $message = \sprintf('Key "%s" does not exist as the sequence/mapping is empty.', $arrayItem);
                     } else {
-                        $message = \sprintf('Key "%s" for sequence/mapping with keys "%s" does not exist.', $arrayItem, implode(', ', array_keys($object)));
+                        $message = \sprintf('Key "%s" for sequence/mapping with keys "%s" does not exist.', $arrayItem, \implode(', ', \array_keys($object)));
                     }
-                } elseif (/* Template::ARRAY_CALL */ 'array' === $type) {
+                } elseif ('array' === $type) {
                     if (null === $object) {
                         $message = \sprintf('Impossible to access a key ("%s") on a null variable.', $item);
                     } else {
@@ -1596,20 +1325,16 @@ final class CoreExtension extends AbstractExtension
                 } else {
                     $message = \sprintf('Impossible to access an attribute ("%s") on a %s variable ("%s").', $item, \gettype($object), $object);
                 }
-
                 throw new RuntimeError($message, $lineno, $source);
             }
         }
-
         if (!\is_object($object)) {
             if ($isDefinedTest) {
-                return false;
+                return \false;
             }
-
             if ($ignoreStrictCheck || !$env->isStrictVariables()) {
                 return;
             }
-
             if (null === $object) {
                 $message = \sprintf('Impossible to invoke a method ("%s") on a null variable.', $item);
             } elseif (\is_array($object)) {
@@ -1617,66 +1342,57 @@ final class CoreExtension extends AbstractExtension
             } else {
                 $message = \sprintf('Impossible to invoke a method ("%s") on a %s variable ("%s").', $item, \gettype($object), $object);
             }
-
             throw new RuntimeError($message, $lineno, $source);
         }
-
         if ($object instanceof Template) {
-            throw new RuntimeError('Accessing \Twig\Template attributes is forbidden.', $lineno, $source);
+            throw new RuntimeError('Accessing \\Twig\\Template attributes is forbidden.', $lineno, $source);
         }
-
         // object property
-        if (/* Template::METHOD_CALL */ 'method' !== $type) {
-            if (isset($object->$item) || \array_key_exists((string) $item, (array) $object)) {
+        if ('method' !== $type) {
+            if (isset($object->{$item}) || \array_key_exists((string) $item, (array) $object)) {
                 if ($isDefinedTest) {
-                    return true;
+                    return \true;
                 }
-
                 if ($sandboxed) {
                     $env->getExtension(SandboxExtension::class)->checkPropertyAllowed($object, $item, $lineno, $source);
                 }
-
-                return $object->$item;
+                return $object->{$item};
             }
         }
-
         static $cache = [];
-
         $class = \get_class($object);
-
         // object method
         // precedence: getXxx() > isXxx() > hasXxx()
         if (!isset($cache[$class])) {
-            $methods = get_class_methods($object);
-            sort($methods);
-            $lcMethods = array_map(function ($value) { return strtr($value, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'); }, $methods);
+            $methods = \get_class_methods($object);
+            \sort($methods);
+            $lcMethods = \array_map(function ($value) {
+                return \strtr($value, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz');
+            }, $methods);
             $classCache = [];
             foreach ($methods as $i => $method) {
                 $classCache[$method] = $method;
                 $classCache[$lcName = $lcMethods[$i]] = $method;
-
-                if ('g' === $lcName[0] && str_starts_with($lcName, 'get')) {
-                    $name = substr($method, 3);
-                    $lcName = substr($lcName, 3);
-                } elseif ('i' === $lcName[0] && str_starts_with($lcName, 'is')) {
-                    $name = substr($method, 2);
-                    $lcName = substr($lcName, 2);
-                } elseif ('h' === $lcName[0] && str_starts_with($lcName, 'has')) {
-                    $name = substr($method, 3);
-                    $lcName = substr($lcName, 3);
-                    if (\in_array('is'.$lcName, $lcMethods)) {
+                if ('g' === $lcName[0] && \str_starts_with($lcName, 'get')) {
+                    $name = \substr($method, 3);
+                    $lcName = \substr($lcName, 3);
+                } elseif ('i' === $lcName[0] && \str_starts_with($lcName, 'is')) {
+                    $name = \substr($method, 2);
+                    $lcName = \substr($lcName, 2);
+                } elseif ('h' === $lcName[0] && \str_starts_with($lcName, 'has')) {
+                    $name = \substr($method, 3);
+                    $lcName = \substr($lcName, 3);
+                    if (\in_array('is' . $lcName, $lcMethods)) {
                         continue;
                     }
                 } else {
                     continue;
                 }
-
                 // skip get() and is() methods (in which case, $name is empty)
                 if ($name) {
                     if (!isset($classCache[$name])) {
                         $classCache[$name] = $method;
                     }
-
                     if (!isset($classCache[$lcName])) {
                         $classCache[$lcName] = $method;
                     }
@@ -1684,49 +1400,41 @@ final class CoreExtension extends AbstractExtension
             }
             $cache[$class] = $classCache;
         }
-
-        $call = false;
+        $call = \false;
         if (isset($cache[$class][$item])) {
             $method = $cache[$class][$item];
-        } elseif (isset($cache[$class][$lcItem = strtr($item, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')])) {
+        } elseif (isset($cache[$class][$lcItem = \strtr($item, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')])) {
             $method = $cache[$class][$lcItem];
         } elseif (isset($cache[$class]['__call'])) {
             $method = $item;
-            $call = true;
+            $call = \true;
         } else {
             if ($isDefinedTest) {
-                return false;
+                return \false;
             }
-
             if ($ignoreStrictCheck || !$env->isStrictVariables()) {
                 return;
             }
-
             throw new RuntimeError(\sprintf('Neither the property "%1$s" nor one of the methods "%1$s()", "get%1$s()"/"is%1$s()"/"has%1$s()" or "__call()" exist and have public access in class "%2$s".', $item, $class), $lineno, $source);
         }
-
         if ($isDefinedTest) {
-            return true;
+            return \true;
         }
-
         if ($sandboxed) {
             $env->getExtension(SandboxExtension::class)->checkMethodAllowed($object, $method, $lineno, $source);
         }
-
         // Some objects throw exceptions when they have __call, and the method we try
         // to call is not supported. If ignoreStrictCheck is true, we should return null.
         try {
-            $ret = $object->$method(...$arguments);
+            $ret = $object->{$method}(...$arguments);
         } catch (\BadMethodCallException $e) {
             if ($call && ($ignoreStrictCheck || !$env->isStrictVariables())) {
                 return;
             }
             throw $e;
         }
-
         return $ret;
     }
-
     /**
      * Returns the values from a single column in the input array.
      *
@@ -1746,118 +1454,96 @@ final class CoreExtension extends AbstractExtension
      *
      * @internal
      */
-    public static function column($array, $name, $index = null): array
+    public static function column($array, $name, $index = null) : array
     {
         if ($array instanceof \Traversable) {
-            $array = iterator_to_array($array);
+            $array = \iterator_to_array($array);
         } elseif (!\is_array($array)) {
             throw new RuntimeError(\sprintf('The column filter only works with sequences/mappings or "Traversable", got "%s" as first argument.', \gettype($array)));
         }
-
-        return array_column($array, $name, $index);
+        return \array_column($array, $name, $index);
     }
-
     /**
      * @internal
      */
     public static function filter(Environment $env, $array, $arrow)
     {
-        if (!is_iterable($array)) {
+        if (!\is_iterable($array)) {
             throw new RuntimeError(\sprintf('The "filter" filter expects a sequence/mapping or "Traversable", got "%s".', \is_object($array) ? \get_class($array) : \gettype($array)));
         }
-
         self::checkArrowInSandbox($env, $arrow, 'filter', 'filter');
-
         if (\is_array($array)) {
-            return array_filter($array, $arrow, \ARRAY_FILTER_USE_BOTH);
+            return \array_filter($array, $arrow, \ARRAY_FILTER_USE_BOTH);
         }
-
         // the IteratorIterator wrapping is needed as some internal PHP classes are \Traversable but do not implement \Iterator
         return new \CallbackFilterIterator(new \IteratorIterator($array), $arrow);
     }
-
     /**
      * @internal
      */
     public static function find(Environment $env, $array, $arrow)
     {
         self::checkArrowInSandbox($env, $arrow, 'find', 'filter');
-
         foreach ($array as $k => $v) {
             if ($arrow($v, $k)) {
                 return $v;
             }
         }
-
         return null;
     }
-
     /**
      * @internal
      */
     public static function map(Environment $env, $array, $arrow)
     {
         self::checkArrowInSandbox($env, $arrow, 'map', 'filter');
-
         $r = [];
         foreach ($array as $k => $v) {
             $r[$k] = $arrow($v, $k);
         }
-
         return $r;
     }
-
     /**
      * @internal
      */
     public static function reduce(Environment $env, $array, $arrow, $initial = null)
     {
         self::checkArrowInSandbox($env, $arrow, 'reduce', 'filter');
-
         if (!\is_array($array) && !$array instanceof \Traversable) {
             throw new RuntimeError(\sprintf('The "reduce" filter only works with sequences/mappings or "Traversable", got "%s" as first argument.', \gettype($array)));
         }
-
         $accumulator = $initial;
         foreach ($array as $key => $value) {
             $accumulator = $arrow($accumulator, $value, $key);
         }
-
         return $accumulator;
     }
-
     /**
      * @internal
      */
     public static function arraySome(Environment $env, $array, $arrow)
     {
         self::checkArrowInSandbox($env, $arrow, 'has some', 'operator');
-
         foreach ($array as $k => $v) {
             if ($arrow($v, $k)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * @internal
      */
     public static function arrayEvery(Environment $env, $array, $arrow)
     {
         self::checkArrowInSandbox($env, $arrow, 'has every', 'operator');
-
         foreach ($array as $k => $v) {
             if (!$arrow($v, $k)) {
-                return false;
+                return \false;
             }
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * @internal
      */
@@ -1867,35 +1553,30 @@ final class CoreExtension extends AbstractExtension
             throw new RuntimeError(\sprintf('The callable passed to the "%s" %s must be a Closure in sandbox mode.', $thing, $type));
         }
     }
-
     /**
      * @internal to be removed in Twig 4
      */
-    public static function captureOutput(iterable $body): string
+    public static function captureOutput(iterable $body) : string
     {
         $output = '';
-        $level = ob_get_level();
-        ob_start();
-
+        $level = \ob_get_level();
+        \ob_start();
         try {
             foreach ($body as $data) {
-                if (ob_get_length()) {
-                    $output .= ob_get_clean();
-                    ob_start();
+                if (\ob_get_length()) {
+                    $output .= \ob_get_clean();
+                    \ob_start();
                 }
-
                 $output .= $data;
             }
-
-            if (ob_get_length()) {
-                $output .= ob_get_clean();
+            if (\ob_get_length()) {
+                $output .= \ob_get_clean();
             }
         } finally {
-            while (ob_get_level() > $level) {
-                ob_end_clean();
+            while (\ob_get_level() > $level) {
+                \ob_end_clean();
             }
         }
-
         return $output;
     }
 }

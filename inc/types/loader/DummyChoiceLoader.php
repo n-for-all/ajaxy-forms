@@ -2,7 +2,7 @@
 
 namespace Ajaxy\Forms\Inc\Types\Loader;
 
-use Symfony\Component\Form\ChoiceList\Loader\AbstractChoiceLoader;
+use Isolated\Symfony\Component\Form\ChoiceList\Loader\AbstractChoiceLoader;
 
 class DummyChoiceLoader extends AbstractChoiceLoader
 {

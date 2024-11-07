@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Constraints;
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
 /**
  * @Annotation
@@ -21,10 +20,6 @@ namespace Symfony\Component\Validator\Constraints;
 class DivisibleBy extends AbstractComparison
 {
     public const NOT_DIVISIBLE_BY = '6d99d6c3-1464-4ccf-bdc7-14d083cf455c';
-
-    protected static $errorNames = [
-        self::NOT_DIVISIBLE_BY => 'NOT_DIVISIBLE_BY',
-    ];
-
+    protected static $errorNames = [self::NOT_DIVISIBLE_BY => 'NOT_DIVISIBLE_BY'];
     public $message = 'This value should be a multiple of {{ compared_value }}.';
 }

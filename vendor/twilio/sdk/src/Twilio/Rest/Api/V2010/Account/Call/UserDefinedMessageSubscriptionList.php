@@ -13,18 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Call;
 
-namespace Twilio\Rest\Api\V2010\Account\Call;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class UserDefinedMessageSubscriptionList extends ListResource
-    {
+{
     /**
      * Construct the UserDefinedMessageSubscriptionList
      *
@@ -32,28 +29,13 @@ class UserDefinedMessageSubscriptionList extends ListResource
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) that subscribed to the User Defined Messages.
      * @param string $callSid The SID of the [Call](https://www.twilio.com/docs/voice/api/call-resource) the User Defined Messages subscription is associated with. This refers to the Call SID that is producing the user defined messages.
      */
-    public function __construct(
-        Version $version,
-        string $accountSid,
-        string $callSid
-    ) {
+    public function __construct(Version $version, string $accountSid, string $callSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        
-        'callSid' =>
-            $callSid,
-        
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Calls/' . \rawurlencode($callSid)
-        .'/UserDefinedMessageSubscriptions.json';
+        $this->solution = ['accountSid' => $accountSid, 'callSid' => $callSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Calls/' . \rawurlencode($callSid) . '/UserDefinedMessageSubscriptions.json';
     }
-
     /**
      * Create the UserDefinedMessageSubscriptionInstance
      *
@@ -62,55 +44,28 @@ class UserDefinedMessageSubscriptionList extends ListResource
      * @return UserDefinedMessageSubscriptionInstance Created UserDefinedMessageSubscriptionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $callback, array $options = []): UserDefinedMessageSubscriptionInstance
+    public function create(string $callback, array $options = []) : UserDefinedMessageSubscriptionInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Callback' =>
-                $callback,
-            'IdempotencyKey' =>
-                $options['idempotencyKey'],
-            'Method' =>
-                $options['method'],
-        ]);
-
+        $data = Values::of(['Callback' => $callback, 'IdempotencyKey' => $options['idempotencyKey'], 'Method' => $options['method']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new UserDefinedMessageSubscriptionInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['callSid']
-        );
+        return new UserDefinedMessageSubscriptionInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['callSid']);
     }
-
-
     /**
      * Constructs a UserDefinedMessageSubscriptionContext
      *
      * @param string $sid The SID that uniquely identifies this User Defined Message Subscription.
      */
-    public function getContext(
-        string $sid
-        
-    ): UserDefinedMessageSubscriptionContext
+    public function getContext(string $sid) : UserDefinedMessageSubscriptionContext
     {
-        return new UserDefinedMessageSubscriptionContext(
-            $this->version,
-            $this->solution['accountSid'],
-            $this->solution['callSid'],
-            $sid
-        );
+        return new UserDefinedMessageSubscriptionContext($this->version, $this->solution['accountSid'], $this->solution['callSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.UserDefinedMessageSubscriptionList]';
     }

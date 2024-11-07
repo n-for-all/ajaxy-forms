@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Constraints;
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
 /**
  * Validates values are equal (==).
@@ -26,7 +25,6 @@ class EqualToValidator extends AbstractComparisonValidator
     {
         return $value1 == $value2;
     }
-
     /**
      * {@inheritdoc}
      */

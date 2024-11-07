@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Bridge\Twig\Extension;
 
-namespace Symfony\Bridge\Twig\Extension;
-
-use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
-
+use Isolated\Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
+use Isolated\Twig\Extension\AbstractExtension;
+use Isolated\Twig\TwigFunction;
 /**
  * LogoutUrlHelper provides generator functions for the logout URL to Twig.
  *
@@ -23,39 +21,32 @@ use Twig\TwigFunction;
 final class LogoutUrlExtension extends AbstractExtension
 {
     private $generator;
-
     public function __construct(LogoutUrlGenerator $generator)
     {
         $this->generator = $generator;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getFunctions(): array
+    public function getFunctions() : array
     {
-        return [
-            new TwigFunction('logout_url', [$this, 'getLogoutUrl']),
-            new TwigFunction('logout_path', [$this, 'getLogoutPath']),
-        ];
+        return [new TwigFunction('logout_url', [$this, 'getLogoutUrl']), new TwigFunction('logout_path', [$this, 'getLogoutPath'])];
     }
-
     /**
      * Generates the relative logout URL for the firewall.
      *
      * @param string|null $key The firewall key or null to use the current firewall key
      */
-    public function getLogoutPath(string $key = null): string
+    public function getLogoutPath(string $key = null) : string
     {
         return $this->generator->getLogoutPath($key);
     }
-
     /**
      * Generates the absolute logout URL for the firewall.
      *
      * @param string|null $key The firewall key or null to use the current firewall key
      */
-    public function getLogoutUrl(string $key = null): string
+    public function getLogoutUrl(string $key = null) : string
     {
         return $this->generator->getLogoutUrl($key);
     }

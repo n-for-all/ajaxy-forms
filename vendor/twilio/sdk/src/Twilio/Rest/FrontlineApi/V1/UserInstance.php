@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FrontlineApi\V1;
 
-
-namespace Twilio\Rest\FrontlineApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $sid
  * @property string|null $identity
@@ -45,51 +41,33 @@ class UserInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'identity' => Values::array_get($payload, 'identity'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'avatar' => Values::array_get($payload, 'avatar'),
-            'state' => Values::array_get($payload, 'state'),
-            'isAvailable' => Values::array_get($payload, 'is_available'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'identity' => Values::array_get($payload, 'identity'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'avatar' => Values::array_get($payload, 'avatar'), 'state' => Values::array_get($payload, 'state'), 'isAvailable' => Values::array_get($payload, 'is_available'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return UserContext Context for this UserInstance
      */
-    protected function proxy(): UserContext
+    protected function proxy() : UserContext
     {
         if (!$this->context) {
-            $this->context = new UserContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new UserContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the UserInstance
      *
      * @return UserInstance Fetched UserInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): UserInstance
+    public function fetch() : UserInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the UserInstance
      *
@@ -97,12 +75,10 @@ class UserInstance extends InstanceResource
      * @return UserInstance Updated UserInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): UserInstance
+    public function update(array $options = []) : UserInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -115,27 +91,23 @@ class UserInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FrontlineApi.V1.UserInstance ' . \implode(' ', $context) . ']';
     }
 }
-

@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Usage;
 
-
-namespace Twilio\Rest\Api\V2010\Account\Usage;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class TriggerContext extends InstanceContext
-    {
+{
     /**
      * Initialize the TriggerContext
      *
@@ -33,59 +29,34 @@ class TriggerContext extends InstanceContext
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) that will create the resource.
      * @param string $sid The Twilio-provided string that uniquely identifies the UsageTrigger resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $accountSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Usage/Triggers/' . \rawurlencode($sid)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'sid' => $sid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Usage/Triggers/' . \rawurlencode($sid) . '.json';
     }
-
     /**
      * Delete the TriggerInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the TriggerInstance
      *
      * @return TriggerInstance Fetched TriggerInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): TriggerInstance
+    public function fetch() : TriggerInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new TriggerInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['sid']
-        );
+        return new TriggerInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the TriggerInstance
      *
@@ -93,41 +64,23 @@ class TriggerContext extends InstanceContext
      * @return TriggerInstance Updated TriggerInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): TriggerInstance
+    public function update(array $options = []) : TriggerInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'CallbackMethod' =>
-                $options['callbackMethod'],
-            'CallbackUrl' =>
-                $options['callbackUrl'],
-            'FriendlyName' =>
-                $options['friendlyName'],
-        ]);
-
+        $data = Values::of(['CallbackMethod' => $options['callbackMethod'], 'CallbackUrl' => $options['callbackUrl'], 'FriendlyName' => $options['friendlyName']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new TriggerInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['sid']
-        );
+        return new TriggerInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.TriggerContext ' . \implode(' ', $context) . ']';
     }

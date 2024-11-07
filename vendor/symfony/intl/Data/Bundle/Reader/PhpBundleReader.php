@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl\Data\Bundle\Reader;
 
-namespace Symfony\Component\Intl\Data\Bundle\Reader;
-
-use Symfony\Component\Intl\Exception\ResourceBundleNotFoundException;
-
+use Isolated\Symfony\Component\Intl\Exception\ResourceBundleNotFoundException;
 /**
  * Reads .php resource bundles.
  *
@@ -27,17 +25,14 @@ class PhpBundleReader implements BundleReaderInterface
      */
     public function read(string $path, string $locale)
     {
-        $fileName = $path.'/'.$locale.'.php';
-
+        $fileName = $path . '/' . $locale . '.php';
         // prevent directory traversal attacks
         if (\dirname($fileName) !== $path) {
-            throw new ResourceBundleNotFoundException(sprintf('The resource bundle "%s" does not exist.', $fileName));
+            throw new ResourceBundleNotFoundException(\sprintf('The resource bundle "%s" does not exist.', $fileName));
         }
-
-        if (!is_file($fileName)) {
-            throw new ResourceBundleNotFoundException(sprintf('The resource bundle "%s" does not exist.', $fileName));
+        if (!\is_file($fileName)) {
+            throw new ResourceBundleNotFoundException(\sprintf('The resource bundle "%s" does not exist.', $fileName));
         }
-
         return include $fileName;
     }
 }

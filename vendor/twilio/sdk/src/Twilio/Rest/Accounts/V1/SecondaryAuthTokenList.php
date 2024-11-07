@@ -13,48 +13,36 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Accounts\V1;
 
-namespace Twilio\Rest\Accounts\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class SecondaryAuthTokenList extends ListResource
-    {
+{
     /**
      * Construct the SecondaryAuthTokenList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a SecondaryAuthTokenContext
      */
-    public function getContext(
-        
-    ): SecondaryAuthTokenContext
+    public function getContext() : SecondaryAuthTokenContext
     {
-        return new SecondaryAuthTokenContext(
-            $this->version
-        );
+        return new SecondaryAuthTokenContext($this->version);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Accounts.V1.SecondaryAuthTokenList]';
     }

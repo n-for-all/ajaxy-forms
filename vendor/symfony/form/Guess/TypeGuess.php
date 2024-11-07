@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form\Guess;
+namespace Isolated\Symfony\Component\Form\Guess;
 
 /**
  * Contains a guessed class name and a list of options for creating an instance
@@ -21,7 +20,6 @@ class TypeGuess extends Guess
 {
     private $type;
     private $options;
-
     /**
      * @param string $type       The guessed field type
      * @param array  $options    The options for creating instances of the
@@ -32,11 +30,9 @@ class TypeGuess extends Guess
     public function __construct(string $type, array $options, int $confidence)
     {
         parent::__construct($confidence);
-
         $this->type = $type;
         $this->options = $options;
     }
-
     /**
      * Returns the guessed field type.
      *
@@ -46,7 +42,6 @@ class TypeGuess extends Guess
     {
         return $this->type;
     }
-
     /**
      * Returns the guessed options for creating instances of the guessed type.
      *

@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Mime\Header;
 
-namespace Symfony\Component\Mime\Header;
-
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Exception\RfcComplianceException;
-
+use Isolated\Symfony\Component\Mime\Address;
+use Isolated\Symfony\Component\Mime\Exception\RfcComplianceException;
 /**
  * A Path Header, such a Return-Path (one address).
  *
@@ -22,14 +20,11 @@ use Symfony\Component\Mime\Exception\RfcComplianceException;
 final class PathHeader extends AbstractHeader
 {
     private $address;
-
     public function __construct(string $name, Address $address)
     {
         parent::__construct($name);
-
         $this->setAddress($address);
     }
-
     /**
      * @param Address $body
      *
@@ -39,24 +34,20 @@ final class PathHeader extends AbstractHeader
     {
         $this->setAddress($body);
     }
-
-    public function getBody(): Address
+    public function getBody() : Address
     {
         return $this->getAddress();
     }
-
     public function setAddress(Address $address)
     {
         $this->address = $address;
     }
-
-    public function getAddress(): Address
+    public function getAddress() : Address
     {
         return $this->address;
     }
-
-    public function getBodyAsString(): string
+    public function getBodyAsString() : string
     {
-        return '<'.$this->address->toString().'>';
+        return '<' . $this->address->toString() . '>';
     }
 }

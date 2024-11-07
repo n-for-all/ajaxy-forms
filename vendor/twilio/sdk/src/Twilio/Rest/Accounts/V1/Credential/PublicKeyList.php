@@ -13,36 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Accounts\V1\Credential;
 
-namespace Twilio\Rest\Accounts\V1\Credential;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class PublicKeyList extends ListResource
-    {
+{
     /**
      * Construct the PublicKeyList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Credentials/PublicKeys';
     }
-
     /**
      * Create the PublicKeyInstance
      *
@@ -51,29 +43,13 @@ class PublicKeyList extends ListResource
      * @return PublicKeyInstance Created PublicKeyInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $publicKey, array $options = []): PublicKeyInstance
+    public function create(string $publicKey, array $options = []) : PublicKeyInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'PublicKey' =>
-                $publicKey,
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'AccountSid' =>
-                $options['accountSid'],
-        ]);
-
+        $data = Values::of(['PublicKey' => $publicKey, 'FriendlyName' => $options['friendlyName'], 'AccountSid' => $options['accountSid']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new PublicKeyInstance(
-            $this->version,
-            $payload
-        );
+        return new PublicKeyInstance($this->version, $payload);
     }
-
-
     /**
      * Reads PublicKeyInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -89,11 +65,10 @@ class PublicKeyList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return PublicKeyInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams PublicKeyInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -112,15 +87,12 @@ class PublicKeyList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of PublicKeyInstance records from the API.
      * Request is executed immediately
@@ -130,24 +102,12 @@ class PublicKeyList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return PublicKeyPage Page of PublicKeyInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): PublicKeyPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : PublicKeyPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new PublicKeyPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of PublicKeyInstance records from the API.
      * Request is executed immediately
@@ -155,39 +115,26 @@ class PublicKeyList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return PublicKeyPage Page of PublicKeyInstance
      */
-    public function getPage(string $targetUrl): PublicKeyPage
+    public function getPage(string $targetUrl) : PublicKeyPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new PublicKeyPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a PublicKeyContext
      *
      * @param string $sid The Twilio-provided string that uniquely identifies the PublicKey resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): PublicKeyContext
+    public function getContext(string $sid) : PublicKeyContext
     {
-        return new PublicKeyContext(
-            $this->version,
-            $sid
-        );
+        return new PublicKeyContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Accounts.V1.PublicKeyList]';
     }

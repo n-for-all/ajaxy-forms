@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Twig;
+namespace Isolated\Twig;
 
 /**
  * Holds information about a non-compiled Twig template.
@@ -21,7 +20,6 @@ final class Source
     private $code;
     private $name;
     private $path;
-
     /**
      * @param string $code The template source code
      * @param string $name The template logical name
@@ -33,18 +31,15 @@ final class Source
         $this->name = $name;
         $this->path = $path;
     }
-
-    public function getCode(): string
+    public function getCode() : string
     {
         return $this->code;
     }
-
-    public function getName(): string
+    public function getName() : string
     {
         return $this->name;
     }
-
-    public function getPath(): string
+    public function getPath() : string
     {
         return $this->path;
     }

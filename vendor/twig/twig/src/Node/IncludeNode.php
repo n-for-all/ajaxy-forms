@@ -9,13 +9,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node;
 
-namespace Twig\Node;
-
-use Twig\Attribute\YieldReady;
-use Twig\Compiler;
-use Twig\Node\Expression\AbstractExpression;
-
+use Isolated\Twig\Attribute\YieldReady;
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Expression\AbstractExpression;
 /**
  * Represents an include node.
  *
@@ -30,45 +28,18 @@ class IncludeNode extends Node implements NodeOutputInterface
         if (null !== $variables) {
             $nodes['variables'] = $variables;
         }
-
         parent::__construct($nodes, ['only' => $only, 'ignore_missing' => $ignoreMissing], $lineno, $tag);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
         $compiler->addDebugInfo($this);
-
         if ($this->getAttribute('ignore_missing')) {
             $template = $compiler->getVarName();
-
-            $compiler
-                ->write(\sprintf("$%s = null;\n", $template))
-                ->write("try {\n")
-                ->indent()
-                ->write(\sprintf('$%s = ', $template))
-            ;
-
+            $compiler->write(\sprintf("\$%s = null;\n", $template))->write("try {\n")->indent()->write(\sprintf('$%s = ', $template));
             $this->addGetTemplate($compiler);
-
-            $compiler
-                ->raw(";\n")
-                ->outdent()
-                ->write("} catch (LoaderError \$e) {\n")
-                ->indent()
-                ->write("// ignore missing template\n")
-                ->outdent()
-                ->write("}\n")
-                ->write(\sprintf("if ($%s) {\n", $template))
-                ->indent()
-                ->write(\sprintf('yield from $%s->unwrap()->yield(', $template))
-            ;
-
+            $compiler->raw(";\n")->outdent()->write("} catch (LoaderError \$e) {\n")->indent()->write("// ignore missing template\n")->outdent()->write("}\n")->write(\sprintf("if (\$%s) {\n", $template))->indent()->write(\sprintf('yield from $%s->unwrap()->yield(', $template));
             $this->addTemplateArguments($compiler);
-            $compiler
-                ->raw(");\n")
-                ->outdent()
-                ->write("}\n")
-            ;
+            $compiler->raw(");\n")->outdent()->write("}\n");
         } else {
             $compiler->write('yield from ');
             $this->addGetTemplate($compiler);
@@ -77,30 +48,16 @@ class IncludeNode extends Node implements NodeOutputInterface
             $compiler->raw(");\n");
         }
     }
-
     protected function addGetTemplate(Compiler $compiler)
     {
-        $compiler
-            ->write('$this->loadTemplate(')
-            ->subcompile($this->getNode('expr'))
-            ->raw(', ')
-            ->repr($this->getTemplateName())
-            ->raw(', ')
-            ->repr($this->getTemplateLine())
-            ->raw(')')
-        ;
+        $compiler->write('$this->loadTemplate(')->subcompile($this->getNode('expr'))->raw(', ')->repr($this->getTemplateName())->raw(', ')->repr($this->getTemplateLine())->raw(')');
     }
-
     protected function addTemplateArguments(Compiler $compiler)
     {
         if (!$this->hasNode('variables')) {
-            $compiler->raw(false === $this->getAttribute('only') ? '$context' : '[]');
-        } elseif (false === $this->getAttribute('only')) {
-            $compiler
-                ->raw('CoreExtension::merge($context, ')
-                ->subcompile($this->getNode('variables'))
-                ->raw(')')
-            ;
+            $compiler->raw(\false === $this->getAttribute('only') ? '$context' : '[]');
+        } elseif (\false === $this->getAttribute('only')) {
+            $compiler->raw('CoreExtension::merge($context, ')->subcompile($this->getNode('variables'))->raw(')');
         } else {
             $compiler->raw('CoreExtension::toArray(');
             $compiler->subcompile($this->getNode('variables'));

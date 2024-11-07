@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\DataTransformer;
 
-namespace Symfony\Component\Form\Extension\Core\DataTransformer;
-
-use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
-
+use Isolated\Symfony\Component\Form\DataTransformerInterface;
+use Isolated\Symfony\Component\Form\Exception\TransformationFailedException;
 /**
  * Transforms between a timezone identifier string and a DateTimeZone object.
  *
@@ -22,12 +20,10 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 class DateTimeZoneToStringTransformer implements DataTransformerInterface
 {
     private $multiple;
-
-    public function __construct(bool $multiple = false)
+    public function __construct(bool $multiple = \false)
     {
         $this->multiple = $multiple;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -36,22 +32,17 @@ class DateTimeZoneToStringTransformer implements DataTransformerInterface
         if (null === $dateTimeZone) {
             return null;
         }
-
         if ($this->multiple) {
             if (!\is_array($dateTimeZone)) {
-                throw new TransformationFailedException('Expected an array of \DateTimeZone objects.');
+                throw new TransformationFailedException('Expected an array of \\DateTimeZone objects.');
             }
-
-            return array_map([new self(), 'transform'], $dateTimeZone);
+            return \array_map([new self(), 'transform'], $dateTimeZone);
         }
-
         if (!$dateTimeZone instanceof \DateTimeZone) {
-            throw new TransformationFailedException('Expected a \DateTimeZone object.');
+            throw new TransformationFailedException('Expected a \\DateTimeZone object.');
         }
-
         return $dateTimeZone->getName();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -60,19 +51,15 @@ class DateTimeZoneToStringTransformer implements DataTransformerInterface
         if (null === $value) {
             return null;
         }
-
         if ($this->multiple) {
             if (!\is_array($value)) {
                 throw new TransformationFailedException('Expected an array of timezone identifier strings.');
             }
-
-            return array_map([new self(), 'reverseTransform'], $value);
+            return \array_map([new self(), 'reverseTransform'], $value);
         }
-
         if (!\is_string($value)) {
             throw new TransformationFailedException('Expected a timezone identifier string.');
         }
-
         try {
             return new \DateTimeZone($value);
         } catch (\Exception $e) {

@@ -13,54 +13,37 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Studio\V2\Flow;
 
-namespace Twilio\Rest\Studio\V2\Flow;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class FlowTestUserList extends ListResource
-    {
+{
     /**
      * Construct the FlowTestUserList
      *
      * @param Version $version Version that contains the resource
      * @param string $sid Unique identifier of the flow.
      */
-    public function __construct(
-        Version $version,
-        string $sid
-    ) {
+    public function __construct(Version $version, string $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        
-        ];
+        $this->solution = ['sid' => $sid];
     }
-
     /**
      * Constructs a FlowTestUserContext
      */
-    public function getContext(
-        
-    ): FlowTestUserContext
+    public function getContext() : FlowTestUserContext
     {
-        return new FlowTestUserContext(
-            $this->version,
-            $this->solution['sid']
-        );
+        return new FlowTestUserContext($this->version, $this->solution['sid']);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Studio.V2.FlowTestUserList]';
     }

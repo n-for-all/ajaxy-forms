@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account;
 
-
-namespace Twilio\Rest\Api\V2010\Account;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property string|null $authorizeRedirectUrl
@@ -50,68 +46,43 @@ class ConnectAppInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $accountSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'authorizeRedirectUrl' => Values::array_get($payload, 'authorize_redirect_url'),
-            'companyName' => Values::array_get($payload, 'company_name'),
-            'deauthorizeCallbackMethod' => Values::array_get($payload, 'deauthorize_callback_method'),
-            'deauthorizeCallbackUrl' => Values::array_get($payload, 'deauthorize_callback_url'),
-            'description' => Values::array_get($payload, 'description'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'homepageUrl' => Values::array_get($payload, 'homepage_url'),
-            'permissions' => Values::array_get($payload, 'permissions'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'uri' => Values::array_get($payload, 'uri'),
-        ];
-
-        $this->solution = ['accountSid' => $accountSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'authorizeRedirectUrl' => Values::array_get($payload, 'authorize_redirect_url'), 'companyName' => Values::array_get($payload, 'company_name'), 'deauthorizeCallbackMethod' => Values::array_get($payload, 'deauthorize_callback_method'), 'deauthorizeCallbackUrl' => Values::array_get($payload, 'deauthorize_callback_url'), 'description' => Values::array_get($payload, 'description'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'homepageUrl' => Values::array_get($payload, 'homepage_url'), 'permissions' => Values::array_get($payload, 'permissions'), 'sid' => Values::array_get($payload, 'sid'), 'uri' => Values::array_get($payload, 'uri')];
+        $this->solution = ['accountSid' => $accountSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ConnectAppContext Context for this ConnectAppInstance
      */
-    protected function proxy(): ConnectAppContext
+    protected function proxy() : ConnectAppContext
     {
         if (!$this->context) {
-            $this->context = new ConnectAppContext(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['sid']
-            );
+            $this->context = new ConnectAppContext($this->version, $this->solution['accountSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the ConnectAppInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the ConnectAppInstance
      *
      * @return ConnectAppInstance Fetched ConnectAppInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ConnectAppInstance
+    public function fetch() : ConnectAppInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the ConnectAppInstance
      *
@@ -119,12 +90,10 @@ class ConnectAppInstance extends InstanceResource
      * @return ConnectAppInstance Updated ConnectAppInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ConnectAppInstance
+    public function update(array $options = []) : ConnectAppInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -137,27 +106,23 @@ class ConnectAppInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.ConnectAppInstance ' . \implode(' ', $context) . ']';
     }
 }
-

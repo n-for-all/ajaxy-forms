@@ -1,9 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'ES' => 'Espanha',
-        'FR' => 'França',
-        'HK' => 'Hong Kong',
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['ES' => 'Espanha', 'FR' => 'França', 'HK' => 'Hong Kong']];

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig;
 
-namespace Twig;
-
-use Twig\Node\Expression\TestExpression;
-
+use Isolated\Twig\Node\Expression\TestExpression;
 /**
  * Represents a template test.
  *
@@ -26,7 +24,6 @@ final class TwigTest
     private $callable;
     private $options;
     private $arguments = [];
-
     /**
      * @param callable|array{class-string, string}|null $callable A callable implementing the test. If null, you need to overwrite the "node_class" option to customize compilation.
      */
@@ -34,21 +31,12 @@ final class TwigTest
     {
         $this->name = $name;
         $this->callable = $callable;
-        $this->options = array_merge([
-            'is_variadic' => false,
-            'node_class' => TestExpression::class,
-            'deprecated' => false,
-            'deprecating_package' => '',
-            'alternative' => null,
-            'one_mandatory_argument' => false,
-        ], $options);
+        $this->options = \array_merge(['is_variadic' => \false, 'node_class' => TestExpression::class, 'deprecated' => \false, 'deprecating_package' => '', 'alternative' => null, 'one_mandatory_argument' => \false], $options);
     }
-
-    public function getName(): string
+    public function getName() : string
     {
         return $this->name;
     }
-
     /**
      * Returns the callable to execute for this test.
      *
@@ -58,48 +46,39 @@ final class TwigTest
     {
         return $this->callable;
     }
-
-    public function getNodeClass(): string
+    public function getNodeClass() : string
     {
         return $this->options['node_class'];
     }
-
-    public function setArguments(array $arguments): void
+    public function setArguments(array $arguments) : void
     {
         $this->arguments = $arguments;
     }
-
-    public function getArguments(): array
+    public function getArguments() : array
     {
         return $this->arguments;
     }
-
-    public function isVariadic(): bool
+    public function isVariadic() : bool
     {
         return (bool) $this->options['is_variadic'];
     }
-
-    public function isDeprecated(): bool
+    public function isDeprecated() : bool
     {
         return (bool) $this->options['deprecated'];
     }
-
-    public function getDeprecatingPackage(): string
+    public function getDeprecatingPackage() : string
     {
         return $this->options['deprecating_package'];
     }
-
-    public function getDeprecatedVersion(): string
+    public function getDeprecatedVersion() : string
     {
         return \is_bool($this->options['deprecated']) ? '' : $this->options['deprecated'];
     }
-
-    public function getAlternative(): ?string
+    public function getAlternative() : ?string
     {
         return $this->options['alternative'];
     }
-
-    public function hasOneMandatoryArgument(): bool
+    public function hasOneMandatoryArgument() : bool
     {
         return (bool) $this->options['one_mandatory_argument'];
     }

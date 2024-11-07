@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Bridge\Twig\Node;
 
-namespace Symfony\Bridge\Twig\Node;
-
-use Twig\Compiler;
-use Twig\Node\Expression\AbstractExpression;
-use Twig\Node\Node;
-
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Expression\AbstractExpression;
+use Isolated\Twig\Node\Node;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -24,8 +22,7 @@ final class TransDefaultDomainNode extends Node
     {
         parent::__construct(['expr' => $expr], [], $lineno, $tag);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
         // noop as this node is just a marker for TranslationDefaultDomainNodeVisitor
     }

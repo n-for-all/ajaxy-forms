@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Studio\V1\Flow\Engagement;
 
-
-namespace Twilio\Rest\Studio\V1\Flow\Engagement;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class EngagementContextContext extends InstanceContext
-    {
+{
     /**
      * Initialize the EngagementContextContext
      *
@@ -31,56 +27,34 @@ class EngagementContextContext extends InstanceContext
      * @param string $flowSid The SID of the Flow.
      * @param string $engagementSid The SID of the Engagement.
      */
-    public function __construct(
-        Version $version,
-        $flowSid,
-        $engagementSid
-    ) {
+    public function __construct(Version $version, $flowSid, $engagementSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'flowSid' =>
-            $flowSid,
-        'engagementSid' =>
-            $engagementSid,
-        ];
-
-        $this->uri = '/Flows/' . \rawurlencode($flowSid)
-        .'/Engagements/' . \rawurlencode($engagementSid)
-        .'/Context';
+        $this->solution = ['flowSid' => $flowSid, 'engagementSid' => $engagementSid];
+        $this->uri = '/Flows/' . \rawurlencode($flowSid) . '/Engagements/' . \rawurlencode($engagementSid) . '/Context';
     }
-
     /**
      * Fetch the EngagementContextInstance
      *
      * @return EngagementContextInstance Fetched EngagementContextInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): EngagementContextInstance
+    public function fetch() : EngagementContextInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new EngagementContextInstance(
-            $this->version,
-            $payload,
-            $this->solution['flowSid'],
-            $this->solution['engagementSid']
-        );
+        return new EngagementContextInstance($this->version, $payload, $this->solution['flowSid'], $this->solution['engagementSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Studio.V1.EngagementContextContext ' . \implode(' ', $context) . ']';
     }

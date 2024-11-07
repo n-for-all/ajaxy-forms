@@ -8,15 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
-namespace Symfony\Component\Validator\Constraints;
-
-use Symfony\Component\Intl\Currencies;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
-
+use Isolated\Symfony\Component\Intl\Currencies;
+use Isolated\Symfony\Component\Validator\Constraint;
+use Isolated\Symfony\Component\Validator\ConstraintValidator;
+use Isolated\Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Isolated\Symfony\Component\Validator\Exception\UnexpectedValueException;
 /**
  * Validates whether a value is a valid currency.
  *
@@ -33,22 +31,15 @@ class CurrencyValidator extends ConstraintValidator
         if (!$constraint instanceof Currency) {
             throw new UnexpectedTypeException($constraint, Currency::class);
         }
-
         if (null === $value || '' === $value) {
             return;
         }
-
-        if (!\is_scalar($value) && !(\is_object($value) && method_exists($value, '__toString'))) {
+        if (!\is_scalar($value) && !(\is_object($value) && \method_exists($value, '__toString'))) {
             throw new UnexpectedValueException($value, 'string');
         }
-
         $value = (string) $value;
-
         if (!Currencies::exists($value)) {
-            $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ value }}', $this->formatValue($value))
-                ->setCode(Currency::NO_SUCH_CURRENCY_ERROR)
-                ->addViolation();
+            $this->context->buildViolation($constraint->message)->setParameter('{{ value }}', $this->formatValue($value))->setCode(Currency::NO_SUCH_CURRENCY_ERROR)->addViolation();
         }
     }
 }

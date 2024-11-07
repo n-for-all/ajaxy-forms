@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1\TrustProducts;
 
-
-namespace Twilio\Rest\Trusthub\V1\TrustProducts;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -47,53 +43,33 @@ class TrustProductsEvaluationsInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $trustProductSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'policySid' => Values::array_get($payload, 'policy_sid'),
-            'trustProductSid' => Values::array_get($payload, 'trust_product_sid'),
-            'status' => Values::array_get($payload, 'status'),
-            'results' => Values::array_get($payload, 'results'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['trustProductSid' => $trustProductSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'policySid' => Values::array_get($payload, 'policy_sid'), 'trustProductSid' => Values::array_get($payload, 'trust_product_sid'), 'status' => Values::array_get($payload, 'status'), 'results' => Values::array_get($payload, 'results'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['trustProductSid' => $trustProductSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return TrustProductsEvaluationsContext Context for this TrustProductsEvaluationsInstance
      */
-    protected function proxy(): TrustProductsEvaluationsContext
+    protected function proxy() : TrustProductsEvaluationsContext
     {
         if (!$this->context) {
-            $this->context = new TrustProductsEvaluationsContext(
-                $this->version,
-                $this->solution['trustProductSid'],
-                $this->solution['sid']
-            );
+            $this->context = new TrustProductsEvaluationsContext($this->version, $this->solution['trustProductSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the TrustProductsEvaluationsInstance
      *
      * @return TrustProductsEvaluationsInstance Fetched TrustProductsEvaluationsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): TrustProductsEvaluationsInstance
+    public function fetch() : TrustProductsEvaluationsInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -106,27 +82,23 @@ class TrustProductsEvaluationsInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Trusthub.V1.TrustProductsEvaluationsInstance ' . \implode(' ', $context) . ']';
     }
 }
-

@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Chat\V3;
 
-
-namespace Twilio\Rest\Chat\V3;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ChannelContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ChannelContext
      *
@@ -33,26 +29,13 @@ class ChannelContext extends InstanceContext
      * @param string $serviceSid The unique SID identifier of the Service.
      * @param string $sid A 34 character string that uniquely identifies this Channel.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $serviceSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Channels/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Channels/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Update the ChannelInstance
      *
@@ -60,41 +43,24 @@ class ChannelContext extends InstanceContext
      * @return ChannelInstance Updated ChannelInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ChannelInstance
+    public function update(array $options = []) : ChannelInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Type' =>
-                $options['type'],
-            'MessagingServiceSid' =>
-                $options['messagingServiceSid'],
-        ]);
-
+        $data = Values::of(['Type' => $options['type'], 'MessagingServiceSid' => $options['messagingServiceSid']]);
         $headers = Values::of(['X-Twilio-Webhook-Enabled' => $options['xTwilioWebhookEnabled']]);
-
         $payload = $this->version->update('POST', $this->uri, [], $data, $headers);
-
-        return new ChannelInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['sid']
-        );
+        return new ChannelInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Chat.V3.ChannelContext ' . \implode(' ', $context) . ']';
     }

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Violation;
+namespace Isolated\Symfony\Component\Validator\Violation;
 
 /**
  * Builds {@link \Symfony\Component\Validator\ConstraintViolationInterface}
@@ -34,7 +33,6 @@ interface ConstraintViolationBuilderInterface
      * @return $this
      */
     public function atPath(string $path);
-
     /**
      * Sets a parameter to be inserted into the violation message.
      *
@@ -44,7 +42,6 @@ interface ConstraintViolationBuilderInterface
      * @return $this
      */
     public function setParameter(string $key, string $value);
-
     /**
      * Sets all parameters to be inserted into the violation message.
      *
@@ -55,7 +52,6 @@ interface ConstraintViolationBuilderInterface
      * @return $this
      */
     public function setParameters(array $parameters);
-
     /**
      * Sets the translation domain which should be used for translating the
      * violation message.
@@ -67,7 +63,6 @@ interface ConstraintViolationBuilderInterface
      * @see \Symfony\Contracts\Translation\TranslatorInterface
      */
     public function setTranslationDomain(string $translationDomain);
-
     /**
      * Sets the invalid value that caused this violation.
      *
@@ -76,7 +71,6 @@ interface ConstraintViolationBuilderInterface
      * @return $this
      */
     public function setInvalidValue($invalidValue);
-
     /**
      * Sets the number which determines how the plural form of the violation
      * message is chosen when it is translated.
@@ -88,7 +82,6 @@ interface ConstraintViolationBuilderInterface
      * @see \Symfony\Contracts\Translation\TranslatorInterface::trans()
      */
     public function setPlural(int $number);
-
     /**
      * Sets the violation code.
      *
@@ -97,7 +90,6 @@ interface ConstraintViolationBuilderInterface
      * @return $this
      */
     public function setCode(?string $code);
-
     /**
      * Sets the cause of the violation.
      *
@@ -106,7 +98,6 @@ interface ConstraintViolationBuilderInterface
      * @return $this
      */
     public function setCause($cause);
-
     /**
      * Adds the violation to the current execution context.
      */

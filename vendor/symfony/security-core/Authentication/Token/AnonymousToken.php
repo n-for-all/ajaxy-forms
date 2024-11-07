@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Authentication\Token;
 
-namespace Symfony\Component\Security\Core\Authentication\Token;
-
-use Symfony\Component\Security\Core\User\UserInterface;
-
+use Isolated\Symfony\Component\Security\Core\User\UserInterface;
 /**
  * AnonymousToken represents an anonymous token.
  *
@@ -23,7 +21,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class AnonymousToken extends AbstractToken
 {
     private $secret;
-
     /**
      * @param string                           $secret A secret used to make sure the token is created by the app and not by a malicious client
      * @param string|\Stringable|UserInterface $user
@@ -32,15 +29,12 @@ class AnonymousToken extends AbstractToken
     public function __construct(string $secret, $user, array $roles = [])
     {
         trigger_deprecation('symfony/security-core', '5.4', 'The "%s" class is deprecated.', __CLASS__);
-
         parent::__construct($roles);
-
         $this->secret = $secret;
         $this->setUser($user);
         // @deprecated since Symfony 5.4
-        $this->setAuthenticated(true, false);
+        $this->setAuthenticated(\true, \false);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -48,7 +42,6 @@ class AnonymousToken extends AbstractToken
     {
         return '';
     }
-
     /**
      * Returns the secret.
      *
@@ -58,22 +51,20 @@ class AnonymousToken extends AbstractToken
     {
         return $this->secret;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function __serialize(): array
+    public function __serialize() : array
     {
         return [$this->secret, parent::__serialize()];
     }
-
     /**
      * {@inheritdoc}
      */
-    public function __unserialize(array $data): void
+    public function __unserialize(array $data) : void
     {
         [$this->secret, $parentData] = $data;
-        $parentData = \is_array($parentData) ? $parentData : unserialize($parentData);
+        $parentData = \is_array($parentData) ? $parentData : \unserialize($parentData);
         parent::__unserialize($parentData);
     }
 }

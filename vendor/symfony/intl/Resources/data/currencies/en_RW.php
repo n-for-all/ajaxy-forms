@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'RWF' => [
-            'RF',
-            'Rwandan Franc',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['RWF' => ['RF', 'Rwandan Franc']]];

@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1\Service;
 
-
-namespace Twilio\Rest\Messaging\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ChannelSenderContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ChannelSenderContext
      *
@@ -31,56 +27,34 @@ class ChannelSenderContext extends InstanceContext
      * @param string $messagingServiceSid The SID of the [Service](https://www.twilio.com/docs/chat/rest/service-resource) to fetch the resource from.
      * @param string $sid The SID of the ChannelSender resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $messagingServiceSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $messagingServiceSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'messagingServiceSid' =>
-            $messagingServiceSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($messagingServiceSid)
-        .'/ChannelSenders/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['messagingServiceSid' => $messagingServiceSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($messagingServiceSid) . '/ChannelSenders/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the ChannelSenderInstance
      *
      * @return ChannelSenderInstance Fetched ChannelSenderInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ChannelSenderInstance
+    public function fetch() : ChannelSenderInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ChannelSenderInstance(
-            $this->version,
-            $payload,
-            $this->solution['messagingServiceSid'],
-            $this->solution['sid']
-        );
+        return new ChannelSenderInstance($this->version, $payload, $this->solution['messagingServiceSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.ChannelSenderContext ' . \implode(' ', $context) . ']';
     }

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form;
 
-namespace Symfony\Component\Form;
-
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
@@ -27,7 +25,6 @@ interface FormTypeExtensionInterface
      * @see FormTypeInterface::buildForm()
      */
     public function buildForm(FormBuilderInterface $builder, array $options);
-
     /**
      * Builds the view.
      *
@@ -37,7 +34,6 @@ interface FormTypeExtensionInterface
      * @see FormTypeInterface::buildView()
      */
     public function buildView(FormView $view, FormInterface $form, array $options);
-
     /**
      * Finishes the view.
      *
@@ -47,13 +43,11 @@ interface FormTypeExtensionInterface
      * @see FormTypeInterface::finishView()
      */
     public function finishView(FormView $view, FormInterface $form, array $options);
-
     public function configureOptions(OptionsResolver $resolver);
-
     /**
      * Gets the extended types.
      *
      * @return string[]
      */
-    public static function getExtendedTypes(): iterable;
+    public static function getExtendedTypes() : iterable;
 }

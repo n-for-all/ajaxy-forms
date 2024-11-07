@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form;
+namespace Isolated\Symfony\Component\Form;
 
 class CallbackTransformer implements DataTransformerInterface
 {
     private $transform;
     private $reverseTransform;
-
     /**
      * @param callable $transform        The forward transform callback
      * @param callable $reverseTransform The reverse transform callback
@@ -25,7 +23,6 @@ class CallbackTransformer implements DataTransformerInterface
         $this->transform = $transform;
         $this->reverseTransform = $reverseTransform;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -33,7 +30,6 @@ class CallbackTransformer implements DataTransformerInterface
     {
         return ($this->transform)($data);
     }
-
     /**
      * {@inheritdoc}
      */

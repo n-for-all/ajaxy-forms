@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Config\Definition;
 
-namespace Symfony\Component\Config\Definition;
-
-use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
-
+use Isolated\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 /**
  * This node represents a Boolean value in the config tree.
  *
@@ -26,29 +24,26 @@ class BooleanNode extends ScalarNode
     protected function validateType($value)
     {
         if (!\is_bool($value)) {
-            $ex = new InvalidTypeException(sprintf('Invalid type for path "%s". Expected "bool", but got "%s".', $this->getPath(), get_debug_type($value)));
+            $ex = new InvalidTypeException(\sprintf('Invalid type for path "%s". Expected "bool", but got "%s".', $this->getPath(), \get_debug_type($value)));
             if ($hint = $this->getInfo()) {
                 $ex->addHint($hint);
             }
             $ex->setPath($this->getPath());
-
             throw $ex;
         }
     }
-
     /**
      * {@inheritdoc}
      */
     protected function isValueEmpty($value)
     {
         // a boolean value cannot be empty
-        return false;
+        return \false;
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function getValidPlaceholderTypes(): array
+    protected function getValidPlaceholderTypes() : array
     {
         return ['bool'];
     }

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Twig\Cache;
+namespace Isolated\Twig\Cache;
 
 /**
  * Implements a cache on the filesystem that can only be read, not written to.
@@ -18,7 +17,7 @@ namespace Twig\Cache;
  */
 class ReadOnlyFilesystemCache extends FilesystemCache
 {
-    public function write(string $key, string $content): void
+    public function write(string $key, string $content) : void
     {
         // Do nothing with the content, it's a read-only filesystem.
     }

@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\Type;
 
-namespace Symfony\Component\Form\Extension\Core\Type;
-
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\ButtonTypeInterface;
-
+use Isolated\Symfony\Component\Form\AbstractType;
+use Isolated\Symfony\Component\Form\ButtonTypeInterface;
 /**
  * A reset button.
  *
@@ -28,7 +26,6 @@ class ResetType extends AbstractType implements ButtonTypeInterface
     {
         return ButtonType::class;
     }
-
     /**
      * {@inheritdoc}
      */

@@ -1,7 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'my_MM' => 'birmană (Myanmar)',
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['my_MM' => 'birmană (Myanmar)']];

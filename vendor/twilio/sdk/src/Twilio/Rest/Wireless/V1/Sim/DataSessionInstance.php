@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Wireless\V1\Sim;
 
-
-namespace Twilio\Rest\Wireless\V1\Sim;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $simSid
@@ -54,30 +50,10 @@ class DataSessionInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $simSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'simSid' => Values::array_get($payload, 'sim_sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'radioLink' => Values::array_get($payload, 'radio_link'),
-            'operatorMcc' => Values::array_get($payload, 'operator_mcc'),
-            'operatorMnc' => Values::array_get($payload, 'operator_mnc'),
-            'operatorCountry' => Values::array_get($payload, 'operator_country'),
-            'operatorName' => Values::array_get($payload, 'operator_name'),
-            'cellId' => Values::array_get($payload, 'cell_id'),
-            'cellLocationEstimate' => Values::array_get($payload, 'cell_location_estimate'),
-            'packetsUploaded' => Values::array_get($payload, 'packets_uploaded'),
-            'packetsDownloaded' => Values::array_get($payload, 'packets_downloaded'),
-            'lastUpdated' => Deserialize::dateTime(Values::array_get($payload, 'last_updated')),
-            'start' => Deserialize::dateTime(Values::array_get($payload, 'start')),
-            'end' => Deserialize::dateTime(Values::array_get($payload, 'end')),
-            'imei' => Values::array_get($payload, 'imei'),
-        ];
-
-        $this->solution = ['simSid' => $simSid, ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'simSid' => Values::array_get($payload, 'sim_sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'radioLink' => Values::array_get($payload, 'radio_link'), 'operatorMcc' => Values::array_get($payload, 'operator_mcc'), 'operatorMnc' => Values::array_get($payload, 'operator_mnc'), 'operatorCountry' => Values::array_get($payload, 'operator_country'), 'operatorName' => Values::array_get($payload, 'operator_name'), 'cellId' => Values::array_get($payload, 'cell_id'), 'cellLocationEstimate' => Values::array_get($payload, 'cell_location_estimate'), 'packetsUploaded' => Values::array_get($payload, 'packets_uploaded'), 'packetsDownloaded' => Values::array_get($payload, 'packets_downloaded'), 'lastUpdated' => Deserialize::dateTime(Values::array_get($payload, 'last_updated')), 'start' => Deserialize::dateTime(Values::array_get($payload, 'start')), 'end' => Deserialize::dateTime(Values::array_get($payload, 'end')), 'imei' => Values::array_get($payload, 'imei')];
+        $this->solution = ['simSid' => $simSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -90,23 +66,19 @@ class DataSessionInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Wireless.V1.DataSessionInstance]';
     }
 }
-

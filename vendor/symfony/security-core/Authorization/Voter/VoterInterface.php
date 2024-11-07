@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Authorization\Voter;
 
-namespace Symfony\Component\Security\Core\Authorization\Voter;
-
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
+use Isolated\Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 /**
  * VoterInterface is the interface implemented by all voters.
  *
@@ -23,7 +21,6 @@ interface VoterInterface
     public const ACCESS_GRANTED = 1;
     public const ACCESS_ABSTAIN = 0;
     public const ACCESS_DENIED = -1;
-
     /**
      * Returns the vote for the given parameters.
      *

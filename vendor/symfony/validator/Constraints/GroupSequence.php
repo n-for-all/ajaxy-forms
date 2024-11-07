@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Constraints;
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
 /**
  * A sequence of validation groups.
@@ -60,7 +59,6 @@ class GroupSequence
      * @var array<int, string|string[]|GroupSequence>
      */
     public $groups;
-
     /**
      * The group in which cascaded objects are validated when validating
      * this sequence.
@@ -76,7 +74,6 @@ class GroupSequence
      * @var string|GroupSequence
      */
     public $cascadedGroup;
-
     /**
      * Creates a new group sequence.
      *

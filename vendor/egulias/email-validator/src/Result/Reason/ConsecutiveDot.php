@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class ConsecutiveDot implements Reason
 {
@@ -8,7 +8,6 @@ class ConsecutiveDot implements Reason
     {
         return 132;
     }
-
     public function description() : string
     {
         return 'Concecutive DOT found';

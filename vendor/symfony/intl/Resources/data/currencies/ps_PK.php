@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'PKR' => [
-            'Rs',
-            'پاکستانۍ کلداره',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['PKR' => ['Rs', 'پاکستانۍ کلداره']]];

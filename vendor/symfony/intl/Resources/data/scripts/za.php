@@ -1,7 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'Latn' => 'Lahdinghvwnz',
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['Latn' => 'Lahdinghvwnz']];

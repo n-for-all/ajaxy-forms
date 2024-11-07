@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Authentication\Token\Storage;
 
-namespace Symfony\Component\Security\Core\Authentication\Token\Storage;
-
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Contracts\Service\ResetInterface;
-
+use Isolated\Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Isolated\Symfony\Contracts\Service\ResetInterface;
 /**
  * TokenStorage contains a TokenInterface.
  *
@@ -26,7 +24,6 @@ class TokenStorage implements TokenStorageInterface, ResetInterface
 {
     private $token;
     private $initializer;
-
     /**
      * {@inheritdoc}
      */
@@ -36,10 +33,8 @@ class TokenStorage implements TokenStorageInterface, ResetInterface
             $this->initializer = null;
             $initializer();
         }
-
         return $this->token;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -48,22 +43,18 @@ class TokenStorage implements TokenStorageInterface, ResetInterface
         if ($token) {
             // ensure any initializer is called
             $this->getToken();
-
             // @deprecated since Symfony 5.3
-            if (!method_exists($token, 'getUserIdentifier')) {
-                trigger_deprecation('symfony/security-core', '5.3', 'Not implementing method "getUserIdentifier(): string" in token class "%s" is deprecated. This method will replace "getUsername()" in Symfony 6.0.', get_debug_type($token));
+            if (!\method_exists($token, 'getUserIdentifier')) {
+                trigger_deprecation('symfony/security-core', '5.3', 'Not implementing method "getUserIdentifier(): string" in token class "%s" is deprecated. This method will replace "getUsername()" in Symfony 6.0.', \get_debug_type($token));
             }
         }
-
         $this->initializer = null;
         $this->token = $token;
     }
-
-    public function setInitializer(?callable $initializer): void
+    public function setInitializer(?callable $initializer) : void
     {
         $this->initializer = $initializer;
     }
-
     public function reset()
     {
         $this->setToken(null);

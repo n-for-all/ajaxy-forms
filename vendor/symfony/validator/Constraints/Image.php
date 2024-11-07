@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Constraints;
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
 /**
  * @Annotation
@@ -34,30 +33,8 @@ class Image extends File
     public const LANDSCAPE_NOT_ALLOWED_ERROR = '6f895685-7cf2-4d65-b3da-9029c5581d88';
     public const PORTRAIT_NOT_ALLOWED_ERROR = '65608156-77da-4c79-a88c-02ef6d18c782';
     public const CORRUPTED_IMAGE_ERROR = '5d4163f3-648f-4e39-87fd-cc5ea7aad2d1';
-
     // Include the mapping from the base class
-
-    protected static $errorNames = [
-        self::NOT_FOUND_ERROR => 'NOT_FOUND_ERROR',
-        self::NOT_READABLE_ERROR => 'NOT_READABLE_ERROR',
-        self::EMPTY_ERROR => 'EMPTY_ERROR',
-        self::TOO_LARGE_ERROR => 'TOO_LARGE_ERROR',
-        self::INVALID_MIME_TYPE_ERROR => 'INVALID_MIME_TYPE_ERROR',
-        self::SIZE_NOT_DETECTED_ERROR => 'SIZE_NOT_DETECTED_ERROR',
-        self::TOO_WIDE_ERROR => 'TOO_WIDE_ERROR',
-        self::TOO_NARROW_ERROR => 'TOO_NARROW_ERROR',
-        self::TOO_HIGH_ERROR => 'TOO_HIGH_ERROR',
-        self::TOO_LOW_ERROR => 'TOO_LOW_ERROR',
-        self::TOO_FEW_PIXEL_ERROR => 'TOO_FEW_PIXEL_ERROR',
-        self::TOO_MANY_PIXEL_ERROR => 'TOO_MANY_PIXEL_ERROR',
-        self::RATIO_TOO_BIG_ERROR => 'RATIO_TOO_BIG_ERROR',
-        self::RATIO_TOO_SMALL_ERROR => 'RATIO_TOO_SMALL_ERROR',
-        self::SQUARE_NOT_ALLOWED_ERROR => 'SQUARE_NOT_ALLOWED_ERROR',
-        self::LANDSCAPE_NOT_ALLOWED_ERROR => 'LANDSCAPE_NOT_ALLOWED_ERROR',
-        self::PORTRAIT_NOT_ALLOWED_ERROR => 'PORTRAIT_NOT_ALLOWED_ERROR',
-        self::CORRUPTED_IMAGE_ERROR => 'CORRUPTED_IMAGE_ERROR',
-    ];
-
+    protected static $errorNames = [self::NOT_FOUND_ERROR => 'NOT_FOUND_ERROR', self::NOT_READABLE_ERROR => 'NOT_READABLE_ERROR', self::EMPTY_ERROR => 'EMPTY_ERROR', self::TOO_LARGE_ERROR => 'TOO_LARGE_ERROR', self::INVALID_MIME_TYPE_ERROR => 'INVALID_MIME_TYPE_ERROR', self::SIZE_NOT_DETECTED_ERROR => 'SIZE_NOT_DETECTED_ERROR', self::TOO_WIDE_ERROR => 'TOO_WIDE_ERROR', self::TOO_NARROW_ERROR => 'TOO_NARROW_ERROR', self::TOO_HIGH_ERROR => 'TOO_HIGH_ERROR', self::TOO_LOW_ERROR => 'TOO_LOW_ERROR', self::TOO_FEW_PIXEL_ERROR => 'TOO_FEW_PIXEL_ERROR', self::TOO_MANY_PIXEL_ERROR => 'TOO_MANY_PIXEL_ERROR', self::RATIO_TOO_BIG_ERROR => 'RATIO_TOO_BIG_ERROR', self::RATIO_TOO_SMALL_ERROR => 'RATIO_TOO_SMALL_ERROR', self::SQUARE_NOT_ALLOWED_ERROR => 'SQUARE_NOT_ALLOWED_ERROR', self::LANDSCAPE_NOT_ALLOWED_ERROR => 'LANDSCAPE_NOT_ALLOWED_ERROR', self::PORTRAIT_NOT_ALLOWED_ERROR => 'PORTRAIT_NOT_ALLOWED_ERROR', self::CORRUPTED_IMAGE_ERROR => 'CORRUPTED_IMAGE_ERROR'];
     public $mimeTypes = 'image/*';
     public $minWidth;
     public $maxWidth;
@@ -67,11 +44,10 @@ class Image extends File
     public $minRatio;
     public $minPixels;
     public $maxPixels;
-    public $allowSquare = true;
-    public $allowLandscape = true;
-    public $allowPortrait = true;
-    public $detectCorrupted = false;
-
+    public $allowSquare = \true;
+    public $allowLandscape = \true;
+    public $allowPortrait = \true;
+    public $detectCorrupted = \false;
     // The constant for a wrong MIME type is taken from the parent class.
     public $mimeTypesMessage = 'This file is not a valid image.';
     public $sizeNotDetectedMessage = 'The size of the image could not be detected.';
@@ -87,7 +63,6 @@ class Image extends File
     public $allowLandscapeMessage = 'The image is landscape oriented ({{ width }}x{{ height }}px). Landscape oriented images are not allowed.';
     public $allowPortraitMessage = 'The image is portrait oriented ({{ width }}x{{ height }}px). Portrait oriented images are not allowed.';
     public $corruptedMessage = 'The image file is corrupted.';
-
     /**
      * {@inheritdoc}
      *
@@ -96,74 +71,9 @@ class Image extends File
      * @param int|float $minPixels
      * @param int|float $maxPixels
      */
-    public function __construct(
-        ?array $options = null,
-        $maxSize = null,
-        ?bool $binaryFormat = null,
-        ?array $mimeTypes = null,
-        ?int $minWidth = null,
-        ?int $maxWidth = null,
-        ?int $maxHeight = null,
-        ?int $minHeight = null,
-        $maxRatio = null,
-        $minRatio = null,
-        $minPixels = null,
-        $maxPixels = null,
-        ?bool $allowSquare = null,
-        ?bool $allowLandscape = null,
-        ?bool $allowPortrait = null,
-        ?bool $detectCorrupted = null,
-        ?string $notFoundMessage = null,
-        ?string $notReadableMessage = null,
-        ?string $maxSizeMessage = null,
-        ?string $mimeTypesMessage = null,
-        ?string $disallowEmptyMessage = null,
-        ?string $uploadIniSizeErrorMessage = null,
-        ?string $uploadFormSizeErrorMessage = null,
-        ?string $uploadPartialErrorMessage = null,
-        ?string $uploadNoFileErrorMessage = null,
-        ?string $uploadNoTmpDirErrorMessage = null,
-        ?string $uploadCantWriteErrorMessage = null,
-        ?string $uploadExtensionErrorMessage = null,
-        ?string $uploadErrorMessage = null,
-        ?string $sizeNotDetectedMessage = null,
-        ?string $maxWidthMessage = null,
-        ?string $minWidthMessage = null,
-        ?string $maxHeightMessage = null,
-        ?string $minHeightMessage = null,
-        ?string $minPixelsMessage = null,
-        ?string $maxPixelsMessage = null,
-        ?string $maxRatioMessage = null,
-        ?string $minRatioMessage = null,
-        ?string $allowSquareMessage = null,
-        ?string $allowLandscapeMessage = null,
-        ?string $allowPortraitMessage = null,
-        ?string $corruptedMessage = null,
-        ?array $groups = null,
-        $payload = null
-    ) {
-        parent::__construct(
-            $options,
-            $maxSize,
-            $binaryFormat,
-            $mimeTypes,
-            $notFoundMessage,
-            $notReadableMessage,
-            $maxSizeMessage,
-            $mimeTypesMessage,
-            $disallowEmptyMessage,
-            $uploadIniSizeErrorMessage,
-            $uploadFormSizeErrorMessage,
-            $uploadPartialErrorMessage,
-            $uploadNoFileErrorMessage,
-            $uploadNoTmpDirErrorMessage,
-            $uploadCantWriteErrorMessage,
-            $uploadExtensionErrorMessage,
-            $uploadErrorMessage,
-            $groups,
-            $payload
-        );
-
+    public function __construct(?array $options = null, $maxSize = null, ?bool $binaryFormat = null, ?array $mimeTypes = null, ?int $minWidth = null, ?int $maxWidth = null, ?int $maxHeight = null, ?int $minHeight = null, $maxRatio = null, $minRatio = null, $minPixels = null, $maxPixels = null, ?bool $allowSquare = null, ?bool $allowLandscape = null, ?bool $allowPortrait = null, ?bool $detectCorrupted = null, ?string $notFoundMessage = null, ?string $notReadableMessage = null, ?string $maxSizeMessage = null, ?string $mimeTypesMessage = null, ?string $disallowEmptyMessage = null, ?string $uploadIniSizeErrorMessage = null, ?string $uploadFormSizeErrorMessage = null, ?string $uploadPartialErrorMessage = null, ?string $uploadNoFileErrorMessage = null, ?string $uploadNoTmpDirErrorMessage = null, ?string $uploadCantWriteErrorMessage = null, ?string $uploadExtensionErrorMessage = null, ?string $uploadErrorMessage = null, ?string $sizeNotDetectedMessage = null, ?string $maxWidthMessage = null, ?string $minWidthMessage = null, ?string $maxHeightMessage = null, ?string $minHeightMessage = null, ?string $minPixelsMessage = null, ?string $maxPixelsMessage = null, ?string $maxRatioMessage = null, ?string $minRatioMessage = null, ?string $allowSquareMessage = null, ?string $allowLandscapeMessage = null, ?string $allowPortraitMessage = null, ?string $corruptedMessage = null, ?array $groups = null, $payload = null)
+    {
+        parent::__construct($options, $maxSize, $binaryFormat, $mimeTypes, $notFoundMessage, $notReadableMessage, $maxSizeMessage, $mimeTypesMessage, $disallowEmptyMessage, $uploadIniSizeErrorMessage, $uploadFormSizeErrorMessage, $uploadPartialErrorMessage, $uploadNoFileErrorMessage, $uploadNoTmpDirErrorMessage, $uploadCantWriteErrorMessage, $uploadExtensionErrorMessage, $uploadErrorMessage, $groups, $payload);
         $this->minWidth = $minWidth ?? $this->minWidth;
         $this->maxWidth = $maxWidth ?? $this->maxWidth;
         $this->maxHeight = $maxHeight ?? $this->maxHeight;

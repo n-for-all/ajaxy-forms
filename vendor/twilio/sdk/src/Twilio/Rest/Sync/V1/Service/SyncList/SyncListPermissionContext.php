@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Sync\V1\Service\SyncList;
 
-
-namespace Twilio\Rest\Sync\V1\Service\SyncList;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class SyncListPermissionContext extends InstanceContext
-    {
+{
     /**
      * Initialize the SyncListPermissionContext
      *
@@ -34,64 +30,34 @@ class SyncListPermissionContext extends InstanceContext
      * @param string $listSid The SID of the Sync List with the Sync List Permission resource to delete. Can be the Sync List resource's `sid` or its `unique_name`.
      * @param string $identity The application-defined string that uniquely identifies the User's Sync List Permission resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $listSid,
-        $identity
-    ) {
+    public function __construct(Version $version, $serviceSid, $listSid, $identity)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'listSid' =>
-            $listSid,
-        'identity' =>
-            $identity,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Lists/' . \rawurlencode($listSid)
-        .'/Permissions/' . \rawurlencode($identity)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'listSid' => $listSid, 'identity' => $identity];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Lists/' . \rawurlencode($listSid) . '/Permissions/' . \rawurlencode($identity) . '';
     }
-
     /**
      * Delete the SyncListPermissionInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the SyncListPermissionInstance
      *
      * @return SyncListPermissionInstance Fetched SyncListPermissionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SyncListPermissionInstance
+    public function fetch() : SyncListPermissionInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new SyncListPermissionInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['listSid'],
-            $this->solution['identity']
-        );
+        return new SyncListPermissionInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['listSid'], $this->solution['identity']);
     }
-
-
     /**
      * Update the SyncListPermissionInstance
      *
@@ -101,40 +67,22 @@ class SyncListPermissionContext extends InstanceContext
      * @return SyncListPermissionInstance Updated SyncListPermissionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(bool $read, bool $write, bool $manage): SyncListPermissionInstance
+    public function update(bool $read, bool $write, bool $manage) : SyncListPermissionInstance
     {
-
-        $data = Values::of([
-            'Read' =>
-                Serialize::booleanToString($read),
-            'Write' =>
-                Serialize::booleanToString($write),
-            'Manage' =>
-                Serialize::booleanToString($manage),
-        ]);
-
+        $data = Values::of(['Read' => Serialize::booleanToString($read), 'Write' => Serialize::booleanToString($write), 'Manage' => Serialize::booleanToString($manage)]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new SyncListPermissionInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['listSid'],
-            $this->solution['identity']
-        );
+        return new SyncListPermissionInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['listSid'], $this->solution['identity']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Sync.V1.SyncListPermissionContext ' . \implode(' ', $context) . ']';
     }

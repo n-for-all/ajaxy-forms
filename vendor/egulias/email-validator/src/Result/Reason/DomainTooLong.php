@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class DomainTooLong implements Reason
 {
@@ -8,7 +8,6 @@ class DomainTooLong implements Reason
     {
         return 244;
     }
-
     public function description() : string
     {
         return 'Domain is longer than 253 characters';

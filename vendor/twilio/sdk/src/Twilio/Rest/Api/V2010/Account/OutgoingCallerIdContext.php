@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account;
 
-
-namespace Twilio\Rest\Api\V2010\Account;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class OutgoingCallerIdContext extends InstanceContext
-    {
+{
     /**
      * Initialize the OutgoingCallerIdContext
      *
@@ -33,59 +29,34 @@ class OutgoingCallerIdContext extends InstanceContext
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) that created the OutgoingCallerId resources to delete.
      * @param string $sid The Twilio-provided string that uniquely identifies the OutgoingCallerId resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $accountSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/OutgoingCallerIds/' . \rawurlencode($sid)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'sid' => $sid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/OutgoingCallerIds/' . \rawurlencode($sid) . '.json';
     }
-
     /**
      * Delete the OutgoingCallerIdInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the OutgoingCallerIdInstance
      *
      * @return OutgoingCallerIdInstance Fetched OutgoingCallerIdInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): OutgoingCallerIdInstance
+    public function fetch() : OutgoingCallerIdInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new OutgoingCallerIdInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['sid']
-        );
+        return new OutgoingCallerIdInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the OutgoingCallerIdInstance
      *
@@ -93,37 +64,23 @@ class OutgoingCallerIdContext extends InstanceContext
      * @return OutgoingCallerIdInstance Updated OutgoingCallerIdInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): OutgoingCallerIdInstance
+    public function update(array $options = []) : OutgoingCallerIdInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new OutgoingCallerIdInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['sid']
-        );
+        return new OutgoingCallerIdInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.OutgoingCallerIdContext ' . \implode(' ', $context) . ']';
     }

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Mapping;
 
-namespace Symfony\Component\Validator\Mapping;
-
-use Symfony\Component\Validator\Exception\ValidatorException;
-
+use Isolated\Symfony\Component\Validator\Exception\ValidatorException;
 /**
  * Stores all metadata needed for validating a class property via its getter
  * method.
@@ -42,26 +40,23 @@ class GetterMetadata extends MemberMetadata
     public function __construct(string $class, string $property, ?string $method = null)
     {
         if (null === $method) {
-            $getMethod = 'get'.ucfirst($property);
-            $isMethod = 'is'.ucfirst($property);
-            $hasMethod = 'has'.ucfirst($property);
-
-            if (method_exists($class, $getMethod)) {
+            $getMethod = 'get' . \ucfirst($property);
+            $isMethod = 'is' . \ucfirst($property);
+            $hasMethod = 'has' . \ucfirst($property);
+            if (\method_exists($class, $getMethod)) {
                 $method = $getMethod;
-            } elseif (method_exists($class, $isMethod)) {
+            } elseif (\method_exists($class, $isMethod)) {
                 $method = $isMethod;
-            } elseif (method_exists($class, $hasMethod)) {
+            } elseif (\method_exists($class, $hasMethod)) {
                 $method = $hasMethod;
             } else {
-                throw new ValidatorException(sprintf('Neither of these methods exist in class "%s": "%s", "%s", "%s".', $class, $getMethod, $isMethod, $hasMethod));
+                throw new ValidatorException(\sprintf('Neither of these methods exist in class "%s": "%s", "%s", "%s".', $class, $getMethod, $isMethod, $hasMethod));
             }
-        } elseif (!method_exists($class, $method)) {
-            throw new ValidatorException(sprintf('The "%s()" method does not exist in class "%s".', $method, $class));
+        } elseif (!\method_exists($class, $method)) {
+            throw new ValidatorException(\sprintf('The "%s()" method does not exist in class "%s".', $method, $class));
         }
-
         parent::__construct($class, $method, $property);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -69,7 +64,6 @@ class GetterMetadata extends MemberMetadata
     {
         return $this->newReflectionMember($object)->invoke($object);
     }
-
     /**
      * {@inheritdoc}
      */

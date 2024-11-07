@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'MOP' => [
-            'MOP$',
-            '澳門元',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['MOP' => ['MOP$', '澳門元']]];

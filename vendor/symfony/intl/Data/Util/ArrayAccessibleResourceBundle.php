@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl\Data\Util;
 
-namespace Symfony\Component\Intl\Data\Util;
-
-use Symfony\Component\Intl\Exception\BadMethodCallException;
-
+use Isolated\Symfony\Component\Intl\Exception\BadMethodCallException;
 /**
  * Work-around for a bug in PHP's \ResourceBundle implementation.
  *
@@ -26,24 +24,19 @@ use Symfony\Component\Intl\Exception\BadMethodCallException;
 class ArrayAccessibleResourceBundle implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     private $bundleImpl;
-
     public function __construct(\ResourceBundle $bundleImpl)
     {
         $this->bundleImpl = $bundleImpl;
     }
-
     public function get($offset)
     {
         $value = $this->bundleImpl->get($offset);
-
         return $value instanceof \ResourceBundle ? new static($value) : $value;
     }
-
-    public function offsetExists($offset): bool
+    public function offsetExists($offset) : bool
     {
         return null !== $this->bundleImpl->get($offset);
     }
-
     /**
      * @param mixed $offset
      *
@@ -54,32 +47,26 @@ class ArrayAccessibleResourceBundle implements \ArrayAccess, \IteratorAggregate,
     {
         return $this->get($offset);
     }
-
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, $value) : void
     {
         throw new BadMethodCallException('Resource bundles cannot be modified.');
     }
-
-    public function offsetUnset($offset): void
+    public function offsetUnset($offset) : void
     {
         throw new BadMethodCallException('Resource bundles cannot be modified.');
     }
-
-    public function getIterator(): \Traversable
+    public function getIterator() : \Traversable
     {
         return $this->bundleImpl;
     }
-
-    public function count(): int
+    public function count() : int
     {
         return $this->bundleImpl->count();
     }
-
     public function getErrorCode()
     {
         return $this->bundleImpl->getErrorCode();
     }
-
     public function getErrorMessage()
     {
         return $this->bundleImpl->getErrorMessage();

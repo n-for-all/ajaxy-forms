@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property string|null $questionSid
@@ -48,42 +44,23 @@ class InsightsQuestionnairesQuestionInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $questionSid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'questionSid' => Values::array_get($payload, 'question_sid'),
-            'question' => Values::array_get($payload, 'question'),
-            'description' => Values::array_get($payload, 'description'),
-            'category' => Values::array_get($payload, 'category'),
-            'answerSetId' => Values::array_get($payload, 'answer_set_id'),
-            'allowNa' => Values::array_get($payload, 'allow_na'),
-            'usage' => Values::array_get($payload, 'usage'),
-            'answerSet' => Values::array_get($payload, 'answer_set'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['questionSid' => $questionSid ?: $this->properties['questionSid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'questionSid' => Values::array_get($payload, 'question_sid'), 'question' => Values::array_get($payload, 'question'), 'description' => Values::array_get($payload, 'description'), 'category' => Values::array_get($payload, 'category'), 'answerSetId' => Values::array_get($payload, 'answer_set_id'), 'allowNa' => Values::array_get($payload, 'allow_na'), 'usage' => Values::array_get($payload, 'usage'), 'answerSet' => Values::array_get($payload, 'answer_set'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['questionSid' => $questionSid ?: $this->properties['questionSid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return InsightsQuestionnairesQuestionContext Context for this InsightsQuestionnairesQuestionInstance
      */
-    protected function proxy(): InsightsQuestionnairesQuestionContext
+    protected function proxy() : InsightsQuestionnairesQuestionContext
     {
         if (!$this->context) {
-            $this->context = new InsightsQuestionnairesQuestionContext(
-                $this->version,
-                $this->solution['questionSid']
-            );
+            $this->context = new InsightsQuestionnairesQuestionContext($this->version, $this->solution['questionSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the InsightsQuestionnairesQuestionInstance
      *
@@ -91,12 +68,10 @@ class InsightsQuestionnairesQuestionInstance extends InstanceResource
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(array $options = []): bool
+    public function delete(array $options = []) : bool
     {
-
         return $this->proxy()->delete($options);
     }
-
     /**
      * Update the InsightsQuestionnairesQuestionInstance
      *
@@ -105,12 +80,10 @@ class InsightsQuestionnairesQuestionInstance extends InstanceResource
      * @return InsightsQuestionnairesQuestionInstance Updated InsightsQuestionnairesQuestionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(bool $allowNa, array $options = []): InsightsQuestionnairesQuestionInstance
+    public function update(bool $allowNa, array $options = []) : InsightsQuestionnairesQuestionInstance
     {
-
         return $this->proxy()->update($allowNa, $options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -123,27 +96,23 @@ class InsightsQuestionnairesQuestionInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.InsightsQuestionnairesQuestionInstance ' . \implode(' ', $context) . ']';
     }
 }
-

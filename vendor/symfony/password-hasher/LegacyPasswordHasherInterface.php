@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\PasswordHasher;
 
-namespace Symfony\Component\PasswordHasher;
-
-use Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
-
+use Isolated\Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
 /**
  * Provides password hashing and verification capabilities for "legacy" hashers that require external salts.
  *
@@ -27,10 +25,9 @@ interface LegacyPasswordHasherInterface extends PasswordHasherInterface
      *
      * @throws InvalidPasswordException If the plain password is invalid, e.g. excessively long
      */
-    public function hash(string $plainPassword, ?string $salt = null): string;
-
+    public function hash(string $plainPassword, ?string $salt = null) : string;
     /**
      * Checks that a plain password and a salt match a password hash.
      */
-    public function verify(string $hashedPassword, string $plainPassword, ?string $salt = null): bool;
+    public function verify(string $hashedPassword, string $plainPassword, ?string $salt = null) : bool;
 }

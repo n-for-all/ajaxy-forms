@@ -13,73 +13,49 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Accounts\V1\Credential;
 
-
-namespace Twilio\Rest\Accounts\V1\Credential;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class AwsContext extends InstanceContext
-    {
+{
     /**
      * Initialize the AwsContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The Twilio-provided string that uniquely identifies the AWS resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Credentials/AWS/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Credentials/AWS/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the AwsInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the AwsInstance
      *
      * @return AwsInstance Fetched AwsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): AwsInstance
+    public function fetch() : AwsInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new AwsInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new AwsInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the AwsInstance
      *
@@ -87,36 +63,23 @@ class AwsContext extends InstanceContext
      * @return AwsInstance Updated AwsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): AwsInstance
+    public function update(array $options = []) : AwsInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new AwsInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new AwsInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Accounts.V1.AwsContext ' . \implode(' ', $context) . ']';
     }

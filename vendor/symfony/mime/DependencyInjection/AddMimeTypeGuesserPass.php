@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Mime\DependencyInjection;
 
-namespace Symfony\Component\Mime\DependencyInjection;
-
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
-
+use Isolated\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Isolated\Symfony\Component\DependencyInjection\ContainerBuilder;
+use Isolated\Symfony\Component\DependencyInjection\Reference;
 /**
  * Registers custom mime types guessers.
  *
@@ -24,13 +22,11 @@ class AddMimeTypeGuesserPass implements CompilerPassInterface
 {
     private $mimeTypesService;
     private $mimeTypeGuesserTag;
-
     public function __construct(string $mimeTypesService = 'mime_types', string $mimeTypeGuesserTag = 'mime.mime_type_guesser')
     {
         $this->mimeTypesService = $mimeTypesService;
         $this->mimeTypeGuesserTag = $mimeTypeGuesserTag;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -38,7 +34,7 @@ class AddMimeTypeGuesserPass implements CompilerPassInterface
     {
         if ($container->has($this->mimeTypesService)) {
             $definition = $container->findDefinition($this->mimeTypesService);
-            foreach ($container->findTaggedServiceIds($this->mimeTypeGuesserTag, true) as $id => $attributes) {
+            foreach ($container->findTaggedServiceIds($this->mimeTypeGuesserTag, \true) as $id => $attributes) {
                 $definition->addMethodCall('registerGuesser', [new Reference($id)]);
             }
         }

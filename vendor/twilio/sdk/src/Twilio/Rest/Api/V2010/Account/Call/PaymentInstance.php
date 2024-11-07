@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Call;
 
-
-namespace Twilio\Rest\Api\V2010\Account\Call;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property string|null $callSid
@@ -47,40 +43,23 @@ class PaymentInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $accountSid, string $callSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'callSid' => Values::array_get($payload, 'call_sid'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'uri' => Values::array_get($payload, 'uri'),
-        ];
-
-        $this->solution = ['accountSid' => $accountSid, 'callSid' => $callSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'callSid' => Values::array_get($payload, 'call_sid'), 'sid' => Values::array_get($payload, 'sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'uri' => Values::array_get($payload, 'uri')];
+        $this->solution = ['accountSid' => $accountSid, 'callSid' => $callSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return PaymentContext Context for this PaymentInstance
      */
-    protected function proxy(): PaymentContext
+    protected function proxy() : PaymentContext
     {
         if (!$this->context) {
-            $this->context = new PaymentContext(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['callSid'],
-                $this->solution['sid']
-            );
+            $this->context = new PaymentContext($this->version, $this->solution['accountSid'], $this->solution['callSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Update the PaymentInstance
      *
@@ -90,12 +69,10 @@ class PaymentInstance extends InstanceResource
      * @return PaymentInstance Updated PaymentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $idempotencyKey, string $statusCallback, array $options = []): PaymentInstance
+    public function update(string $idempotencyKey, string $statusCallback, array $options = []) : PaymentInstance
     {
-
         return $this->proxy()->update($idempotencyKey, $statusCallback, $options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -108,27 +85,23 @@ class PaymentInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.PaymentInstance ' . \implode(' ', $context) . ']';
     }
 }
-

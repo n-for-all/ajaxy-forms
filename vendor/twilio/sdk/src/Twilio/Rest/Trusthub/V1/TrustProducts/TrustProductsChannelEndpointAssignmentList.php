@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1\TrustProducts;
 
-namespace Twilio\Rest\Trusthub\V1\TrustProducts;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class TrustProductsChannelEndpointAssignmentList extends ListResource
-    {
+{
     /**
      * Construct the TrustProductsChannelEndpointAssignmentList
      *
      * @param Version $version Version that contains the resource
      * @param string $trustProductSid The unique string that we created to identify the CustomerProfile resource.
      */
-    public function __construct(
-        Version $version,
-        string $trustProductSid
-    ) {
+    public function __construct(Version $version, string $trustProductSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'trustProductSid' =>
-            $trustProductSid,
-        
-        ];
-
-        $this->uri = '/TrustProducts/' . \rawurlencode($trustProductSid)
-        .'/ChannelEndpointAssignments';
+        $this->solution = ['trustProductSid' => $trustProductSid];
+        $this->uri = '/TrustProducts/' . \rawurlencode($trustProductSid) . '/ChannelEndpointAssignments';
     }
-
     /**
      * Create the TrustProductsChannelEndpointAssignmentInstance
      *
@@ -57,26 +44,12 @@ class TrustProductsChannelEndpointAssignmentList extends ListResource
      * @return TrustProductsChannelEndpointAssignmentInstance Created TrustProductsChannelEndpointAssignmentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $channelEndpointType, string $channelEndpointSid): TrustProductsChannelEndpointAssignmentInstance
+    public function create(string $channelEndpointType, string $channelEndpointSid) : TrustProductsChannelEndpointAssignmentInstance
     {
-
-        $data = Values::of([
-            'ChannelEndpointType' =>
-                $channelEndpointType,
-            'ChannelEndpointSid' =>
-                $channelEndpointSid,
-        ]);
-
+        $data = Values::of(['ChannelEndpointType' => $channelEndpointType, 'ChannelEndpointSid' => $channelEndpointSid]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new TrustProductsChannelEndpointAssignmentInstance(
-            $this->version,
-            $payload,
-            $this->solution['trustProductSid']
-        );
+        return new TrustProductsChannelEndpointAssignmentInstance($this->version, $payload, $this->solution['trustProductSid']);
     }
-
-
     /**
      * Reads TrustProductsChannelEndpointAssignmentInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -93,11 +66,10 @@ class TrustProductsChannelEndpointAssignmentList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return TrustProductsChannelEndpointAssignmentInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams TrustProductsChannelEndpointAssignmentInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -117,15 +89,12 @@ class TrustProductsChannelEndpointAssignmentList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of TrustProductsChannelEndpointAssignmentInstance records from the API.
      * Request is executed immediately
@@ -135,30 +104,13 @@ class TrustProductsChannelEndpointAssignmentList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return TrustProductsChannelEndpointAssignmentPage Page of TrustProductsChannelEndpointAssignmentInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): TrustProductsChannelEndpointAssignmentPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : TrustProductsChannelEndpointAssignmentPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'ChannelEndpointSid' =>
-                $options['channelEndpointSid'],
-            'ChannelEndpointSids' =>
-                $options['channelEndpointSids'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['ChannelEndpointSid' => $options['channelEndpointSid'], 'ChannelEndpointSids' => $options['channelEndpointSids'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new TrustProductsChannelEndpointAssignmentPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of TrustProductsChannelEndpointAssignmentInstance records from the API.
      * Request is executed immediately
@@ -166,40 +118,26 @@ class TrustProductsChannelEndpointAssignmentList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return TrustProductsChannelEndpointAssignmentPage Page of TrustProductsChannelEndpointAssignmentInstance
      */
-    public function getPage(string $targetUrl): TrustProductsChannelEndpointAssignmentPage
+    public function getPage(string $targetUrl) : TrustProductsChannelEndpointAssignmentPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new TrustProductsChannelEndpointAssignmentPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a TrustProductsChannelEndpointAssignmentContext
      *
      * @param string $sid The unique string that we created to identify the resource.
      */
-    public function getContext(
-        string $sid
-        
-    ): TrustProductsChannelEndpointAssignmentContext
+    public function getContext(string $sid) : TrustProductsChannelEndpointAssignmentContext
     {
-        return new TrustProductsChannelEndpointAssignmentContext(
-            $this->version,
-            $this->solution['trustProductSid'],
-            $sid
-        );
+        return new TrustProductsChannelEndpointAssignmentContext($this->version, $this->solution['trustProductSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Trusthub.V1.TrustProductsChannelEndpointAssignmentList]';
     }

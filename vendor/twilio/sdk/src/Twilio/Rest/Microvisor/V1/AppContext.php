@@ -13,94 +13,64 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Microvisor\V1;
 
-
-namespace Twilio\Rest\Microvisor\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Microvisor\V1\App\AppManifestList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Microvisor\V1\App\AppManifestList;
 /**
  * @property AppManifestList $appManifests
  * @method \Twilio\Rest\Microvisor\V1\App\AppManifestContext appManifests()
  */
 class AppContext extends InstanceContext
-    {
+{
     protected $_appManifests;
-
     /**
      * Initialize the AppContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid A 34-character string that uniquely identifies this App.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Apps/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Apps/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the AppInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the AppInstance
      *
      * @return AppInstance Fetched AppInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): AppInstance
+    public function fetch() : AppInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new AppInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new AppInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the appManifests
      */
-    protected function getAppManifests(): AppManifestList
+    protected function getAppManifests() : AppManifestList
     {
         if (!$this->_appManifests) {
-            $this->_appManifests = new AppManifestList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_appManifests = new AppManifestList($this->version, $this->solution['sid']);
         }
-
         return $this->_appManifests;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -108,16 +78,14 @@ class AppContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -126,26 +94,24 @@ class AppContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Microvisor.V1.AppContext ' . \implode(' ', $context) . ']';
     }

@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Recording;
 
-
-namespace Twilio\Rest\Api\V2010\Account\Recording;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class TranscriptionContext extends InstanceContext
-    {
+{
     /**
      * Initialize the TranscriptionContext
      *
@@ -32,74 +28,44 @@ class TranscriptionContext extends InstanceContext
      * @param string $recordingSid The SID of the [Recording](https://www.twilio.com/docs/voice/api/recording) that created the transcription to delete.
      * @param string $sid The Twilio-provided string that uniquely identifies the Transcription resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $recordingSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $accountSid, $recordingSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'recordingSid' =>
-            $recordingSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Recordings/' . \rawurlencode($recordingSid)
-        .'/Transcriptions/' . \rawurlencode($sid)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'recordingSid' => $recordingSid, 'sid' => $sid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Recordings/' . \rawurlencode($recordingSid) . '/Transcriptions/' . \rawurlencode($sid) . '.json';
     }
-
     /**
      * Delete the TranscriptionInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the TranscriptionInstance
      *
      * @return TranscriptionInstance Fetched TranscriptionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): TranscriptionInstance
+    public function fetch() : TranscriptionInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new TranscriptionInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['recordingSid'],
-            $this->solution['sid']
-        );
+        return new TranscriptionInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['recordingSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.TranscriptionContext ' . \implode(' ', $context) . ']';
     }

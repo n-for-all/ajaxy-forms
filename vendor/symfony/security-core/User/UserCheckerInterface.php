@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\User;
 
-namespace Symfony\Component\Security\Core\User;
-
-use Symfony\Component\Security\Core\Exception\AccountStatusException;
-
+use Isolated\Symfony\Component\Security\Core\Exception\AccountStatusException;
 /**
  * Implement to throw AccountStatusException during the authentication process.
  *
@@ -29,7 +27,6 @@ interface UserCheckerInterface
      * @throws AccountStatusException
      */
     public function checkPreAuth(UserInterface $user);
-
     /**
      * Checks the user account after authentication.
      *

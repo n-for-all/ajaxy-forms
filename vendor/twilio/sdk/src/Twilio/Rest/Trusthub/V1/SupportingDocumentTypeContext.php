@@ -13,68 +13,47 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1;
 
-
-namespace Twilio\Rest\Trusthub\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class SupportingDocumentTypeContext extends InstanceContext
-    {
+{
     /**
      * Initialize the SupportingDocumentTypeContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The unique string that identifies the Supporting Document Type resource.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/SupportingDocumentTypes/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/SupportingDocumentTypes/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the SupportingDocumentTypeInstance
      *
      * @return SupportingDocumentTypeInstance Fetched SupportingDocumentTypeInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SupportingDocumentTypeInstance
+    public function fetch() : SupportingDocumentTypeInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new SupportingDocumentTypeInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new SupportingDocumentTypeInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Trusthub.V1.SupportingDocumentTypeContext ' . \implode(' ', $context) . ']';
     }

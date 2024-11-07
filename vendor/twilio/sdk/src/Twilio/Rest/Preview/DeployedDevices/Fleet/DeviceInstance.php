@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\DeployedDevices\Fleet;
 
-
-namespace Twilio\Rest\Preview\DeployedDevices\Fleet;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $url
@@ -52,69 +48,43 @@ class DeviceInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $fleetSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'url' => Values::array_get($payload, 'url'),
-            'uniqueName' => Values::array_get($payload, 'unique_name'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'fleetSid' => Values::array_get($payload, 'fleet_sid'),
-            'enabled' => Values::array_get($payload, 'enabled'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'identity' => Values::array_get($payload, 'identity'),
-            'deploymentSid' => Values::array_get($payload, 'deployment_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'dateAuthenticated' => Deserialize::dateTime(Values::array_get($payload, 'date_authenticated')),
-        ];
-
-        $this->solution = ['fleetSid' => $fleetSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'url' => Values::array_get($payload, 'url'), 'uniqueName' => Values::array_get($payload, 'unique_name'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'fleetSid' => Values::array_get($payload, 'fleet_sid'), 'enabled' => Values::array_get($payload, 'enabled'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'identity' => Values::array_get($payload, 'identity'), 'deploymentSid' => Values::array_get($payload, 'deployment_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'dateAuthenticated' => Deserialize::dateTime(Values::array_get($payload, 'date_authenticated'))];
+        $this->solution = ['fleetSid' => $fleetSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return DeviceContext Context for this DeviceInstance
      */
-    protected function proxy(): DeviceContext
+    protected function proxy() : DeviceContext
     {
         if (!$this->context) {
-            $this->context = new DeviceContext(
-                $this->version,
-                $this->solution['fleetSid'],
-                $this->solution['sid']
-            );
+            $this->context = new DeviceContext($this->version, $this->solution['fleetSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the DeviceInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the DeviceInstance
      *
      * @return DeviceInstance Fetched DeviceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DeviceInstance
+    public function fetch() : DeviceInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the DeviceInstance
      *
@@ -122,12 +92,10 @@ class DeviceInstance extends InstanceResource
      * @return DeviceInstance Updated DeviceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): DeviceInstance
+    public function update(array $options = []) : DeviceInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -140,27 +108,23 @@ class DeviceInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.DeployedDevices.DeviceInstance ' . \implode(' ', $context) . ']';
     }
 }
-

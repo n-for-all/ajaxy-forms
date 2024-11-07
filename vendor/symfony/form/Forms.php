@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form;
+namespace Isolated\Symfony\Component\Form;
 
 /**
  * Entry point of the Form component.
@@ -67,21 +66,19 @@ final class Forms
      *
      * @return FormFactoryInterface
      */
-    public static function createFormFactory(): FormFactoryInterface
+    public static function createFormFactory() : FormFactoryInterface
     {
         return self::createFormFactoryBuilder()->getFormFactory();
     }
-
     /**
      * Creates a form factory builder with the default configuration.
      *
      * @return FormFactoryBuilderInterface
      */
-    public static function createFormFactoryBuilder(): FormFactoryBuilderInterface
+    public static function createFormFactoryBuilder() : FormFactoryBuilderInterface
     {
-        return new FormFactoryBuilder(true);
+        return new FormFactoryBuilder(\true);
     }
-
     /**
      * This class cannot be instantiated.
      */

@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1\Service\Conversation;
 
-
-namespace Twilio\Rest\Conversations\V1\Service\Conversation;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Conversations\V1\Service\Conversation\Message\DeliveryReceiptList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Conversations\V1\Service\Conversation\Message\DeliveryReceiptList;
 /**
  * @property string|null $accountSid
  * @property string|null $chatServiceSid
@@ -47,7 +43,6 @@ use Twilio\Rest\Conversations\V1\Service\Conversation\Message\DeliveryReceiptLis
 class MessageInstance extends InstanceResource
 {
     protected $_deliveryReceipts;
-
     /**
      * Initialize the MessageInstance
      *
@@ -60,50 +55,23 @@ class MessageInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $chatServiceSid, string $conversationSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'chatServiceSid' => Values::array_get($payload, 'chat_service_sid'),
-            'conversationSid' => Values::array_get($payload, 'conversation_sid'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'index' => Values::array_get($payload, 'index'),
-            'author' => Values::array_get($payload, 'author'),
-            'body' => Values::array_get($payload, 'body'),
-            'media' => Values::array_get($payload, 'media'),
-            'attributes' => Values::array_get($payload, 'attributes'),
-            'participantSid' => Values::array_get($payload, 'participant_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'delivery' => Values::array_get($payload, 'delivery'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-            'contentSid' => Values::array_get($payload, 'content_sid'),
-        ];
-
-        $this->solution = ['chatServiceSid' => $chatServiceSid, 'conversationSid' => $conversationSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'chatServiceSid' => Values::array_get($payload, 'chat_service_sid'), 'conversationSid' => Values::array_get($payload, 'conversation_sid'), 'sid' => Values::array_get($payload, 'sid'), 'index' => Values::array_get($payload, 'index'), 'author' => Values::array_get($payload, 'author'), 'body' => Values::array_get($payload, 'body'), 'media' => Values::array_get($payload, 'media'), 'attributes' => Values::array_get($payload, 'attributes'), 'participantSid' => Values::array_get($payload, 'participant_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'delivery' => Values::array_get($payload, 'delivery'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links'), 'contentSid' => Values::array_get($payload, 'content_sid')];
+        $this->solution = ['chatServiceSid' => $chatServiceSid, 'conversationSid' => $conversationSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return MessageContext Context for this MessageInstance
      */
-    protected function proxy(): MessageContext
+    protected function proxy() : MessageContext
     {
         if (!$this->context) {
-            $this->context = new MessageContext(
-                $this->version,
-                $this->solution['chatServiceSid'],
-                $this->solution['conversationSid'],
-                $this->solution['sid']
-            );
+            $this->context = new MessageContext($this->version, $this->solution['chatServiceSid'], $this->solution['conversationSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the MessageInstance
      *
@@ -111,24 +79,20 @@ class MessageInstance extends InstanceResource
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(array $options = []): bool
+    public function delete(array $options = []) : bool
     {
-
         return $this->proxy()->delete($options);
     }
-
     /**
      * Fetch the MessageInstance
      *
      * @return MessageInstance Fetched MessageInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): MessageInstance
+    public function fetch() : MessageInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the MessageInstance
      *
@@ -136,20 +100,17 @@ class MessageInstance extends InstanceResource
      * @return MessageInstance Updated MessageInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): MessageInstance
+    public function update(array $options = []) : MessageInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the deliveryReceipts
      */
-    protected function getDeliveryReceipts(): DeliveryReceiptList
+    protected function getDeliveryReceipts() : DeliveryReceiptList
     {
         return $this->proxy()->deliveryReceipts;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -162,27 +123,23 @@ class MessageInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Conversations.V1.MessageInstance ' . \implode(' ', $context) . ']';
     }
 }
-

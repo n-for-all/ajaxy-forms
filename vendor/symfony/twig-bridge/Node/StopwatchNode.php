@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Bridge\Twig\Node;
 
-namespace Symfony\Bridge\Twig\Node;
-
-use Twig\Compiler;
-use Twig\Node\Expression\AssignNameExpression;
-use Twig\Node\Node;
-
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Expression\AssignNameExpression;
+use Isolated\Twig\Node\Node;
 /**
  * Represents a stopwatch node.
  *
@@ -26,23 +24,8 @@ final class StopwatchNode extends Node
     {
         parent::__construct(['body' => $body, 'name' => $name, 'var' => $var], [], $lineno, $tag);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
-        $compiler
-            ->addDebugInfo($this)
-            ->write('')
-            ->subcompile($this->getNode('var'))
-            ->raw(' = ')
-            ->subcompile($this->getNode('name'))
-            ->write(";\n")
-            ->write("\$this->env->getExtension('Symfony\Bridge\Twig\Extension\StopwatchExtension')->getStopwatch()->start(")
-            ->subcompile($this->getNode('var'))
-            ->raw(", 'template');\n")
-            ->subcompile($this->getNode('body'))
-            ->write("\$this->env->getExtension('Symfony\Bridge\Twig\Extension\StopwatchExtension')->getStopwatch()->stop(")
-            ->subcompile($this->getNode('var'))
-            ->raw(");\n")
-        ;
+        $compiler->addDebugInfo($this)->write('')->subcompile($this->getNode('var'))->raw(' = ')->subcompile($this->getNode('name'))->write(";\n")->write("\$this->env->getExtension('Symfony\\Bridge\\Twig\\Extension\\StopwatchExtension')->getStopwatch()->start(")->subcompile($this->getNode('var'))->raw(", 'template');\n")->subcompile($this->getNode('body'))->write("\$this->env->getExtension('Symfony\\Bridge\\Twig\\Extension\\StopwatchExtension')->getStopwatch()->stop(")->subcompile($this->getNode('var'))->raw(");\n");
     }
 }

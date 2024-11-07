@@ -1,7 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'Cyrl' => 'Кирил',
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['Cyrl' => 'Кирил']];

@@ -13,37 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1;
 
-namespace Twilio\Rest\Conversations\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class AddressConfigurationList extends ListResource
-    {
+{
     /**
      * Construct the AddressConfigurationList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Configuration/Addresses';
     }
-
     /**
      * Create the AddressConfigurationInstance
      *
@@ -53,47 +45,15 @@ class AddressConfigurationList extends ListResource
      * @return AddressConfigurationInstance Created AddressConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $type, string $address, array $options = []): AddressConfigurationInstance
+    public function create(string $type, string $address, array $options = []) : AddressConfigurationInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Type' =>
-                $type,
-            'Address' =>
-                $address,
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'AutoCreation.Enabled' =>
-                Serialize::booleanToString($options['autoCreationEnabled']),
-            'AutoCreation.Type' =>
-                $options['autoCreationType'],
-            'AutoCreation.ConversationServiceSid' =>
-                $options['autoCreationConversationServiceSid'],
-            'AutoCreation.WebhookUrl' =>
-                $options['autoCreationWebhookUrl'],
-            'AutoCreation.WebhookMethod' =>
-                $options['autoCreationWebhookMethod'],
-            'AutoCreation.WebhookFilters' =>
-                Serialize::map($options['autoCreationWebhookFilters'], function ($e) { return $e; }),
-            'AutoCreation.StudioFlowSid' =>
-                $options['autoCreationStudioFlowSid'],
-            'AutoCreation.StudioRetryCount' =>
-                $options['autoCreationStudioRetryCount'],
-            'AddressCountry' =>
-                $options['addressCountry'],
-        ]);
-
+        $data = Values::of(['Type' => $type, 'Address' => $address, 'FriendlyName' => $options['friendlyName'], 'AutoCreation.Enabled' => Serialize::booleanToString($options['autoCreationEnabled']), 'AutoCreation.Type' => $options['autoCreationType'], 'AutoCreation.ConversationServiceSid' => $options['autoCreationConversationServiceSid'], 'AutoCreation.WebhookUrl' => $options['autoCreationWebhookUrl'], 'AutoCreation.WebhookMethod' => $options['autoCreationWebhookMethod'], 'AutoCreation.WebhookFilters' => Serialize::map($options['autoCreationWebhookFilters'], function ($e) {
+            return $e;
+        }), 'AutoCreation.StudioFlowSid' => $options['autoCreationStudioFlowSid'], 'AutoCreation.StudioRetryCount' => $options['autoCreationStudioRetryCount'], 'AddressCountry' => $options['addressCountry']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new AddressConfigurationInstance(
-            $this->version,
-            $payload
-        );
+        return new AddressConfigurationInstance($this->version, $payload);
     }
-
-
     /**
      * Reads AddressConfigurationInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -110,11 +70,10 @@ class AddressConfigurationList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return AddressConfigurationInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams AddressConfigurationInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -134,15 +93,12 @@ class AddressConfigurationList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of AddressConfigurationInstance records from the API.
      * Request is executed immediately
@@ -152,28 +108,13 @@ class AddressConfigurationList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return AddressConfigurationPage Page of AddressConfigurationInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): AddressConfigurationPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : AddressConfigurationPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Type' =>
-                $options['type'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Type' => $options['type'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new AddressConfigurationPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of AddressConfigurationInstance records from the API.
      * Request is executed immediately
@@ -181,39 +122,26 @@ class AddressConfigurationList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return AddressConfigurationPage Page of AddressConfigurationInstance
      */
-    public function getPage(string $targetUrl): AddressConfigurationPage
+    public function getPage(string $targetUrl) : AddressConfigurationPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new AddressConfigurationPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a AddressConfigurationContext
      *
      * @param string $sid The SID of the Address Configuration resource. This value can be either the `sid` or the `address` of the configuration
      */
-    public function getContext(
-        string $sid
-        
-    ): AddressConfigurationContext
+    public function getContext(string $sid) : AddressConfigurationContext
     {
-        return new AddressConfigurationContext(
-            $this->version,
-            $sid
-        );
+        return new AddressConfigurationContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Conversations.V1.AddressConfigurationList]';
     }

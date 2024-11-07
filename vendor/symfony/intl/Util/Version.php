@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Intl\Util;
+namespace Isolated\Symfony\Component\Intl\Util;
 
 /**
  * Facilitates the comparison of version strings.
@@ -44,10 +43,8 @@ class Version
     {
         $version1 = self::normalize($version1, $precision);
         $version2 = self::normalize($version2, $precision);
-
-        return version_compare($version1, $version2, $operator);
+        return \version_compare($version1, $version2, $operator);
     }
-
     /**
      * Normalizes a version string to the number of components given in the
      * parameter $precision.
@@ -70,20 +67,15 @@ class Version
         if (null === $precision) {
             return $version;
         }
-
-        $pattern = '[^\.]+';
-
+        $pattern = '[^\\.]+';
         for ($i = 2; $i <= $precision; ++$i) {
-            $pattern = sprintf('[^\.]+(\.%s)?', $pattern);
+            $pattern = \sprintf('[^\\.]+(\\.%s)?', $pattern);
         }
-
-        if (!preg_match('/^'.$pattern.'/', $version, $matches)) {
+        if (!\preg_match('/^' . $pattern . '/', $version, $matches)) {
             return null;
         }
-
         return $matches[0];
     }
-
     /**
      * Must not be instantiated.
      */

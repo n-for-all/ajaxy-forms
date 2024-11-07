@@ -8,25 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node\Expression;
 
-namespace Twig\Node\Expression;
-
-use Twig\Compiler;
-use Twig\Extension\CoreExtension;
-use Twig\Node\Node;
-
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Extension\CoreExtension;
+use Isolated\Twig\Node\Node;
 class FunctionExpression extends CallExpression
 {
     public function __construct(string $name, Node $arguments, int $lineno)
     {
-        parent::__construct(['arguments' => $arguments], ['name' => $name, 'type' => 'function', 'is_defined_test' => false], $lineno);
+        parent::__construct(['arguments' => $arguments], ['name' => $name, 'type' => 'function', 'is_defined_test' => \false], $lineno);
     }
-
     public function compile(Compiler $compiler)
     {
         $name = $this->getAttribute('name');
         $function = $compiler->getEnvironment()->getFunction($name);
-
         $this->setAttribute('needs_charset', $function->needsCharset());
         $this->setAttribute('needs_environment', $function->needsEnvironment());
         $this->setAttribute('needs_context', $function->needsContext());
@@ -37,7 +33,6 @@ class FunctionExpression extends CallExpression
         }
         $this->setAttribute('callable', $callable);
         $this->setAttribute('is_variadic', $function->isVariadic());
-
         $this->compileCallable($compiler);
     }
 }

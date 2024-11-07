@@ -13,19 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry;
 
-namespace Twilio\Rest\Api\V2010\Account\AvailablePhoneNumberCountry;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class NationalList extends ListResource
-    {
+{
     /**
      * Construct the NationalList
      *
@@ -33,28 +30,13 @@ class NationalList extends ListResource
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) requesting the AvailablePhoneNumber resources.
      * @param string $countryCode The [ISO-3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code of the country from which to read phone numbers.
      */
-    public function __construct(
-        Version $version,
-        string $accountSid,
-        string $countryCode
-    ) {
+    public function __construct(Version $version, string $accountSid, string $countryCode)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        
-        'countryCode' =>
-            $countryCode,
-        
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/AvailablePhoneNumbers/' . \rawurlencode($countryCode)
-        .'/National.json';
+        $this->solution = ['accountSid' => $accountSid, 'countryCode' => $countryCode];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/AvailablePhoneNumbers/' . \rawurlencode($countryCode) . '/National.json';
     }
-
     /**
      * Reads NationalInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -71,11 +53,10 @@ class NationalList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return NationalInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams NationalInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -95,15 +76,12 @@ class NationalList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of NationalInstance records from the API.
      * Request is executed immediately
@@ -113,62 +91,13 @@ class NationalList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return NationalPage Page of NationalInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): NationalPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : NationalPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'AreaCode' =>
-                $options['areaCode'],
-            'Contains' =>
-                $options['contains'],
-            'SmsEnabled' =>
-                Serialize::booleanToString($options['smsEnabled']),
-            'MmsEnabled' =>
-                Serialize::booleanToString($options['mmsEnabled']),
-            'VoiceEnabled' =>
-                Serialize::booleanToString($options['voiceEnabled']),
-            'ExcludeAllAddressRequired' =>
-                Serialize::booleanToString($options['excludeAllAddressRequired']),
-            'ExcludeLocalAddressRequired' =>
-                Serialize::booleanToString($options['excludeLocalAddressRequired']),
-            'ExcludeForeignAddressRequired' =>
-                Serialize::booleanToString($options['excludeForeignAddressRequired']),
-            'Beta' =>
-                Serialize::booleanToString($options['beta']),
-            'NearNumber' =>
-                $options['nearNumber'],
-            'NearLatLong' =>
-                $options['nearLatLong'],
-            'Distance' =>
-                $options['distance'],
-            'InPostalCode' =>
-                $options['inPostalCode'],
-            'InRegion' =>
-                $options['inRegion'],
-            'InRateCenter' =>
-                $options['inRateCenter'],
-            'InLata' =>
-                $options['inLata'],
-            'InLocality' =>
-                $options['inLocality'],
-            'FaxEnabled' =>
-                Serialize::booleanToString($options['faxEnabled']),
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['AreaCode' => $options['areaCode'], 'Contains' => $options['contains'], 'SmsEnabled' => Serialize::booleanToString($options['smsEnabled']), 'MmsEnabled' => Serialize::booleanToString($options['mmsEnabled']), 'VoiceEnabled' => Serialize::booleanToString($options['voiceEnabled']), 'ExcludeAllAddressRequired' => Serialize::booleanToString($options['excludeAllAddressRequired']), 'ExcludeLocalAddressRequired' => Serialize::booleanToString($options['excludeLocalAddressRequired']), 'ExcludeForeignAddressRequired' => Serialize::booleanToString($options['excludeForeignAddressRequired']), 'Beta' => Serialize::booleanToString($options['beta']), 'NearNumber' => $options['nearNumber'], 'NearLatLong' => $options['nearLatLong'], 'Distance' => $options['distance'], 'InPostalCode' => $options['inPostalCode'], 'InRegion' => $options['inRegion'], 'InRateCenter' => $options['inRateCenter'], 'InLata' => $options['inLata'], 'InLocality' => $options['inLocality'], 'FaxEnabled' => Serialize::booleanToString($options['faxEnabled']), 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new NationalPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of NationalInstance records from the API.
      * Request is executed immediately
@@ -176,23 +105,17 @@ class NationalList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return NationalPage Page of NationalInstance
      */
-    public function getPage(string $targetUrl): NationalPage
+    public function getPage(string $targetUrl) : NationalPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new NationalPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.NationalList]';
     }

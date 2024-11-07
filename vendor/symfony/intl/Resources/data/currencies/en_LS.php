@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'ZAR' => [
-            'R',
-            'South African Rand',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['ZAR' => ['R', 'South African Rand']]];

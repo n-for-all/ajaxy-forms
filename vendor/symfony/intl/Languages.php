@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl;
 
-namespace Symfony\Component\Intl;
-
-use Symfony\Component\Intl\Exception\MissingResourceException;
-
+use Isolated\Symfony\Component\Intl\Exception\MissingResourceException;
 /**
  * Gives access to language-related ICU data.
  *
@@ -33,22 +31,19 @@ final class Languages extends ResourceBundle
      *
      * @return string[] an array of canonical ISO 639-1 language codes
      */
-    public static function getLanguageCodes(): array
+    public static function getLanguageCodes() : array
     {
         return self::readEntry(['Languages'], 'meta');
     }
-
-    public static function exists(string $language): bool
+    public static function exists(string $language) : bool
     {
         try {
             self::readEntry(['Names', $language]);
-
-            return true;
+            return \true;
         } catch (MissingResourceException $e) {
-            return false;
+            return \false;
         }
     }
-
     /**
      * Gets the language name from its alpha2 code.
      *
@@ -56,7 +51,7 @@ final class Languages extends ResourceBundle
      *
      * @throws MissingResourceException if the language code does not exist
      */
-    public static function getName(string $language, ?string $displayLocale = null): string
+    public static function getName(string $language, ?string $displayLocale = null) : string
     {
         try {
             return self::readEntry(['Names', $language], $displayLocale);
@@ -64,45 +59,40 @@ final class Languages extends ResourceBundle
             try {
                 return self::readEntry(['LocalizedNames', $language], $displayLocale);
             } catch (MissingResourceException $e) {
-                if (false !== $i = strrpos($language, '_')) {
-                    return self::getName(substr($language, 0, $i), $displayLocale);
+                if (\false !== ($i = \strrpos($language, '_'))) {
+                    return self::getName(\substr($language, 0, $i), $displayLocale);
                 }
-
                 throw $e;
             }
         }
     }
-
     /**
      * Gets the list of language names indexed with alpha2 codes as keys.
      *
      * @return array<string, string>
      */
-    public static function getNames(?string $displayLocale = null): array
+    public static function getNames(?string $displayLocale = null) : array
     {
         return self::asort(self::readEntry(['Names'], $displayLocale), $displayLocale);
     }
-
     /**
      * Returns the ISO 639-2 three-letter code of a language, given a two-letter code.
      *
      * @throws MissingResourceException if the language has no corresponding three-letter code
      */
-    public static function getAlpha3Code(string $language): string
+    public static function getAlpha3Code(string $language) : string
     {
         return self::readEntry(['Alpha2ToAlpha3', $language], 'meta');
     }
-
     /**
      * Returns the ISO 639-1 two-letter code of a language, given a three letter code.
      *
      * @throws MissingResourceException if the language has no corresponding three-letter code
      */
-    public static function getAlpha2Code(string $language): string
+    public static function getAlpha2Code(string $language) : string
     {
         return self::readEntry(['Alpha3ToAlpha2', $language], 'meta');
     }
-
     /**
      * Returns all available languages as three-letter codes.
      *
@@ -110,36 +100,32 @@ final class Languages extends ResourceBundle
      *
      * @return string[] an array of canonical ISO 639-2 language codes
      */
-    public static function getAlpha3Codes(): array
+    public static function getAlpha3Codes() : array
     {
         return self::readEntry(['Alpha3Languages'], 'meta');
     }
-
     /**
      * @param string $language ISO 639-2 three-letter language code
      */
-    public static function alpha3CodeExists(string $language): bool
+    public static function alpha3CodeExists(string $language) : bool
     {
         try {
             self::getAlpha2Code($language);
-
-            return true;
+            return \true;
         } catch (MissingResourceException $e) {
             static $cache;
             if (null === $cache) {
-                $cache = array_flip(self::getAlpha3Codes());
+                $cache = \array_flip(self::getAlpha3Codes());
             }
-
             return isset($cache[$language]);
         }
     }
-
     /**
      * Gets the language name from its ISO 639-2 three-letter code.
      *
      * @throws MissingResourceException if the country code does not exists
      */
-    public static function getAlpha3Name(string $language, ?string $displayLocale = null): string
+    public static function getAlpha3Name(string $language, ?string $displayLocale = null) : string
     {
         try {
             return self::getName(self::getAlpha2Code($language), $displayLocale);
@@ -147,11 +133,9 @@ final class Languages extends ResourceBundle
             if (3 === \strlen($language)) {
                 return self::getName($language, $displayLocale);
             }
-
             throw $e;
         }
     }
-
     /**
      * Gets the list of language names indexed with ISO 639-2 three-letter codes as keys.
      *
@@ -159,7 +143,7 @@ final class Languages extends ResourceBundle
      *
      * @return array<string, string>
      */
-    public static function getAlpha3Names(?string $displayLocale = null): array
+    public static function getAlpha3Names(?string $displayLocale = null) : array
     {
         $alpha2Names = self::getNames($displayLocale);
         $alpha3Names = [];
@@ -173,12 +157,10 @@ final class Languages extends ResourceBundle
             } catch (MissingResourceException $e) {
             }
         }
-
         return $alpha3Names;
     }
-
-    protected static function getPath(): string
+    protected static function getPath() : string
     {
-        return Intl::getDataDirectory().'/'.Intl::LANGUAGE_DIR;
+        return Intl::getDataDirectory() . '/' . Intl::LANGUAGE_DIR;
     }
 }

@@ -13,60 +13,39 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Supersim\V1;
 
-
-namespace Twilio\Rest\Supersim\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class FleetContext extends InstanceContext
-    {
+{
     /**
      * Initialize the FleetContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The SID of the Fleet resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Fleets/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Fleets/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the FleetInstance
      *
      * @return FleetInstance Fetched FleetInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): FleetInstance
+    public function fetch() : FleetInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new FleetInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new FleetInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the FleetInstance
      *
@@ -74,48 +53,23 @@ class FleetContext extends InstanceContext
      * @return FleetInstance Updated FleetInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): FleetInstance
+    public function update(array $options = []) : FleetInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'UniqueName' =>
-                $options['uniqueName'],
-            'NetworkAccessProfile' =>
-                $options['networkAccessProfile'],
-            'IpCommandsUrl' =>
-                $options['ipCommandsUrl'],
-            'IpCommandsMethod' =>
-                $options['ipCommandsMethod'],
-            'SmsCommandsUrl' =>
-                $options['smsCommandsUrl'],
-            'SmsCommandsMethod' =>
-                $options['smsCommandsMethod'],
-            'DataLimit' =>
-                $options['dataLimit'],
-        ]);
-
+        $data = Values::of(['UniqueName' => $options['uniqueName'], 'NetworkAccessProfile' => $options['networkAccessProfile'], 'IpCommandsUrl' => $options['ipCommandsUrl'], 'IpCommandsMethod' => $options['ipCommandsMethod'], 'SmsCommandsUrl' => $options['smsCommandsUrl'], 'SmsCommandsMethod' => $options['smsCommandsMethod'], 'DataLimit' => $options['dataLimit']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new FleetInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new FleetInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Supersim.V1.FleetContext ' . \implode(' ', $context) . ']';
     }

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator;
 
-namespace Symfony\Component\Validator;
-
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
-
+use Isolated\Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * Base class for constraint validators.
  *
@@ -25,17 +23,14 @@ abstract class ConstraintValidator implements ConstraintValidatorInterface
      * (if it is available) or as RFC-3339 dates ("Y-m-d H:i:s").
      */
     public const PRETTY_DATE = 1;
-
     /**
      * Whether to cast objects with a "__toString()" method to strings.
      */
     public const OBJECT_TO_STRING = 2;
-
     /**
      * @var ExecutionContextInterface
      */
     protected $context;
-
     /**
      * {@inheritdoc}
      */
@@ -43,7 +38,6 @@ abstract class ConstraintValidator implements ConstraintValidatorInterface
     {
         $this->context = $context;
     }
-
     /**
      * Returns a string representation of the type of the value.
      *
@@ -58,9 +52,8 @@ abstract class ConstraintValidator implements ConstraintValidatorInterface
      */
     protected function formatTypeOf($value)
     {
-        return get_debug_type($value);
+        return \get_debug_type($value);
     }
-
     /**
      * Returns a string representation of the value.
      *
@@ -86,58 +79,42 @@ abstract class ConstraintValidator implements ConstraintValidatorInterface
      */
     protected function formatValue($value, int $format = 0)
     {
-        if (($format & self::PRETTY_DATE) && $value instanceof \DateTimeInterface) {
-            if (class_exists(\IntlDateFormatter::class)) {
+        if ($format & self::PRETTY_DATE && $value instanceof \DateTimeInterface) {
+            if (\class_exists(\IntlDateFormatter::class)) {
                 $formatter = new \IntlDateFormatter(\Locale::getDefault(), \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT, 'UTC');
-
-                return $formatter->format(new \DateTime(
-                    $value->format('Y-m-d H:i:s.u'),
-                    new \DateTimeZone('UTC')
-                ));
+                return $formatter->format(new \DateTime($value->format('Y-m-d H:i:s.u'), new \DateTimeZone('UTC')));
             }
-
             return $value->format('Y-m-d H:i:s');
         }
-
         if ($value instanceof \UnitEnum) {
             return $value->name;
         }
-
         if (\is_object($value)) {
-            if (($format & self::OBJECT_TO_STRING) && method_exists($value, '__toString')) {
+            if ($format & self::OBJECT_TO_STRING && \method_exists($value, '__toString')) {
                 return $value->__toString();
             }
-
             return 'object';
         }
-
         if (\is_array($value)) {
             return 'array';
         }
-
         if (\is_string($value)) {
-            return '"'.$value.'"';
+            return '"' . $value . '"';
         }
-
         if (\is_resource($value)) {
             return 'resource';
         }
-
         if (null === $value) {
             return 'null';
         }
-
-        if (false === $value) {
+        if (\false === $value) {
             return 'false';
         }
-
-        if (true === $value) {
+        if (\true === $value) {
             return 'true';
         }
-
         return (string) $value;
     }
-
     /**
      * Returns a string representation of a list of values.
      *
@@ -157,7 +134,6 @@ abstract class ConstraintValidator implements ConstraintValidatorInterface
         foreach ($values as $key => $value) {
             $values[$key] = $this->formatValue($value, $format);
         }
-
-        return implode(', ', $values);
+        return \implode(', ', $values);
     }
 }

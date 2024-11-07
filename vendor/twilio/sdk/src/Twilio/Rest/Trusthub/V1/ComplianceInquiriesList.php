@@ -13,35 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1;
 
-namespace Twilio\Rest\Trusthub\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class ComplianceInquiriesList extends ListResource
-    {
+{
     /**
      * Construct the ComplianceInquiriesList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/ComplianceInquiries/Customers/Initialize';
     }
-
     /**
      * Create the ComplianceInquiriesInstance
      *
@@ -50,49 +42,28 @@ class ComplianceInquiriesList extends ListResource
      * @return ComplianceInquiriesInstance Created ComplianceInquiriesInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $primaryProfileSid, array $options = []): ComplianceInquiriesInstance
+    public function create(string $primaryProfileSid, array $options = []) : ComplianceInquiriesInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'PrimaryProfileSid' =>
-                $primaryProfileSid,
-            'NotificationEmail' =>
-                $options['notificationEmail'],
-        ]);
-
+        $data = Values::of(['PrimaryProfileSid' => $primaryProfileSid, 'NotificationEmail' => $options['notificationEmail']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new ComplianceInquiriesInstance(
-            $this->version,
-            $payload
-        );
+        return new ComplianceInquiriesInstance($this->version, $payload);
     }
-
-
     /**
      * Constructs a ComplianceInquiriesContext
      *
      * @param string $customerId The unique CustomerId matching the Customer Profile/Compliance Inquiry that should be resumed or resubmitted. This value will have been returned by the initial Compliance Inquiry creation call.
      */
-    public function getContext(
-        string $customerId
-        
-    ): ComplianceInquiriesContext
+    public function getContext(string $customerId) : ComplianceInquiriesContext
     {
-        return new ComplianceInquiriesContext(
-            $this->version,
-            $customerId
-        );
+        return new ComplianceInquiriesContext($this->version, $customerId);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Trusthub.V1.ComplianceInquiriesList]';
     }

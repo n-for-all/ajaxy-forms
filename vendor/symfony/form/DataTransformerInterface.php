@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form;
 
-namespace Symfony\Component\Form;
-
-use Symfony\Component\Form\Exception\TransformationFailedException;
-
+use Isolated\Symfony\Component\Form\Exception\TransformationFailedException;
 /**
  * Transforms a value between different representations.
  *
@@ -60,7 +58,6 @@ interface DataTransformerInterface
      * @throws TransformationFailedException when the transformation fails
      */
     public function transform($value);
-
     /**
      * Transforms a value from the transformed representation to its original
      * representation.

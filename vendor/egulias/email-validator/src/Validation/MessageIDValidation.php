@@ -1,26 +1,22 @@
 <?php
 
-namespace Egulias\EmailValidator\Validation;
+namespace Isolated\Egulias\EmailValidator\Validation;
 
-use Egulias\EmailValidator\EmailLexer;
-use Egulias\EmailValidator\MessageIDParser;
-use Egulias\EmailValidator\Result\InvalidEmail;
-use Egulias\EmailValidator\Result\Reason\ExceptionFound;
-
+use Isolated\Egulias\EmailValidator\EmailLexer;
+use Isolated\Egulias\EmailValidator\MessageIDParser;
+use Isolated\Egulias\EmailValidator\Result\InvalidEmail;
+use Isolated\Egulias\EmailValidator\Result\Reason\ExceptionFound;
 class MessageIDValidation implements EmailValidation
 {
-
     /**
      * @var array
      */
     private $warnings = [];
-
     /**
      * @var ?InvalidEmail
      */
     private $error;
-
-    public function isValid(string $email, EmailLexer $emailLexer): bool
+    public function isValid(string $email, EmailLexer $emailLexer) : bool
     {
         $parser = new MessageIDParser($emailLexer);
         try {
@@ -29,22 +25,19 @@ class MessageIDValidation implements EmailValidation
             if ($result->isInvalid()) {
                 /** @psalm-suppress PropertyTypeCoercion */
                 $this->error = $result;
-                return false;
+                return \false;
             }
         } catch (\Exception $invalid) {
             $this->error = new InvalidEmail(new ExceptionFound($invalid), '');
-            return false;
+            return \false;
         }
-
-        return true;
+        return \true;
     }
-
-    public function getWarnings(): array
+    public function getWarnings() : array
     {
         return $this->warnings;
     }
-
-    public function getError(): ?InvalidEmail
+    public function getError() : ?InvalidEmail
     {
         return $this->error;
     }

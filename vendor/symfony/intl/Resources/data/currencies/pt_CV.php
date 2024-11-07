@@ -1,14 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'CVE' => [
-            '​',
-            'escudo cabo-verdiano',
-        ],
-        'PTE' => [
-            'PTE',
-            'escudo português',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['CVE' => ['​', 'escudo cabo-verdiano'], 'PTE' => ['PTE', 'escudo português']]];

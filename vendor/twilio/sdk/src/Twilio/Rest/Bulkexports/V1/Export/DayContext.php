@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Bulkexports\V1\Export;
 
-
-namespace Twilio\Rest\Bulkexports\V1\Export;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class DayContext extends InstanceContext
-    {
+{
     /**
      * Initialize the DayContext
      *
@@ -31,56 +27,34 @@ class DayContext extends InstanceContext
      * @param string $resourceType The type of communication – Messages, Calls, Conferences, and Participants
      * @param string $day The ISO 8601 format date of the resources in the file, for a UTC day
      */
-    public function __construct(
-        Version $version,
-        $resourceType,
-        $day
-    ) {
+    public function __construct(Version $version, $resourceType, $day)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'resourceType' =>
-            $resourceType,
-        'day' =>
-            $day,
-        ];
-
-        $this->uri = '/Exports/' . \rawurlencode($resourceType)
-        .'/Days/' . \rawurlencode($day)
-        .'';
+        $this->solution = ['resourceType' => $resourceType, 'day' => $day];
+        $this->uri = '/Exports/' . \rawurlencode($resourceType) . '/Days/' . \rawurlencode($day) . '';
     }
-
     /**
      * Fetch the DayInstance
      *
      * @return DayInstance Fetched DayInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DayInstance
+    public function fetch() : DayInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new DayInstance(
-            $this->version,
-            $payload,
-            $this->solution['resourceType'],
-            $this->solution['day']
-        );
+        return new DayInstance($this->version, $payload, $this->solution['resourceType'], $this->solution['day']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Bulkexports.V1.DayContext ' . \implode(' ', $context) . ']';
     }

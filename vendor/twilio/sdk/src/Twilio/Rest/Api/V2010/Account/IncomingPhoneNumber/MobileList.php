@@ -13,43 +13,30 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\IncomingPhoneNumber;
 
-namespace Twilio\Rest\Api\V2010\Account\IncomingPhoneNumber;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class MobileList extends ListResource
-    {
+{
     /**
      * Construct the MobileList
      *
      * @param Version $version Version that contains the resource
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) that will create the resource.
      */
-    public function __construct(
-        Version $version,
-        string $accountSid
-    ) {
+    public function __construct(Version $version, string $accountSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/IncomingPhoneNumbers/Mobile.json';
+        $this->solution = ['accountSid' => $accountSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/IncomingPhoneNumbers/Mobile.json';
     }
-
     /**
      * Create the MobileInstance
      *
@@ -58,70 +45,13 @@ class MobileList extends ListResource
      * @return MobileInstance Created MobileInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $phoneNumber, array $options = []): MobileInstance
+    public function create(string $phoneNumber, array $options = []) : MobileInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'PhoneNumber' =>
-                $phoneNumber,
-            'ApiVersion' =>
-                $options['apiVersion'],
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'SmsApplicationSid' =>
-                $options['smsApplicationSid'],
-            'SmsFallbackMethod' =>
-                $options['smsFallbackMethod'],
-            'SmsFallbackUrl' =>
-                $options['smsFallbackUrl'],
-            'SmsMethod' =>
-                $options['smsMethod'],
-            'SmsUrl' =>
-                $options['smsUrl'],
-            'StatusCallback' =>
-                $options['statusCallback'],
-            'StatusCallbackMethod' =>
-                $options['statusCallbackMethod'],
-            'VoiceApplicationSid' =>
-                $options['voiceApplicationSid'],
-            'VoiceCallerIdLookup' =>
-                Serialize::booleanToString($options['voiceCallerIdLookup']),
-            'VoiceFallbackMethod' =>
-                $options['voiceFallbackMethod'],
-            'VoiceFallbackUrl' =>
-                $options['voiceFallbackUrl'],
-            'VoiceMethod' =>
-                $options['voiceMethod'],
-            'VoiceUrl' =>
-                $options['voiceUrl'],
-            'IdentitySid' =>
-                $options['identitySid'],
-            'AddressSid' =>
-                $options['addressSid'],
-            'EmergencyStatus' =>
-                $options['emergencyStatus'],
-            'EmergencyAddressSid' =>
-                $options['emergencyAddressSid'],
-            'TrunkSid' =>
-                $options['trunkSid'],
-            'VoiceReceiveMode' =>
-                $options['voiceReceiveMode'],
-            'BundleSid' =>
-                $options['bundleSid'],
-        ]);
-
+        $data = Values::of(['PhoneNumber' => $phoneNumber, 'ApiVersion' => $options['apiVersion'], 'FriendlyName' => $options['friendlyName'], 'SmsApplicationSid' => $options['smsApplicationSid'], 'SmsFallbackMethod' => $options['smsFallbackMethod'], 'SmsFallbackUrl' => $options['smsFallbackUrl'], 'SmsMethod' => $options['smsMethod'], 'SmsUrl' => $options['smsUrl'], 'StatusCallback' => $options['statusCallback'], 'StatusCallbackMethod' => $options['statusCallbackMethod'], 'VoiceApplicationSid' => $options['voiceApplicationSid'], 'VoiceCallerIdLookup' => Serialize::booleanToString($options['voiceCallerIdLookup']), 'VoiceFallbackMethod' => $options['voiceFallbackMethod'], 'VoiceFallbackUrl' => $options['voiceFallbackUrl'], 'VoiceMethod' => $options['voiceMethod'], 'VoiceUrl' => $options['voiceUrl'], 'IdentitySid' => $options['identitySid'], 'AddressSid' => $options['addressSid'], 'EmergencyStatus' => $options['emergencyStatus'], 'EmergencyAddressSid' => $options['emergencyAddressSid'], 'TrunkSid' => $options['trunkSid'], 'VoiceReceiveMode' => $options['voiceReceiveMode'], 'BundleSid' => $options['bundleSid']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new MobileInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid']
-        );
+        return new MobileInstance($this->version, $payload, $this->solution['accountSid']);
     }
-
-
     /**
      * Reads MobileInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -138,11 +68,10 @@ class MobileList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return MobileInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams MobileInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -162,15 +91,12 @@ class MobileList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of MobileInstance records from the API.
      * Request is executed immediately
@@ -180,34 +106,13 @@ class MobileList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return MobilePage Page of MobileInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): MobilePage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : MobilePage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Beta' =>
-                Serialize::booleanToString($options['beta']),
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'PhoneNumber' =>
-                $options['phoneNumber'],
-            'Origin' =>
-                $options['origin'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Beta' => Serialize::booleanToString($options['beta']), 'FriendlyName' => $options['friendlyName'], 'PhoneNumber' => $options['phoneNumber'], 'Origin' => $options['origin'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new MobilePage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of MobileInstance records from the API.
      * Request is executed immediately
@@ -215,23 +120,17 @@ class MobileList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return MobilePage Page of MobileInstance
      */
-    public function getPage(string $targetUrl): MobilePage
+    public function getPage(string $targetUrl) : MobilePage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new MobilePage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.MobileList]';
     }

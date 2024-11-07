@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\IpMessaging\V1\Service\Channel;
 
-
-namespace Twilio\Rest\IpMessaging\V1\Service\Channel;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class InviteContext extends InstanceContext
-    {
+{
     /**
      * Initialize the InviteContext
      *
@@ -32,74 +28,44 @@ class InviteContext extends InstanceContext
      * @param string $channelSid 
      * @param string $sid 
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $channelSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $serviceSid, $channelSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'channelSid' =>
-            $channelSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Channels/' . \rawurlencode($channelSid)
-        .'/Invites/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'channelSid' => $channelSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Channels/' . \rawurlencode($channelSid) . '/Invites/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the InviteInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the InviteInstance
      *
      * @return InviteInstance Fetched InviteInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): InviteInstance
+    public function fetch() : InviteInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new InviteInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['channelSid'],
-            $this->solution['sid']
-        );
+        return new InviteInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['channelSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.IpMessaging.V1.InviteContext ' . \implode(' ', $context) . ']';
     }

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Translation\Extractor;
 
-namespace Symfony\Component\Translation\Extractor;
-
-use Symfony\Component\Translation\MessageCatalogue;
-
+use Isolated\Symfony\Component\Translation\MessageCatalogue;
 /**
  * Extracts translation messages from a directory or files to the catalogue.
  * New found messages are injected to the catalogue using the prefix.
@@ -27,7 +25,6 @@ interface ExtractorInterface
      * @param string|iterable<string> $resource Files, a file or a directory
      */
     public function extract($resource, MessageCatalogue $catalogue);
-
     /**
      * Sets the prefix that should be used for new found messages.
      */

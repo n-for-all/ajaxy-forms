@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $domainSid
  * @property string|null $messagingServiceSid
@@ -40,47 +36,33 @@ class LinkshorteningMessagingServiceDomainAssociationInstance extends InstanceRe
     public function __construct(Version $version, array $payload, string $messagingServiceSid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'domainSid' => Values::array_get($payload, 'domain_sid'),
-            'messagingServiceSid' => Values::array_get($payload, 'messaging_service_sid'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['messagingServiceSid' => $messagingServiceSid ?: $this->properties['messagingServiceSid'], ];
+        $this->properties = ['domainSid' => Values::array_get($payload, 'domain_sid'), 'messagingServiceSid' => Values::array_get($payload, 'messaging_service_sid'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['messagingServiceSid' => $messagingServiceSid ?: $this->properties['messagingServiceSid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return LinkshorteningMessagingServiceDomainAssociationContext Context for this LinkshorteningMessagingServiceDomainAssociationInstance
      */
-    protected function proxy(): LinkshorteningMessagingServiceDomainAssociationContext
+    protected function proxy() : LinkshorteningMessagingServiceDomainAssociationContext
     {
         if (!$this->context) {
-            $this->context = new LinkshorteningMessagingServiceDomainAssociationContext(
-                $this->version,
-                $this->solution['messagingServiceSid']
-            );
+            $this->context = new LinkshorteningMessagingServiceDomainAssociationContext($this->version, $this->solution['messagingServiceSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the LinkshorteningMessagingServiceDomainAssociationInstance
      *
      * @return LinkshorteningMessagingServiceDomainAssociationInstance Fetched LinkshorteningMessagingServiceDomainAssociationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): LinkshorteningMessagingServiceDomainAssociationInstance
+    public function fetch() : LinkshorteningMessagingServiceDomainAssociationInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -93,27 +75,23 @@ class LinkshorteningMessagingServiceDomainAssociationInstance extends InstanceRe
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.LinkshorteningMessagingServiceDomainAssociationInstance ' . \implode(' ', $context) . ']';
     }
 }
-

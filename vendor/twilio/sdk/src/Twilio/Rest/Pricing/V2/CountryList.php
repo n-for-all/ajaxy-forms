@@ -13,34 +13,26 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Pricing\V2;
 
-namespace Twilio\Rest\Pricing\V2;
-
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class CountryList extends ListResource
-    {
+{
     /**
      * Construct the CountryList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Trunking/Countries';
     }
-
     /**
      * Reads CountryInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -56,11 +48,10 @@ class CountryList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return CountryInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams CountryInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -79,15 +70,12 @@ class CountryList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of CountryInstance records from the API.
      * Request is executed immediately
@@ -97,24 +85,12 @@ class CountryList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return CountryPage Page of CountryInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): CountryPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : CountryPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new CountryPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of CountryInstance records from the API.
      * Request is executed immediately
@@ -122,39 +98,26 @@ class CountryList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return CountryPage Page of CountryInstance
      */
-    public function getPage(string $targetUrl): CountryPage
+    public function getPage(string $targetUrl) : CountryPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new CountryPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a CountryContext
      *
      * @param string $isoCountry The [ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) of the origin-based voice pricing information to fetch.
      */
-    public function getContext(
-        string $isoCountry
-        
-    ): CountryContext
+    public function getContext(string $isoCountry) : CountryContext
     {
-        return new CountryContext(
-            $this->version,
-            $isoCountry
-        );
+        return new CountryContext($this->version, $isoCountry);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Pricing.V2.CountryList]';
     }

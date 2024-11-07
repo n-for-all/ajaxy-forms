@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
-namespace Symfony\Component\Validator\Constraints;
-
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
-
+use Isolated\Symfony\Component\Validator\Constraint;
+use Isolated\Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 /**
  * Extend this class to create a reusable set of constraints.
  *
@@ -23,30 +21,24 @@ abstract class Compound extends Composite
 {
     /** @var Constraint[] */
     public $constraints = [];
-
     public function __construct($options = null)
     {
         if (isset($options[$this->getCompositeOption()])) {
-            throw new ConstraintDefinitionException(sprintf('You can\'t redefine the "%s" option. Use the "%s::getConstraints()" method instead.', $this->getCompositeOption(), __CLASS__));
+            throw new ConstraintDefinitionException(\sprintf('You can\'t redefine the "%s" option. Use the "%s::getConstraints()" method instead.', $this->getCompositeOption(), __CLASS__));
         }
-
         $this->constraints = $this->getConstraints($this->normalizeOptions($options));
-
         parent::__construct($options);
     }
-
-    final protected function getCompositeOption(): string
+    protected final function getCompositeOption() : string
     {
         return 'constraints';
     }
-
-    final public function validatedBy(): string
+    public final function validatedBy() : string
     {
         return CompoundValidator::class;
     }
-
     /**
      * @return Constraint[]
      */
-    abstract protected function getConstraints(array $options): array;
+    protected abstract function getConstraints(array $options) : array;
 }

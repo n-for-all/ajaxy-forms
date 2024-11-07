@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1\BrandRegistration;
 
-namespace Twilio\Rest\Messaging\V1\BrandRegistration;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class BrandVettingList extends ListResource
-    {
+{
     /**
      * Construct the BrandVettingList
      *
      * @param Version $version Version that contains the resource
      * @param string $brandSid The SID of the Brand Registration resource of the vettings to create .
      */
-    public function __construct(
-        Version $version,
-        string $brandSid
-    ) {
+    public function __construct(Version $version, string $brandSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'brandSid' =>
-            $brandSid,
-        
-        ];
-
-        $this->uri = '/a2p/BrandRegistrations/' . \rawurlencode($brandSid)
-        .'/Vettings';
+        $this->solution = ['brandSid' => $brandSid];
+        $this->uri = '/a2p/BrandRegistrations/' . \rawurlencode($brandSid) . '/Vettings';
     }
-
     /**
      * Create the BrandVettingInstance
      *
@@ -57,28 +44,13 @@ class BrandVettingList extends ListResource
      * @return BrandVettingInstance Created BrandVettingInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $vettingProvider, array $options = []): BrandVettingInstance
+    public function create(string $vettingProvider, array $options = []) : BrandVettingInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'VettingProvider' =>
-                $vettingProvider,
-            'VettingId' =>
-                $options['vettingId'],
-        ]);
-
+        $data = Values::of(['VettingProvider' => $vettingProvider, 'VettingId' => $options['vettingId']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new BrandVettingInstance(
-            $this->version,
-            $payload,
-            $this->solution['brandSid']
-        );
+        return new BrandVettingInstance($this->version, $payload, $this->solution['brandSid']);
     }
-
-
     /**
      * Reads BrandVettingInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -95,11 +67,10 @@ class BrandVettingList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return BrandVettingInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams BrandVettingInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -119,15 +90,12 @@ class BrandVettingList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of BrandVettingInstance records from the API.
      * Request is executed immediately
@@ -137,28 +105,13 @@ class BrandVettingList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return BrandVettingPage Page of BrandVettingInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): BrandVettingPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : BrandVettingPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'VettingProvider' =>
-                $options['vettingProvider'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['VettingProvider' => $options['vettingProvider'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new BrandVettingPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of BrandVettingInstance records from the API.
      * Request is executed immediately
@@ -166,40 +119,26 @@ class BrandVettingList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return BrandVettingPage Page of BrandVettingInstance
      */
-    public function getPage(string $targetUrl): BrandVettingPage
+    public function getPage(string $targetUrl) : BrandVettingPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new BrandVettingPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a BrandVettingContext
      *
      * @param string $brandVettingSid The Twilio SID of the third-party vetting record.
      */
-    public function getContext(
-        string $brandVettingSid
-        
-    ): BrandVettingContext
+    public function getContext(string $brandVettingSid) : BrandVettingContext
     {
-        return new BrandVettingContext(
-            $this->version,
-            $this->solution['brandSid'],
-            $brandVettingSid
-        );
+        return new BrandVettingContext($this->version, $this->solution['brandSid'], $brandVettingSid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Messaging.V1.BrandVettingList]';
     }

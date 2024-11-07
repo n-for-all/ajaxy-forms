@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Contracts\EventDispatcher;
 
-namespace Symfony\Contracts\EventDispatcher;
-
-use Psr\EventDispatcher\StoppableEventInterface;
-
+use Isolated\Psr\EventDispatcher\StoppableEventInterface;
 /**
  * Event is the base class for classes containing event data.
  *
@@ -30,16 +28,14 @@ use Psr\EventDispatcher\StoppableEventInterface;
  */
 class Event implements StoppableEventInterface
 {
-    private $propagationStopped = false;
-
+    private $propagationStopped = \false;
     /**
      * {@inheritdoc}
      */
-    public function isPropagationStopped(): bool
+    public function isPropagationStopped() : bool
     {
         return $this->propagationStopped;
     }
-
     /**
      * Stops the propagation of the event to further event listeners.
      *
@@ -47,8 +43,8 @@ class Event implements StoppableEventInterface
      * further event listener will be triggered once any trigger calls
      * stopPropagation().
      */
-    public function stopPropagation(): void
+    public function stopPropagation() : void
     {
-        $this->propagationStopped = true;
+        $this->propagationStopped = \true;
     }
 }

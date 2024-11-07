@@ -13,20 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Sync\V1\Service\SyncList;
 
-
-namespace Twilio\Rest\Sync\V1\Service\SyncList;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class SyncListItemContext extends InstanceContext
-    {
+{
     /**
      * Initialize the SyncListItemContext
      *
@@ -35,30 +31,13 @@ class SyncListItemContext extends InstanceContext
      * @param string $listSid The SID of the Sync List to add the new List Item to. Can be the Sync List resource's `sid` or its `unique_name`.
      * @param int $index The index of the Sync List Item resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $listSid,
-        $index
-    ) {
+    public function __construct(Version $version, $serviceSid, $listSid, $index)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'listSid' =>
-            $listSid,
-        'index' =>
-            $index,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Lists/' . \rawurlencode($listSid)
-        .'/Items/' . \rawurlencode($index)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'listSid' => $listSid, 'index' => $index];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Lists/' . \rawurlencode($listSid) . '/Items/' . \rawurlencode($index) . '';
     }
-
     /**
      * Delete the SyncListItemInstance
      *
@@ -66,38 +45,23 @@ class SyncListItemContext extends InstanceContext
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(array $options = []): bool
+    public function delete(array $options = []) : bool
     {
-
         $options = new Values($options);
-
         $headers = Values::of(['If-Match' => $options['ifMatch']]);
-
         return $this->version->delete('DELETE', $this->uri, [], [], $headers);
     }
-
-
     /**
      * Fetch the SyncListItemInstance
      *
      * @return SyncListItemInstance Fetched SyncListItemInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SyncListItemInstance
+    public function fetch() : SyncListItemInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new SyncListItemInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['listSid'],
-            $this->solution['index']
-        );
+        return new SyncListItemInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['listSid'], $this->solution['index']);
     }
-
-
     /**
      * Update the SyncListItemInstance
      *
@@ -105,46 +69,24 @@ class SyncListItemContext extends InstanceContext
      * @return SyncListItemInstance Updated SyncListItemInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): SyncListItemInstance
+    public function update(array $options = []) : SyncListItemInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Data' =>
-                Serialize::jsonObject($options['data']),
-            'Ttl' =>
-                $options['ttl'],
-            'ItemTtl' =>
-                $options['itemTtl'],
-            'CollectionTtl' =>
-                $options['collectionTtl'],
-        ]);
-
+        $data = Values::of(['Data' => Serialize::jsonObject($options['data']), 'Ttl' => $options['ttl'], 'ItemTtl' => $options['itemTtl'], 'CollectionTtl' => $options['collectionTtl']]);
         $headers = Values::of(['If-Match' => $options['ifMatch']]);
-
         $payload = $this->version->update('POST', $this->uri, [], $data, $headers);
-
-        return new SyncListItemInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['listSid'],
-            $this->solution['index']
-        );
+        return new SyncListItemInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['listSid'], $this->solution['index']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Sync.V1.SyncListItemContext ' . \implode(' ', $context) . ']';
     }

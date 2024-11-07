@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form\Util;
+namespace Isolated\Symfony\Component\Form\Util;
 
 /**
  * Iterator for {@link OrderedHashMap} objects.
@@ -29,37 +28,30 @@ class OrderedHashMapIterator implements \Iterator
      * @var array<TKey, TValue>
      */
     private $elements;
-
     /**
      * @var list<TKey>
      */
     private $orderedKeys;
-
     /**
      * @var int
      */
     private $cursor = 0;
-
     /**
      * @var int
      */
     private $cursorId;
-
     /**
      * @var array<int, int>
      */
     private $managedCursors;
-
     /**
      * @var TKey|null
      */
     private $key;
-
     /**
      * @var TValue|null
      */
     private $current;
-
     /**
      * @param array<TKey, TValue> $elements       The elements of the map, indexed by their
      *                                            keys
@@ -73,24 +65,20 @@ class OrderedHashMapIterator implements \Iterator
      */
     public function __construct(array &$elements, array &$orderedKeys, array &$managedCursors)
     {
-        $this->elements = &$elements;
-        $this->orderedKeys = &$orderedKeys;
-        $this->managedCursors = &$managedCursors;
+        $this->elements =& $elements;
+        $this->orderedKeys =& $orderedKeys;
+        $this->managedCursors =& $managedCursors;
         $this->cursorId = \count($managedCursors);
-
-        $this->managedCursors[$this->cursorId] = &$this->cursor;
+        $this->managedCursors[$this->cursorId] =& $this->cursor;
     }
-
-    public function __sleep(): array
+    public function __sleep() : array
     {
-        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
+        throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);
     }
-
     public function __wakeup()
     {
-        throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
+        throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
     }
-
     /**
      * Removes the iterator's cursors from the managed cursors of the
      * corresponding {@link OrderedHashMap} instance.
@@ -99,9 +87,8 @@ class OrderedHashMapIterator implements \Iterator
     {
         // Use array_splice() instead of unset() to prevent holes in the
         // array indices, which would break the initialization of $cursorId
-        array_splice($this->managedCursors, $this->cursorId, 1);
+        \array_splice($this->managedCursors, $this->cursorId, 1);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -112,14 +99,12 @@ class OrderedHashMapIterator implements \Iterator
     {
         return $this->current;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function next(): void
+    public function next() : void
     {
         ++$this->cursor;
-
         if (isset($this->orderedKeys[$this->cursor])) {
             $this->key = $this->orderedKeys[$this->cursor];
             $this->current = $this->elements[$this->key];
@@ -128,7 +113,6 @@ class OrderedHashMapIterator implements \Iterator
             $this->current = null;
         }
     }
-
     /**
      * {@inheritdoc}
      *
@@ -140,27 +124,22 @@ class OrderedHashMapIterator implements \Iterator
         if (null === $this->key) {
             return null;
         }
-
         $array = [$this->key => null];
-
-        return key($array);
+        return \key($array);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function valid(): bool
+    public function valid() : bool
     {
         return null !== $this->key;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function rewind(): void
+    public function rewind() : void
     {
         $this->cursor = 0;
-
         if (isset($this->orderedKeys[0])) {
             $this->key = $this->orderedKeys[0];
             $this->current = $this->elements[$this->key];

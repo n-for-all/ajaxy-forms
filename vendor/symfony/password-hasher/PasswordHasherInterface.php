@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\PasswordHasher;
 
-namespace Symfony\Component\PasswordHasher;
-
-use Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
-
+use Isolated\Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
 /**
  * Provides password hashing capabilities.
  *
@@ -23,21 +21,18 @@ use Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
 interface PasswordHasherInterface
 {
     public const MAX_PASSWORD_LENGTH = 4096;
-
     /**
      * Hashes a plain password.
      *
      * @throws InvalidPasswordException When the plain password is invalid, e.g. excessively long
      */
-    public function hash(string $plainPassword): string;
-
+    public function hash(string $plainPassword) : string;
     /**
      * Verifies a plain password against a hash.
      */
-    public function verify(string $hashedPassword, string $plainPassword): bool;
-
+    public function verify(string $hashedPassword, string $plainPassword) : bool;
     /**
      * Checks if a password hash would benefit from rehashing.
      */
-    public function needsRehash(string $hashedPassword): bool;
+    public function needsRehash(string $hashedPassword) : bool;
 }

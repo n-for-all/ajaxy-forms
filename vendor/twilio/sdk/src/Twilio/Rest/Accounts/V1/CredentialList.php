@@ -13,17 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Accounts\V1;
 
-namespace Twilio\Rest\Accounts\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Accounts\V1\Credential\AwsList;
-use Twilio\Rest\Accounts\V1\Credential\PublicKeyList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Accounts\V1\Credential\AwsList;
+use Isolated\Twilio\Rest\Accounts\V1\Credential\PublicKeyList;
 /**
  * @property AwsList $aws
  * @property PublicKeyList $publicKey
@@ -31,51 +28,40 @@ use Twilio\Rest\Accounts\V1\Credential\PublicKeyList;
  * @method \Twilio\Rest\Accounts\V1\Credential\AwsContext aws(string $sid)
  */
 class CredentialList extends ListResource
-    {
+{
     protected $_aws = null;
     protected $_publicKey = null;
-
     /**
      * Construct the CredentialList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Access the aws
      */
-    protected function getAws(): AwsList
+    protected function getAws() : AwsList
     {
         if (!$this->_aws) {
-            $this->_aws = new AwsList(
-                $this->version
-            );
+            $this->_aws = new AwsList($this->version);
         }
         return $this->_aws;
     }
-
     /**
      * Access the publicKey
      */
-    protected function getPublicKey(): PublicKeyList
+    protected function getPublicKey() : PublicKeyList
     {
         if (!$this->_publicKey) {
-            $this->_publicKey = new PublicKeyList(
-                $this->version
-            );
+            $this->_publicKey = new PublicKeyList($this->version);
         }
         return $this->_publicKey;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -87,12 +73,10 @@ class CredentialList extends ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -101,22 +85,20 @@ class CredentialList extends ListResource
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Accounts.V1.CredentialList]';
     }

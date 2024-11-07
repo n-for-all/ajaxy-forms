@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle;
 
-
-namespace Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $bundleSid
@@ -45,63 +41,43 @@ class ItemAssignmentInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $bundleSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'bundleSid' => Values::array_get($payload, 'bundle_sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'objectSid' => Values::array_get($payload, 'object_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['bundleSid' => $bundleSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'bundleSid' => Values::array_get($payload, 'bundle_sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'objectSid' => Values::array_get($payload, 'object_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['bundleSid' => $bundleSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ItemAssignmentContext Context for this ItemAssignmentInstance
      */
-    protected function proxy(): ItemAssignmentContext
+    protected function proxy() : ItemAssignmentContext
     {
         if (!$this->context) {
-            $this->context = new ItemAssignmentContext(
-                $this->version,
-                $this->solution['bundleSid'],
-                $this->solution['sid']
-            );
+            $this->context = new ItemAssignmentContext($this->version, $this->solution['bundleSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the ItemAssignmentInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the ItemAssignmentInstance
      *
      * @return ItemAssignmentInstance Fetched ItemAssignmentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ItemAssignmentInstance
+    public function fetch() : ItemAssignmentInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -114,27 +90,23 @@ class ItemAssignmentInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Numbers.V2.ItemAssignmentInstance ' . \implode(' ', $context) . ']';
     }
 }
-

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form;
+namespace Isolated\Symfony\Component\Form;
 
 /**
  * Renders a form into HTML.
@@ -24,7 +23,6 @@ interface FormRendererInterface
      * @return FormRendererEngineInterface
      */
     public function getEngine();
-
     /**
      * Sets the theme(s) to be used for rendering a view and its children.
      *
@@ -34,8 +32,7 @@ interface FormRendererInterface
      * @param bool     $useDefaultThemes If true, will use default themes specified
      *                                   in the renderer
      */
-    public function setTheme(FormView $view, $themes, bool $useDefaultThemes = true);
-
+    public function setTheme(FormView $view, $themes, bool $useDefaultThemes = \true);
     /**
      * Renders a named block of the form theme.
      *
@@ -45,7 +42,6 @@ interface FormRendererInterface
      * @return string
      */
     public function renderBlock(FormView $view, string $blockName, array $variables = []);
-
     /**
      * Searches and renders a block for a given name suffix.
      *
@@ -62,7 +58,6 @@ interface FormRendererInterface
      * @return string
      */
     public function searchAndRenderBlock(FormView $view, string $blockNameSuffix, array $variables = []);
-
     /**
      * Renders a CSRF token.
      *
@@ -81,7 +76,6 @@ interface FormRendererInterface
      * @return string
      */
     public function renderCsrfToken(string $tokenId);
-
     /**
      * Makes a technical name human readable.
      *

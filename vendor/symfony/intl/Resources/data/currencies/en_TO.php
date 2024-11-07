@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'TOP' => [
-            'T$',
-            'Tongan Paʻanga',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['TOP' => ['T$', 'Tongan Paʻanga']]];

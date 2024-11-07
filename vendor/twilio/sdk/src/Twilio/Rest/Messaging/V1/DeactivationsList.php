@@ -13,48 +13,36 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class DeactivationsList extends ListResource
-    {
+{
     /**
      * Construct the DeactivationsList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a DeactivationsContext
      */
-    public function getContext(
-        
-    ): DeactivationsContext
+    public function getContext() : DeactivationsContext
     {
-        return new DeactivationsContext(
-            $this->version
-        );
+        return new DeactivationsContext($this->version);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Messaging.V1.DeactivationsList]';
     }

@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V1;
 
-
-namespace Twilio\Rest\Numbers\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class PortingPortabilityContext extends InstanceContext
-    {
+{
     /**
      * Initialize the PortingPortabilityContext
      *
      * @param Version $version Version that contains the resource
      * @param string $phoneNumber The phone number which portability is to be checked. Phone numbers are in E.164 format (e.g. +16175551212).
      */
-    public function __construct(
-        Version $version,
-        $phoneNumber
-    ) {
+    public function __construct(Version $version, $phoneNumber)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'phoneNumber' =>
-            $phoneNumber,
-        ];
-
-        $this->uri = '/Porting/Portability/PhoneNumber/' . \rawurlencode($phoneNumber)
-        .'';
+        $this->solution = ['phoneNumber' => $phoneNumber];
+        $this->uri = '/Porting/Portability/PhoneNumber/' . \rawurlencode($phoneNumber) . '';
     }
-
     /**
      * Fetch the PortingPortabilityInstance
      *
@@ -55,36 +42,23 @@ class PortingPortabilityContext extends InstanceContext
      * @return PortingPortabilityInstance Fetched PortingPortabilityInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): PortingPortabilityInstance
+    public function fetch(array $options = []) : PortingPortabilityInstance
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'TargetAccountSid' =>
-                $options['targetAccountSid'],
-        ]);
-
+        $params = Values::of(['TargetAccountSid' => $options['targetAccountSid']]);
         $payload = $this->version->fetch('GET', $this->uri, $params, []);
-
-        return new PortingPortabilityInstance(
-            $this->version,
-            $payload,
-            $this->solution['phoneNumber']
-        );
+        return new PortingPortabilityInstance($this->version, $payload, $this->solution['phoneNumber']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Numbers.V1.PortingPortabilityContext ' . \implode(' ', $context) . ']';
     }

@@ -1,7 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'GL' => 'Kalaallit Nunaat',
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['GL' => 'Kalaallit Nunaat']];

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Csrf\TokenStorage;
+namespace Isolated\Symfony\Component\Security\Csrf\TokenStorage;
 
 /**
  * Stores CSRF tokens.
@@ -26,12 +25,10 @@ interface TokenStorageInterface
      * @throws \Symfony\Component\Security\Csrf\Exception\TokenNotFoundException If the token ID does not exist
      */
     public function getToken(string $tokenId);
-
     /**
      * Stores a CSRF token.
      */
     public function setToken(string $tokenId, string $token);
-
     /**
      * Removes a CSRF token.
      *
@@ -39,7 +36,6 @@ interface TokenStorageInterface
      *                     otherwise
      */
     public function removeToken(string $tokenId);
-
     /**
      * Checks whether a token with the given token ID exists.
      *

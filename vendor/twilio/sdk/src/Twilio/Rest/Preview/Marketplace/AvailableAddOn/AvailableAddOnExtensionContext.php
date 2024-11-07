@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Marketplace\AvailableAddOn;
 
-
-namespace Twilio\Rest\Preview\Marketplace\AvailableAddOn;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class AvailableAddOnExtensionContext extends InstanceContext
-    {
+{
     /**
      * Initialize the AvailableAddOnExtensionContext
      *
@@ -31,56 +27,34 @@ class AvailableAddOnExtensionContext extends InstanceContext
      * @param string $availableAddOnSid The SID of the AvailableAddOn resource with the extension to fetch.
      * @param string $sid The SID of the AvailableAddOn Extension resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $availableAddOnSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $availableAddOnSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'availableAddOnSid' =>
-            $availableAddOnSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/AvailableAddOns/' . \rawurlencode($availableAddOnSid)
-        .'/Extensions/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['availableAddOnSid' => $availableAddOnSid, 'sid' => $sid];
+        $this->uri = '/AvailableAddOns/' . \rawurlencode($availableAddOnSid) . '/Extensions/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the AvailableAddOnExtensionInstance
      *
      * @return AvailableAddOnExtensionInstance Fetched AvailableAddOnExtensionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): AvailableAddOnExtensionInstance
+    public function fetch() : AvailableAddOnExtensionInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new AvailableAddOnExtensionInstance(
-            $this->version,
-            $payload,
-            $this->solution['availableAddOnSid'],
-            $this->solution['sid']
-        );
+        return new AvailableAddOnExtensionInstance($this->version, $payload, $this->solution['availableAddOnSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.Marketplace.AvailableAddOnExtensionContext ' . \implode(' ', $context) . ']';
     }

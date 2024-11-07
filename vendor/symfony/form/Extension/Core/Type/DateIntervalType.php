@@ -8,41 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\Type;
 
-namespace Symfony\Component\Form\Extension\Core\Type;
-
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Exception\InvalidConfigurationException;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateIntervalToArrayTransformer;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateIntervalToStringTransformer;
-use Symfony\Component\Form\Extension\Core\DataTransformer\IntegerToLocalizedStringTransformer;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\ReversedTransformer;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\Form\AbstractType;
+use Isolated\Symfony\Component\Form\Exception\InvalidConfigurationException;
+use Isolated\Symfony\Component\Form\Extension\Core\DataTransformer\DateIntervalToArrayTransformer;
+use Isolated\Symfony\Component\Form\Extension\Core\DataTransformer\DateIntervalToStringTransformer;
+use Isolated\Symfony\Component\Form\Extension\Core\DataTransformer\IntegerToLocalizedStringTransformer;
+use Isolated\Symfony\Component\Form\FormBuilderInterface;
+use Isolated\Symfony\Component\Form\FormInterface;
+use Isolated\Symfony\Component\Form\FormView;
+use Isolated\Symfony\Component\Form\ReversedTransformer;
+use Isolated\Symfony\Component\OptionsResolver\Options;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @author Steffen Roßkamp <steffen.rosskamp@gimmickmedia.de>
  */
 class DateIntervalType extends AbstractType
 {
-    private const TIME_PARTS = [
-        'years',
-        'months',
-        'weeks',
-        'days',
-        'hours',
-        'minutes',
-        'seconds',
-    ];
-    private const WIDGETS = [
-        'text' => TextType::class,
-        'integer' => IntegerType::class,
-        'choice' => ChoiceType::class,
-    ];
-
+    private const TIME_PARTS = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'];
+    private const WIDGETS = ['text' => TextType::class, 'integer' => IntegerType::class, 'choice' => ChoiceType::class];
     /**
      * {@inheritdoc}
      */
@@ -97,9 +82,9 @@ class DateIntervalType extends AbstractType
             $builder->addViewTransformer(new DateIntervalToStringTransformer($format));
         } else {
             foreach (self::TIME_PARTS as $part) {
-                if ($options['with_'.$part]) {
+                if ($options['with_' . $part]) {
                     $childOptions = [
-                        'error_bubbling' => true,
+                        'error_bubbling' => \true,
                         'label' => $options['labels'][$part],
                         // Append generic carry-along options
                         'required' => $options['required'],
@@ -108,61 +93,39 @@ class DateIntervalType extends AbstractType
                         'empty_data' => $options['empty_data'][$part] ?? null,
                     ];
                     if ('choice' === $options['widget']) {
-                        $childOptions['choice_translation_domain'] = false;
+                        $childOptions['choice_translation_domain'] = \false;
                         $childOptions['choices'] = $options[$part];
                         $childOptions['placeholder'] = $options['placeholder'][$part];
                     }
                     $childForm = $builder->create($part, self::WIDGETS[$options['widget']], $childOptions);
                     if ('integer' === $options['widget']) {
-                        $childForm->addModelTransformer(
-                            new ReversedTransformer(
-                                new IntegerToLocalizedStringTransformer()
-                            )
-                        );
+                        $childForm->addModelTransformer(new ReversedTransformer(new IntegerToLocalizedStringTransformer()));
                     }
                     $builder->add($childForm);
                 }
             }
             if ($options['with_invert']) {
-                $builder->add('invert', CheckboxType::class, [
-                    'label' => $options['labels']['invert'],
-                    'error_bubbling' => true,
-                    'required' => false,
-                    'translation_domain' => $options['translation_domain'],
-                ]);
+                $builder->add('invert', CheckboxType::class, ['label' => $options['labels']['invert'], 'error_bubbling' => \true, 'required' => \false, 'translation_domain' => $options['translation_domain']]);
             }
             $builder->addViewTransformer(new DateIntervalToArrayTransformer($parts, 'text' === $options['widget']));
         }
         if ('string' === $options['input']) {
-            $builder->addModelTransformer(
-                new ReversedTransformer(
-                    new DateIntervalToStringTransformer($format)
-                )
-            );
+            $builder->addModelTransformer(new ReversedTransformer(new DateIntervalToStringTransformer($format)));
         } elseif ('array' === $options['input']) {
-            $builder->addModelTransformer(
-                new ReversedTransformer(
-                    new DateIntervalToArrayTransformer($parts)
-                )
-            );
+            $builder->addModelTransformer(new ReversedTransformer(new DateIntervalToArrayTransformer($parts)));
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $vars = [
-            'widget' => $options['widget'],
-            'with_invert' => $options['with_invert'],
-        ];
+        $vars = ['widget' => $options['widget'], 'with_invert' => $options['with_invert']];
         foreach (self::TIME_PARTS as $part) {
-            $vars['with_'.$part] = $options['with_'.$part];
+            $vars['with_' . $part] = $options['with_' . $part];
         }
-        $view->vars = array_replace($view->vars, $vars);
+        $view->vars = \array_replace($view->vars, $vars);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -174,57 +137,42 @@ class DateIntervalType extends AbstractType
         $emptyData = function (Options $options) {
             return 'single_text' === $options['widget'] ? '' : [];
         };
-
         $placeholderDefault = function (Options $options) {
             return $options['required'] ? null : '';
         };
-
-        $placeholderNormalizer = function (Options $options, $placeholder) use ($placeholderDefault) {
+        $placeholderNormalizer = function (Options $options, $placeholder) use($placeholderDefault) {
             if (\is_array($placeholder)) {
                 $default = $placeholderDefault($options);
-
-                return array_merge(array_fill_keys(self::TIME_PARTS, $default), $placeholder);
+                return \array_merge(\array_fill_keys(self::TIME_PARTS, $default), $placeholder);
             }
-
-            return array_fill_keys(self::TIME_PARTS, $placeholder);
+            return \array_fill_keys(self::TIME_PARTS, $placeholder);
         };
-
         $labelsNormalizer = function (Options $options, array $labels) {
-            return array_replace([
-                'years' => null,
-                'months' => null,
-                'days' => null,
-                'weeks' => null,
-                'hours' => null,
-                'minutes' => null,
-                'seconds' => null,
-                'invert' => 'Negative interval',
-            ], array_filter($labels, function ($label) {
+            return \array_replace(['years' => null, 'months' => null, 'days' => null, 'weeks' => null, 'hours' => null, 'minutes' => null, 'seconds' => null, 'invert' => 'Negative interval'], \array_filter($labels, function ($label) {
                 return null !== $label;
             }));
         };
-
         $resolver->setDefaults([
-            'with_years' => true,
-            'with_months' => true,
-            'with_days' => true,
-            'with_weeks' => false,
-            'with_hours' => false,
-            'with_minutes' => false,
-            'with_seconds' => false,
-            'with_invert' => false,
-            'years' => range(0, 100),
-            'months' => range(0, 12),
-            'weeks' => range(0, 52),
-            'days' => range(0, 31),
-            'hours' => range(0, 24),
-            'minutes' => range(0, 60),
-            'seconds' => range(0, 60),
+            'with_years' => \true,
+            'with_months' => \true,
+            'with_days' => \true,
+            'with_weeks' => \false,
+            'with_hours' => \false,
+            'with_minutes' => \false,
+            'with_seconds' => \false,
+            'with_invert' => \false,
+            'years' => \range(0, 100),
+            'months' => \range(0, 12),
+            'weeks' => \range(0, 52),
+            'days' => \range(0, 31),
+            'hours' => \range(0, 24),
+            'minutes' => \range(0, 60),
+            'seconds' => \range(0, 60),
             'widget' => 'choice',
             'input' => 'dateinterval',
             'placeholder' => $placeholderDefault,
-            'by_reference' => true,
-            'error_bubbling' => false,
+            'by_reference' => \true,
+            'error_bubbling' => \false,
             // If initialized with a \DateInterval object, FormType initializes
             // this option to "\DateInterval". Since the internal, normalized
             // representation is not \DateInterval, but an array, we need to unset
@@ -234,35 +182,16 @@ class DateIntervalType extends AbstractType
             'empty_data' => $emptyData,
             'labels' => [],
             'invalid_message' => function (Options $options, $previousValue) {
-                return ($options['legacy_error_messages'] ?? true)
-                    ? $previousValue
-                    : 'Please choose a valid date interval.';
+                return $options['legacy_error_messages'] ?? \true ? $previousValue : 'Please choose a valid date interval.';
             },
         ]);
         $resolver->setNormalizer('placeholder', $placeholderNormalizer);
         $resolver->setNormalizer('labels', $labelsNormalizer);
-
-        $resolver->setAllowedValues(
-            'input',
-            [
-                'dateinterval',
-                'string',
-                'array',
-            ]
-        );
-        $resolver->setAllowedValues(
-            'widget',
-            [
-                'single_text',
-                'text',
-                'integer',
-                'choice',
-            ]
-        );
+        $resolver->setAllowedValues('input', ['dateinterval', 'string', 'array']);
+        $resolver->setAllowedValues('widget', ['single_text', 'text', 'integer', 'choice']);
         // Don't clone \DateInterval classes, as i.e. format()
         // does not work after that
-        $resolver->setAllowedValues('by_reference', true);
-
+        $resolver->setAllowedValues('by_reference', \true);
         $resolver->setAllowedTypes('years', 'array');
         $resolver->setAllowedTypes('months', 'array');
         $resolver->setAllowedTypes('weeks', 'array');
@@ -280,7 +209,6 @@ class DateIntervalType extends AbstractType
         $resolver->setAllowedTypes('with_invert', 'bool');
         $resolver->setAllowedTypes('labels', 'array');
     }
-
     /**
      * {@inheritdoc}
      */

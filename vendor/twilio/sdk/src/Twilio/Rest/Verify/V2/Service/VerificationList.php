@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service;
 
-namespace Twilio\Rest\Verify\V2\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class VerificationList extends ListResource
-    {
+{
     /**
      * Construct the VerificationList
      *
      * @param Version $version Version that contains the resource
      * @param string $serviceSid The SID of the verification [Service](https://www.twilio.com/docs/verify/api/service) to create the resource under.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid
-    ) {
+    public function __construct(Version $version, string $serviceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Verifications';
+        $this->solution = ['serviceSid' => $serviceSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Verifications';
     }
-
     /**
      * Create the VerificationInstance
      *
@@ -58,81 +45,28 @@ class VerificationList extends ListResource
      * @return VerificationInstance Created VerificationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $to, string $channel, array $options = []): VerificationInstance
+    public function create(string $to, string $channel, array $options = []) : VerificationInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'To' =>
-                $to,
-            'Channel' =>
-                $channel,
-            'CustomFriendlyName' =>
-                $options['customFriendlyName'],
-            'CustomMessage' =>
-                $options['customMessage'],
-            'SendDigits' =>
-                $options['sendDigits'],
-            'Locale' =>
-                $options['locale'],
-            'CustomCode' =>
-                $options['customCode'],
-            'Amount' =>
-                $options['amount'],
-            'Payee' =>
-                $options['payee'],
-            'RateLimits' =>
-                Serialize::jsonObject($options['rateLimits']),
-            'ChannelConfiguration' =>
-                Serialize::jsonObject($options['channelConfiguration']),
-            'AppHash' =>
-                $options['appHash'],
-            'TemplateSid' =>
-                $options['templateSid'],
-            'TemplateCustomSubstitutions' =>
-                $options['templateCustomSubstitutions'],
-            'DeviceIp' =>
-                $options['deviceIp'],
-            'RiskCheck' =>
-                $options['riskCheck'],
-            'Tags' =>
-                $options['tags'],
-        ]);
-
+        $data = Values::of(['To' => $to, 'Channel' => $channel, 'CustomFriendlyName' => $options['customFriendlyName'], 'CustomMessage' => $options['customMessage'], 'SendDigits' => $options['sendDigits'], 'Locale' => $options['locale'], 'CustomCode' => $options['customCode'], 'Amount' => $options['amount'], 'Payee' => $options['payee'], 'RateLimits' => Serialize::jsonObject($options['rateLimits']), 'ChannelConfiguration' => Serialize::jsonObject($options['channelConfiguration']), 'AppHash' => $options['appHash'], 'TemplateSid' => $options['templateSid'], 'TemplateCustomSubstitutions' => $options['templateCustomSubstitutions'], 'DeviceIp' => $options['deviceIp'], 'RiskCheck' => $options['riskCheck'], 'Tags' => $options['tags']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new VerificationInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid']
-        );
+        return new VerificationInstance($this->version, $payload, $this->solution['serviceSid']);
     }
-
-
     /**
      * Constructs a VerificationContext
      *
      * @param string $sid The Twilio-provided string that uniquely identifies the Verification resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): VerificationContext
+    public function getContext(string $sid) : VerificationContext
     {
-        return new VerificationContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $sid
-        );
+        return new VerificationContext($this->version, $this->solution['serviceSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Verify.V2.VerificationList]';
     }

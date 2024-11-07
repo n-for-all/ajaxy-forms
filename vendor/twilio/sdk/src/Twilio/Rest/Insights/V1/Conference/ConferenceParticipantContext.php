@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Insights\V1\Conference;
 
-
-namespace Twilio\Rest\Insights\V1\Conference;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ConferenceParticipantContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ConferenceParticipantContext
      *
@@ -33,26 +29,13 @@ class ConferenceParticipantContext extends InstanceContext
      * @param string $conferenceSid The unique SID identifier of the Conference.
      * @param string $participantSid The unique SID identifier of the Participant.
      */
-    public function __construct(
-        Version $version,
-        $conferenceSid,
-        $participantSid
-    ) {
+    public function __construct(Version $version, $conferenceSid, $participantSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'conferenceSid' =>
-            $conferenceSid,
-        'participantSid' =>
-            $participantSid,
-        ];
-
-        $this->uri = '/Conferences/' . \rawurlencode($conferenceSid)
-        .'/Participants/' . \rawurlencode($participantSid)
-        .'';
+        $this->solution = ['conferenceSid' => $conferenceSid, 'participantSid' => $participantSid];
+        $this->uri = '/Conferences/' . \rawurlencode($conferenceSid) . '/Participants/' . \rawurlencode($participantSid) . '';
     }
-
     /**
      * Fetch the ConferenceParticipantInstance
      *
@@ -60,39 +43,23 @@ class ConferenceParticipantContext extends InstanceContext
      * @return ConferenceParticipantInstance Fetched ConferenceParticipantInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): ConferenceParticipantInstance
+    public function fetch(array $options = []) : ConferenceParticipantInstance
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'Events' =>
-                $options['events'],
-            'Metrics' =>
-                $options['metrics'],
-        ]);
-
+        $params = Values::of(['Events' => $options['events'], 'Metrics' => $options['metrics']]);
         $payload = $this->version->fetch('GET', $this->uri, $params, []);
-
-        return new ConferenceParticipantInstance(
-            $this->version,
-            $payload,
-            $this->solution['conferenceSid'],
-            $this->solution['participantSid']
-        );
+        return new ConferenceParticipantInstance($this->version, $payload, $this->solution['conferenceSid'], $this->solution['participantSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Insights.V1.ConferenceParticipantContext ' . \implode(' ', $context) . ']';
     }

@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node\Expression;
 
-namespace Twig\Node\Expression;
-
-use Twig\Compiler;
-use Twig\Node\Node;
-
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Node;
 /**
  * Represents an arrow function.
  *
@@ -25,40 +23,19 @@ class ArrowFunctionExpression extends AbstractExpression
     {
         parent::__construct(['expr' => $expr, 'names' => $names], [], $lineno, $tag);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
-        $compiler
-            ->addDebugInfo($this)
-            ->raw('function (')
-        ;
+        $compiler->addDebugInfo($this)->raw('function (');
         foreach ($this->getNode('names') as $i => $name) {
             if ($i) {
                 $compiler->raw(', ');
             }
-
-            $compiler
-                ->raw('$__')
-                ->raw($name->getAttribute('name'))
-                ->raw('__')
-            ;
+            $compiler->raw('$__')->raw($name->getAttribute('name'))->raw('__');
         }
-        $compiler
-            ->raw(') use ($context, $macros) { ')
-        ;
+        $compiler->raw(') use ($context, $macros) { ');
         foreach ($this->getNode('names') as $name) {
-            $compiler
-                ->raw('$context["')
-                ->raw($name->getAttribute('name'))
-                ->raw('"] = $__')
-                ->raw($name->getAttribute('name'))
-                ->raw('__; ')
-            ;
+            $compiler->raw('$context["')->raw($name->getAttribute('name'))->raw('"] = $__')->raw($name->getAttribute('name'))->raw('__; ');
         }
-        $compiler
-            ->raw('return ')
-            ->subcompile($this->getNode('expr'))
-            ->raw('; }')
-        ;
+        $compiler->raw('return ')->subcompile($this->getNode('expr'))->raw('; }');
     }
 }

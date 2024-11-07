@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V1;
 
-
-namespace Twilio\Rest\Numbers\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $url
  * @property string|null $portInTargetUrl
@@ -43,20 +39,10 @@ class PortingWebhookConfigurationFetchInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'url' => Values::array_get($payload, 'url'),
-            'portInTargetUrl' => Values::array_get($payload, 'port_in_target_url'),
-            'portOutTargetUrl' => Values::array_get($payload, 'port_out_target_url'),
-            'notificationsOf' => Values::array_get($payload, 'notifications_of'),
-            'portInTargetDateCreated' => Deserialize::dateTime(Values::array_get($payload, 'port_in_target_date_created')),
-            'portOutTargetDateCreated' => Deserialize::dateTime(Values::array_get($payload, 'port_out_target_date_created')),
-        ];
-
+        $this->properties = ['url' => Values::array_get($payload, 'url'), 'portInTargetUrl' => Values::array_get($payload, 'port_in_target_url'), 'portOutTargetUrl' => Values::array_get($payload, 'port_out_target_url'), 'notificationsOf' => Values::array_get($payload, 'notifications_of'), 'portInTargetDateCreated' => Deserialize::dateTime(Values::array_get($payload, 'port_in_target_date_created')), 'portOutTargetDateCreated' => Deserialize::dateTime(Values::array_get($payload, 'port_out_target_date_created'))];
         $this->solution = [];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -69,23 +55,19 @@ class PortingWebhookConfigurationFetchInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V1.PortingWebhookConfigurationFetchInstance]';
     }
 }
-

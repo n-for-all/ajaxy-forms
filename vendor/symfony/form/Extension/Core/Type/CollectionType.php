@@ -8,17 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\Type;
 
-namespace Symfony\Component\Form\Extension\Core\Type;
-
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\Form\AbstractType;
+use Isolated\Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
+use Isolated\Symfony\Component\Form\FormBuilderInterface;
+use Isolated\Symfony\Component\Form\FormInterface;
+use Isolated\Symfony\Component\Form\FormView;
+use Isolated\Symfony\Component\OptionsResolver\Options;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 class CollectionType extends AbstractType
 {
     /**
@@ -27,46 +25,27 @@ class CollectionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if ($options['allow_add'] && $options['prototype']) {
-            $prototypeOptions = array_replace([
-                'required' => $options['required'],
-                'label' => $options['prototype_name'].'label__',
-            ], $options['entry_options']);
-
+            $prototypeOptions = \array_replace(['required' => $options['required'], 'label' => $options['prototype_name'] . 'label__'], $options['entry_options']);
             if (null !== $options['prototype_data']) {
                 $prototypeOptions['data'] = $options['prototype_data'];
             }
-
             $prototype = $builder->create($options['prototype_name'], $options['entry_type'], $prototypeOptions);
             $builder->setAttribute('prototype', $prototype->getForm());
         }
-
-        $resizeListener = new ResizeFormListener(
-            $options['entry_type'],
-            $options['entry_options'],
-            $options['allow_add'],
-            $options['allow_delete'],
-            $options['delete_empty']
-        );
-
+        $resizeListener = new ResizeFormListener($options['entry_type'], $options['entry_options'], $options['allow_add'], $options['allow_delete'], $options['delete_empty']);
         $builder->addEventSubscriber($resizeListener);
     }
-
     /**
      * {@inheritdoc}
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars = array_replace($view->vars, [
-            'allow_add' => $options['allow_add'],
-            'allow_delete' => $options['allow_delete'],
-        ]);
-
+        $view->vars = \array_replace($view->vars, ['allow_add' => $options['allow_add'], 'allow_delete' => $options['allow_delete']]);
         if ($form->getConfig()->hasAttribute('prototype')) {
             $prototype = $form->getConfig()->getAttribute('prototype');
             $view->vars['prototype'] = $prototype->setParent($form)->createView($view);
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -79,28 +58,22 @@ class CollectionType extends AbstractType
             if ($entry->getConfig()->getOption('block_prefix')) {
                 --$prefixOffset;
             }
-
             break;
         }
-
         foreach ($view as $entryView) {
-            array_splice($entryView->vars['block_prefixes'], $prefixOffset, 0, 'collection_entry');
+            \array_splice($entryView->vars['block_prefixes'], $prefixOffset, 0, 'collection_entry');
         }
-
         /** @var FormInterface $prototype */
         if ($prototype = $form->getConfig()->getAttribute('prototype')) {
             if ($view->vars['prototype']->vars['multipart']) {
-                $view->vars['multipart'] = true;
+                $view->vars['multipart'] = \true;
             }
-
             if ($prefixOffset > -3 && $prototype->getConfig()->getOption('block_prefix')) {
                 --$prefixOffset;
             }
-
-            array_splice($view->vars['prototype']->vars['block_prefixes'], $prefixOffset, 0, 'collection_entry');
+            \array_splice($view->vars['prototype']->vars['block_prefixes'], $prefixOffset, 0, 'collection_entry');
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -108,30 +81,14 @@ class CollectionType extends AbstractType
     {
         $entryOptionsNormalizer = function (Options $options, $value) {
             $value['block_name'] = 'entry';
-
             return $value;
         };
-
-        $resolver->setDefaults([
-            'allow_add' => false,
-            'allow_delete' => false,
-            'prototype' => true,
-            'prototype_data' => null,
-            'prototype_name' => '__name__',
-            'entry_type' => TextType::class,
-            'entry_options' => [],
-            'delete_empty' => false,
-            'invalid_message' => function (Options $options, $previousValue) {
-                return ($options['legacy_error_messages'] ?? true)
-                    ? $previousValue
-                    : 'The collection is invalid.';
-            },
-        ]);
-
+        $resolver->setDefaults(['allow_add' => \false, 'allow_delete' => \false, 'prototype' => \true, 'prototype_data' => null, 'prototype_name' => '__name__', 'entry_type' => TextType::class, 'entry_options' => [], 'delete_empty' => \false, 'invalid_message' => function (Options $options, $previousValue) {
+            return $options['legacy_error_messages'] ?? \true ? $previousValue : 'The collection is invalid.';
+        }]);
         $resolver->setNormalizer('entry_options', $entryOptionsNormalizer);
         $resolver->setAllowedTypes('delete_empty', ['bool', 'callable']);
     }
-
     /**
      * {@inheritdoc}
      */

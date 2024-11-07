@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Mime\Encoder;
 
-namespace Symfony\Component\Mime\Encoder;
-
-use Symfony\Component\Mime\Exception\AddressEncoderException;
-
+use Isolated\Symfony\Component\Mime\Exception\AddressEncoderException;
 /**
  * @author Christian Schmidt
  */
@@ -24,5 +22,5 @@ interface AddressEncoderInterface
      * @throws AddressEncoderException if the email cannot be represented in
      *                                 the encoding implemented by this class
      */
-    public function encodeString(string $address): string;
+    public function encodeString(string $address) : string;
 }

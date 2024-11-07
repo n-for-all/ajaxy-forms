@@ -1,9 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'Arab' => 'عربی',
-        'Aran' => 'نستعلیق',
-        'Guru' => 'گُرمُکھی',
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['Arab' => 'عربی', 'Aran' => 'نستعلیق', 'Guru' => 'گُرمُکھی']];

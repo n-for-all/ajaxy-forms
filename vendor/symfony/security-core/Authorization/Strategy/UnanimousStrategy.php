@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Authorization\Strategy;
 
-namespace Symfony\Component\Security\Core\Authorization\Strategy;
-
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
-
+use Isolated\Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 /**
  * Grants access if only grant (or abstain) votes were received.
  *
@@ -25,37 +23,31 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 final class UnanimousStrategy implements AccessDecisionStrategyInterface, \Stringable
 {
     private $allowIfAllAbstainDecisions;
-
-    public function __construct(bool $allowIfAllAbstainDecisions = false)
+    public function __construct(bool $allowIfAllAbstainDecisions = \false)
     {
         $this->allowIfAllAbstainDecisions = $allowIfAllAbstainDecisions;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function decide(\Traversable $results): bool
+    public function decide(\Traversable $results) : bool
     {
         $grant = 0;
         foreach ($results as $result) {
             if (VoterInterface::ACCESS_DENIED === $result) {
-                return false;
+                return \false;
             }
-
             if (VoterInterface::ACCESS_GRANTED === $result) {
                 ++$grant;
             }
         }
-
         // no deny votes
         if ($grant > 0) {
-            return true;
+            return \true;
         }
-
         return $this->allowIfAllAbstainDecisions;
     }
-
-    public function __toString(): string
+    public function __toString() : string
     {
         return 'unanimous';
     }

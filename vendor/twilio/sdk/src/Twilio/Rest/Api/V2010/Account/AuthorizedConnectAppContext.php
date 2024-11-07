@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account;
 
-
-namespace Twilio\Rest\Api\V2010\Account;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class AuthorizedConnectAppContext extends InstanceContext
-    {
+{
     /**
      * Initialize the AuthorizedConnectAppContext
      *
@@ -31,56 +27,34 @@ class AuthorizedConnectAppContext extends InstanceContext
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) that created the AuthorizedConnectApp resource to fetch.
      * @param string $connectAppSid The SID of the Connect App to fetch.
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $connectAppSid
-    ) {
+    public function __construct(Version $version, $accountSid, $connectAppSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'connectAppSid' =>
-            $connectAppSid,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/AuthorizedConnectApps/' . \rawurlencode($connectAppSid)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'connectAppSid' => $connectAppSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/AuthorizedConnectApps/' . \rawurlencode($connectAppSid) . '.json';
     }
-
     /**
      * Fetch the AuthorizedConnectAppInstance
      *
      * @return AuthorizedConnectAppInstance Fetched AuthorizedConnectAppInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): AuthorizedConnectAppInstance
+    public function fetch() : AuthorizedConnectAppInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new AuthorizedConnectAppInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['connectAppSid']
-        );
+        return new AuthorizedConnectAppInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['connectAppSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.AuthorizedConnectAppContext ' . \implode(' ', $context) . ']';
     }

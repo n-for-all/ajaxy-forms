@@ -1,11 +1,10 @@
 <?php
 
-namespace Egulias\EmailValidator\Warning;
+namespace Isolated\Egulias\EmailValidator\Warning;
 
 class DomainLiteral extends Warning
 {
     public const CODE = 70;
-
     public function __construct()
     {
         $this->message = 'Domain Literal';

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Config\Resource;
+namespace Isolated\Symfony\Component\Config\Resource;
 
 /**
  * ComposerResource tracks the PHP version and Composer dependencies.
@@ -21,45 +20,37 @@ namespace Symfony\Component\Config\Resource;
 class ComposerResource implements SelfCheckingResourceInterface
 {
     private $vendors;
-
     private static $runtimeVendors;
-
     public function __construct()
     {
         self::refresh();
         $this->vendors = self::$runtimeVendors;
     }
-
-    public function getVendors(): array
+    public function getVendors() : array
     {
-        return array_keys($this->vendors);
+        return \array_keys($this->vendors);
     }
-
-    public function __toString(): string
+    public function __toString() : string
     {
         return __CLASS__;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function isFresh(int $timestamp): bool
+    public function isFresh(int $timestamp) : bool
     {
         self::refresh();
-
-        return array_values(self::$runtimeVendors) === array_values($this->vendors);
+        return \array_values(self::$runtimeVendors) === \array_values($this->vendors);
     }
-
     private static function refresh()
     {
         self::$runtimeVendors = [];
-
-        foreach (get_declared_classes() as $class) {
-            if ('C' === $class[0] && str_starts_with($class, 'ComposerAutoloaderInit')) {
+        foreach (\get_declared_classes() as $class) {
+            if ('C' === $class[0] && \str_starts_with($class, 'ComposerAutoloaderInit')) {
                 $r = new \ReflectionClass($class);
                 $v = \dirname($r->getFileName(), 2);
-                if (is_file($v.'/composer/installed.json')) {
-                    self::$runtimeVendors[$v] = @filemtime($v.'/composer/installed.json');
+                if (\is_file($v . '/composer/installed.json')) {
+                    self::$runtimeVendors[$v] = @\filemtime($v . '/composer/installed.json');
                 }
             }
         }

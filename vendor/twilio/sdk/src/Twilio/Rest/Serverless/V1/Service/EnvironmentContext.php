@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Serverless\V1\Service;
 
-
-namespace Twilio\Rest\Serverless\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Serverless\V1\Service\Environment\LogList;
-use Twilio\Rest\Serverless\V1\Service\Environment\DeploymentList;
-use Twilio\Rest\Serverless\V1\Service\Environment\VariableList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Serverless\V1\Service\Environment\LogList;
+use Isolated\Twilio\Rest\Serverless\V1\Service\Environment\DeploymentList;
+use Isolated\Twilio\Rest\Serverless\V1\Service\Environment\VariableList;
 /**
  * @property LogList $logs
  * @property DeploymentList $deployments
@@ -35,11 +31,10 @@ use Twilio\Rest\Serverless\V1\Service\Environment\VariableList;
  * @method \Twilio\Rest\Serverless\V1\Service\Environment\DeploymentContext deployments(string $sid)
  */
 class EnvironmentContext extends InstanceContext
-    {
+{
     protected $_logs;
     protected $_deployments;
     protected $_variables;
-
     /**
      * Initialize the EnvironmentContext
      *
@@ -47,107 +42,64 @@ class EnvironmentContext extends InstanceContext
      * @param string $serviceSid The SID of the Service to create the Environment resource under.
      * @param string $sid The SID of the Environment resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $serviceSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Environments/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Environments/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the EnvironmentInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the EnvironmentInstance
      *
      * @return EnvironmentInstance Fetched EnvironmentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): EnvironmentInstance
+    public function fetch() : EnvironmentInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new EnvironmentInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['sid']
-        );
+        return new EnvironmentInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['sid']);
     }
-
-
     /**
      * Access the logs
      */
-    protected function getLogs(): LogList
+    protected function getLogs() : LogList
     {
         if (!$this->_logs) {
-            $this->_logs = new LogList(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['sid']
-            );
+            $this->_logs = new LogList($this->version, $this->solution['serviceSid'], $this->solution['sid']);
         }
-
         return $this->_logs;
     }
-
     /**
      * Access the deployments
      */
-    protected function getDeployments(): DeploymentList
+    protected function getDeployments() : DeploymentList
     {
         if (!$this->_deployments) {
-            $this->_deployments = new DeploymentList(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['sid']
-            );
+            $this->_deployments = new DeploymentList($this->version, $this->solution['serviceSid'], $this->solution['sid']);
         }
-
         return $this->_deployments;
     }
-
     /**
      * Access the variables
      */
-    protected function getVariables(): VariableList
+    protected function getVariables() : VariableList
     {
         if (!$this->_variables) {
-            $this->_variables = new VariableList(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['sid']
-            );
+            $this->_variables = new VariableList($this->version, $this->solution['serviceSid'], $this->solution['sid']);
         }
-
         return $this->_variables;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -155,16 +107,14 @@ class EnvironmentContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -173,26 +123,24 @@ class EnvironmentContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Serverless.V1.EnvironmentContext ' . \implode(' ', $context) . ']';
     }

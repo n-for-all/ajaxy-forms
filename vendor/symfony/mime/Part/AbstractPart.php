@@ -8,58 +8,45 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Mime\Part;
 
-namespace Symfony\Component\Mime\Part;
-
-use Symfony\Component\Mime\Header\Headers;
-
+use Isolated\Symfony\Component\Mime\Header\Headers;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
 abstract class AbstractPart
 {
     private $headers;
-
     public function __construct()
     {
         $this->headers = new Headers();
     }
-
-    public function getHeaders(): Headers
+    public function getHeaders() : Headers
     {
         return $this->headers;
     }
-
-    public function getPreparedHeaders(): Headers
+    public function getPreparedHeaders() : Headers
     {
         $headers = clone $this->headers;
-        $headers->setHeaderBody('Parameterized', 'Content-Type', $this->getMediaType().'/'.$this->getMediaSubtype());
-
+        $headers->setHeaderBody('Parameterized', 'Content-Type', $this->getMediaType() . '/' . $this->getMediaSubtype());
         return $headers;
     }
-
-    public function toString(): string
+    public function toString() : string
     {
-        return $this->getPreparedHeaders()->toString()."\r\n".$this->bodyToString();
+        return $this->getPreparedHeaders()->toString() . "\r\n" . $this->bodyToString();
     }
-
-    public function toIterable(): iterable
+    public function toIterable() : iterable
     {
-        yield $this->getPreparedHeaders()->toString();
-        yield "\r\n";
+        (yield $this->getPreparedHeaders()->toString());
+        (yield "\r\n");
         yield from $this->bodyToIterable();
     }
-
-    public function asDebugString(): string
+    public function asDebugString() : string
     {
-        return $this->getMediaType().'/'.$this->getMediaSubtype();
+        return $this->getMediaType() . '/' . $this->getMediaSubtype();
     }
-
-    abstract public function bodyToString(): string;
-
-    abstract public function bodyToIterable(): iterable;
-
-    abstract public function getMediaType(): string;
-
-    abstract public function getMediaSubtype(): string;
+    public abstract function bodyToString() : string;
+    public abstract function bodyToIterable() : iterable;
+    public abstract function getMediaType() : string;
+    public abstract function getMediaSubtype() : string;
 }

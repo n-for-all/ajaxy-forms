@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl\Data\Bundle\Reader;
 
-namespace Symfony\Component\Intl\Data\Bundle\Reader;
-
-use Symfony\Component\Intl\Exception\MissingResourceException;
-
+use Isolated\Symfony\Component\Intl\Exception\MissingResourceException;
 /**
  * Reads individual entries of a resource file.
  *
@@ -50,5 +48,5 @@ interface BundleEntryReaderInterface extends BundleReaderInterface
      *
      * @throws MissingResourceException If the indices cannot be accessed
      */
-    public function readEntry(string $path, string $locale, array $indices, bool $fallback = true);
+    public function readEntry(string $path, string $locale, array $indices, bool $fallback = \true);
 }

@@ -13,61 +13,40 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Bulkexports\V1;
 
-
-namespace Twilio\Rest\Bulkexports\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class ExportConfigurationContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ExportConfigurationContext
      *
      * @param Version $version Version that contains the resource
      * @param string $resourceType The type of communication – Messages, Calls, Conferences, and Participants
      */
-    public function __construct(
-        Version $version,
-        $resourceType
-    ) {
+    public function __construct(Version $version, $resourceType)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'resourceType' =>
-            $resourceType,
-        ];
-
-        $this->uri = '/Exports/' . \rawurlencode($resourceType)
-        .'/Configuration';
+        $this->solution = ['resourceType' => $resourceType];
+        $this->uri = '/Exports/' . \rawurlencode($resourceType) . '/Configuration';
     }
-
     /**
      * Fetch the ExportConfigurationInstance
      *
      * @return ExportConfigurationInstance Fetched ExportConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ExportConfigurationInstance
+    public function fetch() : ExportConfigurationInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ExportConfigurationInstance(
-            $this->version,
-            $payload,
-            $this->solution['resourceType']
-        );
+        return new ExportConfigurationInstance($this->version, $payload, $this->solution['resourceType']);
     }
-
-
     /**
      * Update the ExportConfigurationInstance
      *
@@ -75,40 +54,23 @@ class ExportConfigurationContext extends InstanceContext
      * @return ExportConfigurationInstance Updated ExportConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ExportConfigurationInstance
+    public function update(array $options = []) : ExportConfigurationInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Enabled' =>
-                Serialize::booleanToString($options['enabled']),
-            'WebhookUrl' =>
-                $options['webhookUrl'],
-            'WebhookMethod' =>
-                $options['webhookMethod'],
-        ]);
-
+        $data = Values::of(['Enabled' => Serialize::booleanToString($options['enabled']), 'WebhookUrl' => $options['webhookUrl'], 'WebhookMethod' => $options['webhookMethod']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new ExportConfigurationInstance(
-            $this->version,
-            $payload,
-            $this->solution['resourceType']
-        );
+        return new ExportConfigurationInstance($this->version, $payload, $this->solution['resourceType']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Bulkexports.V1.ExportConfigurationContext ' . \implode(' ', $context) . ']';
     }

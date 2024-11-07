@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\PasswordHasher\Hasher;
 
-namespace Symfony\Component\PasswordHasher\Hasher;
-
-use Symfony\Component\PasswordHasher\PasswordHasherInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-
+use Isolated\Symfony\Component\PasswordHasher\PasswordHasherInterface;
+use Isolated\Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 /**
  * PasswordHasherFactoryInterface to support different password hashers for different user accounts.
  *
@@ -29,5 +27,5 @@ interface PasswordHasherFactoryInterface
      *
      * @throws \RuntimeException When no password hasher could be found for the user
      */
-    public function getPasswordHasher($user): PasswordHasherInterface;
+    public function getPasswordHasher($user) : PasswordHasherInterface;
 }

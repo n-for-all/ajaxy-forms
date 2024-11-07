@@ -3,17 +3,17 @@
 namespace Ajaxy\Forms\Inc\Types;
 
 use Ajaxy\Forms\Inc\Types\Data\Terms;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\ChoiceList\ChoiceList;
-use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\RadioType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Isolated\Symfony\Component\Form\AbstractType;
+use Isolated\Symfony\Component\Form\CallbackTransformer;
+use Isolated\Symfony\Component\Form\ChoiceList\ChoiceList;
+use Isolated\Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
+use Isolated\Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Isolated\Symfony\Component\Form\Extension\Core\Type\RadioType;
+use Isolated\Symfony\Component\Form\FormBuilderInterface;
+use Isolated\Symfony\Component\Form\FormInterface;
+use Isolated\Symfony\Component\Form\FormView;
+use Isolated\Symfony\Component\OptionsResolver\Options;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RatingType extends AbstractType
 {

@@ -13,35 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Microvisor\V1;
 
-namespace Twilio\Rest\Microvisor\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class AccountConfigList extends ListResource
-    {
+{
     /**
      * Construct the AccountConfigList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Configs';
     }
-
     /**
      * Create the AccountConfigInstance
      *
@@ -50,25 +42,12 @@ class AccountConfigList extends ListResource
      * @return AccountConfigInstance Created AccountConfigInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $key, string $value): AccountConfigInstance
+    public function create(string $key, string $value) : AccountConfigInstance
     {
-
-        $data = Values::of([
-            'Key' =>
-                $key,
-            'Value' =>
-                $value,
-        ]);
-
+        $data = Values::of(['Key' => $key, 'Value' => $value]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new AccountConfigInstance(
-            $this->version,
-            $payload
-        );
+        return new AccountConfigInstance($this->version, $payload);
     }
-
-
     /**
      * Reads AccountConfigInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -84,11 +63,10 @@ class AccountConfigList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return AccountConfigInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams AccountConfigInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -107,15 +85,12 @@ class AccountConfigList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of AccountConfigInstance records from the API.
      * Request is executed immediately
@@ -125,24 +100,12 @@ class AccountConfigList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return AccountConfigPage Page of AccountConfigInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): AccountConfigPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : AccountConfigPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new AccountConfigPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of AccountConfigInstance records from the API.
      * Request is executed immediately
@@ -150,39 +113,26 @@ class AccountConfigList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return AccountConfigPage Page of AccountConfigInstance
      */
-    public function getPage(string $targetUrl): AccountConfigPage
+    public function getPage(string $targetUrl) : AccountConfigPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new AccountConfigPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a AccountConfigContext
      *
      * @param string $key The config key; up to 100 characters.
      */
-    public function getContext(
-        string $key
-        
-    ): AccountConfigContext
+    public function getContext(string $key) : AccountConfigContext
     {
-        return new AccountConfigContext(
-            $this->version,
-            $key
-        );
+        return new AccountConfigContext($this->version, $key);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Microvisor.V1.AccountConfigList]';
     }

@@ -13,23 +13,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trunking\V1;
 
-
-namespace Twilio\Rest\Trunking\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Trunking\V1\Trunk\IpAccessControlListList;
-use Twilio\Rest\Trunking\V1\Trunk\PhoneNumberList;
-use Twilio\Rest\Trunking\V1\Trunk\CredentialListList;
-use Twilio\Rest\Trunking\V1\Trunk\OriginationUrlList;
-use Twilio\Rest\Trunking\V1\Trunk\RecordingList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Trunking\V1\Trunk\IpAccessControlListList;
+use Isolated\Twilio\Rest\Trunking\V1\Trunk\PhoneNumberList;
+use Isolated\Twilio\Rest\Trunking\V1\Trunk\CredentialListList;
+use Isolated\Twilio\Rest\Trunking\V1\Trunk\OriginationUrlList;
+use Isolated\Twilio\Rest\Trunking\V1\Trunk\RecordingList;
 /**
  * @property string|null $accountSid
  * @property string|null $domainName
@@ -56,7 +52,6 @@ class TrunkInstance extends InstanceResource
     protected $_credentialsLists;
     protected $_originationUrls;
     protected $_recordings;
-
     /**
      * Initialize the TrunkInstance
      *
@@ -67,73 +62,43 @@ class TrunkInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'domainName' => Values::array_get($payload, 'domain_name'),
-            'disasterRecoveryMethod' => Values::array_get($payload, 'disaster_recovery_method'),
-            'disasterRecoveryUrl' => Values::array_get($payload, 'disaster_recovery_url'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'secure' => Values::array_get($payload, 'secure'),
-            'recording' => Values::array_get($payload, 'recording'),
-            'transferMode' => Values::array_get($payload, 'transfer_mode'),
-            'transferCallerId' => Values::array_get($payload, 'transfer_caller_id'),
-            'cnamLookupEnabled' => Values::array_get($payload, 'cnam_lookup_enabled'),
-            'authType' => Values::array_get($payload, 'auth_type'),
-            'authTypeSet' => Values::array_get($payload, 'auth_type_set'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'sid' => Values::array_get($payload, 'sid'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'domainName' => Values::array_get($payload, 'domain_name'), 'disasterRecoveryMethod' => Values::array_get($payload, 'disaster_recovery_method'), 'disasterRecoveryUrl' => Values::array_get($payload, 'disaster_recovery_url'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'secure' => Values::array_get($payload, 'secure'), 'recording' => Values::array_get($payload, 'recording'), 'transferMode' => Values::array_get($payload, 'transfer_mode'), 'transferCallerId' => Values::array_get($payload, 'transfer_caller_id'), 'cnamLookupEnabled' => Values::array_get($payload, 'cnam_lookup_enabled'), 'authType' => Values::array_get($payload, 'auth_type'), 'authTypeSet' => Values::array_get($payload, 'auth_type_set'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'sid' => Values::array_get($payload, 'sid'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return TrunkContext Context for this TrunkInstance
      */
-    protected function proxy(): TrunkContext
+    protected function proxy() : TrunkContext
     {
         if (!$this->context) {
-            $this->context = new TrunkContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new TrunkContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the TrunkInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the TrunkInstance
      *
      * @return TrunkInstance Fetched TrunkInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): TrunkInstance
+    public function fetch() : TrunkInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the TrunkInstance
      *
@@ -141,52 +106,45 @@ class TrunkInstance extends InstanceResource
      * @return TrunkInstance Updated TrunkInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): TrunkInstance
+    public function update(array $options = []) : TrunkInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the ipAccessControlLists
      */
-    protected function getIpAccessControlLists(): IpAccessControlListList
+    protected function getIpAccessControlLists() : IpAccessControlListList
     {
         return $this->proxy()->ipAccessControlLists;
     }
-
     /**
      * Access the phoneNumbers
      */
-    protected function getPhoneNumbers(): PhoneNumberList
+    protected function getPhoneNumbers() : PhoneNumberList
     {
         return $this->proxy()->phoneNumbers;
     }
-
     /**
      * Access the credentialsLists
      */
-    protected function getCredentialsLists(): CredentialListList
+    protected function getCredentialsLists() : CredentialListList
     {
         return $this->proxy()->credentialsLists;
     }
-
     /**
      * Access the originationUrls
      */
-    protected function getOriginationUrls(): OriginationUrlList
+    protected function getOriginationUrls() : OriginationUrlList
     {
         return $this->proxy()->originationUrls;
     }
-
     /**
      * Access the recordings
      */
-    protected function getRecordings(): RecordingList
+    protected function getRecordings() : RecordingList
     {
         return $this->proxy()->recordings;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -199,27 +157,23 @@ class TrunkInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Trunking.V1.TrunkInstance ' . \implode(' ', $context) . ']';
     }
 }
-

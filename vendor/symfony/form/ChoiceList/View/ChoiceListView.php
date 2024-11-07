@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form\ChoiceList\View;
+namespace Isolated\Symfony\Component\Form\ChoiceList\View;
 
 /**
  * Represents a choice list in templates.
@@ -24,7 +23,6 @@ class ChoiceListView
 {
     public $choices;
     public $preferredChoices;
-
     /**
      * Creates a new choice list view.
      *
@@ -36,7 +34,6 @@ class ChoiceListView
         $this->choices = $choices;
         $this->preferredChoices = $preferredChoices;
     }
-
     /**
      * Returns whether a placeholder is in the choices.
      *
@@ -47,13 +44,10 @@ class ChoiceListView
     public function hasPlaceholder()
     {
         if ($this->preferredChoices) {
-            $firstChoice = reset($this->preferredChoices);
-
+            $firstChoice = \reset($this->preferredChoices);
             return $firstChoice instanceof ChoiceView && '' === $firstChoice->value;
         }
-
-        $firstChoice = reset($this->choices);
-
+        $firstChoice = \reset($this->choices);
         return $firstChoice instanceof ChoiceView && '' === $firstChoice->value;
     }
 }

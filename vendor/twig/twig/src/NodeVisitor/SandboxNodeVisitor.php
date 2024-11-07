@@ -8,24 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\NodeVisitor;
 
-namespace Twig\NodeVisitor;
-
-use Twig\Environment;
-use Twig\Node\CheckSecurityCallNode;
-use Twig\Node\CheckSecurityNode;
-use Twig\Node\CheckToStringNode;
-use Twig\Node\Expression\Binary\ConcatBinary;
-use Twig\Node\Expression\Binary\RangeBinary;
-use Twig\Node\Expression\FilterExpression;
-use Twig\Node\Expression\FunctionExpression;
-use Twig\Node\Expression\GetAttrExpression;
-use Twig\Node\Expression\NameExpression;
-use Twig\Node\ModuleNode;
-use Twig\Node\Node;
-use Twig\Node\PrintNode;
-use Twig\Node\SetNode;
-
+use Isolated\Twig\Environment;
+use Isolated\Twig\Node\CheckSecurityCallNode;
+use Isolated\Twig\Node\CheckSecurityNode;
+use Isolated\Twig\Node\CheckToStringNode;
+use Isolated\Twig\Node\Expression\Binary\ConcatBinary;
+use Isolated\Twig\Node\Expression\Binary\RangeBinary;
+use Isolated\Twig\Node\Expression\FilterExpression;
+use Isolated\Twig\Node\Expression\FunctionExpression;
+use Isolated\Twig\Node\Expression\GetAttrExpression;
+use Isolated\Twig\Node\Expression\NameExpression;
+use Isolated\Twig\Node\ModuleNode;
+use Isolated\Twig\Node\Node;
+use Isolated\Twig\Node\PrintNode;
+use Isolated\Twig\Node\SetNode;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  *
@@ -33,54 +31,46 @@ use Twig\Node\SetNode;
  */
 final class SandboxNodeVisitor implements NodeVisitorInterface
 {
-    private $inAModule = false;
+    private $inAModule = \false;
     /** @var array<string, int> */
     private $tags;
     /** @var array<string, int> */
     private $filters;
     /** @var array<string, int> */
     private $functions;
-    private $needsToStringWrap = false;
-
-    public function enterNode(Node $node, Environment $env): Node
+    private $needsToStringWrap = \false;
+    public function enterNode(Node $node, Environment $env) : Node
     {
         if ($node instanceof ModuleNode) {
-            $this->inAModule = true;
+            $this->inAModule = \true;
             $this->tags = [];
             $this->filters = [];
             $this->functions = [];
-
             return $node;
         } elseif ($this->inAModule) {
             // look for tags
             if ($node->getNodeTag() && !isset($this->tags[$node->getNodeTag()])) {
                 $this->tags[$node->getNodeTag()] = $node->getTemplateLine();
             }
-
             // look for filters
             if ($node instanceof FilterExpression && !isset($this->filters[$node->getNode('filter')->getAttribute('value')])) {
                 $this->filters[$node->getNode('filter')->getAttribute('value')] = $node->getTemplateLine();
             }
-
             // look for functions
             if ($node instanceof FunctionExpression && !isset($this->functions[$node->getAttribute('name')])) {
                 $this->functions[$node->getAttribute('name')] = $node->getTemplateLine();
             }
-
             // the .. operator is equivalent to the range() function
             if ($node instanceof RangeBinary && !isset($this->functions['range'])) {
                 $this->functions['range'] = $node->getTemplateLine();
             }
-
             if ($node instanceof PrintNode) {
-                $this->needsToStringWrap = true;
+                $this->needsToStringWrap = \true;
                 $this->wrapNode($node, 'expr');
             }
-
             if ($node instanceof SetNode && !$node->getAttribute('capture')) {
-                $this->needsToStringWrap = true;
+                $this->needsToStringWrap = \true;
             }
-
             // wrap outer nodes that can implicitly call __toString()
             if ($this->needsToStringWrap) {
                 if ($node instanceof ConcatBinary) {
@@ -96,43 +86,36 @@ final class SandboxNodeVisitor implements NodeVisitorInterface
                 }
             }
         }
-
         return $node;
     }
-
-    public function leaveNode(Node $node, Environment $env): ?Node
+    public function leaveNode(Node $node, Environment $env) : ?Node
     {
         if ($node instanceof ModuleNode) {
-            $this->inAModule = false;
-
+            $this->inAModule = \false;
             $node->setNode('constructor_end', new Node([new CheckSecurityCallNode(), $node->getNode('constructor_end')]));
             $node->setNode('class_end', new Node([new CheckSecurityNode($this->filters, $this->tags, $this->functions), $node->getNode('class_end')]));
         } elseif ($this->inAModule) {
             if ($node instanceof PrintNode || $node instanceof SetNode) {
-                $this->needsToStringWrap = false;
+                $this->needsToStringWrap = \false;
             }
         }
-
         return $node;
     }
-
-    private function wrapNode(Node $node, string $name): void
+    private function wrapNode(Node $node, string $name) : void
     {
         $expr = $node->getNode($name);
         if (($expr instanceof NameExpression || $expr instanceof GetAttrExpression) && !$expr->isGenerator()) {
             $node->setNode($name, new CheckToStringNode($expr));
         }
     }
-
-    private function wrapArrayNode(Node $node, string $name): void
+    private function wrapArrayNode(Node $node, string $name) : void
     {
         $args = $node->getNode($name);
         foreach ($args as $name => $_) {
             $this->wrapNode($args, $name);
         }
     }
-
-    public function getPriority(): int
+    public function getPriority() : int
     {
         return 0;
     }

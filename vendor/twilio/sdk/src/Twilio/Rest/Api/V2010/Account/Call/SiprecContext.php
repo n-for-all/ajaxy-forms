@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Call;
 
-
-namespace Twilio\Rest\Api\V2010\Account\Call;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class SiprecContext extends InstanceContext
-    {
+{
     /**
      * Initialize the SiprecContext
      *
@@ -33,30 +29,13 @@ class SiprecContext extends InstanceContext
      * @param string $callSid The SID of the [Call](https://www.twilio.com/docs/voice/api/call-resource) the Siprec resource is associated with.
      * @param string $sid The SID of the Siprec resource, or the `name` used when creating the resource
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $callSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $accountSid, $callSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'callSid' =>
-            $callSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Calls/' . \rawurlencode($callSid)
-        .'/Siprec/' . \rawurlencode($sid)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'callSid' => $callSid, 'sid' => $sid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Calls/' . \rawurlencode($callSid) . '/Siprec/' . \rawurlencode($sid) . '.json';
     }
-
     /**
      * Update the SiprecInstance
      *
@@ -64,36 +43,22 @@ class SiprecContext extends InstanceContext
      * @return SiprecInstance Updated SiprecInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $status): SiprecInstance
+    public function update(string $status) : SiprecInstance
     {
-
-        $data = Values::of([
-            'Status' =>
-                $status,
-        ]);
-
+        $data = Values::of(['Status' => $status]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new SiprecInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['callSid'],
-            $this->solution['sid']
-        );
+        return new SiprecInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['callSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.SiprecContext ' . \implode(' ', $context) . ']';
     }

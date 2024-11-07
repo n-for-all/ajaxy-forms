@@ -13,81 +13,54 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Marketplace;
 
-
-namespace Twilio\Rest\Preview\Marketplace;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Preview\Marketplace\AvailableAddOn\AvailableAddOnExtensionList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Preview\Marketplace\AvailableAddOn\AvailableAddOnExtensionList;
 /**
  * @property AvailableAddOnExtensionList $extensions
  * @method \Twilio\Rest\Preview\Marketplace\AvailableAddOn\AvailableAddOnExtensionContext extensions(string $sid)
  */
 class AvailableAddOnContext extends InstanceContext
-    {
+{
     protected $_extensions;
-
     /**
      * Initialize the AvailableAddOnContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The SID of the AvailableAddOn resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/AvailableAddOns/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/AvailableAddOns/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the AvailableAddOnInstance
      *
      * @return AvailableAddOnInstance Fetched AvailableAddOnInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): AvailableAddOnInstance
+    public function fetch() : AvailableAddOnInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new AvailableAddOnInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new AvailableAddOnInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the extensions
      */
-    protected function getExtensions(): AvailableAddOnExtensionList
+    protected function getExtensions() : AvailableAddOnExtensionList
     {
         if (!$this->_extensions) {
-            $this->_extensions = new AvailableAddOnExtensionList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_extensions = new AvailableAddOnExtensionList($this->version, $this->solution['sid']);
         }
-
         return $this->_extensions;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -95,16 +68,14 @@ class AvailableAddOnContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -113,26 +84,24 @@ class AvailableAddOnContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.Marketplace.AvailableAddOnContext ' . \implode(' ', $context) . ']';
     }

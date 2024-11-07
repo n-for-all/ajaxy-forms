@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Mapping;
+namespace Isolated\Symfony\Component\Validator\Mapping;
 
 /**
  * Specifies whether and how a traversable object should be traversed.
@@ -34,18 +33,15 @@ class TraversalStrategy
      * instance of {@link \Traversable}.
      */
     public const IMPLICIT = 1;
-
     /**
      * Specifies that a node's value should never be iterated.
      */
     public const NONE = 2;
-
     /**
      * Specifies that a node's value should always be iterated. If the value is
      * not an instance of {@link \Traversable}, an exception should be thrown.
      */
     public const TRAVERSE = 4;
-
     /**
      * Not instantiable.
      */

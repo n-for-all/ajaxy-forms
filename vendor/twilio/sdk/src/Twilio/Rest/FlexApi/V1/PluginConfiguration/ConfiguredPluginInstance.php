@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1\PluginConfiguration;
 
-
-namespace Twilio\Rest\FlexApi\V1\PluginConfiguration;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property string|null $configurationSid
@@ -56,49 +52,23 @@ class ConfiguredPluginInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $configurationSid, string $pluginSid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'configurationSid' => Values::array_get($payload, 'configuration_sid'),
-            'pluginSid' => Values::array_get($payload, 'plugin_sid'),
-            'pluginVersionSid' => Values::array_get($payload, 'plugin_version_sid'),
-            'phase' => Values::array_get($payload, 'phase'),
-            'pluginUrl' => Values::array_get($payload, 'plugin_url'),
-            'uniqueName' => Values::array_get($payload, 'unique_name'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'description' => Values::array_get($payload, 'description'),
-            'pluginArchived' => Values::array_get($payload, 'plugin_archived'),
-            'version' => Values::array_get($payload, 'version'),
-            'changelog' => Values::array_get($payload, 'changelog'),
-            'pluginVersionArchived' => Values::array_get($payload, 'plugin_version_archived'),
-            'private' => Values::array_get($payload, 'private'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['configurationSid' => $configurationSid, 'pluginSid' => $pluginSid ?: $this->properties['pluginSid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'configurationSid' => Values::array_get($payload, 'configuration_sid'), 'pluginSid' => Values::array_get($payload, 'plugin_sid'), 'pluginVersionSid' => Values::array_get($payload, 'plugin_version_sid'), 'phase' => Values::array_get($payload, 'phase'), 'pluginUrl' => Values::array_get($payload, 'plugin_url'), 'uniqueName' => Values::array_get($payload, 'unique_name'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'description' => Values::array_get($payload, 'description'), 'pluginArchived' => Values::array_get($payload, 'plugin_archived'), 'version' => Values::array_get($payload, 'version'), 'changelog' => Values::array_get($payload, 'changelog'), 'pluginVersionArchived' => Values::array_get($payload, 'plugin_version_archived'), 'private' => Values::array_get($payload, 'private'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['configurationSid' => $configurationSid, 'pluginSid' => $pluginSid ?: $this->properties['pluginSid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ConfiguredPluginContext Context for this ConfiguredPluginInstance
      */
-    protected function proxy(): ConfiguredPluginContext
+    protected function proxy() : ConfiguredPluginContext
     {
         if (!$this->context) {
-            $this->context = new ConfiguredPluginContext(
-                $this->version,
-                $this->solution['configurationSid'],
-                $this->solution['pluginSid']
-            );
+            $this->context = new ConfiguredPluginContext($this->version, $this->solution['configurationSid'], $this->solution['pluginSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the ConfiguredPluginInstance
      *
@@ -106,12 +76,10 @@ class ConfiguredPluginInstance extends InstanceResource
      * @return ConfiguredPluginInstance Fetched ConfiguredPluginInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): ConfiguredPluginInstance
+    public function fetch(array $options = []) : ConfiguredPluginInstance
     {
-
         return $this->proxy()->fetch($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -124,27 +92,23 @@ class ConfiguredPluginInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.ConfiguredPluginInstance ' . \implode(' ', $context) . ']';
     }
 }
-

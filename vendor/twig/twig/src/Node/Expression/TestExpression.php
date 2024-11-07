@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node\Expression;
 
-namespace Twig\Node\Expression;
-
-use Twig\Compiler;
-use Twig\Node\Node;
-
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Node;
 class TestExpression extends CallExpression
 {
     public function __construct(Node $node, string $name, ?Node $arguments, int $lineno)
@@ -22,18 +20,14 @@ class TestExpression extends CallExpression
         if (null !== $arguments) {
             $nodes['arguments'] = $arguments;
         }
-
         parent::__construct($nodes, ['name' => $name, 'type' => 'test'], $lineno);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
         $test = $compiler->getEnvironment()->getTest($this->getAttribute('name'));
-
         $this->setAttribute('arguments', $test->getArguments());
         $this->setAttribute('callable', $test->getCallable());
         $this->setAttribute('is_variadic', $test->isVariadic());
-
         $this->compileCallable($compiler);
     }
 }

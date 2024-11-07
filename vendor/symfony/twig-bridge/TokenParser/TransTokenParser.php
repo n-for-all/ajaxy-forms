@@ -8,18 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Bridge\Twig\TokenParser;
 
-namespace Symfony\Bridge\Twig\TokenParser;
-
-use Symfony\Bridge\Twig\Node\TransNode;
-use Twig\Error\SyntaxError;
-use Twig\Node\Expression\AbstractExpression;
-use Twig\Node\Expression\ArrayExpression;
-use Twig\Node\Node;
-use Twig\Node\TextNode;
-use Twig\Token;
-use Twig\TokenParser\AbstractTokenParser;
-
+use Isolated\Symfony\Bridge\Twig\Node\TransNode;
+use Isolated\Twig\Error\SyntaxError;
+use Isolated\Twig\Node\Expression\AbstractExpression;
+use Isolated\Twig\Node\Expression\ArrayExpression;
+use Isolated\Twig\Node\Node;
+use Isolated\Twig\Node\TextNode;
+use Isolated\Twig\Token;
+use Isolated\Twig\TokenParser\AbstractTokenParser;
 /**
  * Token Parser for the 'trans' tag.
  *
@@ -30,11 +28,10 @@ final class TransTokenParser extends AbstractTokenParser
     /**
      * {@inheritdoc}
      */
-    public function parse(Token $token): Node
+    public function parse(Token $token) : Node
     {
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
-
         $count = null;
         $vars = new ArrayExpression([], $lineno);
         $domain = null;
@@ -45,19 +42,16 @@ final class TransTokenParser extends AbstractTokenParser
                 $stream->next();
                 $count = $this->parser->getExpressionParser()->parseExpression();
             }
-
             if ($stream->test('with')) {
                 // {% trans with vars %}
                 $stream->next();
                 $vars = $this->parser->getExpressionParser()->parseExpression();
             }
-
             if ($stream->test('from')) {
                 // {% trans from "messages" %}
                 $stream->next();
                 $domain = $this->parser->getExpressionParser()->parseExpression();
             }
-
             if ($stream->test('into')) {
                 // {% trans into "fr" %}
                 $stream->next();
@@ -66,29 +60,23 @@ final class TransTokenParser extends AbstractTokenParser
                 throw new SyntaxError('Unexpected token. Twig was looking for the "with", "from", or "into" keyword.', $stream->getCurrent()->getLine(), $stream->getSourceContext());
             }
         }
-
         // {% trans %}message{% endtrans %}
         $stream->expect(Token::BLOCK_END_TYPE);
-        $body = $this->parser->subparse([$this, 'decideTransFork'], true);
-
+        $body = $this->parser->subparse([$this, 'decideTransFork'], \true);
         if (!$body instanceof TextNode && !$body instanceof AbstractExpression) {
             throw new SyntaxError('A message inside a trans tag must be a simple text.', $body->getTemplateLine(), $stream->getSourceContext());
         }
-
         $stream->expect(Token::BLOCK_END_TYPE);
-
         return new TransNode($body, $domain, $count, $vars, $locale, $lineno, $this->getTag());
     }
-
-    public function decideTransFork(Token $token): bool
+    public function decideTransFork(Token $token) : bool
     {
         return $token->test(['endtrans']);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getTag(): string
+    public function getTag() : string
     {
         return 'trans';
     }

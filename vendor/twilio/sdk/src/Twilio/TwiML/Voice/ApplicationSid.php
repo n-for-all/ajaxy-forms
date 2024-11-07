@@ -6,18 +6,18 @@
  * | (_)\/(_)(_|\/| |(/_  v1.0.0
  * /       /
  */
+namespace Isolated\Twilio\TwiML\Voice;
 
-namespace Twilio\TwiML\Voice;
-
-use Twilio\TwiML\TwiML;
-
-class ApplicationSid extends TwiML {
+use Isolated\Twilio\TwiML\TwiML;
+class ApplicationSid extends TwiML
+{
     /**
      * ApplicationSid constructor.
      *
      * @param string $sid Application sid to dial
      */
-    public function __construct($sid) {
+    public function __construct($sid)
+    {
         parent::__construct('ApplicationSid', $sid);
     }
 }

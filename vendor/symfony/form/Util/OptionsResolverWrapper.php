@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Util;
 
-namespace Symfony\Component\Form\Util;
-
-use Symfony\Component\OptionsResolver\Exception\AccessException;
-use Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\OptionsResolver\Exception\AccessException;
+use Isolated\Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  *
@@ -23,88 +21,76 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class OptionsResolverWrapper extends OptionsResolver
 {
     private $undefined = [];
-
     /**
      * @return $this
      */
-    public function setNormalizer(string $option, \Closure $normalizer): self
+    public function setNormalizer(string $option, \Closure $normalizer) : self
     {
         try {
             parent::setNormalizer($option, $normalizer);
         } catch (UndefinedOptionsException $e) {
-            $this->undefined[$option] = true;
+            $this->undefined[$option] = \true;
         }
-
         return $this;
     }
-
     /**
      * @return $this
      */
-    public function setAllowedValues(string $option, $allowedValues): self
+    public function setAllowedValues(string $option, $allowedValues) : self
     {
         try {
             parent::setAllowedValues($option, $allowedValues);
         } catch (UndefinedOptionsException $e) {
-            $this->undefined[$option] = true;
+            $this->undefined[$option] = \true;
         }
-
         return $this;
     }
-
     /**
      * @return $this
      */
-    public function addAllowedValues(string $option, $allowedValues): self
+    public function addAllowedValues(string $option, $allowedValues) : self
     {
         try {
             parent::addAllowedValues($option, $allowedValues);
         } catch (UndefinedOptionsException $e) {
-            $this->undefined[$option] = true;
+            $this->undefined[$option] = \true;
         }
-
         return $this;
     }
-
     /**
      * @param string|array $allowedTypes
      *
      * @return $this
      */
-    public function setAllowedTypes(string $option, $allowedTypes): self
+    public function setAllowedTypes(string $option, $allowedTypes) : self
     {
         try {
             parent::setAllowedTypes($option, $allowedTypes);
         } catch (UndefinedOptionsException $e) {
-            $this->undefined[$option] = true;
+            $this->undefined[$option] = \true;
         }
-
         return $this;
     }
-
     /**
      * @param string|array $allowedTypes
      *
      * @return $this
      */
-    public function addAllowedTypes(string $option, $allowedTypes): self
+    public function addAllowedTypes(string $option, $allowedTypes) : self
     {
         try {
             parent::addAllowedTypes($option, $allowedTypes);
         } catch (UndefinedOptionsException $e) {
-            $this->undefined[$option] = true;
+            $this->undefined[$option] = \true;
         }
-
         return $this;
     }
-
-    public function resolve(array $options = []): array
+    public function resolve(array $options = []) : array
     {
         throw new AccessException('Resolve options is not supported.');
     }
-
-    public function getUndefinedOptions(): array
+    public function getUndefinedOptions() : array
     {
-        return array_keys($this->undefined);
+        return \array_keys($this->undefined);
     }
 }

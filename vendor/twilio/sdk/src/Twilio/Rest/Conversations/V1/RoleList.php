@@ -13,36 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1;
 
-namespace Twilio\Rest\Conversations\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class RoleList extends ListResource
-    {
+{
     /**
      * Construct the RoleList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Roles';
     }
-
     /**
      * Create the RoleInstance
      *
@@ -52,27 +44,14 @@ class RoleList extends ListResource
      * @return RoleInstance Created RoleInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $friendlyName, string $type, array $permission): RoleInstance
+    public function create(string $friendlyName, string $type, array $permission) : RoleInstance
     {
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $friendlyName,
-            'Type' =>
-                $type,
-            'Permission' =>
-                Serialize::map($permission,function ($e) { return $e; }),
-        ]);
-
+        $data = Values::of(['FriendlyName' => $friendlyName, 'Type' => $type, 'Permission' => Serialize::map($permission, function ($e) {
+            return $e;
+        })]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new RoleInstance(
-            $this->version,
-            $payload
-        );
+        return new RoleInstance($this->version, $payload);
     }
-
-
     /**
      * Reads RoleInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -88,11 +67,10 @@ class RoleList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return RoleInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams RoleInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -111,15 +89,12 @@ class RoleList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of RoleInstance records from the API.
      * Request is executed immediately
@@ -129,24 +104,12 @@ class RoleList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return RolePage Page of RoleInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): RolePage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : RolePage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new RolePage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of RoleInstance records from the API.
      * Request is executed immediately
@@ -154,39 +117,26 @@ class RoleList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return RolePage Page of RoleInstance
      */
-    public function getPage(string $targetUrl): RolePage
+    public function getPage(string $targetUrl) : RolePage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new RolePage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a RoleContext
      *
      * @param string $sid The SID of the Role resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): RoleContext
+    public function getContext(string $sid) : RoleContext
     {
-        return new RoleContext(
-            $this->version,
-            $sid
-        );
+        return new RoleContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Conversations.V1.RoleList]';
     }

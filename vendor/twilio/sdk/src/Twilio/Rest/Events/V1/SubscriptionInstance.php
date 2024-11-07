@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Events\V1;
 
-
-namespace Twilio\Rest\Events\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Events\V1\Subscription\SubscribedEventList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Events\V1\Subscription\SubscribedEventList;
 /**
  * @property string|null $accountSid
  * @property string|null $sid
@@ -39,7 +35,6 @@ use Twilio\Rest\Events\V1\Subscription\SubscribedEventList;
 class SubscriptionInstance extends InstanceResource
 {
     protected $_subscribedEvents;
-
     /**
      * Initialize the SubscriptionInstance
      *
@@ -50,64 +45,43 @@ class SubscriptionInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'description' => Values::array_get($payload, 'description'),
-            'sinkSid' => Values::array_get($payload, 'sink_sid'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'sid' => Values::array_get($payload, 'sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'description' => Values::array_get($payload, 'description'), 'sinkSid' => Values::array_get($payload, 'sink_sid'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return SubscriptionContext Context for this SubscriptionInstance
      */
-    protected function proxy(): SubscriptionContext
+    protected function proxy() : SubscriptionContext
     {
         if (!$this->context) {
-            $this->context = new SubscriptionContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new SubscriptionContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the SubscriptionInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the SubscriptionInstance
      *
      * @return SubscriptionInstance Fetched SubscriptionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SubscriptionInstance
+    public function fetch() : SubscriptionInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the SubscriptionInstance
      *
@@ -115,20 +89,17 @@ class SubscriptionInstance extends InstanceResource
      * @return SubscriptionInstance Updated SubscriptionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): SubscriptionInstance
+    public function update(array $options = []) : SubscriptionInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the subscribedEvents
      */
-    protected function getSubscribedEvents(): SubscribedEventList
+    protected function getSubscribedEvents() : SubscribedEventList
     {
         return $this->proxy()->subscribedEvents;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -141,27 +112,23 @@ class SubscriptionInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Events.V1.SubscriptionInstance ' . \implode(' ', $context) . ']';
     }
 }
-

@@ -13,52 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Lookups\V1;
 
-namespace Twilio\Rest\Lookups\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class PhoneNumberList extends ListResource
-    {
+{
     /**
      * Construct the PhoneNumberList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a PhoneNumberContext
      *
      * @param string $phoneNumber The phone number to lookup in [E.164](https://www.twilio.com/docs/glossary/what-e164) format, which consists of a + followed by the country code and subscriber number.
      */
-    public function getContext(
-        string $phoneNumber
-        
-    ): PhoneNumberContext
+    public function getContext(string $phoneNumber) : PhoneNumberContext
     {
-        return new PhoneNumberContext(
-            $this->version,
-            $phoneNumber
-        );
+        return new PhoneNumberContext($this->version, $phoneNumber);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Lookups.V1.PhoneNumberList]';
     }

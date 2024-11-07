@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Mapping\Loader;
 
-namespace Symfony\Component\Validator\Mapping\Loader;
-
-use Symfony\Component\Validator\Mapping\AutoMappingStrategy;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
-
+use Isolated\Symfony\Component\Validator\Mapping\AutoMappingStrategy;
+use Isolated\Symfony\Component\Validator\Mapping\ClassMetadata;
 /**
  * Utility methods to create auto mapping loaders.
  *
@@ -21,14 +19,13 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  */
 trait AutoMappingTrait
 {
-    private function isAutoMappingEnabledForClass(ClassMetadata $metadata, ?string $classValidatorRegexp = null): bool
+    private function isAutoMappingEnabledForClass(ClassMetadata $metadata, ?string $classValidatorRegexp = null) : bool
     {
         // Check if AutoMapping constraint is set first
-        if (AutoMappingStrategy::NONE !== $strategy = $metadata->getAutoMappingStrategy()) {
+        if (AutoMappingStrategy::NONE !== ($strategy = $metadata->getAutoMappingStrategy())) {
             return AutoMappingStrategy::ENABLED === $strategy;
         }
-
         // Fallback on the config
-        return null !== $classValidatorRegexp && preg_match($classValidatorRegexp, $metadata->getClassName());
+        return null !== $classValidatorRegexp && \preg_match($classValidatorRegexp, $metadata->getClassName());
     }
 }

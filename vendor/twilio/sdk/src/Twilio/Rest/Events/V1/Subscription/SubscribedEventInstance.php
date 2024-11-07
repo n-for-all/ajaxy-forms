@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Events\V1\Subscription;
 
-
-namespace Twilio\Rest\Events\V1\Subscription;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property string|null $type
@@ -44,62 +40,43 @@ class SubscribedEventInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $subscriptionSid, string $type = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'type' => Values::array_get($payload, 'type'),
-            'schemaVersion' => Values::array_get($payload, 'schema_version'),
-            'subscriptionSid' => Values::array_get($payload, 'subscription_sid'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['subscriptionSid' => $subscriptionSid, 'type' => $type ?: $this->properties['type'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'type' => Values::array_get($payload, 'type'), 'schemaVersion' => Values::array_get($payload, 'schema_version'), 'subscriptionSid' => Values::array_get($payload, 'subscription_sid'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['subscriptionSid' => $subscriptionSid, 'type' => $type ?: $this->properties['type']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return SubscribedEventContext Context for this SubscribedEventInstance
      */
-    protected function proxy(): SubscribedEventContext
+    protected function proxy() : SubscribedEventContext
     {
         if (!$this->context) {
-            $this->context = new SubscribedEventContext(
-                $this->version,
-                $this->solution['subscriptionSid'],
-                $this->solution['type']
-            );
+            $this->context = new SubscribedEventContext($this->version, $this->solution['subscriptionSid'], $this->solution['type']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the SubscribedEventInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the SubscribedEventInstance
      *
      * @return SubscribedEventInstance Fetched SubscribedEventInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SubscribedEventInstance
+    public function fetch() : SubscribedEventInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the SubscribedEventInstance
      *
@@ -107,12 +84,10 @@ class SubscribedEventInstance extends InstanceResource
      * @return SubscribedEventInstance Updated SubscribedEventInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): SubscribedEventInstance
+    public function update(array $options = []) : SubscribedEventInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -125,27 +100,23 @@ class SubscribedEventInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Events.V1.SubscribedEventInstance ' . \implode(' ', $context) . ']';
     }
 }
-

@@ -1,5 +1,6 @@
 <?php
-namespace Egulias\EmailValidator\Validation;
+
+namespace Isolated\Egulias\EmailValidator\Validation;
 
 class DNSGetRecordWrapper
 {
@@ -11,18 +12,16 @@ class DNSGetRecordWrapper
     {
         // A workaround to fix https://bugs.php.net/bug.php?id=73149
         /** @psalm-suppress InvalidArgument */
-        set_error_handler(
-            static function (int $errorLevel, string $errorMessage): ?bool {
-                throw new \RuntimeException("Unable to get DNS record for the host: $errorMessage");
-            }
-        );
+        \set_error_handler(static function (int $errorLevel, string $errorMessage) : ?bool {
+            throw new \RuntimeException("Unable to get DNS record for the host: {$errorMessage}");
+        });
         try {
             // Get all MX, A and AAAA DNS records for host
-            return new DNSRecords(dns_get_record($host, $type));
+            return new DNSRecords(\dns_get_record($host, $type));
         } catch (\RuntimeException $exception) {
-            return new DNSRecords([], true);
+            return new DNSRecords([], \true);
         } finally {
-            restore_error_handler();
+            \restore_error_handler();
         }
     }
 }

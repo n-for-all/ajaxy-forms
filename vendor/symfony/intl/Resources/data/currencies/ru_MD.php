@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'MDL' => [
-            'L',
-            'молдавский лей',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['MDL' => ['L', 'молдавский лей']]];

@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class ExpectingDTEXT implements Reason
 {
@@ -8,7 +8,6 @@ class ExpectingDTEXT implements Reason
     {
         return 129;
     }
-
     public function description() : string
     {
         return 'Expecting DTEXT';

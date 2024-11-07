@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Context;
 
-namespace Symfony\Component\Validator\Context;
-
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-
+use Isolated\Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Creates instances of {@link ExecutionContextInterface}.
  *

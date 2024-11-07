@@ -13,35 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V2;
 
-namespace Twilio\Rest\FlexApi\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class WebChannelsList extends ListResource
-    {
+{
     /**
      * Construct the WebChannelsList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/WebChats';
     }
-
     /**
      * Create the WebChannelsInstance
      *
@@ -50,39 +42,20 @@ class WebChannelsList extends ListResource
      * @return WebChannelsInstance Created WebChannelsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $addressSid, array $options = []): WebChannelsInstance
+    public function create(string $addressSid, array $options = []) : WebChannelsInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'AddressSid' =>
-                $addressSid,
-            'ChatFriendlyName' =>
-                $options['chatFriendlyName'],
-            'CustomerFriendlyName' =>
-                $options['customerFriendlyName'],
-            'PreEngagementData' =>
-                $options['preEngagementData'],
-        ]);
-
+        $data = Values::of(['AddressSid' => $addressSid, 'ChatFriendlyName' => $options['chatFriendlyName'], 'CustomerFriendlyName' => $options['customerFriendlyName'], 'PreEngagementData' => $options['preEngagementData']]);
         $headers = Values::of(['Ui-Version' => $options['uiVersion']]);
-
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new WebChannelsInstance(
-            $this->version,
-            $payload
-        );
+        return new WebChannelsInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.FlexApi.V2.WebChannelsList]';
     }

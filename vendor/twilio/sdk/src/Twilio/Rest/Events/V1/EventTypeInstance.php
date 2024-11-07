@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Events\V1;
 
-
-namespace Twilio\Rest\Events\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $type
  * @property string|null $schemaId
@@ -45,51 +41,33 @@ class EventTypeInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $type = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'type' => Values::array_get($payload, 'type'),
-            'schemaId' => Values::array_get($payload, 'schema_id'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'description' => Values::array_get($payload, 'description'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['type' => $type ?: $this->properties['type'], ];
+        $this->properties = ['type' => Values::array_get($payload, 'type'), 'schemaId' => Values::array_get($payload, 'schema_id'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'description' => Values::array_get($payload, 'description'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['type' => $type ?: $this->properties['type']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return EventTypeContext Context for this EventTypeInstance
      */
-    protected function proxy(): EventTypeContext
+    protected function proxy() : EventTypeContext
     {
         if (!$this->context) {
-            $this->context = new EventTypeContext(
-                $this->version,
-                $this->solution['type']
-            );
+            $this->context = new EventTypeContext($this->version, $this->solution['type']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the EventTypeInstance
      *
      * @return EventTypeInstance Fetched EventTypeInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): EventTypeInstance
+    public function fetch() : EventTypeInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -102,27 +80,23 @@ class EventTypeInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Events.V1.EventTypeInstance ' . \implode(' ', $context) . ']';
     }
 }
-

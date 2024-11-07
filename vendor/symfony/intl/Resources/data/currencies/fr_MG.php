@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'MGA' => [
-            'Ar',
-            'ariary malgache',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['MGA' => ['Ar', 'ariary malgache']]];

@@ -13,52 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Insights\V1;
 
-namespace Twilio\Rest\Insights\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class CallList extends ListResource
-    {
+{
     /**
      * Construct the CallList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a CallContext
      *
      * @param string $sid 
      */
-    public function getContext(
-        string $sid
-        
-    ): CallContext
+    public function getContext(string $sid) : CallContext
     {
-        return new CallContext(
-            $this->version,
-            $sid
-        );
+        return new CallContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Insights.V1.CallList]';
     }

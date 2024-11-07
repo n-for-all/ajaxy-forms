@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Authorization\Strategy;
 
-namespace Symfony\Component\Security\Core\Authorization\Strategy;
-
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
-
+use Isolated\Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 /**
  * Grants access if there is consensus of granted against denied responses.
  *
@@ -34,14 +32,12 @@ final class ConsensusStrategy implements AccessDecisionStrategyInterface, \Strin
 {
     private $allowIfAllAbstainDecisions;
     private $allowIfEqualGrantedDeniedDecisions;
-
-    public function __construct(bool $allowIfAllAbstainDecisions = false, bool $allowIfEqualGrantedDeniedDecisions = true)
+    public function __construct(bool $allowIfAllAbstainDecisions = \false, bool $allowIfEqualGrantedDeniedDecisions = \true)
     {
         $this->allowIfAllAbstainDecisions = $allowIfAllAbstainDecisions;
         $this->allowIfEqualGrantedDeniedDecisions = $allowIfEqualGrantedDeniedDecisions;
     }
-
-    public function decide(\Traversable $results): bool
+    public function decide(\Traversable $results) : bool
     {
         $grant = 0;
         $deny = 0;
@@ -52,23 +48,18 @@ final class ConsensusStrategy implements AccessDecisionStrategyInterface, \Strin
                 ++$deny;
             }
         }
-
         if ($grant > $deny) {
-            return true;
+            return \true;
         }
-
         if ($deny > $grant) {
-            return false;
+            return \false;
         }
-
         if ($grant > 0) {
             return $this->allowIfEqualGrantedDeniedDecisions;
         }
-
         return $this->allowIfAllAbstainDecisions;
     }
-
-    public function __toString(): string
+    public function __toString() : string
     {
         return 'consensus';
     }

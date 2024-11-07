@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Authentication\Token\Storage;
 
-namespace Symfony\Component\Security\Core\Authentication\Token\Storage;
-
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
+use Isolated\Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 /**
  * The TokenStorageInterface.
  *
@@ -26,7 +24,6 @@ interface TokenStorageInterface
      * @return TokenInterface|null
      */
     public function getToken();
-
     /**
      * Sets the authentication token.
      *

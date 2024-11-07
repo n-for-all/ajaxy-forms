@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'VUV' => [
-            'VT',
-            'Vanuatu Vatu',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['VUV' => ['VT', 'Vanuatu Vatu']]];

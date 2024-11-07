@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Microvisor\V1\Device;
 
-namespace Twilio\Rest\Microvisor\V1\Device;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class DeviceSecretList extends ListResource
-    {
+{
     /**
      * Construct the DeviceSecretList
      *
      * @param Version $version Version that contains the resource
      * @param string $deviceSid A 34-character string that uniquely identifies the Device.
      */
-    public function __construct(
-        Version $version,
-        string $deviceSid
-    ) {
+    public function __construct(Version $version, string $deviceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'deviceSid' =>
-            $deviceSid,
-        
-        ];
-
-        $this->uri = '/Devices/' . \rawurlencode($deviceSid)
-        .'/Secrets';
+        $this->solution = ['deviceSid' => $deviceSid];
+        $this->uri = '/Devices/' . \rawurlencode($deviceSid) . '/Secrets';
     }
-
     /**
      * Create the DeviceSecretInstance
      *
@@ -56,26 +43,12 @@ class DeviceSecretList extends ListResource
      * @return DeviceSecretInstance Created DeviceSecretInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $key, string $value): DeviceSecretInstance
+    public function create(string $key, string $value) : DeviceSecretInstance
     {
-
-        $data = Values::of([
-            'Key' =>
-                $key,
-            'Value' =>
-                $value,
-        ]);
-
+        $data = Values::of(['Key' => $key, 'Value' => $value]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new DeviceSecretInstance(
-            $this->version,
-            $payload,
-            $this->solution['deviceSid']
-        );
+        return new DeviceSecretInstance($this->version, $payload, $this->solution['deviceSid']);
     }
-
-
     /**
      * Reads DeviceSecretInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -91,11 +64,10 @@ class DeviceSecretList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return DeviceSecretInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams DeviceSecretInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -114,15 +86,12 @@ class DeviceSecretList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of DeviceSecretInstance records from the API.
      * Request is executed immediately
@@ -132,24 +101,12 @@ class DeviceSecretList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return DeviceSecretPage Page of DeviceSecretInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): DeviceSecretPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : DeviceSecretPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new DeviceSecretPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of DeviceSecretInstance records from the API.
      * Request is executed immediately
@@ -157,40 +114,26 @@ class DeviceSecretList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return DeviceSecretPage Page of DeviceSecretInstance
      */
-    public function getPage(string $targetUrl): DeviceSecretPage
+    public function getPage(string $targetUrl) : DeviceSecretPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new DeviceSecretPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a DeviceSecretContext
      *
      * @param string $key The secret key; up to 100 characters.
      */
-    public function getContext(
-        string $key
-        
-    ): DeviceSecretContext
+    public function getContext(string $key) : DeviceSecretContext
     {
-        return new DeviceSecretContext(
-            $this->version,
-            $this->solution['deviceSid'],
-            $key
-        );
+        return new DeviceSecretContext($this->version, $this->solution['deviceSid'], $key);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Microvisor.V1.DeviceSecretList]';
     }

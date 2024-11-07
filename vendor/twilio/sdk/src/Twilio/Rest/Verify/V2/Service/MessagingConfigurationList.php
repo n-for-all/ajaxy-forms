@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service;
 
-namespace Twilio\Rest\Verify\V2\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class MessagingConfigurationList extends ListResource
-    {
+{
     /**
      * Construct the MessagingConfigurationList
      *
      * @param Version $version Version that contains the resource
      * @param string $serviceSid The SID of the [Service](https://www.twilio.com/docs/verify/api/service) that the resource is associated with.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid
-    ) {
+    public function __construct(Version $version, string $serviceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/MessagingConfigurations';
+        $this->solution = ['serviceSid' => $serviceSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/MessagingConfigurations';
     }
-
     /**
      * Create the MessagingConfigurationInstance
      *
@@ -56,26 +43,12 @@ class MessagingConfigurationList extends ListResource
      * @return MessagingConfigurationInstance Created MessagingConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $country, string $messagingServiceSid): MessagingConfigurationInstance
+    public function create(string $country, string $messagingServiceSid) : MessagingConfigurationInstance
     {
-
-        $data = Values::of([
-            'Country' =>
-                $country,
-            'MessagingServiceSid' =>
-                $messagingServiceSid,
-        ]);
-
+        $data = Values::of(['Country' => $country, 'MessagingServiceSid' => $messagingServiceSid]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new MessagingConfigurationInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid']
-        );
+        return new MessagingConfigurationInstance($this->version, $payload, $this->solution['serviceSid']);
     }
-
-
     /**
      * Reads MessagingConfigurationInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -91,11 +64,10 @@ class MessagingConfigurationList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return MessagingConfigurationInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams MessagingConfigurationInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -114,15 +86,12 @@ class MessagingConfigurationList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of MessagingConfigurationInstance records from the API.
      * Request is executed immediately
@@ -132,24 +101,12 @@ class MessagingConfigurationList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return MessagingConfigurationPage Page of MessagingConfigurationInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): MessagingConfigurationPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : MessagingConfigurationPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new MessagingConfigurationPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of MessagingConfigurationInstance records from the API.
      * Request is executed immediately
@@ -157,40 +114,26 @@ class MessagingConfigurationList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return MessagingConfigurationPage Page of MessagingConfigurationInstance
      */
-    public function getPage(string $targetUrl): MessagingConfigurationPage
+    public function getPage(string $targetUrl) : MessagingConfigurationPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new MessagingConfigurationPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a MessagingConfigurationContext
      *
      * @param string $country The [ISO-3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code of the country this configuration will be applied to. If this is a global configuration, Country will take the value `all`.
      */
-    public function getContext(
-        string $country
-        
-    ): MessagingConfigurationContext
+    public function getContext(string $country) : MessagingConfigurationContext
     {
-        return new MessagingConfigurationContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $country
-        );
+        return new MessagingConfigurationContext($this->version, $this->solution['serviceSid'], $country);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Verify.V2.MessagingConfigurationList]';
     }

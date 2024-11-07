@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1\Service\Conversation\Message;
 
-
-namespace Twilio\Rest\Conversations\V1\Service\Conversation\Message;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class DeliveryReceiptContext extends InstanceContext
-    {
+{
     /**
      * Initialize the DeliveryReceiptContext
      *
@@ -33,66 +29,34 @@ class DeliveryReceiptContext extends InstanceContext
      * @param string $messageSid The SID of the message within a [Conversation](https://www.twilio.com/docs/conversations/api/conversation-resource) the delivery receipt belongs to.
      * @param string $sid A 34 character string that uniquely identifies this resource.
      */
-    public function __construct(
-        Version $version,
-        $chatServiceSid,
-        $conversationSid,
-        $messageSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $chatServiceSid, $conversationSid, $messageSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'chatServiceSid' =>
-            $chatServiceSid,
-        'conversationSid' =>
-            $conversationSid,
-        'messageSid' =>
-            $messageSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($chatServiceSid)
-        .'/Conversations/' . \rawurlencode($conversationSid)
-        .'/Messages/' . \rawurlencode($messageSid)
-        .'/Receipts/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['chatServiceSid' => $chatServiceSid, 'conversationSid' => $conversationSid, 'messageSid' => $messageSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($chatServiceSid) . '/Conversations/' . \rawurlencode($conversationSid) . '/Messages/' . \rawurlencode($messageSid) . '/Receipts/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the DeliveryReceiptInstance
      *
      * @return DeliveryReceiptInstance Fetched DeliveryReceiptInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DeliveryReceiptInstance
+    public function fetch() : DeliveryReceiptInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new DeliveryReceiptInstance(
-            $this->version,
-            $payload,
-            $this->solution['chatServiceSid'],
-            $this->solution['conversationSid'],
-            $this->solution['messageSid'],
-            $this->solution['sid']
-        );
+        return new DeliveryReceiptInstance($this->version, $payload, $this->solution['chatServiceSid'], $this->solution['conversationSid'], $this->solution['messageSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Conversations.V1.DeliveryReceiptContext ' . \implode(' ', $context) . ']';
     }

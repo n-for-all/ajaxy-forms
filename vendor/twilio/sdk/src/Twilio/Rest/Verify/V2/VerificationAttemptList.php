@@ -13,36 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2;
 
-namespace Twilio\Rest\Verify\V2;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class VerificationAttemptList extends ListResource
-    {
+{
     /**
      * Construct the VerificationAttemptList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Attempts';
     }
-
     /**
      * Reads VerificationAttemptInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -59,11 +51,10 @@ class VerificationAttemptList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return VerificationAttemptInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams VerificationAttemptInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -83,15 +74,12 @@ class VerificationAttemptList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of VerificationAttemptInstance records from the API.
      * Request is executed immediately
@@ -101,42 +89,13 @@ class VerificationAttemptList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return VerificationAttemptPage Page of VerificationAttemptInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): VerificationAttemptPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : VerificationAttemptPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'DateCreatedAfter' =>
-                Serialize::iso8601DateTime($options['dateCreatedAfter']),
-            'DateCreatedBefore' =>
-                Serialize::iso8601DateTime($options['dateCreatedBefore']),
-            'ChannelData.To' =>
-                $options['channelDataTo'],
-            'Country' =>
-                $options['country'],
-            'Channel' =>
-                $options['channel'],
-            'VerifyServiceSid' =>
-                $options['verifyServiceSid'],
-            'VerificationSid' =>
-                $options['verificationSid'],
-            'Status' =>
-                $options['status'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['DateCreatedAfter' => Serialize::iso8601DateTime($options['dateCreatedAfter']), 'DateCreatedBefore' => Serialize::iso8601DateTime($options['dateCreatedBefore']), 'ChannelData.To' => $options['channelDataTo'], 'Country' => $options['country'], 'Channel' => $options['channel'], 'VerifyServiceSid' => $options['verifyServiceSid'], 'VerificationSid' => $options['verificationSid'], 'Status' => $options['status'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new VerificationAttemptPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of VerificationAttemptInstance records from the API.
      * Request is executed immediately
@@ -144,39 +103,26 @@ class VerificationAttemptList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return VerificationAttemptPage Page of VerificationAttemptInstance
      */
-    public function getPage(string $targetUrl): VerificationAttemptPage
+    public function getPage(string $targetUrl) : VerificationAttemptPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new VerificationAttemptPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a VerificationAttemptContext
      *
      * @param string $sid The unique SID identifier of a Verification Attempt
      */
-    public function getContext(
-        string $sid
-        
-    ): VerificationAttemptContext
+    public function getContext(string $sid) : VerificationAttemptContext
     {
-        return new VerificationAttemptContext(
-            $this->version,
-            $sid
-        );
+        return new VerificationAttemptContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Verify.V2.VerificationAttemptList]';
     }

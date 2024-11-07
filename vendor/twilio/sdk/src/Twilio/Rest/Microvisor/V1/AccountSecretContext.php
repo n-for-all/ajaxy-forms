@@ -13,72 +13,48 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Microvisor\V1;
 
-
-namespace Twilio\Rest\Microvisor\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class AccountSecretContext extends InstanceContext
-    {
+{
     /**
      * Initialize the AccountSecretContext
      *
      * @param Version $version Version that contains the resource
      * @param string $key The secret key; up to 100 characters.
      */
-    public function __construct(
-        Version $version,
-        $key
-    ) {
+    public function __construct(Version $version, $key)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'key' =>
-            $key,
-        ];
-
-        $this->uri = '/Secrets/' . \rawurlencode($key)
-        .'';
+        $this->solution = ['key' => $key];
+        $this->uri = '/Secrets/' . \rawurlencode($key) . '';
     }
-
     /**
      * Delete the AccountSecretInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the AccountSecretInstance
      *
      * @return AccountSecretInstance Fetched AccountSecretInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): AccountSecretInstance
+    public function fetch() : AccountSecretInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new AccountSecretInstance(
-            $this->version,
-            $payload,
-            $this->solution['key']
-        );
+        return new AccountSecretInstance($this->version, $payload, $this->solution['key']);
     }
-
-
     /**
      * Update the AccountSecretInstance
      *
@@ -86,34 +62,22 @@ class AccountSecretContext extends InstanceContext
      * @return AccountSecretInstance Updated AccountSecretInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $value): AccountSecretInstance
+    public function update(string $value) : AccountSecretInstance
     {
-
-        $data = Values::of([
-            'Value' =>
-                $value,
-        ]);
-
+        $data = Values::of(['Value' => $value]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new AccountSecretInstance(
-            $this->version,
-            $payload,
-            $this->solution['key']
-        );
+        return new AccountSecretInstance($this->version, $payload, $this->solution['key']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Microvisor.V1.AccountSecretContext ' . \implode(' ', $context) . ']';
     }

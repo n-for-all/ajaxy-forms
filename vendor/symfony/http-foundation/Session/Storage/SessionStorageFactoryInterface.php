@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\HttpFoundation\Session\Storage;
 
-namespace Symfony\Component\HttpFoundation\Session\Storage;
-
-use Symfony\Component\HttpFoundation\Request;
-
+use Isolated\Symfony\Component\HttpFoundation\Request;
 /**
  * @author Jérémy Derussé <jeremy@derusse.com>
  */
@@ -21,5 +19,5 @@ interface SessionStorageFactoryInterface
     /**
      * Creates a new instance of SessionStorageInterface.
      */
-    public function createStorage(?Request $request): SessionStorageInterface;
+    public function createStorage(?Request $request) : SessionStorageInterface;
 }

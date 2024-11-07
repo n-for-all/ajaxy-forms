@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class InsightsQuestionnairesCategoryContext extends InstanceContext
-    {
+{
     /**
      * Initialize the InsightsQuestionnairesCategoryContext
      *
      * @param Version $version Version that contains the resource
      * @param string $categorySid The SID of the category to be deleted
      */
-    public function __construct(
-        Version $version,
-        $categorySid
-    ) {
+    public function __construct(Version $version, $categorySid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'categorySid' =>
-            $categorySid,
-        ];
-
-        $this->uri = '/Insights/QualityManagement/Categories/' . \rawurlencode($categorySid)
-        .'';
+        $this->solution = ['categorySid' => $categorySid];
+        $this->uri = '/Insights/QualityManagement/Categories/' . \rawurlencode($categorySid) . '';
     }
-
     /**
      * Delete the InsightsQuestionnairesCategoryInstance
      *
@@ -55,17 +42,12 @@ class InsightsQuestionnairesCategoryContext extends InstanceContext
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(array $options = []): bool
+    public function delete(array $options = []) : bool
     {
-
         $options = new Values($options);
-
         $headers = Values::of(['Authorization' => $options['authorization']]);
-
         return $this->version->delete('DELETE', $this->uri, [], [], $headers);
     }
-
-
     /**
      * Update the InsightsQuestionnairesCategoryInstance
      *
@@ -74,38 +56,24 @@ class InsightsQuestionnairesCategoryContext extends InstanceContext
      * @return InsightsQuestionnairesCategoryInstance Updated InsightsQuestionnairesCategoryInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $name, array $options = []): InsightsQuestionnairesCategoryInstance
+    public function update(string $name, array $options = []) : InsightsQuestionnairesCategoryInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Name' =>
-                $name,
-        ]);
-
+        $data = Values::of(['Name' => $name]);
         $headers = Values::of(['Authorization' => $options['authorization']]);
-
         $payload = $this->version->update('POST', $this->uri, [], $data, $headers);
-
-        return new InsightsQuestionnairesCategoryInstance(
-            $this->version,
-            $payload,
-            $this->solution['categorySid']
-        );
+        return new InsightsQuestionnairesCategoryInstance($this->version, $payload, $this->solution['categorySid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.InsightsQuestionnairesCategoryContext ' . \implode(' ', $context) . ']';
     }

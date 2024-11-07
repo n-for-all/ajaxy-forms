@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1\BrandRegistration;
 
-
-namespace Twilio\Rest\Messaging\V1\BrandRegistration;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property string|null $brandRegistrationSid
@@ -39,16 +35,10 @@ class BrandRegistrationOtpInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $brandRegistrationSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'brandRegistrationSid' => Values::array_get($payload, 'brand_registration_sid'),
-        ];
-
-        $this->solution = ['brandRegistrationSid' => $brandRegistrationSid, ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'brandRegistrationSid' => Values::array_get($payload, 'brand_registration_sid')];
+        $this->solution = ['brandRegistrationSid' => $brandRegistrationSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -61,23 +51,19 @@ class BrandRegistrationOtpInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Messaging.V1.BrandRegistrationOtpInstance]';
     }
 }
-

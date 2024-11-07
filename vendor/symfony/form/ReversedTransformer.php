@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form;
+namespace Isolated\Symfony\Component\Form;
 
 /**
  * Reverses a transformer.
@@ -22,12 +21,10 @@ namespace Symfony\Component\Form;
 class ReversedTransformer implements DataTransformerInterface
 {
     protected $reversedTransformer;
-
     public function __construct(DataTransformerInterface $reversedTransformer)
     {
         $this->reversedTransformer = $reversedTransformer;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -35,7 +32,6 @@ class ReversedTransformer implements DataTransformerInterface
     {
         return $this->reversedTransformer->reverseTransform($value);
     }
-
     /**
      * {@inheritdoc}
      */

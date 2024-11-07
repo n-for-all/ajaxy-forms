@@ -8,21 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\DataTransformer;
 
-namespace Symfony\Component\Form\Extension\Core\DataTransformer;
-
-use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
-
+use Isolated\Symfony\Component\Form\DataTransformerInterface;
+use Isolated\Symfony\Component\Form\Exception\TransformationFailedException;
 class StringToFloatTransformer implements DataTransformerInterface
 {
     private $scale;
-
     public function __construct(int $scale = null)
     {
         $this->scale = $scale;
     }
-
     /**
      * @param mixed $value
      *
@@ -33,14 +29,11 @@ class StringToFloatTransformer implements DataTransformerInterface
         if (null === $value) {
             return null;
         }
-
-        if (!\is_string($value) || !is_numeric($value)) {
+        if (!\is_string($value) || !\is_numeric($value)) {
             throw new TransformationFailedException('Expected a numeric string.');
         }
-
         return (float) $value;
     }
-
     /**
      * @param mixed $value
      *
@@ -51,15 +44,12 @@ class StringToFloatTransformer implements DataTransformerInterface
         if (null === $value) {
             return null;
         }
-
         if (!\is_int($value) && !\is_float($value)) {
             throw new TransformationFailedException('Expected a numeric.');
         }
-
         if ($this->scale > 0) {
-            return number_format((float) $value, $this->scale, '.', '');
+            return \number_format((float) $value, $this->scale, '.', '');
         }
-
         return (string) $value;
     }
 }

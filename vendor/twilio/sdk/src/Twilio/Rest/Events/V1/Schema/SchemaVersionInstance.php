@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Events\V1\Schema;
 
-
-namespace Twilio\Rest\Events\V1\Schema;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $id
  * @property int|null $schemaVersion
@@ -44,50 +40,33 @@ class SchemaVersionInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $id, int $schemaVersion = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'id' => Values::array_get($payload, 'id'),
-            'schemaVersion' => Values::array_get($payload, 'schema_version'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'url' => Values::array_get($payload, 'url'),
-            'raw' => Values::array_get($payload, 'raw'),
-        ];
-
-        $this->solution = ['id' => $id, 'schemaVersion' => $schemaVersion ?: $this->properties['schemaVersion'], ];
+        $this->properties = ['id' => Values::array_get($payload, 'id'), 'schemaVersion' => Values::array_get($payload, 'schema_version'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'url' => Values::array_get($payload, 'url'), 'raw' => Values::array_get($payload, 'raw')];
+        $this->solution = ['id' => $id, 'schemaVersion' => $schemaVersion ?: $this->properties['schemaVersion']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return SchemaVersionContext Context for this SchemaVersionInstance
      */
-    protected function proxy(): SchemaVersionContext
+    protected function proxy() : SchemaVersionContext
     {
         if (!$this->context) {
-            $this->context = new SchemaVersionContext(
-                $this->version,
-                $this->solution['id'],
-                $this->solution['schemaVersion']
-            );
+            $this->context = new SchemaVersionContext($this->version, $this->solution['id'], $this->solution['schemaVersion']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the SchemaVersionInstance
      *
      * @return SchemaVersionInstance Fetched SchemaVersionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SchemaVersionInstance
+    public function fetch() : SchemaVersionInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -100,27 +79,23 @@ class SchemaVersionInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Events.V1.SchemaVersionInstance ' . \implode(' ', $context) . ']';
     }
 }
-

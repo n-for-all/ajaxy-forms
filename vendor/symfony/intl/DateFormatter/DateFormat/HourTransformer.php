@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Intl\DateFormatter\DateFormat;
+namespace Isolated\Symfony\Component\Intl\DateFormatter\DateFormat;
 
 /**
  * Base class for hour transformers.
@@ -30,5 +29,5 @@ abstract class HourTransformer extends Transformer
      *
      * @return int The normalized hour value
      */
-    abstract public function normalizeHour(int $hour, ?string $marker = null): int;
+    public abstract function normalizeHour(int $hour, ?string $marker = null) : int;
 }

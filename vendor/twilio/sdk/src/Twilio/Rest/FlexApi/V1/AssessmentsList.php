@@ -13,36 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class AssessmentsList extends ListResource
-    {
+{
     /**
      * Construct the AssessmentsList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Insights/QualityManagement/Assessments';
     }
-
     /**
      * Create the AssessmentsInstance
      *
@@ -60,45 +52,14 @@ class AssessmentsList extends ListResource
      * @return AssessmentsInstance Created AssessmentsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $categorySid, string $categoryName, string $segmentId, string $agentId, string $offset, string $metricId, string $metricName, string $answerText, string $answerId, string $questionnaireSid, array $options = []): AssessmentsInstance
+    public function create(string $categorySid, string $categoryName, string $segmentId, string $agentId, string $offset, string $metricId, string $metricName, string $answerText, string $answerId, string $questionnaireSid, array $options = []) : AssessmentsInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'CategorySid' =>
-                $categorySid,
-            'CategoryName' =>
-                $categoryName,
-            'SegmentId' =>
-                $segmentId,
-            'AgentId' =>
-                $agentId,
-            'Offset' =>
-                $offset,
-            'MetricId' =>
-                $metricId,
-            'MetricName' =>
-                $metricName,
-            'AnswerText' =>
-                $answerText,
-            'AnswerId' =>
-                $answerId,
-            'QuestionnaireSid' =>
-                $questionnaireSid,
-        ]);
-
+        $data = Values::of(['CategorySid' => $categorySid, 'CategoryName' => $categoryName, 'SegmentId' => $segmentId, 'AgentId' => $agentId, 'Offset' => $offset, 'MetricId' => $metricId, 'MetricName' => $metricName, 'AnswerText' => $answerText, 'AnswerId' => $answerId, 'QuestionnaireSid' => $questionnaireSid]);
         $headers = Values::of(['Authorization' => $options['authorization']]);
-
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new AssessmentsInstance(
-            $this->version,
-            $payload
-        );
+        return new AssessmentsInstance($this->version, $payload);
     }
-
-
     /**
      * Reads AssessmentsInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -115,11 +76,10 @@ class AssessmentsList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return AssessmentsInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams AssessmentsInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -139,15 +99,12 @@ class AssessmentsList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of AssessmentsInstance records from the API.
      * Request is executed immediately
@@ -157,30 +114,13 @@ class AssessmentsList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return AssessmentsPage Page of AssessmentsInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): AssessmentsPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : AssessmentsPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'SegmentId' =>
-                $options['segmentId'],
-            'Authorization' =>
-                $options['authorization'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['SegmentId' => $options['segmentId'], 'Authorization' => $options['authorization'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new AssessmentsPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of AssessmentsInstance records from the API.
      * Request is executed immediately
@@ -188,39 +128,26 @@ class AssessmentsList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return AssessmentsPage Page of AssessmentsInstance
      */
-    public function getPage(string $targetUrl): AssessmentsPage
+    public function getPage(string $targetUrl) : AssessmentsPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new AssessmentsPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a AssessmentsContext
      *
      * @param string $assessmentSid The SID of the assessment to be modified
      */
-    public function getContext(
-        string $assessmentSid
-        
-    ): AssessmentsContext
+    public function getContext(string $assessmentSid) : AssessmentsContext
     {
-        return new AssessmentsContext(
-            $this->version,
-            $assessmentSid
-        );
+        return new AssessmentsContext($this->version, $assessmentSid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.FlexApi.V1.AssessmentsList]';
     }

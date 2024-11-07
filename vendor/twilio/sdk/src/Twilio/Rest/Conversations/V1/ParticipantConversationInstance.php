@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1;
 
-
-namespace Twilio\Rest\Conversations\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property string|null $chatServiceSid
@@ -53,30 +49,10 @@ class ParticipantConversationInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'chatServiceSid' => Values::array_get($payload, 'chat_service_sid'),
-            'participantSid' => Values::array_get($payload, 'participant_sid'),
-            'participantUserSid' => Values::array_get($payload, 'participant_user_sid'),
-            'participantIdentity' => Values::array_get($payload, 'participant_identity'),
-            'participantMessagingBinding' => Values::array_get($payload, 'participant_messaging_binding'),
-            'conversationSid' => Values::array_get($payload, 'conversation_sid'),
-            'conversationUniqueName' => Values::array_get($payload, 'conversation_unique_name'),
-            'conversationFriendlyName' => Values::array_get($payload, 'conversation_friendly_name'),
-            'conversationAttributes' => Values::array_get($payload, 'conversation_attributes'),
-            'conversationDateCreated' => Deserialize::dateTime(Values::array_get($payload, 'conversation_date_created')),
-            'conversationDateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'conversation_date_updated')),
-            'conversationCreatedBy' => Values::array_get($payload, 'conversation_created_by'),
-            'conversationState' => Values::array_get($payload, 'conversation_state'),
-            'conversationTimers' => Values::array_get($payload, 'conversation_timers'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'chatServiceSid' => Values::array_get($payload, 'chat_service_sid'), 'participantSid' => Values::array_get($payload, 'participant_sid'), 'participantUserSid' => Values::array_get($payload, 'participant_user_sid'), 'participantIdentity' => Values::array_get($payload, 'participant_identity'), 'participantMessagingBinding' => Values::array_get($payload, 'participant_messaging_binding'), 'conversationSid' => Values::array_get($payload, 'conversation_sid'), 'conversationUniqueName' => Values::array_get($payload, 'conversation_unique_name'), 'conversationFriendlyName' => Values::array_get($payload, 'conversation_friendly_name'), 'conversationAttributes' => Values::array_get($payload, 'conversation_attributes'), 'conversationDateCreated' => Deserialize::dateTime(Values::array_get($payload, 'conversation_date_created')), 'conversationDateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'conversation_date_updated')), 'conversationCreatedBy' => Values::array_get($payload, 'conversation_created_by'), 'conversationState' => Values::array_get($payload, 'conversation_state'), 'conversationTimers' => Values::array_get($payload, 'conversation_timers'), 'links' => Values::array_get($payload, 'links')];
         $this->solution = [];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -89,23 +65,19 @@ class ParticipantConversationInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Conversations.V1.ParticipantConversationInstance]';
     }
 }
-

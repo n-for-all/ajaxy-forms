@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Insights\V1\Call;
 
-
-namespace Twilio\Rest\Insights\V1\Call;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $timestamp
  * @property string|null $callSid
@@ -46,23 +42,10 @@ class MetricInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $callSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'timestamp' => Values::array_get($payload, 'timestamp'),
-            'callSid' => Values::array_get($payload, 'call_sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'edge' => Values::array_get($payload, 'edge'),
-            'direction' => Values::array_get($payload, 'direction'),
-            'carrierEdge' => Values::array_get($payload, 'carrier_edge'),
-            'sipEdge' => Values::array_get($payload, 'sip_edge'),
-            'sdkEdge' => Values::array_get($payload, 'sdk_edge'),
-            'clientEdge' => Values::array_get($payload, 'client_edge'),
-        ];
-
-        $this->solution = ['callSid' => $callSid, ];
+        $this->properties = ['timestamp' => Values::array_get($payload, 'timestamp'), 'callSid' => Values::array_get($payload, 'call_sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'edge' => Values::array_get($payload, 'edge'), 'direction' => Values::array_get($payload, 'direction'), 'carrierEdge' => Values::array_get($payload, 'carrier_edge'), 'sipEdge' => Values::array_get($payload, 'sip_edge'), 'sdkEdge' => Values::array_get($payload, 'sdk_edge'), 'clientEdge' => Values::array_get($payload, 'client_edge')];
+        $this->solution = ['callSid' => $callSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -75,23 +58,19 @@ class MetricInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Insights.V1.MetricInstance]';
     }
 }
-

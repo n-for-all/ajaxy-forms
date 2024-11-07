@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'MKD' => [
-            'den',
-            'Denari maqedonas',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['MKD' => ['den', 'Denari maqedonas']]];

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Mime\Header;
+namespace Isolated\Symfony\Component\Mime\Header;
 
 /**
  * A Simple MIME Header.
@@ -19,14 +18,11 @@ namespace Symfony\Component\Mime\Header;
 class UnstructuredHeader extends AbstractHeader
 {
     private $value;
-
     public function __construct(string $name, string $value)
     {
         parent::__construct($name);
-
         $this->setValue($value);
     }
-
     /**
      * @param string $body
      */
@@ -34,7 +30,6 @@ class UnstructuredHeader extends AbstractHeader
     {
         $this->setValue($body);
     }
-
     /**
      * @return string
      */
@@ -42,15 +37,13 @@ class UnstructuredHeader extends AbstractHeader
     {
         return $this->getValue();
     }
-
     /**
      * Get the (unencoded) value of this header.
      */
-    public function getValue(): string
+    public function getValue() : string
     {
         return $this->value;
     }
-
     /**
      * Set the (unencoded) value of this header.
      */
@@ -58,11 +51,10 @@ class UnstructuredHeader extends AbstractHeader
     {
         $this->value = $value;
     }
-
     /**
      * Get the value of this header prepared for rendering.
      */
-    public function getBodyAsString(): string
+    public function getBodyAsString() : string
     {
         return $this->encodeWords($this, $this->value);
     }

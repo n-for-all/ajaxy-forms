@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class ConsecutiveAt implements Reason
 {
@@ -8,10 +8,8 @@ class ConsecutiveAt implements Reason
     {
         return 128;
     }
-
     public function description() : string
     {
         return '@ found after another @';
     }
-
 }

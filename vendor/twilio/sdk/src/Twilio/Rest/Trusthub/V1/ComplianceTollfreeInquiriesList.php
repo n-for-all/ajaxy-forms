@@ -13,36 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1;
 
-namespace Twilio\Rest\Trusthub\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class ComplianceTollfreeInquiriesList extends ListResource
-    {
+{
     /**
      * Construct the ComplianceTollfreeInquiriesList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/ComplianceInquiries/Tollfree/Initialize';
     }
-
     /**
      * Create the ComplianceTollfreeInquiriesInstance
      *
@@ -52,73 +44,23 @@ class ComplianceTollfreeInquiriesList extends ListResource
      * @return ComplianceTollfreeInquiriesInstance Created ComplianceTollfreeInquiriesInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $tollfreePhoneNumber, string $notificationEmail, array $options = []): ComplianceTollfreeInquiriesInstance
+    public function create(string $tollfreePhoneNumber, string $notificationEmail, array $options = []) : ComplianceTollfreeInquiriesInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'TollfreePhoneNumber' =>
-                $tollfreePhoneNumber,
-            'NotificationEmail' =>
-                $notificationEmail,
-            'BusinessName' =>
-                $options['businessName'],
-            'BusinessWebsite' =>
-                $options['businessWebsite'],
-            'UseCaseCategories' =>
-                Serialize::map($options['useCaseCategories'], function ($e) { return $e; }),
-            'UseCaseSummary' =>
-                $options['useCaseSummary'],
-            'ProductionMessageSample' =>
-                $options['productionMessageSample'],
-            'OptInImageUrls' =>
-                Serialize::map($options['optInImageUrls'], function ($e) { return $e; }),
-            'OptInType' =>
-                $options['optInType'],
-            'MessageVolume' =>
-                $options['messageVolume'],
-            'BusinessStreetAddress' =>
-                $options['businessStreetAddress'],
-            'BusinessStreetAddress2' =>
-                $options['businessStreetAddress2'],
-            'BusinessCity' =>
-                $options['businessCity'],
-            'BusinessStateProvinceRegion' =>
-                $options['businessStateProvinceRegion'],
-            'BusinessPostalCode' =>
-                $options['businessPostalCode'],
-            'BusinessCountry' =>
-                $options['businessCountry'],
-            'AdditionalInformation' =>
-                $options['additionalInformation'],
-            'BusinessContactFirstName' =>
-                $options['businessContactFirstName'],
-            'BusinessContactLastName' =>
-                $options['businessContactLastName'],
-            'BusinessContactEmail' =>
-                $options['businessContactEmail'],
-            'BusinessContactPhone' =>
-                $options['businessContactPhone'],
-            'ThemeSetId' =>
-                $options['themeSetId'],
-        ]);
-
+        $data = Values::of(['TollfreePhoneNumber' => $tollfreePhoneNumber, 'NotificationEmail' => $notificationEmail, 'BusinessName' => $options['businessName'], 'BusinessWebsite' => $options['businessWebsite'], 'UseCaseCategories' => Serialize::map($options['useCaseCategories'], function ($e) {
+            return $e;
+        }), 'UseCaseSummary' => $options['useCaseSummary'], 'ProductionMessageSample' => $options['productionMessageSample'], 'OptInImageUrls' => Serialize::map($options['optInImageUrls'], function ($e) {
+            return $e;
+        }), 'OptInType' => $options['optInType'], 'MessageVolume' => $options['messageVolume'], 'BusinessStreetAddress' => $options['businessStreetAddress'], 'BusinessStreetAddress2' => $options['businessStreetAddress2'], 'BusinessCity' => $options['businessCity'], 'BusinessStateProvinceRegion' => $options['businessStateProvinceRegion'], 'BusinessPostalCode' => $options['businessPostalCode'], 'BusinessCountry' => $options['businessCountry'], 'AdditionalInformation' => $options['additionalInformation'], 'BusinessContactFirstName' => $options['businessContactFirstName'], 'BusinessContactLastName' => $options['businessContactLastName'], 'BusinessContactEmail' => $options['businessContactEmail'], 'BusinessContactPhone' => $options['businessContactPhone'], 'ThemeSetId' => $options['themeSetId']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new ComplianceTollfreeInquiriesInstance(
-            $this->version,
-            $payload
-        );
+        return new ComplianceTollfreeInquiriesInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Trusthub.V1.ComplianceTollfreeInquiriesList]';
     }

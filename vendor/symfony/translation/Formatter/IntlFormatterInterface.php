@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Translation\Formatter;
+namespace Isolated\Symfony\Component\Translation\Formatter;
 
 /**
  * Formats ICU message patterns.
@@ -23,5 +22,5 @@ interface IntlFormatterInterface
      *
      * @see http://icu-project.org/apiref/icu4c/classMessageFormat.html#details
      */
-    public function formatIntl(string $message, string $locale, array $parameters = []): string;
+    public function formatIntl(string $message, string $locale, array $parameters = []) : string;
 }

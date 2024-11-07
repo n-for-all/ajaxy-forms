@@ -13,19 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Serverless\V1\Service\Environment;
 
-namespace Twilio\Rest\Serverless\V1\Service\Environment;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class LogList extends ListResource
-    {
+{
     /**
      * Construct the LogList
      *
@@ -33,28 +30,13 @@ class LogList extends ListResource
      * @param string $serviceSid The SID of the Service to fetch the Log resource from.
      * @param string $environmentSid The SID of the environment with the Log resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid,
-        string $environmentSid
-    ) {
+    public function __construct(Version $version, string $serviceSid, string $environmentSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        'environmentSid' =>
-            $environmentSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Environments/' . \rawurlencode($environmentSid)
-        .'/Logs';
+        $this->solution = ['serviceSid' => $serviceSid, 'environmentSid' => $environmentSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Environments/' . \rawurlencode($environmentSid) . '/Logs';
     }
-
     /**
      * Reads LogInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -71,11 +53,10 @@ class LogList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return LogInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams LogInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -95,15 +76,12 @@ class LogList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of LogInstance records from the API.
      * Request is executed immediately
@@ -113,32 +91,13 @@ class LogList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return LogPage Page of LogInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): LogPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : LogPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'FunctionSid' =>
-                $options['functionSid'],
-            'StartDate' =>
-                Serialize::iso8601DateTime($options['startDate']),
-            'EndDate' =>
-                Serialize::iso8601DateTime($options['endDate']),
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['FunctionSid' => $options['functionSid'], 'StartDate' => Serialize::iso8601DateTime($options['startDate']), 'EndDate' => Serialize::iso8601DateTime($options['endDate']), 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new LogPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of LogInstance records from the API.
      * Request is executed immediately
@@ -146,41 +105,26 @@ class LogList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return LogPage Page of LogInstance
      */
-    public function getPage(string $targetUrl): LogPage
+    public function getPage(string $targetUrl) : LogPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new LogPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a LogContext
      *
      * @param string $sid The SID of the Log resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): LogContext
+    public function getContext(string $sid) : LogContext
     {
-        return new LogContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $this->solution['environmentSid'],
-            $sid
-        );
+        return new LogContext($this->version, $this->solution['serviceSid'], $this->solution['environmentSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Serverless.V1.LogList]';
     }

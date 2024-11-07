@@ -13,35 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Content\V1;
 
-namespace Twilio\Rest\Content\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class ContentList extends ListResource
-    {
+{
     /**
      * Construct the ContentList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Content';
     }
-
     /**
      * Create the ContentInstance
      *
@@ -49,20 +41,13 @@ class ContentList extends ListResource
      * @return ContentInstance Created ContentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(ContentCreateRequest $contentCreateRequest): ContentInstance
+    public function create(ContentCreateRequest $contentCreateRequest) : ContentInstance
     {
-
         $data = $contentCreateRequest->toArray();
         $headers['Content-Type'] = 'application/json';
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new ContentInstance(
-            $this->version,
-            $payload
-        );
+        return new ContentInstance($this->version, $payload);
     }
-
-
     /**
      * Reads ContentInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -78,11 +63,10 @@ class ContentList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return ContentInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams ContentInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -101,15 +85,12 @@ class ContentList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of ContentInstance records from the API.
      * Request is executed immediately
@@ -119,24 +100,12 @@ class ContentList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return ContentPage Page of ContentInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): ContentPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : ContentPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new ContentPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of ContentInstance records from the API.
      * Request is executed immediately
@@ -144,39 +113,26 @@ class ContentList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return ContentPage Page of ContentInstance
      */
-    public function getPage(string $targetUrl): ContentPage
+    public function getPage(string $targetUrl) : ContentPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new ContentPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a ContentContext
      *
      * @param string $sid The Twilio-provided string that uniquely identifies the Content resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): ContentContext
+    public function getContext(string $sid) : ContentContext
     {
-        return new ContentContext(
-            $this->version,
-            $sid
-        );
+        return new ContentContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Content.V1.ContentList]';
     }

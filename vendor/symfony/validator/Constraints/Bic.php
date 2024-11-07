@@ -8,16 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
-namespace Symfony\Component\Validator\Constraints;
-
-use Symfony\Component\Intl\Countries;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyPathInterface;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
-use Symfony\Component\Validator\Exception\LogicException;
-
+use Isolated\Symfony\Component\Intl\Countries;
+use Isolated\Symfony\Component\PropertyAccess\PropertyAccess;
+use Isolated\Symfony\Component\PropertyAccess\PropertyPathInterface;
+use Isolated\Symfony\Component\Validator\Constraint;
+use Isolated\Symfony\Component\Validator\Exception\ConstraintDefinitionException;
+use Isolated\Symfony\Component\Validator\Exception\LogicException;
 /**
  * @Annotation
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
@@ -33,20 +31,11 @@ class Bic extends Constraint
     public const INVALID_COUNTRY_CODE_ERROR = '1ce76f8d-3c1f-451c-9e62-fe9c3ed486ae';
     public const INVALID_CASE_ERROR = '11884038-3312-4ae5-9d04-699f782130c7';
     public const INVALID_IBAN_COUNTRY_CODE_ERROR = '29a2c3bb-587b-4996-b6f5-53081364cea5';
-
-    protected static $errorNames = [
-        self::INVALID_LENGTH_ERROR => 'INVALID_LENGTH_ERROR',
-        self::INVALID_CHARACTERS_ERROR => 'INVALID_CHARACTERS_ERROR',
-        self::INVALID_BANK_CODE_ERROR => 'INVALID_BANK_CODE_ERROR',
-        self::INVALID_COUNTRY_CODE_ERROR => 'INVALID_COUNTRY_CODE_ERROR',
-        self::INVALID_CASE_ERROR => 'INVALID_CASE_ERROR',
-    ];
-
+    protected static $errorNames = [self::INVALID_LENGTH_ERROR => 'INVALID_LENGTH_ERROR', self::INVALID_CHARACTERS_ERROR => 'INVALID_CHARACTERS_ERROR', self::INVALID_BANK_CODE_ERROR => 'INVALID_BANK_CODE_ERROR', self::INVALID_COUNTRY_CODE_ERROR => 'INVALID_COUNTRY_CODE_ERROR', self::INVALID_CASE_ERROR => 'INVALID_CASE_ERROR'];
     public $message = 'This is not a valid Business Identifier Code (BIC).';
     public $ibanMessage = 'This Business Identifier Code (BIC) is not associated with IBAN {{ iban }}.';
     public $iban;
     public $ibanPropertyPath;
-
     /**
      * {@inheritdoc}
      *
@@ -54,26 +43,22 @@ class Bic extends Constraint
      */
     public function __construct(?array $options = null, ?string $message = null, ?string $iban = null, $ibanPropertyPath = null, ?string $ibanMessage = null, ?array $groups = null, $payload = null)
     {
-        if (!class_exists(Countries::class)) {
+        if (!\class_exists(Countries::class)) {
             throw new LogicException('The Intl component is required to use the Bic constraint. Try running "composer require symfony/intl".');
         }
         if (null !== $ibanPropertyPath && !\is_string($ibanPropertyPath) && !$ibanPropertyPath instanceof PropertyPathInterface) {
-            throw new \TypeError(sprintf('"%s": Expected argument $ibanPropertyPath to be either null, a string or an instance of "%s", got "%s".', __METHOD__, PropertyPathInterface::class, get_debug_type($ibanPropertyPath)));
+            throw new \TypeError(\sprintf('"%s": Expected argument $ibanPropertyPath to be either null, a string or an instance of "%s", got "%s".', __METHOD__, PropertyPathInterface::class, \get_debug_type($ibanPropertyPath)));
         }
-
         parent::__construct($options, $groups, $payload);
-
         $this->message = $message ?? $this->message;
         $this->ibanMessage = $ibanMessage ?? $this->ibanMessage;
         $this->iban = $iban ?? $this->iban;
         $this->ibanPropertyPath = $ibanPropertyPath ?? $this->ibanPropertyPath;
-
         if (null !== $this->iban && null !== $this->ibanPropertyPath) {
             throw new ConstraintDefinitionException('The "iban" and "ibanPropertyPath" options of the Iban constraint cannot be used at the same time.');
         }
-
-        if (null !== $this->ibanPropertyPath && !class_exists(PropertyAccess::class)) {
-            throw new LogicException(sprintf('The "symfony/property-access" component is required to use the "%s" constraint with the "ibanPropertyPath" option.', self::class));
+        if (null !== $this->ibanPropertyPath && !\class_exists(PropertyAccess::class)) {
+            throw new LogicException(\sprintf('The "symfony/property-access" component is required to use the "%s" constraint with the "ibanPropertyPath" option.', self::class));
         }
     }
 }

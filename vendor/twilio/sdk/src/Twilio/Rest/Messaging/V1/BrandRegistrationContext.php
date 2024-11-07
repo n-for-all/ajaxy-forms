@@ -13,118 +13,78 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Messaging\V1\BrandRegistration\BrandRegistrationOtpList;
-use Twilio\Rest\Messaging\V1\BrandRegistration\BrandVettingList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Messaging\V1\BrandRegistration\BrandRegistrationOtpList;
+use Isolated\Twilio\Rest\Messaging\V1\BrandRegistration\BrandVettingList;
 /**
  * @property BrandRegistrationOtpList $brandRegistrationOtps
  * @property BrandVettingList $brandVettings
  * @method \Twilio\Rest\Messaging\V1\BrandRegistration\BrandVettingContext brandVettings(string $brandVettingSid)
  */
 class BrandRegistrationContext extends InstanceContext
-    {
+{
     protected $_brandRegistrationOtps;
     protected $_brandVettings;
-
     /**
      * Initialize the BrandRegistrationContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The SID of the Brand Registration resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/a2p/BrandRegistrations/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/a2p/BrandRegistrations/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the BrandRegistrationInstance
      *
      * @return BrandRegistrationInstance Fetched BrandRegistrationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): BrandRegistrationInstance
+    public function fetch() : BrandRegistrationInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new BrandRegistrationInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new BrandRegistrationInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the BrandRegistrationInstance
      *
      * @return BrandRegistrationInstance Updated BrandRegistrationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(): BrandRegistrationInstance
+    public function update() : BrandRegistrationInstance
     {
-
         $payload = $this->version->update('POST', $this->uri, [], []);
-
-        return new BrandRegistrationInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new BrandRegistrationInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the brandRegistrationOtps
      */
-    protected function getBrandRegistrationOtps(): BrandRegistrationOtpList
+    protected function getBrandRegistrationOtps() : BrandRegistrationOtpList
     {
         if (!$this->_brandRegistrationOtps) {
-            $this->_brandRegistrationOtps = new BrandRegistrationOtpList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_brandRegistrationOtps = new BrandRegistrationOtpList($this->version, $this->solution['sid']);
         }
-
         return $this->_brandRegistrationOtps;
     }
-
     /**
      * Access the brandVettings
      */
-    protected function getBrandVettings(): BrandVettingList
+    protected function getBrandVettings() : BrandVettingList
     {
         if (!$this->_brandVettings) {
-            $this->_brandVettings = new BrandVettingList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_brandVettings = new BrandVettingList($this->version, $this->solution['sid']);
         }
-
         return $this->_brandVettings;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -132,16 +92,14 @@ class BrandRegistrationContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -150,26 +108,24 @@ class BrandRegistrationContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.BrandRegistrationContext ' . \implode(' ', $context) . ']';
     }

@@ -13,52 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Bulkexports\V1;
 
-namespace Twilio\Rest\Bulkexports\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class ExportConfigurationList extends ListResource
-    {
+{
     /**
      * Construct the ExportConfigurationList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a ExportConfigurationContext
      *
      * @param string $resourceType The type of communication – Messages, Calls, Conferences, and Participants
      */
-    public function getContext(
-        string $resourceType
-        
-    ): ExportConfigurationContext
+    public function getContext(string $resourceType) : ExportConfigurationContext
     {
-        return new ExportConfigurationContext(
-            $this->version,
-            $resourceType
-        );
+        return new ExportConfigurationContext($this->version, $resourceType);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Bulkexports.V1.ExportConfigurationList]';
     }

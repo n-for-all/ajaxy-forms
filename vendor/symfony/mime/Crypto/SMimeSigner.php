@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Mime\Crypto;
 
-namespace Symfony\Component\Mime\Crypto;
-
-use Symfony\Component\Mime\Exception\RuntimeException;
-use Symfony\Component\Mime\Message;
-
+use Isolated\Symfony\Component\Mime\Exception\RuntimeException;
+use Isolated\Symfony\Component\Mime\Message;
 /**
  * @author Sebastiaan Stok <s.stok@rollerscapes.net>
  */
@@ -23,12 +21,10 @@ final class SMimeSigner extends SMime
     private $signPrivateKey;
     private $signOptions;
     private $extraCerts;
-
     /**
      * @var string|null
      */
     private $privateKeyPassphrase;
-
     /**
      * @param string      $certificate          The path of the file containing the signing certificate (in PEM format)
      * @param string      $privateKey           The path of the file containing the private key (in PEM format)
@@ -41,31 +37,24 @@ final class SMimeSigner extends SMime
         if (!\extension_loaded('openssl')) {
             throw new \LogicException('PHP extension "openssl" is required to use SMime.');
         }
-
         $this->signCertificate = $this->normalizeFilePath($certificate);
-
         if (null !== $privateKeyPassphrase) {
             $this->signPrivateKey = [$this->normalizeFilePath($privateKey), $privateKeyPassphrase];
         } else {
             $this->signPrivateKey = $this->normalizeFilePath($privateKey);
         }
-
-        $this->signOptions = $signOptions ?? PKCS7_DETACHED;
-        $this->extraCerts = $extraCerts ? realpath($extraCerts) : null;
+        $this->signOptions = $signOptions ?? \PKCS7_DETACHED;
+        $this->extraCerts = $extraCerts ? \realpath($extraCerts) : null;
         $this->privateKeyPassphrase = $privateKeyPassphrase;
     }
-
-    public function sign(Message $message): Message
+    public function sign(Message $message) : Message
     {
-        $bufferFile = tmpfile();
-        $outputFile = tmpfile();
-
+        $bufferFile = \tmpfile();
+        $outputFile = \tmpfile();
         $this->iteratorToFile($message->getBody()->toIterable(), $bufferFile);
-
-        if (!@openssl_pkcs7_sign(stream_get_meta_data($bufferFile)['uri'], stream_get_meta_data($outputFile)['uri'], $this->signCertificate, $this->signPrivateKey, [], $this->signOptions, $this->extraCerts)) {
-            throw new RuntimeException(sprintf('Failed to sign S/Mime message. Error: "%s".', openssl_error_string()));
+        if (!@\openssl_pkcs7_sign(\stream_get_meta_data($bufferFile)['uri'], \stream_get_meta_data($outputFile)['uri'], $this->signCertificate, $this->signPrivateKey, [], $this->signOptions, $this->extraCerts)) {
+            throw new RuntimeException(\sprintf('Failed to sign S/Mime message. Error: "%s".', \openssl_error_string()));
         }
-
         return new Message($message->getHeaders(), $this->convertMessageToSMimePart($outputFile, 'multipart', 'signed'));
     }
 }

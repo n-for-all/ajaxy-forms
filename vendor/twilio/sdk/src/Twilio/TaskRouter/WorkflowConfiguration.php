@@ -1,6 +1,6 @@
 <?php
 
-namespace Twilio\TaskRouter;
+namespace Isolated\Twilio\TaskRouter;
 
 /**
  * Twilio TaskRouter Workflow Builder
@@ -8,24 +8,25 @@ namespace Twilio\TaskRouter;
  * @author Justin Witz <jwitz@twilio.com>
  * @license  http://creativecommons.org/licenses/MIT/ MIT
  */
-class WorkflowConfiguration implements \JsonSerializable {
+class WorkflowConfiguration implements \JsonSerializable
+{
     public $filters;
     public $default_filter;
-
-    public function __construct(array $filters, $default_filter = null) {
+    public function __construct(array $filters, $default_filter = null)
+    {
         $this->filters = $filters;
         $this->default_filter = $default_filter;
     }
-
-    public function toJSON() {
+    public function toJSON()
+    {
         return \json_encode($this);
     }
-
-    public static function parse(string $json) {
+    public static function parse(string $json)
+    {
         return \json_decode($json);
     }
-
-    public static function fromJson(string $json): WorkflowConfiguration {
+    public static function fromJson(string $json) : WorkflowConfiguration
+    {
         $configJSON = self::parse($json);
         $default_filter = $configJSON->task_routing->default_filter;
         $filters = [];
@@ -37,8 +38,8 @@ class WorkflowConfiguration implements \JsonSerializable {
         }
         return new WorkflowConfiguration($filters, $default_filter);
     }
-
-    public function jsonSerialize(): array {
+    public function jsonSerialize() : array
+    {
         $json = [];
         $task_routing = [];
         $task_routing['filters'] = $this->filters;

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Config\Builder;
 
-namespace Symfony\Component\Config\Builder;
-
-use Symfony\Component\Config\Definition\ConfigurationInterface;
-
+use Isolated\Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * Generates ConfigBuilders to help create valid config.
  *
@@ -23,5 +21,5 @@ interface ConfigBuilderGeneratorInterface
     /**
      * @return \Closure that will return the root config class
      */
-    public function build(ConfigurationInterface $configuration): \Closure;
+    public function build(ConfigurationInterface $configuration) : \Closure;
 }

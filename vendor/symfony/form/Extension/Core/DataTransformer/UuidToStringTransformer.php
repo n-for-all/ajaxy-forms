@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\DataTransformer;
 
-namespace Symfony\Component\Form\Extension\Core\DataTransformer;
-
-use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\Uid\Uuid;
-
+use Isolated\Symfony\Component\Form\DataTransformerInterface;
+use Isolated\Symfony\Component\Form\Exception\TransformationFailedException;
+use Isolated\Symfony\Component\Uid\Uuid;
 /**
  * Transforms between a UUID string and a Uuid object.
  *
@@ -36,14 +34,11 @@ class UuidToStringTransformer implements DataTransformerInterface
         if (null === $value) {
             return null;
         }
-
         if (!$value instanceof Uuid) {
             throw new TransformationFailedException('Expected a Uuid.');
         }
-
         return (string) $value;
     }
-
     /**
      * Transforms a UUID string into a Uuid object.
      *
@@ -59,17 +54,14 @@ class UuidToStringTransformer implements DataTransformerInterface
         if (null === $value || '' === $value) {
             return null;
         }
-
         if (!\is_string($value)) {
             throw new TransformationFailedException('Expected a string.');
         }
-
         try {
             $uuid = new Uuid($value);
         } catch (\InvalidArgumentException $e) {
-            throw new TransformationFailedException(sprintf('The value "%s" is not a valid UUID.', $value), $e->getCode(), $e);
+            throw new TransformationFailedException(\sprintf('The value "%s" is not a valid UUID.', $value), $e->getCode(), $e);
         }
-
         return $uuid;
     }
 }

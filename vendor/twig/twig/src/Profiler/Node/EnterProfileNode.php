@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Profiler\Node;
 
-namespace Twig\Profiler\Node;
-
-use Twig\Attribute\YieldReady;
-use Twig\Compiler;
-use Twig\Node\Node;
-
+use Isolated\Twig\Attribute\YieldReady;
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Node;
 /**
  * Represents a profile enter node.
  *
@@ -27,18 +25,8 @@ class EnterProfileNode extends Node
     {
         parent::__construct([], ['extension_name' => $extensionName, 'name' => $name, 'type' => $type, 'var_name' => $varName]);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
-        $compiler
-            ->write(\sprintf('$%s = $this->extensions[', $this->getAttribute('var_name')))
-            ->repr($this->getAttribute('extension_name'))
-            ->raw("];\n")
-            ->write(\sprintf('$%s->enter($%s = new \Twig\Profiler\Profile($this->getTemplateName(), ', $this->getAttribute('var_name'), $this->getAttribute('var_name').'_prof'))
-            ->repr($this->getAttribute('type'))
-            ->raw(', ')
-            ->repr($this->getAttribute('name'))
-            ->raw("));\n\n")
-        ;
+        $compiler->write(\sprintf('$%s = $this->extensions[', $this->getAttribute('var_name')))->repr($this->getAttribute('extension_name'))->raw("];\n")->write(\sprintf('$%s->enter($%s = new \\Twig\\Profiler\\Profile($this->getTemplateName(), ', $this->getAttribute('var_name'), $this->getAttribute('var_name') . '_prof'))->repr($this->getAttribute('type'))->raw(', ')->repr($this->getAttribute('name'))->raw("));\n\n");
     }
 }

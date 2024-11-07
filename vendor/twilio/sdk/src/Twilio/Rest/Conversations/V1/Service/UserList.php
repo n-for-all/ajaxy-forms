@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1\Service;
 
-namespace Twilio\Rest\Conversations\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class UserList extends ListResource
-    {
+{
     /**
      * Construct the UserList
      *
      * @param Version $version Version that contains the resource
      * @param string $chatServiceSid The SID of the [Conversation Service](https://www.twilio.com/docs/conversations/api/service-resource) the User resource is associated with.
      */
-    public function __construct(
-        Version $version,
-        string $chatServiceSid
-    ) {
+    public function __construct(Version $version, string $chatServiceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'chatServiceSid' =>
-            $chatServiceSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($chatServiceSid)
-        .'/Users';
+        $this->solution = ['chatServiceSid' => $chatServiceSid];
+        $this->uri = '/Services/' . \rawurlencode($chatServiceSid) . '/Users';
     }
-
     /**
      * Create the UserInstance
      *
@@ -57,34 +44,14 @@ class UserList extends ListResource
      * @return UserInstance Created UserInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $identity, array $options = []): UserInstance
+    public function create(string $identity, array $options = []) : UserInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Identity' =>
-                $identity,
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'Attributes' =>
-                $options['attributes'],
-            'RoleSid' =>
-                $options['roleSid'],
-        ]);
-
+        $data = Values::of(['Identity' => $identity, 'FriendlyName' => $options['friendlyName'], 'Attributes' => $options['attributes'], 'RoleSid' => $options['roleSid']]);
         $headers = Values::of(['X-Twilio-Webhook-Enabled' => $options['xTwilioWebhookEnabled']]);
-
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new UserInstance(
-            $this->version,
-            $payload,
-            $this->solution['chatServiceSid']
-        );
+        return new UserInstance($this->version, $payload, $this->solution['chatServiceSid']);
     }
-
-
     /**
      * Reads UserInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -100,11 +67,10 @@ class UserList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return UserInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams UserInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -123,15 +89,12 @@ class UserList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of UserInstance records from the API.
      * Request is executed immediately
@@ -141,24 +104,12 @@ class UserList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return UserPage Page of UserInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): UserPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : UserPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new UserPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of UserInstance records from the API.
      * Request is executed immediately
@@ -166,40 +117,26 @@ class UserList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return UserPage Page of UserInstance
      */
-    public function getPage(string $targetUrl): UserPage
+    public function getPage(string $targetUrl) : UserPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new UserPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a UserContext
      *
      * @param string $sid The SID of the User resource to delete. This value can be either the `sid` or the `identity` of the User resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): UserContext
+    public function getContext(string $sid) : UserContext
     {
-        return new UserContext(
-            $this->version,
-            $this->solution['chatServiceSid'],
-            $sid
-        );
+        return new UserContext($this->version, $this->solution['chatServiceSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Conversations.V1.UserList]';
     }

@@ -13,35 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Events\V1;
 
-namespace Twilio\Rest\Events\V1;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class EventTypeList extends ListResource
-    {
+{
     /**
      * Construct the EventTypeList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Types';
     }
-
     /**
      * Reads EventTypeInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -58,11 +50,10 @@ class EventTypeList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return EventTypeInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams EventTypeInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -82,15 +73,12 @@ class EventTypeList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of EventTypeInstance records from the API.
      * Request is executed immediately
@@ -100,28 +88,13 @@ class EventTypeList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return EventTypePage Page of EventTypeInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): EventTypePage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : EventTypePage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'SchemaId' =>
-                $options['schemaId'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['SchemaId' => $options['schemaId'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new EventTypePage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of EventTypeInstance records from the API.
      * Request is executed immediately
@@ -129,39 +102,26 @@ class EventTypeList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return EventTypePage Page of EventTypeInstance
      */
-    public function getPage(string $targetUrl): EventTypePage
+    public function getPage(string $targetUrl) : EventTypePage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new EventTypePage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a EventTypeContext
      *
      * @param string $type A string that uniquely identifies this Event Type.
      */
-    public function getContext(
-        string $type
-        
-    ): EventTypeContext
+    public function getContext(string $type) : EventTypeContext
     {
-        return new EventTypeContext(
-            $this->version,
-            $type
-        );
+        return new EventTypeContext($this->version, $type);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Events.V1.EventTypeList]';
     }

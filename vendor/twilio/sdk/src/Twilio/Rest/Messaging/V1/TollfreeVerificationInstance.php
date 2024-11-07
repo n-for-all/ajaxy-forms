@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -76,93 +72,43 @@ class TollfreeVerificationInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'customerProfileSid' => Values::array_get($payload, 'customer_profile_sid'),
-            'trustProductSid' => Values::array_get($payload, 'trust_product_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'regulatedItemSid' => Values::array_get($payload, 'regulated_item_sid'),
-            'businessName' => Values::array_get($payload, 'business_name'),
-            'businessStreetAddress' => Values::array_get($payload, 'business_street_address'),
-            'businessStreetAddress2' => Values::array_get($payload, 'business_street_address2'),
-            'businessCity' => Values::array_get($payload, 'business_city'),
-            'businessStateProvinceRegion' => Values::array_get($payload, 'business_state_province_region'),
-            'businessPostalCode' => Values::array_get($payload, 'business_postal_code'),
-            'businessCountry' => Values::array_get($payload, 'business_country'),
-            'businessWebsite' => Values::array_get($payload, 'business_website'),
-            'businessContactFirstName' => Values::array_get($payload, 'business_contact_first_name'),
-            'businessContactLastName' => Values::array_get($payload, 'business_contact_last_name'),
-            'businessContactEmail' => Values::array_get($payload, 'business_contact_email'),
-            'businessContactPhone' => Values::array_get($payload, 'business_contact_phone'),
-            'notificationEmail' => Values::array_get($payload, 'notification_email'),
-            'useCaseCategories' => Values::array_get($payload, 'use_case_categories'),
-            'useCaseSummary' => Values::array_get($payload, 'use_case_summary'),
-            'productionMessageSample' => Values::array_get($payload, 'production_message_sample'),
-            'optInImageUrls' => Values::array_get($payload, 'opt_in_image_urls'),
-            'optInType' => Values::array_get($payload, 'opt_in_type'),
-            'messageVolume' => Values::array_get($payload, 'message_volume'),
-            'additionalInformation' => Values::array_get($payload, 'additional_information'),
-            'tollfreePhoneNumberSid' => Values::array_get($payload, 'tollfree_phone_number_sid'),
-            'status' => Values::array_get($payload, 'status'),
-            'url' => Values::array_get($payload, 'url'),
-            'rejectionReason' => Values::array_get($payload, 'rejection_reason'),
-            'errorCode' => Values::array_get($payload, 'error_code'),
-            'editExpiration' => Deserialize::dateTime(Values::array_get($payload, 'edit_expiration')),
-            'editAllowed' => Values::array_get($payload, 'edit_allowed'),
-            'rejectionReasons' => Values::array_get($payload, 'rejection_reasons'),
-            'resourceLinks' => Values::array_get($payload, 'resource_links'),
-            'externalReferenceId' => Values::array_get($payload, 'external_reference_id'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'customerProfileSid' => Values::array_get($payload, 'customer_profile_sid'), 'trustProductSid' => Values::array_get($payload, 'trust_product_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'regulatedItemSid' => Values::array_get($payload, 'regulated_item_sid'), 'businessName' => Values::array_get($payload, 'business_name'), 'businessStreetAddress' => Values::array_get($payload, 'business_street_address'), 'businessStreetAddress2' => Values::array_get($payload, 'business_street_address2'), 'businessCity' => Values::array_get($payload, 'business_city'), 'businessStateProvinceRegion' => Values::array_get($payload, 'business_state_province_region'), 'businessPostalCode' => Values::array_get($payload, 'business_postal_code'), 'businessCountry' => Values::array_get($payload, 'business_country'), 'businessWebsite' => Values::array_get($payload, 'business_website'), 'businessContactFirstName' => Values::array_get($payload, 'business_contact_first_name'), 'businessContactLastName' => Values::array_get($payload, 'business_contact_last_name'), 'businessContactEmail' => Values::array_get($payload, 'business_contact_email'), 'businessContactPhone' => Values::array_get($payload, 'business_contact_phone'), 'notificationEmail' => Values::array_get($payload, 'notification_email'), 'useCaseCategories' => Values::array_get($payload, 'use_case_categories'), 'useCaseSummary' => Values::array_get($payload, 'use_case_summary'), 'productionMessageSample' => Values::array_get($payload, 'production_message_sample'), 'optInImageUrls' => Values::array_get($payload, 'opt_in_image_urls'), 'optInType' => Values::array_get($payload, 'opt_in_type'), 'messageVolume' => Values::array_get($payload, 'message_volume'), 'additionalInformation' => Values::array_get($payload, 'additional_information'), 'tollfreePhoneNumberSid' => Values::array_get($payload, 'tollfree_phone_number_sid'), 'status' => Values::array_get($payload, 'status'), 'url' => Values::array_get($payload, 'url'), 'rejectionReason' => Values::array_get($payload, 'rejection_reason'), 'errorCode' => Values::array_get($payload, 'error_code'), 'editExpiration' => Deserialize::dateTime(Values::array_get($payload, 'edit_expiration')), 'editAllowed' => Values::array_get($payload, 'edit_allowed'), 'rejectionReasons' => Values::array_get($payload, 'rejection_reasons'), 'resourceLinks' => Values::array_get($payload, 'resource_links'), 'externalReferenceId' => Values::array_get($payload, 'external_reference_id')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return TollfreeVerificationContext Context for this TollfreeVerificationInstance
      */
-    protected function proxy(): TollfreeVerificationContext
+    protected function proxy() : TollfreeVerificationContext
     {
         if (!$this->context) {
-            $this->context = new TollfreeVerificationContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new TollfreeVerificationContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the TollfreeVerificationInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the TollfreeVerificationInstance
      *
      * @return TollfreeVerificationInstance Fetched TollfreeVerificationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): TollfreeVerificationInstance
+    public function fetch() : TollfreeVerificationInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the TollfreeVerificationInstance
      *
@@ -170,12 +116,10 @@ class TollfreeVerificationInstance extends InstanceResource
      * @return TollfreeVerificationInstance Updated TollfreeVerificationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): TollfreeVerificationInstance
+    public function update(array $options = []) : TollfreeVerificationInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -188,27 +132,23 @@ class TollfreeVerificationInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.TollfreeVerificationInstance ' . \implode(' ', $context) . ']';
     }
 }
-

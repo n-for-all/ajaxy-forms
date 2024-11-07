@@ -1,9 +1,7 @@
 <?php
 
+namespace Isolated\Twilio\Exceptions;
 
-namespace Twilio\Exceptions;
-
-
-class DeserializeException extends TwilioException {
-
+class DeserializeException extends TwilioException
+{
 }

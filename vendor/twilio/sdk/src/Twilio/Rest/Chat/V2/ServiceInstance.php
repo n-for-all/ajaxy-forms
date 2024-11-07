@@ -13,22 +13,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Chat\V2;
 
-
-namespace Twilio\Rest\Chat\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Chat\V2\Service\ChannelList;
-use Twilio\Rest\Chat\V2\Service\BindingList;
-use Twilio\Rest\Chat\V2\Service\RoleList;
-use Twilio\Rest\Chat\V2\Service\UserList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Chat\V2\Service\ChannelList;
+use Isolated\Twilio\Rest\Chat\V2\Service\BindingList;
+use Isolated\Twilio\Rest\Chat\V2\Service\RoleList;
+use Isolated\Twilio\Rest\Chat\V2\Service\UserList;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -60,7 +56,6 @@ class ServiceInstance extends InstanceResource
     protected $_bindings;
     protected $_roles;
     protected $_users;
-
     /**
      * Initialize the ServiceInstance
      *
@@ -71,79 +66,43 @@ class ServiceInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'defaultServiceRoleSid' => Values::array_get($payload, 'default_service_role_sid'),
-            'defaultChannelRoleSid' => Values::array_get($payload, 'default_channel_role_sid'),
-            'defaultChannelCreatorRoleSid' => Values::array_get($payload, 'default_channel_creator_role_sid'),
-            'readStatusEnabled' => Values::array_get($payload, 'read_status_enabled'),
-            'reachabilityEnabled' => Values::array_get($payload, 'reachability_enabled'),
-            'typingIndicatorTimeout' => Values::array_get($payload, 'typing_indicator_timeout'),
-            'consumptionReportInterval' => Values::array_get($payload, 'consumption_report_interval'),
-            'limits' => Values::array_get($payload, 'limits'),
-            'preWebhookUrl' => Values::array_get($payload, 'pre_webhook_url'),
-            'postWebhookUrl' => Values::array_get($payload, 'post_webhook_url'),
-            'webhookMethod' => Values::array_get($payload, 'webhook_method'),
-            'webhookFilters' => Values::array_get($payload, 'webhook_filters'),
-            'preWebhookRetryCount' => Values::array_get($payload, 'pre_webhook_retry_count'),
-            'postWebhookRetryCount' => Values::array_get($payload, 'post_webhook_retry_count'),
-            'notifications' => Values::array_get($payload, 'notifications'),
-            'media' => Values::array_get($payload, 'media'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'defaultServiceRoleSid' => Values::array_get($payload, 'default_service_role_sid'), 'defaultChannelRoleSid' => Values::array_get($payload, 'default_channel_role_sid'), 'defaultChannelCreatorRoleSid' => Values::array_get($payload, 'default_channel_creator_role_sid'), 'readStatusEnabled' => Values::array_get($payload, 'read_status_enabled'), 'reachabilityEnabled' => Values::array_get($payload, 'reachability_enabled'), 'typingIndicatorTimeout' => Values::array_get($payload, 'typing_indicator_timeout'), 'consumptionReportInterval' => Values::array_get($payload, 'consumption_report_interval'), 'limits' => Values::array_get($payload, 'limits'), 'preWebhookUrl' => Values::array_get($payload, 'pre_webhook_url'), 'postWebhookUrl' => Values::array_get($payload, 'post_webhook_url'), 'webhookMethod' => Values::array_get($payload, 'webhook_method'), 'webhookFilters' => Values::array_get($payload, 'webhook_filters'), 'preWebhookRetryCount' => Values::array_get($payload, 'pre_webhook_retry_count'), 'postWebhookRetryCount' => Values::array_get($payload, 'post_webhook_retry_count'), 'notifications' => Values::array_get($payload, 'notifications'), 'media' => Values::array_get($payload, 'media'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ServiceContext Context for this ServiceInstance
      */
-    protected function proxy(): ServiceContext
+    protected function proxy() : ServiceContext
     {
         if (!$this->context) {
-            $this->context = new ServiceContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new ServiceContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the ServiceInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the ServiceInstance
      *
      * @return ServiceInstance Fetched ServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ServiceInstance
+    public function fetch() : ServiceInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the ServiceInstance
      *
@@ -151,44 +110,38 @@ class ServiceInstance extends InstanceResource
      * @return ServiceInstance Updated ServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ServiceInstance
+    public function update(array $options = []) : ServiceInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the channels
      */
-    protected function getChannels(): ChannelList
+    protected function getChannels() : ChannelList
     {
         return $this->proxy()->channels;
     }
-
     /**
      * Access the bindings
      */
-    protected function getBindings(): BindingList
+    protected function getBindings() : BindingList
     {
         return $this->proxy()->bindings;
     }
-
     /**
      * Access the roles
      */
-    protected function getRoles(): RoleList
+    protected function getRoles() : RoleList
     {
         return $this->proxy()->roles;
     }
-
     /**
      * Access the users
      */
-    protected function getUsers(): UserList
+    protected function getUsers() : UserList
     {
         return $this->proxy()->users;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -201,27 +154,23 @@ class ServiceInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Chat.V2.ServiceInstance ' . \implode(' ', $context) . ']';
     }
 }
-

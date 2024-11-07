@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class LinkshorteningMessagingServiceContext extends InstanceContext
-    {
+{
     /**
      * Initialize the LinkshorteningMessagingServiceContext
      *
@@ -31,69 +27,44 @@ class LinkshorteningMessagingServiceContext extends InstanceContext
      * @param string $domainSid The domain SID to associate with a messaging service. With URL shortening enabled, links in messages sent with the associated messaging service will be shortened to the provided domain
      * @param string $messagingServiceSid A messaging service SID to associate with a domain. With URL shortening enabled, links in messages sent with the provided messaging service will be shortened to the associated domain
      */
-    public function __construct(
-        Version $version,
-        $domainSid,
-        $messagingServiceSid
-    ) {
+    public function __construct(Version $version, $domainSid, $messagingServiceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'domainSid' =>
-            $domainSid,
-        'messagingServiceSid' =>
-            $messagingServiceSid,
-        ];
-
-        $this->uri = '/LinkShortening/Domains/' . \rawurlencode($domainSid)
-        .'/MessagingServices/' . \rawurlencode($messagingServiceSid)
-        .'';
+        $this->solution = ['domainSid' => $domainSid, 'messagingServiceSid' => $messagingServiceSid];
+        $this->uri = '/LinkShortening/Domains/' . \rawurlencode($domainSid) . '/MessagingServices/' . \rawurlencode($messagingServiceSid) . '';
     }
-
     /**
      * Create the LinkshorteningMessagingServiceInstance
      *
      * @return LinkshorteningMessagingServiceInstance Created LinkshorteningMessagingServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(): LinkshorteningMessagingServiceInstance
+    public function create() : LinkshorteningMessagingServiceInstance
     {
-
         $payload = $this->version->create('POST', $this->uri, [], []);
-
-        return new LinkshorteningMessagingServiceInstance(
-            $this->version,
-            $payload,
-            $this->solution['domainSid'],
-            $this->solution['messagingServiceSid']
-        );
+        return new LinkshorteningMessagingServiceInstance($this->version, $payload, $this->solution['domainSid'], $this->solution['messagingServiceSid']);
     }
-
-
     /**
      * Delete the LinkshorteningMessagingServiceInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.LinkshorteningMessagingServiceContext ' . \implode(' ', $context) . ']';
     }

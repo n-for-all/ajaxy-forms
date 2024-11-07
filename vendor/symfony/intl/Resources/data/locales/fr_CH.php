@@ -1,8 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'gu' => 'goudjrati',
-        'gu_IN' => 'goudjrati (Inde)',
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['gu' => 'goudjrati', 'gu_IN' => 'goudjrati (Inde)']];

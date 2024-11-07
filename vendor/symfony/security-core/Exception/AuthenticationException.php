@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Exception;
 
-namespace Symfony\Component\Security\Core\Exception;
-
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
+use Isolated\Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 /**
  * AuthenticationException is the base class for all authentication exceptions.
  *
@@ -23,15 +21,12 @@ class AuthenticationException extends RuntimeException
 {
     /** @internal */
     protected $serialized;
-
     private $token;
-
     public function __construct(string $message = '', int $code = 0, ?\Throwable $previous = null)
     {
         unset($this->serialized);
         parent::__construct($message, $code, $previous);
     }
-
     /**
      * @return TokenInterface|null
      */
@@ -39,12 +34,10 @@ class AuthenticationException extends RuntimeException
     {
         return $this->token;
     }
-
     public function setToken(TokenInterface $token)
     {
         $this->token = $token;
     }
-
     /**
      * Returns all the necessary state of the object for serialization purposes.
      *
@@ -60,11 +53,10 @@ class AuthenticationException extends RuntimeException
      *
      * @see __unserialize()
      */
-    public function __serialize(): array
+    public function __serialize() : array
     {
         return [$this->token, $this->code, $this->message, $this->file, $this->line];
     }
-
     /**
      * Restores the object state from an array given by __serialize().
      *
@@ -81,11 +73,10 @@ class AuthenticationException extends RuntimeException
      *
      * @see __serialize()
      */
-    public function __unserialize(array $data): void
+    public function __unserialize(array $data) : void
     {
         [$this->token, $this->code, $this->message, $this->file, $this->line] = $data;
     }
-
     /**
      * Message key to be used by the translation component.
      *
@@ -95,7 +86,6 @@ class AuthenticationException extends RuntimeException
     {
         return 'An authentication exception occurred.';
     }
-
     /**
      * Message data to be used by the translation component.
      *
@@ -105,21 +95,18 @@ class AuthenticationException extends RuntimeException
     {
         return [];
     }
-
     /**
      * @internal
      */
-    public function __sleep(): array
+    public function __sleep() : array
     {
         $this->serialized = $this->__serialize();
-
         return ['serialized'];
     }
-
     /**
      * @internal
      */
-    public function __wakeup(): void
+    public function __wakeup() : void
     {
         $this->__unserialize($this->serialized);
         unset($this->serialized);

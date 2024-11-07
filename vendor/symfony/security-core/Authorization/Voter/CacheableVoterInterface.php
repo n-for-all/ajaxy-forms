@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Core\Authorization\Voter;
+namespace Isolated\Symfony\Component\Security\Core\Authorization\Voter;
 
 /**
  * Let voters expose the attributes and types they care about.
@@ -21,10 +20,9 @@ namespace Symfony\Component\Security\Core\Authorization\Voter;
  */
 interface CacheableVoterInterface extends VoterInterface
 {
-    public function supportsAttribute(string $attribute): bool;
-
+    public function supportsAttribute(string $attribute) : bool;
     /**
      * @param string $subjectType The type of the subject inferred by `get_class` or `get_debug_type`
      */
-    public function supportsType(string $subjectType): bool;
+    public function supportsType(string $subjectType) : bool;
 }

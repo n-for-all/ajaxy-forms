@@ -13,54 +13,37 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trunking\V1\Trunk;
 
-namespace Twilio\Rest\Trunking\V1\Trunk;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class RecordingList extends ListResource
-    {
+{
     /**
      * Construct the RecordingList
      *
      * @param Version $version Version that contains the resource
      * @param string $trunkSid The SID of the Trunk from which to fetch the recording settings.
      */
-    public function __construct(
-        Version $version,
-        string $trunkSid
-    ) {
+    public function __construct(Version $version, string $trunkSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'trunkSid' =>
-            $trunkSid,
-        
-        ];
+        $this->solution = ['trunkSid' => $trunkSid];
     }
-
     /**
      * Constructs a RecordingContext
      */
-    public function getContext(
-        
-    ): RecordingContext
+    public function getContext() : RecordingContext
     {
-        return new RecordingContext(
-            $this->version,
-            $this->solution['trunkSid']
-        );
+        return new RecordingContext($this->version, $this->solution['trunkSid']);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Trunking.V1.RecordingList]';
     }

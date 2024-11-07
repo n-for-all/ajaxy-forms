@@ -13,19 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Sync\V1\Service\SyncStream;
 
-namespace Twilio\Rest\Sync\V1\Service\SyncStream;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class StreamMessageList extends ListResource
-    {
+{
     /**
      * Construct the StreamMessageList
      *
@@ -33,28 +30,13 @@ class StreamMessageList extends ListResource
      * @param string $serviceSid The SID of the [Sync Service](https://www.twilio.com/docs/sync/api/service) to create the new Stream Message in.
      * @param string $streamSid The SID of the Sync Stream to create the new Stream Message resource for.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid,
-        string $streamSid
-    ) {
+    public function __construct(Version $version, string $serviceSid, string $streamSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        'streamSid' =>
-            $streamSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Streams/' . \rawurlencode($streamSid)
-        .'/Messages';
+        $this->solution = ['serviceSid' => $serviceSid, 'streamSid' => $streamSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Streams/' . \rawurlencode($streamSid) . '/Messages';
     }
-
     /**
      * Create the StreamMessageInstance
      *
@@ -62,31 +44,18 @@ class StreamMessageList extends ListResource
      * @return StreamMessageInstance Created StreamMessageInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $data): StreamMessageInstance
+    public function create(array $data) : StreamMessageInstance
     {
-
-        $data = Values::of([
-            'Data' =>
-                Serialize::jsonObject($data),
-        ]);
-
+        $data = Values::of(['Data' => Serialize::jsonObject($data)]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new StreamMessageInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['streamSid']
-        );
+        return new StreamMessageInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['streamSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Sync.V1.StreamMessageList]';
     }

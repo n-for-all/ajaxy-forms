@@ -6,36 +6,36 @@
  * | (_)\/(_)(_|\/| |(/_  v1.0.0
  * /       /
  */
+namespace Isolated\Twilio\TwiML\Voice;
 
-namespace Twilio\TwiML\Voice;
-
-use Twilio\TwiML\TwiML;
-
-class Parameter extends TwiML {
+use Isolated\Twilio\TwiML\TwiML;
+class Parameter extends TwiML
+{
     /**
      * Parameter constructor.
      *
      * @param array $attributes Optional attributes
      */
-    public function __construct($attributes = []) {
+    public function __construct($attributes = [])
+    {
         parent::__construct('Parameter', null, $attributes);
     }
-
     /**
      * Add Name attribute.
      *
      * @param string $name The name of the custom parameter
      */
-    public function setName($name): self {
+    public function setName($name) : self
+    {
         return $this->setAttribute('name', $name);
     }
-
     /**
      * Add Value attribute.
      *
      * @param string $value The value of the custom parameter
      */
-    public function setValue($value): self {
+    public function setValue($value) : self
+    {
         return $this->setAttribute('value', $value);
     }
 }

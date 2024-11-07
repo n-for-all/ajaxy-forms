@@ -13,61 +13,40 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Video\V1\Room;
 
-namespace Twilio\Rest\Video\V1\Room;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class RecordingRulesList extends ListResource
-    {
+{
     /**
      * Construct the RecordingRulesList
      *
      * @param Version $version Version that contains the resource
      * @param string $roomSid The SID of the Room resource where the recording rules to fetch apply.
      */
-    public function __construct(
-        Version $version,
-        string $roomSid
-    ) {
+    public function __construct(Version $version, string $roomSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'roomSid' =>
-            $roomSid,
-        
-        ];
-
-        $this->uri = '/Rooms/' . \rawurlencode($roomSid)
-        .'/RecordingRules';
+        $this->solution = ['roomSid' => $roomSid];
+        $this->uri = '/Rooms/' . \rawurlencode($roomSid) . '/RecordingRules';
     }
-
     /**
      * Fetch the RecordingRulesInstance
      *
      * @return RecordingRulesInstance Fetched RecordingRulesInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): RecordingRulesInstance
+    public function fetch() : RecordingRulesInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new RecordingRulesInstance(
-            $this->version,
-            $payload,
-            $this->solution['roomSid']
-        );
+        return new RecordingRulesInstance($this->version, $payload, $this->solution['roomSid']);
     }
-
-
     /**
      * Update the RecordingRulesInstance
      *
@@ -75,32 +54,19 @@ class RecordingRulesList extends ListResource
      * @return RecordingRulesInstance Updated RecordingRulesInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): RecordingRulesInstance
+    public function update(array $options = []) : RecordingRulesInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Rules' =>
-                Serialize::jsonObject($options['rules']),
-        ]);
-
+        $data = Values::of(['Rules' => Serialize::jsonObject($options['rules'])]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new RecordingRulesInstance(
-            $this->version,
-            $payload,
-            $this->solution['roomSid']
-        );
+        return new RecordingRulesInstance($this->version, $payload, $this->solution['roomSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Video.V1.RecordingRulesList]';
     }

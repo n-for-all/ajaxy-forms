@@ -9,13 +9,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\TokenParser;
 
-namespace Twig\TokenParser;
-
-use Twig\Node\IncludeNode;
-use Twig\Node\Node;
-use Twig\Token;
-
+use Isolated\Twig\Node\IncludeNode;
+use Isolated\Twig\Node\Node;
+use Isolated\Twig\Token;
 /**
  * Includes a template.
  *
@@ -27,42 +25,51 @@ use Twig\Token;
  */
 class IncludeTokenParser extends AbstractTokenParser
 {
-    public function parse(Token $token): Node
+    public function parse(Token $token) : Node
     {
         $expr = $this->parser->getExpressionParser()->parseExpression();
-
         [$variables, $only, $ignoreMissing] = $this->parseArguments();
-
         return new IncludeNode($expr, $variables, $only, $ignoreMissing, $token->getLine(), $this->getTag());
     }
-
     protected function parseArguments()
     {
         $stream = $this->parser->getStream();
-
-        $ignoreMissing = false;
-        if ($stream->nextIf(/* Token::NAME_TYPE */ 5, 'ignore')) {
-            $stream->expect(/* Token::NAME_TYPE */ 5, 'missing');
-
-            $ignoreMissing = true;
+        $ignoreMissing = \false;
+        if ($stream->nextIf(
+            /* Token::NAME_TYPE */
+            5,
+            'ignore'
+        )) {
+            $stream->expect(
+                /* Token::NAME_TYPE */
+                5,
+                'missing'
+            );
+            $ignoreMissing = \true;
         }
-
         $variables = null;
-        if ($stream->nextIf(/* Token::NAME_TYPE */ 5, 'with')) {
+        if ($stream->nextIf(
+            /* Token::NAME_TYPE */
+            5,
+            'with'
+        )) {
             $variables = $this->parser->getExpressionParser()->parseExpression();
         }
-
-        $only = false;
-        if ($stream->nextIf(/* Token::NAME_TYPE */ 5, 'only')) {
-            $only = true;
+        $only = \false;
+        if ($stream->nextIf(
+            /* Token::NAME_TYPE */
+            5,
+            'only'
+        )) {
+            $only = \true;
         }
-
-        $stream->expect(/* Token::BLOCK_END_TYPE */ 3);
-
+        $stream->expect(
+            /* Token::BLOCK_END_TYPE */
+            3
+        );
         return [$variables, $only, $ignoreMissing];
     }
-
-    public function getTag(): string
+    public function getTag() : string
     {
         return 'include';
     }

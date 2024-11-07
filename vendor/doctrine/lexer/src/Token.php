@@ -1,16 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Doctrine\Common\Lexer;
+declare (strict_types=1);
+namespace Isolated\Doctrine\Common\Lexer;
 
 use ArrayAccess;
-use Doctrine\Deprecations\Deprecation;
+use Isolated\Doctrine\Deprecations\Deprecation;
 use ReturnTypeWillChange;
 use UnitEnum;
-
 use function in_array;
-
 /**
  * @template T of UnitEnum|string|int
  * @template V of string|int
@@ -25,7 +22,6 @@ final class Token implements ArrayAccess
      * @var V
      */
     public $value;
-
     /**
      * The type of the token (identifier, numeric, string, input parameter, none)
      *
@@ -33,7 +29,6 @@ final class Token implements ArrayAccess
      * @var T|null
      */
     public $type;
-
     /**
      * The position of the token in the input string
      *
@@ -41,40 +36,30 @@ final class Token implements ArrayAccess
      * @var int
      */
     public $position;
-
     /**
      * @param V      $value
      * @param T|null $type
      */
     public function __construct($value, $type, int $position)
     {
-        $this->value    = $value;
-        $this->type     = $type;
+        $this->value = $value;
+        $this->type = $type;
         $this->position = $position;
     }
-
     /** @param T ...$types */
-    public function isA(...$types): bool
+    public function isA(...$types) : bool
     {
-        return in_array($this->type, $types, true);
+        return in_array($this->type, $types, \true);
     }
-
     /**
      * @deprecated Use the value, type or position property instead
      * {@inheritDoc}
      */
-    public function offsetExists($offset): bool
+    public function offsetExists($offset) : bool
     {
-        Deprecation::trigger(
-            'doctrine/lexer',
-            'https://github.com/doctrine/lexer/pull/79',
-            'Accessing %s properties via ArrayAccess is deprecated, use the value, type or position property instead',
-            self::class
-        );
-
-        return in_array($offset, ['value', 'type', 'position'], true);
+        Deprecation::trigger('doctrine/lexer', 'https://github.com/doctrine/lexer/pull/79', 'Accessing %s properties via ArrayAccess is deprecated, use the value, type or position property instead', self::class);
+        return in_array($offset, ['value', 'type', 'position'], \true);
     }
-
     /**
      * @deprecated Use the value, type or position property instead
      * {@inheritDoc}
@@ -101,45 +86,25 @@ final class Token implements ArrayAccess
     #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
-        Deprecation::trigger(
-            'doctrine/lexer',
-            'https://github.com/doctrine/lexer/pull/79',
-            'Accessing %s properties via ArrayAccess is deprecated, use the value, type or position property instead',
-            self::class
-        );
-
-        return $this->$offset;
+        Deprecation::trigger('doctrine/lexer', 'https://github.com/doctrine/lexer/pull/79', 'Accessing %s properties via ArrayAccess is deprecated, use the value, type or position property instead', self::class);
+        return $this->{$offset};
     }
-
     /**
      * @deprecated no replacement planned
      * {@inheritDoc}
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, $value) : void
     {
-        Deprecation::trigger(
-            'doctrine/lexer',
-            'https://github.com/doctrine/lexer/pull/79',
-            'Setting %s properties via ArrayAccess is deprecated',
-            self::class
-        );
-
-        $this->$offset = $value;
+        Deprecation::trigger('doctrine/lexer', 'https://github.com/doctrine/lexer/pull/79', 'Setting %s properties via ArrayAccess is deprecated', self::class);
+        $this->{$offset} = $value;
     }
-
     /**
      * @deprecated no replacement planned
      * {@inheritDoc}
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset($offset) : void
     {
-        Deprecation::trigger(
-            'doctrine/lexer',
-            'https://github.com/doctrine/lexer/pull/79',
-            'Setting %s properties via ArrayAccess is deprecated',
-            self::class
-        );
-
-        $this->$offset = null;
+        Deprecation::trigger('doctrine/lexer', 'https://github.com/doctrine/lexer/pull/79', 'Setting %s properties via ArrayAccess is deprecated', self::class);
+        $this->{$offset} = null;
     }
 }

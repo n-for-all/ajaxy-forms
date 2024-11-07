@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service;
 
-
-namespace Twilio\Rest\Verify\V2\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property string|null $serviceSid
@@ -46,64 +42,43 @@ class MessagingConfigurationInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $country = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'country' => Values::array_get($payload, 'country'),
-            'messagingServiceSid' => Values::array_get($payload, 'messaging_service_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'country' => $country ?: $this->properties['country'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'country' => Values::array_get($payload, 'country'), 'messagingServiceSid' => Values::array_get($payload, 'messaging_service_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['serviceSid' => $serviceSid, 'country' => $country ?: $this->properties['country']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return MessagingConfigurationContext Context for this MessagingConfigurationInstance
      */
-    protected function proxy(): MessagingConfigurationContext
+    protected function proxy() : MessagingConfigurationContext
     {
         if (!$this->context) {
-            $this->context = new MessagingConfigurationContext(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['country']
-            );
+            $this->context = new MessagingConfigurationContext($this->version, $this->solution['serviceSid'], $this->solution['country']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the MessagingConfigurationInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the MessagingConfigurationInstance
      *
      * @return MessagingConfigurationInstance Fetched MessagingConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): MessagingConfigurationInstance
+    public function fetch() : MessagingConfigurationInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the MessagingConfigurationInstance
      *
@@ -111,12 +86,10 @@ class MessagingConfigurationInstance extends InstanceResource
      * @return MessagingConfigurationInstance Updated MessagingConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $messagingServiceSid): MessagingConfigurationInstance
+    public function update(string $messagingServiceSid) : MessagingConfigurationInstance
     {
-
         return $this->proxy()->update($messagingServiceSid);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -129,27 +102,23 @@ class MessagingConfigurationInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Verify.V2.MessagingConfigurationInstance ' . \implode(' ', $context) . ']';
     }
 }
-

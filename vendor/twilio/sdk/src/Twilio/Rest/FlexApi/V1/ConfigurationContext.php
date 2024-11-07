@@ -13,36 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ConfigurationContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ConfigurationContext
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Configuration';
     }
-
     /**
      * Fetch the ConfigurationInstance
      *
@@ -50,55 +41,36 @@ class ConfigurationContext extends InstanceContext
      * @return ConfigurationInstance Fetched ConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): ConfigurationInstance
+    public function fetch(array $options = []) : ConfigurationInstance
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'UiVersion' =>
-                $options['uiVersion'],
-        ]);
-
+        $params = Values::of(['UiVersion' => $options['uiVersion']]);
         $payload = $this->version->fetch('GET', $this->uri, $params, []);
-
-        return new ConfigurationInstance(
-            $this->version,
-            $payload
-        );
+        return new ConfigurationInstance($this->version, $payload);
     }
-
-
     /**
      * Update the ConfigurationInstance
      *
      * @return ConfigurationInstance Updated ConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(): ConfigurationInstance
+    public function update() : ConfigurationInstance
     {
-
         $data = $body->toArray();
         $headers['Content-Type'] = 'application/json';
         $payload = $this->version->update('POST', $this->uri, [], $data, $headers);
-
-        return new ConfigurationInstance(
-            $this->version,
-            $payload
-        );
+        return new ConfigurationInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.ConfigurationContext ' . \implode(' ', $context) . ']';
     }

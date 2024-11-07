@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2\Transcript;
 
-namespace Twilio\Rest\Intelligence\V2\Transcript;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class OperatorResultList extends ListResource
-    {
+{
     /**
      * Construct the OperatorResultList
      *
      * @param Version $version Version that contains the resource
      * @param string $transcriptSid A 34 character string that uniquely identifies this Transcript.
      */
-    public function __construct(
-        Version $version,
-        string $transcriptSid
-    ) {
+    public function __construct(Version $version, string $transcriptSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'transcriptSid' =>
-            $transcriptSid,
-        
-        ];
-
-        $this->uri = '/Transcripts/' . \rawurlencode($transcriptSid)
-        .'/OperatorResults';
+        $this->solution = ['transcriptSid' => $transcriptSid];
+        $this->uri = '/Transcripts/' . \rawurlencode($transcriptSid) . '/OperatorResults';
     }
-
     /**
      * Reads OperatorResultInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -65,11 +52,10 @@ class OperatorResultList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return OperatorResultInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams OperatorResultInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -89,15 +75,12 @@ class OperatorResultList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of OperatorResultInstance records from the API.
      * Request is executed immediately
@@ -107,28 +90,13 @@ class OperatorResultList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return OperatorResultPage Page of OperatorResultInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): OperatorResultPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : OperatorResultPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Redacted' =>
-                Serialize::booleanToString($options['redacted']),
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Redacted' => Serialize::booleanToString($options['redacted']), 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new OperatorResultPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of OperatorResultInstance records from the API.
      * Request is executed immediately
@@ -136,40 +104,26 @@ class OperatorResultList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return OperatorResultPage Page of OperatorResultInstance
      */
-    public function getPage(string $targetUrl): OperatorResultPage
+    public function getPage(string $targetUrl) : OperatorResultPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new OperatorResultPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a OperatorResultContext
      *
      * @param string $operatorSid A 34 character string that identifies this Language Understanding operator sid.
      */
-    public function getContext(
-        string $operatorSid
-        
-    ): OperatorResultContext
+    public function getContext(string $operatorSid) : OperatorResultContext
     {
-        return new OperatorResultContext(
-            $this->version,
-            $this->solution['transcriptSid'],
-            $operatorSid
-        );
+        return new OperatorResultContext($this->version, $this->solution['transcriptSid'], $operatorSid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Intelligence.V2.OperatorResultList]';
     }

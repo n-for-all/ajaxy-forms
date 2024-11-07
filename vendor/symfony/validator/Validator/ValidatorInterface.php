@@ -8,15 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Validator;
 
-namespace Symfony\Component\Validator\Validator;
-
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\GroupSequence;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface;
-
+use Isolated\Symfony\Component\Validator\Constraint;
+use Isolated\Symfony\Component\Validator\Constraints\GroupSequence;
+use Isolated\Symfony\Component\Validator\ConstraintViolationListInterface;
+use Isolated\Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Isolated\Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface;
 /**
  * Validates PHP values against constraints.
  *
@@ -39,7 +37,6 @@ interface ValidatorInterface extends MetadataFactoryInterface
      *                                          succeeded
      */
     public function validate($value, $constraints = null, $groups = null);
-
     /**
      * Validates a property of an object against the constraints specified
      * for this property.
@@ -52,7 +49,6 @@ interface ValidatorInterface extends MetadataFactoryInterface
      *                                          succeeded
      */
     public function validateProperty(object $object, string $propertyName, $groups = null);
-
     /**
      * Validates a value against the constraints specified for an object's
      * property.
@@ -67,7 +63,6 @@ interface ValidatorInterface extends MetadataFactoryInterface
      *                                          succeeded
      */
     public function validatePropertyValue($objectOrClass, string $propertyName, $value, $groups = null);
-
     /**
      * Starts a new validation context and returns a validator for that context.
      *
@@ -78,7 +73,6 @@ interface ValidatorInterface extends MetadataFactoryInterface
      * @return ContextualValidatorInterface
      */
     public function startContext();
-
     /**
      * Returns a validator in the given execution context.
      *

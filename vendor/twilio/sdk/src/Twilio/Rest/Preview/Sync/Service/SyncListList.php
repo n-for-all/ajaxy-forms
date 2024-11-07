@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Sync\Service;
 
-namespace Twilio\Rest\Preview\Sync\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class SyncListList extends ListResource
-    {
+{
     /**
      * Construct the SyncListList
      *
      * @param Version $version Version that contains the resource
      * @param string $serviceSid 
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid
-    ) {
+    public function __construct(Version $version, string $serviceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Lists';
+        $this->solution = ['serviceSid' => $serviceSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Lists';
     }
-
     /**
      * Create the SyncListInstance
      *
@@ -56,26 +43,13 @@ class SyncListList extends ListResource
      * @return SyncListInstance Created SyncListInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): SyncListInstance
+    public function create(array $options = []) : SyncListInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'UniqueName' =>
-                $options['uniqueName'],
-        ]);
-
+        $data = Values::of(['UniqueName' => $options['uniqueName']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new SyncListInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid']
-        );
+        return new SyncListInstance($this->version, $payload, $this->solution['serviceSid']);
     }
-
-
     /**
      * Reads SyncListInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -91,11 +65,10 @@ class SyncListList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return SyncListInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams SyncListInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -114,15 +87,12 @@ class SyncListList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of SyncListInstance records from the API.
      * Request is executed immediately
@@ -132,24 +102,12 @@ class SyncListList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return SyncListPage Page of SyncListInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): SyncListPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : SyncListPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new SyncListPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of SyncListInstance records from the API.
      * Request is executed immediately
@@ -157,40 +115,26 @@ class SyncListList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return SyncListPage Page of SyncListInstance
      */
-    public function getPage(string $targetUrl): SyncListPage
+    public function getPage(string $targetUrl) : SyncListPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new SyncListPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a SyncListContext
      *
      * @param string $sid 
      */
-    public function getContext(
-        string $sid
-        
-    ): SyncListContext
+    public function getContext(string $sid) : SyncListContext
     {
-        return new SyncListContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $sid
-        );
+        return new SyncListContext($this->version, $this->solution['serviceSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Preview.Sync.SyncListList]';
     }

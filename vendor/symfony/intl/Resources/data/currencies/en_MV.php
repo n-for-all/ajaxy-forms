@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'MVR' => [
-            'Rf',
-            'Maldivian Rufiyaa',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['MVR' => ['Rf', 'Maldivian Rufiyaa']]];

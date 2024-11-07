@@ -1,8 +1,6 @@
 <?php
 
-
-namespace Twilio\Jwt\Client;
-
+namespace Isolated\Twilio\Jwt\Client;
 
 /**
  * Scope URI implementation
@@ -15,25 +13,25 @@ namespace Twilio\Jwt\Client;
  * For example:
  * scope:client:incoming?name=jonas
  */
-class ScopeURI {
+class ScopeURI
+{
     public $service;
     public $privilege;
     public $params;
-
-    public function __construct(string $service, string $privilege, array $params = []) {
+    public function __construct(string $service, string $privilege, array $params = [])
+    {
         $this->service = $service;
         $this->privilege = $privilege;
         $this->params = $params;
     }
-
-    public function toString(): string {
+    public function toString() : string
+    {
         $uri = "scope:{$this->service}:{$this->privilege}";
         if (\count($this->params)) {
             $uri .= '?' . \http_build_query($this->params, '', '&');
         }
         return $uri;
     }
-
     /**
      * Parse a scope URI into a ScopeURI object
      *
@@ -41,26 +39,20 @@ class ScopeURI {
      * @return ScopeURI The parsed scope uri
      * @throws \UnexpectedValueException
      */
-    public static function parse(string $uri): ScopeURI {
+    public static function parse(string $uri) : ScopeURI
+    {
         if (\strpos($uri, 'scope:') !== 0) {
-            throw new \UnexpectedValueException(
-                'Not a scope URI according to scheme');
+            throw new \UnexpectedValueException('Not a scope URI according to scheme');
         }
-
         $parts = \explode('?', $uri, 1);
         $params = null;
-
         if (\count($parts) > 1) {
             \parse_str($parts[1], $params);
         }
-
         $parts = \explode(':', $parts[0], 2);
-
         if (\count($parts) !== 3) {
-            throw new \UnexpectedValueException(
-                'Not enough parts for scope URI');
+            throw new \UnexpectedValueException('Not enough parts for scope URI');
         }
-
         [$scheme, $service, $privilege] = $parts;
         return new ScopeURI($service, $privilege, $params);
     }

@@ -13,17 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Recording\AddOnResult;
 
-namespace Twilio\Rest\Api\V2010\Account\Recording\AddOnResult;
-
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class PayloadList extends ListResource
-    {
+{
     /**
      * Construct the PayloadList
      *
@@ -32,33 +29,13 @@ class PayloadList extends ListResource
      * @param string $referenceSid The SID of the recording to which the AddOnResult resource that contains the payloads to delete belongs.
      * @param string $addOnResultSid The SID of the AddOnResult to which the payloads to delete belongs.
      */
-    public function __construct(
-        Version $version,
-        string $accountSid,
-        string $referenceSid,
-        string $addOnResultSid
-    ) {
+    public function __construct(Version $version, string $accountSid, string $referenceSid, string $addOnResultSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        
-        'referenceSid' =>
-            $referenceSid,
-        
-        'addOnResultSid' =>
-            $addOnResultSid,
-        
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Recordings/' . \rawurlencode($referenceSid)
-        .'/AddOnResults/' . \rawurlencode($addOnResultSid)
-        .'/Payloads.json';
+        $this->solution = ['accountSid' => $accountSid, 'referenceSid' => $referenceSid, 'addOnResultSid' => $addOnResultSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Recordings/' . \rawurlencode($referenceSid) . '/AddOnResults/' . \rawurlencode($addOnResultSid) . '/Payloads.json';
     }
-
     /**
      * Reads PayloadInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -74,11 +51,10 @@ class PayloadList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return PayloadInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams PayloadInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -97,15 +73,12 @@ class PayloadList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of PayloadInstance records from the API.
      * Request is executed immediately
@@ -115,24 +88,12 @@ class PayloadList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return PayloadPage Page of PayloadInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): PayloadPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : PayloadPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new PayloadPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of PayloadInstance records from the API.
      * Request is executed immediately
@@ -140,42 +101,26 @@ class PayloadList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return PayloadPage Page of PayloadInstance
      */
-    public function getPage(string $targetUrl): PayloadPage
+    public function getPage(string $targetUrl) : PayloadPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new PayloadPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a PayloadContext
      *
      * @param string $sid The Twilio-provided string that uniquely identifies the Recording AddOnResult Payload resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): PayloadContext
+    public function getContext(string $sid) : PayloadContext
     {
-        return new PayloadContext(
-            $this->version,
-            $this->solution['accountSid'],
-            $this->solution['referenceSid'],
-            $this->solution['addOnResultSid'],
-            $sid
-        );
+        return new PayloadContext($this->version, $this->solution['accountSid'], $this->solution['referenceSid'], $this->solution['addOnResultSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.PayloadList]';
     }

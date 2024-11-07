@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Chat\V1\Service\User;
 
-
-namespace Twilio\Rest\Chat\V1\Service\User;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property string|null $serviceSid
@@ -46,22 +42,10 @@ class UserChannelInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $userSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'channelSid' => Values::array_get($payload, 'channel_sid'),
-            'memberSid' => Values::array_get($payload, 'member_sid'),
-            'status' => Values::array_get($payload, 'status'),
-            'lastConsumedMessageIndex' => Values::array_get($payload, 'last_consumed_message_index'),
-            'unreadMessagesCount' => Values::array_get($payload, 'unread_messages_count'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'userSid' => $userSid, ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'channelSid' => Values::array_get($payload, 'channel_sid'), 'memberSid' => Values::array_get($payload, 'member_sid'), 'status' => Values::array_get($payload, 'status'), 'lastConsumedMessageIndex' => Values::array_get($payload, 'last_consumed_message_index'), 'unreadMessagesCount' => Values::array_get($payload, 'unread_messages_count'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['serviceSid' => $serviceSid, 'userSid' => $userSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -74,23 +58,19 @@ class UserChannelInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Chat.V1.UserChannelInstance]';
     }
 }
-

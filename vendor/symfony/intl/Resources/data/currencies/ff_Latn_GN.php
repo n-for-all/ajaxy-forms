@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'GNF' => [
-            'FG',
-            'GNF',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['GNF' => ['FG', 'GNF']]];

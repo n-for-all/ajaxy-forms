@@ -13,72 +13,48 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class DomainCertsContext extends InstanceContext
-    {
+{
     /**
      * Initialize the DomainCertsContext
      *
      * @param Version $version Version that contains the resource
      * @param string $domainSid Unique string used to identify the domain that this certificate should be associated with.
      */
-    public function __construct(
-        Version $version,
-        $domainSid
-    ) {
+    public function __construct(Version $version, $domainSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'domainSid' =>
-            $domainSid,
-        ];
-
-        $this->uri = '/LinkShortening/Domains/' . \rawurlencode($domainSid)
-        .'/Certificate';
+        $this->solution = ['domainSid' => $domainSid];
+        $this->uri = '/LinkShortening/Domains/' . \rawurlencode($domainSid) . '/Certificate';
     }
-
     /**
      * Delete the DomainCertsInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the DomainCertsInstance
      *
      * @return DomainCertsInstance Fetched DomainCertsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DomainCertsInstance
+    public function fetch() : DomainCertsInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new DomainCertsInstance(
-            $this->version,
-            $payload,
-            $this->solution['domainSid']
-        );
+        return new DomainCertsInstance($this->version, $payload, $this->solution['domainSid']);
     }
-
-
     /**
      * Update the DomainCertsInstance
      *
@@ -86,34 +62,22 @@ class DomainCertsContext extends InstanceContext
      * @return DomainCertsInstance Updated DomainCertsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $tlsCert): DomainCertsInstance
+    public function update(string $tlsCert) : DomainCertsInstance
     {
-
-        $data = Values::of([
-            'TlsCert' =>
-                $tlsCert,
-        ]);
-
+        $data = Values::of(['TlsCert' => $tlsCert]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new DomainCertsInstance(
-            $this->version,
-            $payload,
-            $this->solution['domainSid']
-        );
+        return new DomainCertsInstance($this->version, $payload, $this->solution['domainSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.DomainCertsContext ' . \implode(' ', $context) . ']';
     }

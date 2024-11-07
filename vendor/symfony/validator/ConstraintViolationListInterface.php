@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator;
+namespace Isolated\Symfony\Component\Validator;
 
 /**
  * A list of constraint violations.
@@ -25,12 +24,10 @@ interface ConstraintViolationListInterface extends \Traversable, \Countable, \Ar
      * Adds a constraint violation to this list.
      */
     public function add(ConstraintViolationInterface $violation);
-
     /**
      * Merges an existing violation list into this list.
      */
     public function addAll(self $otherList);
-
     /**
      * Returns the violation at a given offset.
      *
@@ -41,7 +38,6 @@ interface ConstraintViolationListInterface extends \Traversable, \Countable, \Ar
      * @throws \OutOfBoundsException if the offset does not exist
      */
     public function get(int $offset);
-
     /**
      * Returns whether the given offset exists.
      *
@@ -50,14 +46,12 @@ interface ConstraintViolationListInterface extends \Traversable, \Countable, \Ar
      * @return bool
      */
     public function has(int $offset);
-
     /**
      * Sets a violation at a given offset.
      *
      * @param int $offset The violation offset
      */
     public function set(int $offset, ConstraintViolationInterface $violation);
-
     /**
      * Removes a violation at a given offset.
      *

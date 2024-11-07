@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl\Data\Util;
 
-namespace Symfony\Component\Intl\Data\Util;
-
-use Symfony\Component\Intl\Exception\OutOfBoundsException;
-
+use Isolated\Symfony\Component\Intl\Exception\OutOfBoundsException;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  *
@@ -35,13 +33,10 @@ class RecursiveArrayAccess
                     continue;
                 }
             }
-
-            throw new OutOfBoundsException(sprintf('The index "%s" does not exist.', $index));
+            throw new OutOfBoundsException(\sprintf('The index "%s" does not exist.', $index));
         }
-
         return $array;
     }
-
     private function __construct()
     {
     }

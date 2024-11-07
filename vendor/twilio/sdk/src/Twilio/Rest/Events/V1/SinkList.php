@@ -13,37 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Events\V1;
 
-namespace Twilio\Rest\Events\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class SinkList extends ListResource
-    {
+{
     /**
      * Construct the SinkList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Sinks';
     }
-
     /**
      * Create the SinkInstance
      *
@@ -53,27 +45,12 @@ class SinkList extends ListResource
      * @return SinkInstance Created SinkInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $description, array $sinkConfiguration, string $sinkType): SinkInstance
+    public function create(string $description, array $sinkConfiguration, string $sinkType) : SinkInstance
     {
-
-        $data = Values::of([
-            'Description' =>
-                $description,
-            'SinkConfiguration' =>
-                Serialize::jsonObject($sinkConfiguration),
-            'SinkType' =>
-                $sinkType,
-        ]);
-
+        $data = Values::of(['Description' => $description, 'SinkConfiguration' => Serialize::jsonObject($sinkConfiguration), 'SinkType' => $sinkType]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new SinkInstance(
-            $this->version,
-            $payload
-        );
+        return new SinkInstance($this->version, $payload);
     }
-
-
     /**
      * Reads SinkInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -90,11 +67,10 @@ class SinkList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return SinkInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams SinkInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -114,15 +90,12 @@ class SinkList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of SinkInstance records from the API.
      * Request is executed immediately
@@ -132,30 +105,13 @@ class SinkList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return SinkPage Page of SinkInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): SinkPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : SinkPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'InUse' =>
-                Serialize::booleanToString($options['inUse']),
-            'Status' =>
-                $options['status'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['InUse' => Serialize::booleanToString($options['inUse']), 'Status' => $options['status'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new SinkPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of SinkInstance records from the API.
      * Request is executed immediately
@@ -163,39 +119,26 @@ class SinkList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return SinkPage Page of SinkInstance
      */
-    public function getPage(string $targetUrl): SinkPage
+    public function getPage(string $targetUrl) : SinkPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new SinkPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a SinkContext
      *
      * @param string $sid A 34 character string that uniquely identifies this Sink.
      */
-    public function getContext(
-        string $sid
-        
-    ): SinkContext
+    public function getContext(string $sid) : SinkContext
     {
-        return new SinkContext(
-            $this->version,
-            $sid
-        );
+        return new SinkContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Events.V1.SinkList]';
     }

@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'HTG' => [
-            'G',
-            'gourde haïtienne',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['HTG' => ['G', 'gourde haïtienne']]];

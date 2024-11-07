@@ -1,47 +1,43 @@
 <?php
 
+namespace Isolated\Twilio;
 
-namespace Twilio;
-
-
-use Twilio\Http\Response;
-use Twilio\Rest\Client;
-
+use Isolated\Twilio\Http\Response;
+use Isolated\Twilio\Rest\Client;
 /**
  * Class Domain
  * Abstracts a Twilio sub domain
  * @package Twilio
  */
-abstract class Domain {
+abstract class Domain
+{
     /**
      * @var Client Twilio Client
      */
     protected $client;
-
     /**
      * @var string Base URL for this domain
      */
     protected $baseUrl;
-
     /**
      * Construct a new Domain
      * @param Client $client used to communicate with Twilio
      */
-    public function __construct(Client $client) {
+    public function __construct(Client $client)
+    {
         $this->client = $client;
         $this->baseUrl = '';
     }
-
     /**
      * Translate version relative URIs into absolute URLs
      *
      * @param string $uri Version relative URI
      * @return string Absolute URL for this domain
      */
-    public function absoluteUrl(string $uri): string {
+    public function absoluteUrl(string $uri) : string
+    {
         return \implode('/', [\trim($this->baseUrl, '/'), \trim($uri, '/')]);
     }
-
     /**
      * Make an HTTP request to the domain
      *
@@ -55,28 +51,17 @@ abstract class Domain {
      * @param int $timeout Request timeout
      * @return Response the response for the request
      */
-    public function request(string $method, string $uri,
-                            array $params = [], array $data = [], array $headers = [],
-                            string $user = null, string $password = null,
-                            int $timeout = null): Response {
+    public function request(string $method, string $uri, array $params = [], array $data = [], array $headers = [], string $user = null, string $password = null, int $timeout = null) : Response
+    {
         $url = $this->absoluteUrl($uri);
-        return $this->client->request(
-            $method,
-            $url,
-            $params,
-            $data,
-            $headers,
-            $user,
-            $password,
-            $timeout
-        );
+        return $this->client->request($method, $url, $params, $data, $headers, $user, $password, $timeout);
     }
-
-    public function getClient(): Client {
+    public function getClient() : Client
+    {
         return $this->client;
     }
-
-    public function __toString(): string {
+    public function __toString() : string
+    {
         return '[Domain]';
     }
 }

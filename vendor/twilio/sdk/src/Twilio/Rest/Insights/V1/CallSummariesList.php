@@ -13,36 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Insights\V1;
 
-namespace Twilio\Rest\Insights\V1;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class CallSummariesList extends ListResource
-    {
+{
     /**
      * Construct the CallSummariesList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Voice/Summaries';
     }
-
     /**
      * Reads CallSummariesInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -59,11 +51,10 @@ class CallSummariesList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return CallSummariesInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams CallSummariesInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -83,15 +74,12 @@ class CallSummariesList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of CallSummariesInstance records from the API.
      * Request is executed immediately
@@ -101,74 +89,13 @@ class CallSummariesList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return CallSummariesPage Page of CallSummariesInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): CallSummariesPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : CallSummariesPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'From' =>
-                $options['from'],
-            'To' =>
-                $options['to'],
-            'FromCarrier' =>
-                $options['fromCarrier'],
-            'ToCarrier' =>
-                $options['toCarrier'],
-            'FromCountryCode' =>
-                $options['fromCountryCode'],
-            'ToCountryCode' =>
-                $options['toCountryCode'],
-            'Branded' =>
-                Serialize::booleanToString($options['branded']),
-            'VerifiedCaller' =>
-                Serialize::booleanToString($options['verifiedCaller']),
-            'HasTag' =>
-                Serialize::booleanToString($options['hasTag']),
-            'StartTime' =>
-                $options['startTime'],
-            'EndTime' =>
-                $options['endTime'],
-            'CallType' =>
-                $options['callType'],
-            'CallState' =>
-                $options['callState'],
-            'Direction' =>
-                $options['direction'],
-            'ProcessingState' =>
-                $options['processingState'],
-            'SortBy' =>
-                $options['sortBy'],
-            'Subaccount' =>
-                $options['subaccount'],
-            'AbnormalSession' =>
-                Serialize::booleanToString($options['abnormalSession']),
-            'AnsweredBy' =>
-                $options['answeredBy'],
-            'AnsweredByAnnotation' =>
-                $options['answeredByAnnotation'],
-            'ConnectivityIssueAnnotation' =>
-                $options['connectivityIssueAnnotation'],
-            'QualityIssueAnnotation' =>
-                $options['qualityIssueAnnotation'],
-            'SpamAnnotation' =>
-                Serialize::booleanToString($options['spamAnnotation']),
-            'CallScoreAnnotation' =>
-                $options['callScoreAnnotation'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['From' => $options['from'], 'To' => $options['to'], 'FromCarrier' => $options['fromCarrier'], 'ToCarrier' => $options['toCarrier'], 'FromCountryCode' => $options['fromCountryCode'], 'ToCountryCode' => $options['toCountryCode'], 'Branded' => Serialize::booleanToString($options['branded']), 'VerifiedCaller' => Serialize::booleanToString($options['verifiedCaller']), 'HasTag' => Serialize::booleanToString($options['hasTag']), 'StartTime' => $options['startTime'], 'EndTime' => $options['endTime'], 'CallType' => $options['callType'], 'CallState' => $options['callState'], 'Direction' => $options['direction'], 'ProcessingState' => $options['processingState'], 'SortBy' => $options['sortBy'], 'Subaccount' => $options['subaccount'], 'AbnormalSession' => Serialize::booleanToString($options['abnormalSession']), 'AnsweredBy' => $options['answeredBy'], 'AnsweredByAnnotation' => $options['answeredByAnnotation'], 'ConnectivityIssueAnnotation' => $options['connectivityIssueAnnotation'], 'QualityIssueAnnotation' => $options['qualityIssueAnnotation'], 'SpamAnnotation' => Serialize::booleanToString($options['spamAnnotation']), 'CallScoreAnnotation' => $options['callScoreAnnotation'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new CallSummariesPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of CallSummariesInstance records from the API.
      * Request is executed immediately
@@ -176,23 +103,17 @@ class CallSummariesList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return CallSummariesPage Page of CallSummariesInstance
      */
-    public function getPage(string $targetUrl): CallSummariesPage
+    public function getPage(string $targetUrl) : CallSummariesPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new CallSummariesPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Insights.V1.CallSummariesList]';
     }

@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\DeployedDevices\Fleet;
 
-namespace Twilio\Rest\Preview\DeployedDevices\Fleet;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class KeyList extends ListResource
-    {
+{
     /**
      * Construct the KeyList
      *
      * @param Version $version Version that contains the resource
      * @param string $fleetSid 
      */
-    public function __construct(
-        Version $version,
-        string $fleetSid
-    ) {
+    public function __construct(Version $version, string $fleetSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'fleetSid' =>
-            $fleetSid,
-        
-        ];
-
-        $this->uri = '/Fleets/' . \rawurlencode($fleetSid)
-        .'/Keys';
+        $this->solution = ['fleetSid' => $fleetSid];
+        $this->uri = '/Fleets/' . \rawurlencode($fleetSid) . '/Keys';
     }
-
     /**
      * Create the KeyInstance
      *
@@ -56,28 +43,13 @@ class KeyList extends ListResource
      * @return KeyInstance Created KeyInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): KeyInstance
+    public function create(array $options = []) : KeyInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'DeviceSid' =>
-                $options['deviceSid'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName'], 'DeviceSid' => $options['deviceSid']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new KeyInstance(
-            $this->version,
-            $payload,
-            $this->solution['fleetSid']
-        );
+        return new KeyInstance($this->version, $payload, $this->solution['fleetSid']);
     }
-
-
     /**
      * Reads KeyInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -94,11 +66,10 @@ class KeyList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return KeyInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams KeyInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -118,15 +89,12 @@ class KeyList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of KeyInstance records from the API.
      * Request is executed immediately
@@ -136,28 +104,13 @@ class KeyList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return KeyPage Page of KeyInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): KeyPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : KeyPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'DeviceSid' =>
-                $options['deviceSid'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['DeviceSid' => $options['deviceSid'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new KeyPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of KeyInstance records from the API.
      * Request is executed immediately
@@ -165,40 +118,26 @@ class KeyList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return KeyPage Page of KeyInstance
      */
-    public function getPage(string $targetUrl): KeyPage
+    public function getPage(string $targetUrl) : KeyPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new KeyPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a KeyContext
      *
      * @param string $sid Provides a 34 character string that uniquely identifies the requested Key credential resource.
      */
-    public function getContext(
-        string $sid
-        
-    ): KeyContext
+    public function getContext(string $sid) : KeyContext
     {
-        return new KeyContext(
-            $this->version,
-            $this->solution['fleetSid'],
-            $sid
-        );
+        return new KeyContext($this->version, $this->solution['fleetSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Preview.DeployedDevices.KeyList]';
     }

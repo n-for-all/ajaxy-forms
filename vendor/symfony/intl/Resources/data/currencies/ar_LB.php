@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'SDG' => [
-            'SDG',
-            'جنيه سوداني',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['SDG' => ['SDG', 'جنيه سوداني']]];

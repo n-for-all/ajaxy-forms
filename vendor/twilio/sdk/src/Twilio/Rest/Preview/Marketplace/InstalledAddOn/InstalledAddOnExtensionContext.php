@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Marketplace\InstalledAddOn;
 
-
-namespace Twilio\Rest\Preview\Marketplace\InstalledAddOn;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class InstalledAddOnExtensionContext extends InstanceContext
-    {
+{
     /**
      * Initialize the InstalledAddOnExtensionContext
      *
@@ -33,46 +29,24 @@ class InstalledAddOnExtensionContext extends InstanceContext
      * @param string $installedAddOnSid The SID of the InstalledAddOn resource with the extension to fetch.
      * @param string $sid The SID of the InstalledAddOn Extension resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $installedAddOnSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $installedAddOnSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'installedAddOnSid' =>
-            $installedAddOnSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/InstalledAddOns/' . \rawurlencode($installedAddOnSid)
-        .'/Extensions/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['installedAddOnSid' => $installedAddOnSid, 'sid' => $sid];
+        $this->uri = '/InstalledAddOns/' . \rawurlencode($installedAddOnSid) . '/Extensions/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the InstalledAddOnExtensionInstance
      *
      * @return InstalledAddOnExtensionInstance Fetched InstalledAddOnExtensionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): InstalledAddOnExtensionInstance
+    public function fetch() : InstalledAddOnExtensionInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new InstalledAddOnExtensionInstance(
-            $this->version,
-            $payload,
-            $this->solution['installedAddOnSid'],
-            $this->solution['sid']
-        );
+        return new InstalledAddOnExtensionInstance($this->version, $payload, $this->solution['installedAddOnSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the InstalledAddOnExtensionInstance
      *
@@ -80,35 +54,22 @@ class InstalledAddOnExtensionContext extends InstanceContext
      * @return InstalledAddOnExtensionInstance Updated InstalledAddOnExtensionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(bool $enabled): InstalledAddOnExtensionInstance
+    public function update(bool $enabled) : InstalledAddOnExtensionInstance
     {
-
-        $data = Values::of([
-            'Enabled' =>
-                Serialize::booleanToString($enabled),
-        ]);
-
+        $data = Values::of(['Enabled' => Serialize::booleanToString($enabled)]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new InstalledAddOnExtensionInstance(
-            $this->version,
-            $payload,
-            $this->solution['installedAddOnSid'],
-            $this->solution['sid']
-        );
+        return new InstalledAddOnExtensionInstance($this->version, $payload, $this->solution['installedAddOnSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.Marketplace.InstalledAddOnExtensionContext ' . \implode(' ', $context) . ']';
     }

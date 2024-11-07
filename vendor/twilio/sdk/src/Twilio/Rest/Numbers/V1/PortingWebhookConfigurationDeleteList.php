@@ -13,52 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V1;
 
-namespace Twilio\Rest\Numbers\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class PortingWebhookConfigurationDeleteList extends ListResource
-    {
+{
     /**
      * Construct the PortingWebhookConfigurationDeleteList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a PortingWebhookConfigurationDeleteContext
      *
      * @param string $webhookType The of the webhook type of the configuration to be deleted
      */
-    public function getContext(
-        string $webhookType
-        
-    ): PortingWebhookConfigurationDeleteContext
+    public function getContext(string $webhookType) : PortingWebhookConfigurationDeleteContext
     {
-        return new PortingWebhookConfigurationDeleteContext(
-            $this->version,
-            $webhookType
-        );
+        return new PortingWebhookConfigurationDeleteContext($this->version, $webhookType);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V1.PortingWebhookConfigurationDeleteList]';
     }

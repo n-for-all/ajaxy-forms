@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\DataTransformer;
 
-namespace Symfony\Component\Form\Extension\Core\DataTransformer;
-
-use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
-
+use Isolated\Symfony\Component\Form\DataTransformerInterface;
+use Isolated\Symfony\Component\Form\Exception\TransformationFailedException;
 /**
  * Passes a value through multiple value transformers.
  *
@@ -22,7 +20,6 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 class DataTransformerChain implements DataTransformerInterface
 {
     protected $transformers;
-
     /**
      * Uses the given value transformers to transform values.
      *
@@ -32,7 +29,6 @@ class DataTransformerChain implements DataTransformerInterface
     {
         $this->transformers = $transformers;
     }
-
     /**
      * Passes the value through the transform() method of all nested transformers.
      *
@@ -52,10 +48,8 @@ class DataTransformerChain implements DataTransformerInterface
         foreach ($this->transformers as $transformer) {
             $value = $transformer->transform($value);
         }
-
         return $value;
     }
-
     /**
      * Passes the value through the reverseTransform() method of all nested
      * transformers.
@@ -76,10 +70,8 @@ class DataTransformerChain implements DataTransformerInterface
         for ($i = \count($this->transformers) - 1; $i >= 0; --$i) {
             $value = $this->transformers[$i]->reverseTransform($value);
         }
-
         return $value;
     }
-
     /**
      * @return DataTransformerInterface[]
      */

@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Sip;
 
-namespace Twilio\Rest\Api\V2010\Account\Sip;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Rest\Api\V2010\Account\Sip\CredentialList\CredentialList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Rest\Api\V2010\Account\Sip\CredentialList\CredentialList;
 class CredentialListList extends ListResource
-    {
+{
     /**
      * Construct the CredentialListList
      *
      * @param Version $version Version that contains the resource
      * @param string $accountSid The unique id of the Account that is responsible for this resource.
      */
-    public function __construct(
-        Version $version,
-        string $accountSid
-    ) {
+    public function __construct(Version $version, string $accountSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/SIP/CredentialLists.json';
+        $this->solution = ['accountSid' => $accountSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/SIP/CredentialLists.json';
     }
-
     /**
      * Create the CredentialListInstance
      *
@@ -56,24 +43,12 @@ class CredentialListList extends ListResource
      * @return CredentialListInstance Created CredentialListInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $friendlyName): CredentialListInstance
+    public function create(string $friendlyName) : CredentialListInstance
     {
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $friendlyName,
-        ]);
-
+        $data = Values::of(['FriendlyName' => $friendlyName]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new CredentialListInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid']
-        );
+        return new CredentialListInstance($this->version, $payload, $this->solution['accountSid']);
     }
-
-
     /**
      * Reads CredentialListInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -89,11 +64,10 @@ class CredentialListList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return CredentialListInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams CredentialListInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -112,15 +86,12 @@ class CredentialListList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of CredentialListInstance records from the API.
      * Request is executed immediately
@@ -130,24 +101,12 @@ class CredentialListList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return CredentialListPage Page of CredentialListInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): CredentialListPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : CredentialListPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new CredentialListPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of CredentialListInstance records from the API.
      * Request is executed immediately
@@ -155,40 +114,26 @@ class CredentialListList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return CredentialListPage Page of CredentialListInstance
      */
-    public function getPage(string $targetUrl): CredentialListPage
+    public function getPage(string $targetUrl) : CredentialListPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new CredentialListPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a CredentialListContext
      *
      * @param string $sid The credential list Sid that uniquely identifies this resource
      */
-    public function getContext(
-        string $sid
-        
-    ): CredentialListContext
+    public function getContext(string $sid) : CredentialListContext
     {
-        return new CredentialListContext(
-            $this->version,
-            $this->solution['accountSid'],
-            $sid
-        );
+        return new CredentialListContext($this->version, $this->solution['accountSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.CredentialListList]';
     }

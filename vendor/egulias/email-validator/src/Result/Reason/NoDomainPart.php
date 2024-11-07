@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class NoDomainPart implements Reason
 {
@@ -8,7 +8,6 @@ class NoDomainPart implements Reason
     {
         return 131;
     }
-
     public function description() : string
     {
         return 'No domain part found';

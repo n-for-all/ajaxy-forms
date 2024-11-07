@@ -13,18 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Message;
 
-namespace Twilio\Rest\Api\V2010\Account\Message;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class FeedbackList extends ListResource
-    {
+{
     /**
      * Construct the FeedbackList
      *
@@ -32,28 +29,13 @@ class FeedbackList extends ListResource
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) associated with the Message resource for which to create MessageFeedback.
      * @param string $messageSid The SID of the Message resource for which to create MessageFeedback.
      */
-    public function __construct(
-        Version $version,
-        string $accountSid,
-        string $messageSid
-    ) {
+    public function __construct(Version $version, string $accountSid, string $messageSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        
-        'messageSid' =>
-            $messageSid,
-        
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Messages/' . \rawurlencode($messageSid)
-        .'/Feedback.json';
+        $this->solution = ['accountSid' => $accountSid, 'messageSid' => $messageSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Messages/' . \rawurlencode($messageSid) . '/Feedback.json';
     }
-
     /**
      * Create the FeedbackInstance
      *
@@ -61,33 +43,19 @@ class FeedbackList extends ListResource
      * @return FeedbackInstance Created FeedbackInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): FeedbackInstance
+    public function create(array $options = []) : FeedbackInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Outcome' =>
-                $options['outcome'],
-        ]);
-
+        $data = Values::of(['Outcome' => $options['outcome']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new FeedbackInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['messageSid']
-        );
+        return new FeedbackInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['messageSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.FeedbackList]';
     }

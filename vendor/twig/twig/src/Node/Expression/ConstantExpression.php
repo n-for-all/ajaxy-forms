@@ -9,11 +9,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node\Expression;
 
-namespace Twig\Node\Expression;
-
-use Twig\Compiler;
-
+use Isolated\Twig\Compiler;
 /**
  * @final
  */
@@ -23,8 +21,7 @@ class ConstantExpression extends AbstractExpression
     {
         parent::__construct([], ['value' => $value], $lineno);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
         $compiler->repr($this->getAttribute('value'));
     }

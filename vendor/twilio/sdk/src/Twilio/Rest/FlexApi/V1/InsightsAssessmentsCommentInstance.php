@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property string|null $assessmentSid
@@ -48,26 +44,10 @@ class InsightsAssessmentsCommentInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'assessmentSid' => Values::array_get($payload, 'assessment_sid'),
-            'comment' => Values::array_get($payload, 'comment'),
-            'offset' => Values::array_get($payload, 'offset'),
-            'report' => Values::array_get($payload, 'report'),
-            'weight' => Values::array_get($payload, 'weight'),
-            'agentId' => Values::array_get($payload, 'agent_id'),
-            'segmentId' => Values::array_get($payload, 'segment_id'),
-            'userName' => Values::array_get($payload, 'user_name'),
-            'userEmail' => Values::array_get($payload, 'user_email'),
-            'timestamp' => Values::array_get($payload, 'timestamp'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'assessmentSid' => Values::array_get($payload, 'assessment_sid'), 'comment' => Values::array_get($payload, 'comment'), 'offset' => Values::array_get($payload, 'offset'), 'report' => Values::array_get($payload, 'report'), 'weight' => Values::array_get($payload, 'weight'), 'agentId' => Values::array_get($payload, 'agent_id'), 'segmentId' => Values::array_get($payload, 'segment_id'), 'userName' => Values::array_get($payload, 'user_name'), 'userEmail' => Values::array_get($payload, 'user_email'), 'timestamp' => Values::array_get($payload, 'timestamp'), 'url' => Values::array_get($payload, 'url')];
         $this->solution = [];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -80,23 +60,19 @@ class InsightsAssessmentsCommentInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.FlexApi.V1.InsightsAssessmentsCommentInstance]';
     }
 }
-

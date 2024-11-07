@@ -13,62 +13,46 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ProvisioningStatusContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ProvisioningStatusContext
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/account/provision/status';
     }
-
     /**
      * Fetch the ProvisioningStatusInstance
      *
      * @return ProvisioningStatusInstance Fetched ProvisioningStatusInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ProvisioningStatusInstance
+    public function fetch() : ProvisioningStatusInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ProvisioningStatusInstance(
-            $this->version,
-            $payload
-        );
+        return new ProvisioningStatusInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.ProvisioningStatusContext ' . \implode(' ', $context) . ']';
     }

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl\Data\Bundle\Reader;
 
-namespace Symfony\Component\Intl\Data\Bundle\Reader;
-
-use Symfony\Component\Intl\Data\Util\RingBuffer;
-
+use Isolated\Symfony\Component\Intl\Data\Util\RingBuffer;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  *
@@ -23,7 +21,6 @@ class BufferedBundleReader implements BundleReaderInterface
     private $reader;
     /** @var RingBuffer<string, mixed> */
     private $buffer;
-
     /**
      * Buffers a given reader.
      *
@@ -34,18 +31,15 @@ class BufferedBundleReader implements BundleReaderInterface
         $this->reader = $reader;
         $this->buffer = new RingBuffer($bufferSize);
     }
-
     /**
      * {@inheritdoc}
      */
     public function read(string $path, string $locale)
     {
-        $hash = $path.'//'.$locale;
-
+        $hash = $path . '//' . $locale;
         if (!isset($this->buffer[$hash])) {
             $this->buffer[$hash] = $this->reader->read($path, $locale);
         }
-
         return $this->buffer[$hash];
     }
 }

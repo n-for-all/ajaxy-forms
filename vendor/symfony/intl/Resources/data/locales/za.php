@@ -1,9 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'en' => 'Yinghyij',
-        'za' => 'Vahcuengh',
-        'za_CN' => 'Vahcuengh (Cunghgoz)',
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['en' => 'Yinghyij', 'za' => 'Vahcuengh', 'za_CN' => 'Vahcuengh (Cunghgoz)']];

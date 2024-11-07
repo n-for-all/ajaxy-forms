@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service;
 
-
-namespace Twilio\Rest\Verify\V2\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $serviceSid
@@ -54,60 +50,33 @@ class VerificationInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'to' => Values::array_get($payload, 'to'),
-            'channel' => Values::array_get($payload, 'channel'),
-            'status' => Values::array_get($payload, 'status'),
-            'valid' => Values::array_get($payload, 'valid'),
-            'lookup' => Values::array_get($payload, 'lookup'),
-            'amount' => Values::array_get($payload, 'amount'),
-            'payee' => Values::array_get($payload, 'payee'),
-            'sendCodeAttempts' => Values::array_get($payload, 'send_code_attempts'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'sna' => Values::array_get($payload, 'sna'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'to' => Values::array_get($payload, 'to'), 'channel' => Values::array_get($payload, 'channel'), 'status' => Values::array_get($payload, 'status'), 'valid' => Values::array_get($payload, 'valid'), 'lookup' => Values::array_get($payload, 'lookup'), 'amount' => Values::array_get($payload, 'amount'), 'payee' => Values::array_get($payload, 'payee'), 'sendCodeAttempts' => Values::array_get($payload, 'send_code_attempts'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'sna' => Values::array_get($payload, 'sna'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return VerificationContext Context for this VerificationInstance
      */
-    protected function proxy(): VerificationContext
+    protected function proxy() : VerificationContext
     {
         if (!$this->context) {
-            $this->context = new VerificationContext(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['sid']
-            );
+            $this->context = new VerificationContext($this->version, $this->solution['serviceSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the VerificationInstance
      *
      * @return VerificationInstance Fetched VerificationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): VerificationInstance
+    public function fetch() : VerificationInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the VerificationInstance
      *
@@ -115,12 +84,10 @@ class VerificationInstance extends InstanceResource
      * @return VerificationInstance Updated VerificationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $status): VerificationInstance
+    public function update(string $status) : VerificationInstance
     {
-
         return $this->proxy()->update($status);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -133,27 +100,23 @@ class VerificationInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Verify.V2.VerificationInstance ' . \implode(' ', $context) . ']';
     }
 }
-

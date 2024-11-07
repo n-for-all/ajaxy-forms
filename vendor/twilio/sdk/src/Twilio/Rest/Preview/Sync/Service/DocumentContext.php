@@ -13,28 +13,23 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Sync\Service;
 
-
-namespace Twilio\Rest\Preview\Sync\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-use Twilio\Rest\Preview\Sync\Service\Document\DocumentPermissionList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
+use Isolated\Twilio\Rest\Preview\Sync\Service\Document\DocumentPermissionList;
 /**
  * @property DocumentPermissionList $documentPermissions
  * @method \Twilio\Rest\Preview\Sync\Service\Document\DocumentPermissionContext documentPermissions(string $identity)
  */
 class DocumentContext extends InstanceContext
-    {
+{
     protected $_documentPermissions;
-
     /**
      * Initialize the DocumentContext
      *
@@ -42,59 +37,34 @@ class DocumentContext extends InstanceContext
      * @param string $serviceSid 
      * @param string $sid 
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $serviceSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Documents/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Documents/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the DocumentInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the DocumentInstance
      *
      * @return DocumentInstance Fetched DocumentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DocumentInstance
+    public function fetch() : DocumentInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new DocumentInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['sid']
-        );
+        return new DocumentInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the DocumentInstance
      *
@@ -103,45 +73,24 @@ class DocumentContext extends InstanceContext
      * @return DocumentInstance Updated DocumentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $data, array $options = []): DocumentInstance
+    public function update(array $data, array $options = []) : DocumentInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Data' =>
-                Serialize::jsonObject($data),
-        ]);
-
+        $data = Values::of(['Data' => Serialize::jsonObject($data)]);
         $headers = Values::of(['If-Match' => $options['ifMatch']]);
-
         $payload = $this->version->update('POST', $this->uri, [], $data, $headers);
-
-        return new DocumentInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['sid']
-        );
+        return new DocumentInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['sid']);
     }
-
-
     /**
      * Access the documentPermissions
      */
-    protected function getDocumentPermissions(): DocumentPermissionList
+    protected function getDocumentPermissions() : DocumentPermissionList
     {
         if (!$this->_documentPermissions) {
-            $this->_documentPermissions = new DocumentPermissionList(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['sid']
-            );
+            $this->_documentPermissions = new DocumentPermissionList($this->version, $this->solution['serviceSid'], $this->solution['sid']);
         }
-
         return $this->_documentPermissions;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -149,16 +98,14 @@ class DocumentContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -167,26 +114,24 @@ class DocumentContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.Sync.DocumentContext ' . \implode(' ', $context) . ']';
     }

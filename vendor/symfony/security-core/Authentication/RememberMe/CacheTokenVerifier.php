@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Authentication\RememberMe;
 
-namespace Symfony\Component\Security\Core\Authentication\RememberMe;
-
-use Psr\Cache\CacheItemPoolInterface;
-
+use Isolated\Psr\Cache\CacheItemPoolInterface;
 /**
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
@@ -21,7 +19,6 @@ class CacheTokenVerifier implements TokenVerifierInterface
     private $cache;
     private $outdatedTokenTtl;
     private $cacheKeyPrefix;
-
     /**
      * @param int $outdatedTokenTtl How long the outdated token should still be considered valid. Defaults
      *                              to 60, which matches how often the PersistentRememberMeHandler will at
@@ -34,31 +31,26 @@ class CacheTokenVerifier implements TokenVerifierInterface
         $this->outdatedTokenTtl = $outdatedTokenTtl;
         $this->cacheKeyPrefix = $cacheKeyPrefix;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function verifyToken(PersistentTokenInterface $token, string $tokenValue): bool
+    public function verifyToken(PersistentTokenInterface $token, string $tokenValue) : bool
     {
-        if (hash_equals($token->getTokenValue(), $tokenValue)) {
-            return true;
+        if (\hash_equals($token->getTokenValue(), $tokenValue)) {
+            return \true;
         }
-
         $cacheKey = $this->getCacheKey($token);
         $item = $this->cache->getItem($cacheKey);
         if (!$item->isHit()) {
-            return false;
+            return \false;
         }
-
         $outdatedToken = $item->get();
-
-        return hash_equals($outdatedToken, $tokenValue);
+        return \hash_equals($outdatedToken, $tokenValue);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function updateExistingToken(PersistentTokenInterface $token, string $tokenValue, \DateTimeInterface $lastUsed): void
+    public function updateExistingToken(PersistentTokenInterface $token, string $tokenValue, \DateTimeInterface $lastUsed) : void
     {
         // When a token gets updated, persist the outdated token for $outdatedTokenTtl seconds so we can
         // still accept it as valid in verifyToken
@@ -67,9 +59,8 @@ class CacheTokenVerifier implements TokenVerifierInterface
         $item->expiresAfter($this->outdatedTokenTtl);
         $this->cache->save($item);
     }
-
-    private function getCacheKey(PersistentTokenInterface $token): string
+    private function getCacheKey(PersistentTokenInterface $token) : string
     {
-        return $this->cacheKeyPrefix.rawurlencode($token->getSeries());
+        return $this->cacheKeyPrefix . \rawurlencode($token->getSeries());
     }
 }

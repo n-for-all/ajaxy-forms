@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2;
 
-
-namespace Twilio\Rest\Numbers\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class BulkHostedNumberOrderContext extends InstanceContext
-    {
+{
     /**
      * Initialize the BulkHostedNumberOrderContext
      *
      * @param Version $version Version that contains the resource
      * @param string $bulkHostingSid A 34 character string that uniquely identifies this BulkHostedNumberOrder.
      */
-    public function __construct(
-        Version $version,
-        $bulkHostingSid
-    ) {
+    public function __construct(Version $version, $bulkHostingSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'bulkHostingSid' =>
-            $bulkHostingSid,
-        ];
-
-        $this->uri = '/HostedNumber/Orders/Bulk/' . \rawurlencode($bulkHostingSid)
-        .'';
+        $this->solution = ['bulkHostingSid' => $bulkHostingSid];
+        $this->uri = '/HostedNumber/Orders/Bulk/' . \rawurlencode($bulkHostingSid) . '';
     }
-
     /**
      * Fetch the BulkHostedNumberOrderInstance
      *
@@ -55,36 +42,23 @@ class BulkHostedNumberOrderContext extends InstanceContext
      * @return BulkHostedNumberOrderInstance Fetched BulkHostedNumberOrderInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): BulkHostedNumberOrderInstance
+    public function fetch(array $options = []) : BulkHostedNumberOrderInstance
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'OrderStatus' =>
-                $options['orderStatus'],
-        ]);
-
+        $params = Values::of(['OrderStatus' => $options['orderStatus']]);
         $payload = $this->version->fetch('GET', $this->uri, $params, []);
-
-        return new BulkHostedNumberOrderInstance(
-            $this->version,
-            $payload,
-            $this->solution['bulkHostingSid']
-        );
+        return new BulkHostedNumberOrderInstance($this->version, $payload, $this->solution['bulkHostingSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Numbers.V2.BulkHostedNumberOrderContext ' . \implode(' ', $context) . ']';
     }

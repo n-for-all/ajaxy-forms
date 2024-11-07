@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Serverless\V1\Service\Environment;
 
-
-namespace Twilio\Rest\Serverless\V1\Service\Environment;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class VariableContext extends InstanceContext
-    {
+{
     /**
      * Initialize the VariableContext
      *
@@ -34,64 +30,34 @@ class VariableContext extends InstanceContext
      * @param string $environmentSid The SID of the Environment in which the Variable resource exists.
      * @param string $sid The SID of the Variable resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $environmentSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $serviceSid, $environmentSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'environmentSid' =>
-            $environmentSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Environments/' . \rawurlencode($environmentSid)
-        .'/Variables/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'environmentSid' => $environmentSid, 'sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Environments/' . \rawurlencode($environmentSid) . '/Variables/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the VariableInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the VariableInstance
      *
      * @return VariableInstance Fetched VariableInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): VariableInstance
+    public function fetch() : VariableInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new VariableInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['environmentSid'],
-            $this->solution['sid']
-        );
+        return new VariableInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['environmentSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the VariableInstance
      *
@@ -99,40 +65,23 @@ class VariableContext extends InstanceContext
      * @return VariableInstance Updated VariableInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): VariableInstance
+    public function update(array $options = []) : VariableInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Key' =>
-                $options['key'],
-            'Value' =>
-                $options['value'],
-        ]);
-
+        $data = Values::of(['Key' => $options['key'], 'Value' => $options['value']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new VariableInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['environmentSid'],
-            $this->solution['sid']
-        );
+        return new VariableInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['environmentSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Serverless.V1.VariableContext ' . \implode(' ', $context) . ']';
     }

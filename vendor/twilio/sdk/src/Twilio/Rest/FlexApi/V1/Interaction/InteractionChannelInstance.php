@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1\Interaction;
 
-
-namespace Twilio\Rest\FlexApi\V1\Interaction;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Rest\FlexApi\V1\Interaction\InteractionChannel\InteractionChannelParticipantList;
-use Twilio\Rest\FlexApi\V1\Interaction\InteractionChannel\InteractionChannelInviteList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Rest\FlexApi\V1\Interaction\InteractionChannel\InteractionChannelParticipantList;
+use Isolated\Twilio\Rest\FlexApi\V1\Interaction\InteractionChannel\InteractionChannelInviteList;
 /**
  * @property string|null $sid
  * @property string|null $interactionSid
@@ -40,7 +36,6 @@ class InteractionChannelInstance extends InstanceResource
 {
     protected $_participants;
     protected $_invites;
-
     /**
      * Initialize the InteractionChannelInstance
      *
@@ -52,53 +47,33 @@ class InteractionChannelInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $interactionSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'interactionSid' => Values::array_get($payload, 'interaction_sid'),
-            'type' => Values::array_get($payload, 'type'),
-            'status' => Values::array_get($payload, 'status'),
-            'errorCode' => Values::array_get($payload, 'error_code'),
-            'errorMessage' => Values::array_get($payload, 'error_message'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['interactionSid' => $interactionSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'interactionSid' => Values::array_get($payload, 'interaction_sid'), 'type' => Values::array_get($payload, 'type'), 'status' => Values::array_get($payload, 'status'), 'errorCode' => Values::array_get($payload, 'error_code'), 'errorMessage' => Values::array_get($payload, 'error_message'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['interactionSid' => $interactionSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return InteractionChannelContext Context for this InteractionChannelInstance
      */
-    protected function proxy(): InteractionChannelContext
+    protected function proxy() : InteractionChannelContext
     {
         if (!$this->context) {
-            $this->context = new InteractionChannelContext(
-                $this->version,
-                $this->solution['interactionSid'],
-                $this->solution['sid']
-            );
+            $this->context = new InteractionChannelContext($this->version, $this->solution['interactionSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the InteractionChannelInstance
      *
      * @return InteractionChannelInstance Fetched InteractionChannelInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): InteractionChannelInstance
+    public function fetch() : InteractionChannelInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the InteractionChannelInstance
      *
@@ -107,28 +82,24 @@ class InteractionChannelInstance extends InstanceResource
      * @return InteractionChannelInstance Updated InteractionChannelInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $status, array $options = []): InteractionChannelInstance
+    public function update(string $status, array $options = []) : InteractionChannelInstance
     {
-
         return $this->proxy()->update($status, $options);
     }
-
     /**
      * Access the participants
      */
-    protected function getParticipants(): InteractionChannelParticipantList
+    protected function getParticipants() : InteractionChannelParticipantList
     {
         return $this->proxy()->participants;
     }
-
     /**
      * Access the invites
      */
-    protected function getInvites(): InteractionChannelInviteList
+    protected function getInvites() : InteractionChannelInviteList
     {
         return $this->proxy()->invites;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -141,27 +112,23 @@ class InteractionChannelInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.InteractionChannelInstance ' . \implode(' ', $context) . ']';
     }
 }
-

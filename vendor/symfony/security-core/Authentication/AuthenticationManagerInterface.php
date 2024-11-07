@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Authentication;
 
-namespace Symfony\Component\Security\Core\Authentication;
-
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-
+use Isolated\Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Isolated\Symfony\Component\Security\Core\Exception\AuthenticationException;
 /**
  * AuthenticationManagerInterface is the interface for authentication managers,
  * which process Token authentication.

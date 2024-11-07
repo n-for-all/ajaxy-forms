@@ -8,16 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\DataCollector\Proxy;
 
-namespace Symfony\Component\Form\Extension\DataCollector\Proxy;
-
-use Symfony\Component\Form\Extension\DataCollector\FormDataCollectorInterface;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\ResolvedFormTypeInterface;
-
+use Isolated\Symfony\Component\Form\Extension\DataCollector\FormDataCollectorInterface;
+use Isolated\Symfony\Component\Form\FormBuilderInterface;
+use Isolated\Symfony\Component\Form\FormFactoryInterface;
+use Isolated\Symfony\Component\Form\FormInterface;
+use Isolated\Symfony\Component\Form\FormView;
+use Isolated\Symfony\Component\Form\ResolvedFormTypeInterface;
 /**
  * Proxy that invokes a data collector when creating a form and its view.
  *
@@ -27,13 +25,11 @@ class ResolvedTypeDataCollectorProxy implements ResolvedFormTypeInterface
 {
     private $proxiedType;
     private $dataCollector;
-
     public function __construct(ResolvedFormTypeInterface $proxiedType, FormDataCollectorInterface $dataCollector)
     {
         $this->proxiedType = $proxiedType;
         $this->dataCollector = $dataCollector;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -41,7 +37,6 @@ class ResolvedTypeDataCollectorProxy implements ResolvedFormTypeInterface
     {
         return $this->proxiedType->getBlockPrefix();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -49,7 +44,6 @@ class ResolvedTypeDataCollectorProxy implements ResolvedFormTypeInterface
     {
         return $this->proxiedType->getParent();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -57,7 +51,6 @@ class ResolvedTypeDataCollectorProxy implements ResolvedFormTypeInterface
     {
         return $this->proxiedType->getInnerType();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -65,20 +58,16 @@ class ResolvedTypeDataCollectorProxy implements ResolvedFormTypeInterface
     {
         return $this->proxiedType->getTypeExtensions();
     }
-
     /**
      * {@inheritdoc}
      */
     public function createBuilder(FormFactoryInterface $factory, string $name, array $options = [])
     {
         $builder = $this->proxiedType->createBuilder($factory, $name, $options);
-
         $builder->setAttribute('data_collector/passed_options', $options);
         $builder->setType($this);
-
         return $builder;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -86,7 +75,6 @@ class ResolvedTypeDataCollectorProxy implements ResolvedFormTypeInterface
     {
         return $this->proxiedType->createView($form, $parent);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -94,7 +82,6 @@ class ResolvedTypeDataCollectorProxy implements ResolvedFormTypeInterface
     {
         $this->proxiedType->buildForm($builder, $options);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -102,25 +89,21 @@ class ResolvedTypeDataCollectorProxy implements ResolvedFormTypeInterface
     {
         $this->proxiedType->buildView($view, $form, $options);
     }
-
     /**
      * {@inheritdoc}
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $this->proxiedType->finishView($view, $form, $options);
-
         // Remember which view belongs to which form instance, so that we can
         // get the collected data for a view when its form instance is not
         // available (e.g. CSRF token)
         $this->dataCollector->associateFormWithView($form, $view);
-
         // Since the CSRF token is only present in the FormView tree, we also
         // need to check the FormView tree instead of calling isRoot() on the
         // FormInterface tree
         if (null === $view->parent) {
             $this->dataCollector->collectViewVariables($view);
-
             // Re-assemble data, in case FormView instances were added, for
             // which no FormInterface instances were present (e.g. CSRF token).
             // Since finishView() is called after finishing the views of all
@@ -129,7 +112,6 @@ class ResolvedTypeDataCollectorProxy implements ResolvedFormTypeInterface
             $this->dataCollector->buildFinalFormTree($form, $view);
         }
     }
-
     /**
      * {@inheritdoc}
      */

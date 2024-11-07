@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\RuntimeLoader;
 
-namespace Twig\RuntimeLoader;
-
-use Psr\Container\ContainerInterface;
-
+use Isolated\Psr\Container\ContainerInterface;
 /**
  * Lazily loads Twig runtime implementations from a PSR-11 container.
  *
@@ -24,12 +22,10 @@ use Psr\Container\ContainerInterface;
 class ContainerRuntimeLoader implements RuntimeLoaderInterface
 {
     private $container;
-
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
-
     public function load(string $class)
     {
         return $this->container->has($class) ? $this->container->get($class) : null;

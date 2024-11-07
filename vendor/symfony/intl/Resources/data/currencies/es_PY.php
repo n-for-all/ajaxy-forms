@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'PYG' => [
-            'Gs.',
-            'guaraní paraguayo',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['PYG' => ['Gs.', 'guaraní paraguayo']]];

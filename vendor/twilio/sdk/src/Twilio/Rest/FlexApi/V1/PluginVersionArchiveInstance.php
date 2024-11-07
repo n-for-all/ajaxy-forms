@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $pluginSid
@@ -50,43 +46,23 @@ class PluginVersionArchiveInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $pluginSid = null, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'pluginSid' => Values::array_get($payload, 'plugin_sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'version' => Values::array_get($payload, 'version'),
-            'pluginUrl' => Values::array_get($payload, 'plugin_url'),
-            'changelog' => Values::array_get($payload, 'changelog'),
-            'private' => Values::array_get($payload, 'private'),
-            'archived' => Values::array_get($payload, 'archived'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['pluginSid' => $pluginSid ?: $this->properties['pluginSid'], 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'pluginSid' => Values::array_get($payload, 'plugin_sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'version' => Values::array_get($payload, 'version'), 'pluginUrl' => Values::array_get($payload, 'plugin_url'), 'changelog' => Values::array_get($payload, 'changelog'), 'private' => Values::array_get($payload, 'private'), 'archived' => Values::array_get($payload, 'archived'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['pluginSid' => $pluginSid ?: $this->properties['pluginSid'], 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return PluginVersionArchiveContext Context for this PluginVersionArchiveInstance
      */
-    protected function proxy(): PluginVersionArchiveContext
+    protected function proxy() : PluginVersionArchiveContext
     {
         if (!$this->context) {
-            $this->context = new PluginVersionArchiveContext(
-                $this->version,
-                $this->solution['pluginSid'],
-                $this->solution['sid']
-            );
+            $this->context = new PluginVersionArchiveContext($this->version, $this->solution['pluginSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Update the PluginVersionArchiveInstance
      *
@@ -94,12 +70,10 @@ class PluginVersionArchiveInstance extends InstanceResource
      * @return PluginVersionArchiveInstance Updated PluginVersionArchiveInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): PluginVersionArchiveInstance
+    public function update(array $options = []) : PluginVersionArchiveInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -112,27 +86,23 @@ class PluginVersionArchiveInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.PluginVersionArchiveInstance ' . \implode(' ', $context) . ']';
     }
 }
-

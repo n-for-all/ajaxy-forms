@@ -8,21 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Bridge\Twig\Extension;
 
-namespace Symfony\Bridge\Twig\Extension;
-
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
-
+use Isolated\Twig\Extension\AbstractExtension;
+use Isolated\Twig\TwigFilter;
 /**
  * @author Jesse Rushlow <jr@rushlow.dev>
  */
 final class SerializerExtension extends AbstractExtension
 {
-    public function getFilters(): array
+    public function getFilters() : array
     {
-        return [
-            new TwigFilter('serialize', [SerializerRuntime::class, 'serialize']),
-        ];
+        return [new TwigFilter('serialize', [SerializerRuntime::class, 'serialize'])];
     }
 }

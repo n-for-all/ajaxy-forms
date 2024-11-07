@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Config\Builder;
+namespace Isolated\Symfony\Component\Config\Builder;
 
 /**
  * A ConfigBuilder provides helper methods to build a large complex array.
@@ -21,10 +20,9 @@ interface ConfigBuilderInterface
     /**
      * Gets all configuration represented as an array.
      */
-    public function toArray(): array;
-
+    public function toArray() : array;
     /**
      * Gets the alias for the extension which config we are building.
      */
-    public function getExtensionAlias(): string;
+    public function getExtensionAlias() : string;
 }

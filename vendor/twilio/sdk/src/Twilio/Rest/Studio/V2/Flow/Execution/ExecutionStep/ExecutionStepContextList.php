@@ -13,15 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Studio\V2\Flow\Execution\ExecutionStep;
 
-namespace Twilio\Rest\Studio\V2\Flow\Execution\ExecutionStep;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class ExecutionStepContextList extends ListResource
-    {
+{
     /**
      * Construct the ExecutionStepContextList
      *
@@ -30,49 +27,25 @@ class ExecutionStepContextList extends ListResource
      * @param string $executionSid The SID of the Execution resource with the Step to fetch.
      * @param string $stepSid The SID of the Step to fetch.
      */
-    public function __construct(
-        Version $version,
-        string $flowSid,
-        string $executionSid,
-        string $stepSid
-    ) {
+    public function __construct(Version $version, string $flowSid, string $executionSid, string $stepSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'flowSid' =>
-            $flowSid,
-        
-        'executionSid' =>
-            $executionSid,
-        
-        'stepSid' =>
-            $stepSid,
-        
-        ];
+        $this->solution = ['flowSid' => $flowSid, 'executionSid' => $executionSid, 'stepSid' => $stepSid];
     }
-
     /**
      * Constructs a ExecutionStepContextContext
      */
-    public function getContext(
-        
-    ): ExecutionStepContextContext
+    public function getContext() : ExecutionStepContextContext
     {
-        return new ExecutionStepContextContext(
-            $this->version,
-            $this->solution['flowSid'],
-            $this->solution['executionSid'],
-            $this->solution['stepSid']
-        );
+        return new ExecutionStepContextContext($this->version, $this->solution['flowSid'], $this->solution['executionSid'], $this->solution['stepSid']);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Studio.V2.ExecutionStepContextList]';
     }

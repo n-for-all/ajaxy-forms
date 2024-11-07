@@ -6,17 +6,17 @@
  * | (_)\/(_)(_|\/| |(/_  v1.0.0
  * /       /
  */
+namespace Isolated\Twilio\TwiML;
 
-namespace Twilio\TwiML;
-
-class MessagingResponse extends TwiML {
+class MessagingResponse extends TwiML
+{
     /**
      * MessagingResponse constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct('Response', null);
     }
-
     /**
      * Add Message child.
      *
@@ -24,10 +24,10 @@ class MessagingResponse extends TwiML {
      * @param array $attributes Optional attributes
      * @return Messaging\Message Child element.
      */
-    public function message($body, $attributes = []): Messaging\Message {
+    public function message($body, $attributes = []) : Messaging\Message
+    {
         return $this->nest(new Messaging\Message($body, $attributes));
     }
-
     /**
      * Add Redirect child.
      *
@@ -35,7 +35,8 @@ class MessagingResponse extends TwiML {
      * @param array $attributes Optional attributes
      * @return Messaging\Redirect Child element.
      */
-    public function redirect($url, $attributes = []): Messaging\Redirect {
+    public function redirect($url, $attributes = []) : Messaging\Redirect
+    {
         return $this->nest(new Messaging\Redirect($url, $attributes));
     }
 }

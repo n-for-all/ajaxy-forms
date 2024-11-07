@@ -13,30 +13,23 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Chat\V3;
 
-namespace Twilio\Rest\Chat\V3;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class ChannelList extends ListResource
-    {
+{
     /**
      * Construct the ChannelList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a ChannelContext
      *
@@ -44,25 +37,16 @@ class ChannelList extends ListResource
      *
      * @param string $sid A 34 character string that uniquely identifies this Channel.
      */
-    public function getContext(
-        string $serviceSid
-        , string $sid
-        
-    ): ChannelContext
+    public function getContext(string $serviceSid, string $sid) : ChannelContext
     {
-        return new ChannelContext(
-            $this->version,
-            $serviceSid,
-            $sid
-        );
+        return new ChannelContext($this->version, $serviceSid, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Chat.V3.ChannelList]';
     }

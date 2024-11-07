@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node\Expression\Test;
 
-namespace Twig\Node\Expression\Test;
-
-use Twig\Compiler;
-use Twig\Node\Expression\TestExpression;
-
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Expression\TestExpression;
 /**
  * Checks if a number is odd.
  *
@@ -23,13 +21,8 @@ use Twig\Node\Expression\TestExpression;
  */
 class OddTest extends TestExpression
 {
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
-        $compiler
-            ->raw('(')
-            ->subcompile($this->getNode('node'))
-            ->raw(' % 2 != 0')
-            ->raw(')')
-        ;
+        $compiler->raw('(')->subcompile($this->getNode('node'))->raw(' % 2 != 0')->raw(')');
     }
 }

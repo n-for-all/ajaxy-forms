@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'ETB' => [
-            'Br',
-            'Birta Itoobbiya',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['ETB' => ['Br', 'Birta Itoobbiya']]];

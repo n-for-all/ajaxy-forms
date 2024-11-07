@@ -13,68 +13,47 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Microvisor\V1\App;
 
-
-namespace Twilio\Rest\Microvisor\V1\App;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class AppManifestContext extends InstanceContext
-    {
+{
     /**
      * Initialize the AppManifestContext
      *
      * @param Version $version Version that contains the resource
      * @param string $appSid A 34-character string that uniquely identifies this App.
      */
-    public function __construct(
-        Version $version,
-        $appSid
-    ) {
+    public function __construct(Version $version, $appSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'appSid' =>
-            $appSid,
-        ];
-
-        $this->uri = '/Apps/' . \rawurlencode($appSid)
-        .'/Manifest';
+        $this->solution = ['appSid' => $appSid];
+        $this->uri = '/Apps/' . \rawurlencode($appSid) . '/Manifest';
     }
-
     /**
      * Fetch the AppManifestInstance
      *
      * @return AppManifestInstance Fetched AppManifestInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): AppManifestInstance
+    public function fetch() : AppManifestInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new AppManifestInstance(
-            $this->version,
-            $payload,
-            $this->solution['appSid']
-        );
+        return new AppManifestInstance($this->version, $payload, $this->solution['appSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Microvisor.V1.AppManifestContext ' . \implode(' ', $context) . ']';
     }

@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\PropertyAccess;
 
-namespace Symfony\Component\PropertyAccess;
-
-use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
-use Symfony\Component\PropertyAccess\Exception\InvalidPropertyPathException;
-use Symfony\Component\PropertyAccess\Exception\OutOfBoundsException;
-
+use Isolated\Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
+use Isolated\Symfony\Component\PropertyAccess\Exception\InvalidPropertyPathException;
+use Isolated\Symfony\Component\PropertyAccess\Exception\OutOfBoundsException;
 /**
  * Default implementation of {@link PropertyPathInterface}.
  *
@@ -28,21 +26,18 @@ class PropertyPath implements \IteratorAggregate, PropertyPathInterface
      * Character used for separating between plural and singular of an element.
      */
     public const SINGULAR_SEPARATOR = '|';
-
     /**
      * The elements of the property path.
      *
      * @var list<string>
      */
     private $elements = [];
-
     /**
      * The number of elements in the property path.
      *
      * @var int
      */
     private $length;
-
     /**
      * Contains a Boolean for each property in $elements denoting whether this
      * element is an index. It is a property otherwise.
@@ -50,14 +45,12 @@ class PropertyPath implements \IteratorAggregate, PropertyPathInterface
      * @var array
      */
     private $isIndex = [];
-
     /**
      * String representation of the path.
      *
      * @var string
      */
     private $pathAsString;
-
     /**
      * Constructs a property path from a string.
      *
@@ -75,47 +68,37 @@ class PropertyPath implements \IteratorAggregate, PropertyPathInterface
             $this->length = $propertyPath->length;
             $this->isIndex = $propertyPath->isIndex;
             $this->pathAsString = $propertyPath->pathAsString;
-
             return;
         }
         if (!\is_string($propertyPath)) {
-            throw new InvalidArgumentException(sprintf('The property path constructor needs a string or an instance of "Symfony\Component\PropertyAccess\PropertyPath". Got: "%s".', get_debug_type($propertyPath)));
+            throw new InvalidArgumentException(\sprintf('The property path constructor needs a string or an instance of "Symfony\\Component\\PropertyAccess\\PropertyPath". Got: "%s".', \get_debug_type($propertyPath)));
         }
-
         if ('' === $propertyPath) {
             throw new InvalidPropertyPathException('The property path should not be empty.');
         }
-
         $this->pathAsString = $propertyPath;
         $position = 0;
         $remaining = $propertyPath;
-
         // first element is evaluated differently - no leading dot for properties
-        $pattern = '/^(([^\.\[]++)|\[([^\]]++)\])(.*)/';
-
-        while (preg_match($pattern, $remaining, $matches)) {
+        $pattern = '/^(([^\\.\\[]++)|\\[([^\\]]++)\\])(.*)/';
+        while (\preg_match($pattern, $remaining, $matches)) {
             if ('' !== $matches[2]) {
                 $element = $matches[2];
-                $this->isIndex[] = false;
+                $this->isIndex[] = \false;
             } else {
                 $element = $matches[3];
-                $this->isIndex[] = true;
+                $this->isIndex[] = \true;
             }
-
             $this->elements[] = $element;
-
             $position += \strlen($matches[1]);
             $remaining = $matches[4];
-            $pattern = '/^(\.([^\.|\[]++)|\[([^\]]++)\])(.*)/';
+            $pattern = '/^(\\.([^\\.|\\[]++)|\\[([^\\]]++)\\])(.*)/';
         }
-
         if ('' !== $remaining) {
-            throw new InvalidPropertyPathException(sprintf('Could not parse property path "%s". Unexpected token "%s" at position %d.', $propertyPath, $remaining[0], $position));
+            throw new InvalidPropertyPathException(\sprintf('Could not parse property path "%s". Unexpected token "%s" at position %d.', $propertyPath, $remaining[0], $position));
         }
-
         $this->length = \count($this->elements);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -123,7 +106,6 @@ class PropertyPath implements \IteratorAggregate, PropertyPathInterface
     {
         return $this->pathAsString;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -131,7 +113,6 @@ class PropertyPath implements \IteratorAggregate, PropertyPathInterface
     {
         return $this->length;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -140,17 +121,13 @@ class PropertyPath implements \IteratorAggregate, PropertyPathInterface
         if ($this->length <= 1) {
             return null;
         }
-
         $parent = clone $this;
-
         --$parent->length;
-        $parent->pathAsString = substr($parent->pathAsString, 0, max(strrpos($parent->pathAsString, '.'), strrpos($parent->pathAsString, '[')));
-        array_pop($parent->elements);
-        array_pop($parent->isIndex);
-
+        $parent->pathAsString = \substr($parent->pathAsString, 0, \max(\strrpos($parent->pathAsString, '.'), \strrpos($parent->pathAsString, '[')));
+        \array_pop($parent->elements);
+        \array_pop($parent->isIndex);
         return $parent;
     }
-
     /**
      * Returns a new iterator for this path.
      *
@@ -161,7 +138,6 @@ class PropertyPath implements \IteratorAggregate, PropertyPathInterface
     {
         return new PropertyPathIterator($this);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -169,40 +145,34 @@ class PropertyPath implements \IteratorAggregate, PropertyPathInterface
     {
         return $this->elements;
     }
-
     /**
      * {@inheritdoc}
      */
     public function getElement(int $index)
     {
         if (!isset($this->elements[$index])) {
-            throw new OutOfBoundsException(sprintf('The index "%s" is not within the property path.', $index));
+            throw new OutOfBoundsException(\sprintf('The index "%s" is not within the property path.', $index));
         }
-
         return $this->elements[$index];
     }
-
     /**
      * {@inheritdoc}
      */
     public function isProperty(int $index)
     {
         if (!isset($this->isIndex[$index])) {
-            throw new OutOfBoundsException(sprintf('The index "%s" is not within the property path.', $index));
+            throw new OutOfBoundsException(\sprintf('The index "%s" is not within the property path.', $index));
         }
-
         return !$this->isIndex[$index];
     }
-
     /**
      * {@inheritdoc}
      */
     public function isIndex(int $index)
     {
         if (!isset($this->isIndex[$index])) {
-            throw new OutOfBoundsException(sprintf('The index "%s" is not within the property path.', $index));
+            throw new OutOfBoundsException(\sprintf('The index "%s" is not within the property path.', $index));
         }
-
         return $this->isIndex[$index];
     }
 }

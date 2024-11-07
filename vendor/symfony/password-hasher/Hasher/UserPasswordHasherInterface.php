@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\PasswordHasher\Hasher;
 
-namespace Symfony\Component\PasswordHasher\Hasher;
-
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-
+use Isolated\Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 /**
  * Interface for the user password hasher service.
  *

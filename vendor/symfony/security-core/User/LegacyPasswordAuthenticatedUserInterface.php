@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Security\Core\User;
+namespace Isolated\Symfony\Component\Security\Core\User;
 
 /**
  * For users that can be authenticated using a password/salt couple.
@@ -24,5 +23,5 @@ interface LegacyPasswordAuthenticatedUserInterface extends PasswordAuthenticated
     /**
      * Returns the salt that was originally used to hash the password.
      */
-    public function getSalt(): ?string;
+    public function getSalt() : ?string;
 }

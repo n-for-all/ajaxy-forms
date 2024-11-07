@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator;
 
-namespace Symfony\Component\Validator;
-
-use Symfony\Component\Validator\Constraints\GroupSequence;
-
+use Isolated\Symfony\Component\Validator\Constraints\GroupSequence;
 /**
  * Defines the interface for a group sequence provider.
  */

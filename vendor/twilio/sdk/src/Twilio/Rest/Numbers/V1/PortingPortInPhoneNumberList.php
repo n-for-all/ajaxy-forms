@@ -13,30 +13,23 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V1;
 
-namespace Twilio\Rest\Numbers\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class PortingPortInPhoneNumberList extends ListResource
-    {
+{
     /**
      * Construct the PortingPortInPhoneNumberList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a PortingPortInPhoneNumberContext
      *
@@ -44,25 +37,16 @@ class PortingPortInPhoneNumberList extends ListResource
      *
      * @param string $phoneNumberSid The SID of the Port In request phone number. This is a unique identifier of the phone number.
      */
-    public function getContext(
-        string $portInRequestSid
-        , string $phoneNumberSid
-        
-    ): PortingPortInPhoneNumberContext
+    public function getContext(string $portInRequestSid, string $phoneNumberSid) : PortingPortInPhoneNumberContext
     {
-        return new PortingPortInPhoneNumberContext(
-            $this->version,
-            $portInRequestSid,
-            $phoneNumberSid
-        );
+        return new PortingPortInPhoneNumberContext($this->version, $portInRequestSid, $phoneNumberSid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V1.PortingPortInPhoneNumberList]';
     }

@@ -13,68 +13,47 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Supersim\V1;
 
-
-namespace Twilio\Rest\Supersim\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class SmsCommandContext extends InstanceContext
-    {
+{
     /**
      * Initialize the SmsCommandContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The SID of the SMS Command resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/SmsCommands/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/SmsCommands/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the SmsCommandInstance
      *
      * @return SmsCommandInstance Fetched SmsCommandInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SmsCommandInstance
+    public function fetch() : SmsCommandInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new SmsCommandInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new SmsCommandInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Supersim.V1.SmsCommandContext ' . \implode(' ', $context) . ']';
     }

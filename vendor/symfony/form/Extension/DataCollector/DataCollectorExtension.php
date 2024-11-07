@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\DataCollector;
 
-namespace Symfony\Component\Form\Extension\DataCollector;
-
-use Symfony\Component\Form\AbstractExtension;
-
+use Isolated\Symfony\Component\Form\AbstractExtension;
 /**
  * Extension for collecting data of the forms on a page.
  *
@@ -22,19 +20,15 @@ use Symfony\Component\Form\AbstractExtension;
 class DataCollectorExtension extends AbstractExtension
 {
     private $dataCollector;
-
     public function __construct(FormDataCollectorInterface $dataCollector)
     {
         $this->dataCollector = $dataCollector;
     }
-
     /**
      * {@inheritdoc}
      */
     protected function loadTypeExtensions()
     {
-        return [
-            new Type\DataCollectorTypeExtension($this->dataCollector),
-        ];
+        return [new Type\DataCollectorTypeExtension($this->dataCollector)];
     }
 }

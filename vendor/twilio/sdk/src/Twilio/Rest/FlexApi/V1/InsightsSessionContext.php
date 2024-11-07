@@ -13,36 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class InsightsSessionContext extends InstanceContext
-    {
+{
     /**
      * Initialize the InsightsSessionContext
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Insights/Session';
     }
-
     /**
      * Create the InsightsSessionInstance
      *
@@ -50,32 +41,23 @@ class InsightsSessionContext extends InstanceContext
      * @return InsightsSessionInstance Created InsightsSessionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): InsightsSessionInstance
+    public function create(array $options = []) : InsightsSessionInstance
     {
-
         $options = new Values($options);
-
         $headers = Values::of(['Authorization' => $options['authorization']]);
-
         $payload = $this->version->create('POST', $this->uri, [], [], $headers);
-
-        return new InsightsSessionInstance(
-            $this->version,
-            $payload
-        );
+        return new InsightsSessionInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.InsightsSessionContext ' . \implode(' ', $context) . ']';
     }

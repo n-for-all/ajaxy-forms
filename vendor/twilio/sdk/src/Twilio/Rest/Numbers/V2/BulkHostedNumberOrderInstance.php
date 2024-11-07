@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2;
 
-
-namespace Twilio\Rest\Numbers\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $bulkHostingSid
  * @property string $requestStatus
@@ -48,41 +44,23 @@ class BulkHostedNumberOrderInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $bulkHostingSid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'bulkHostingSid' => Values::array_get($payload, 'bulk_hosting_sid'),
-            'requestStatus' => Values::array_get($payload, 'request_status'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'notificationEmail' => Values::array_get($payload, 'notification_email'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateCompleted' => Deserialize::dateTime(Values::array_get($payload, 'date_completed')),
-            'url' => Values::array_get($payload, 'url'),
-            'totalCount' => Values::array_get($payload, 'total_count'),
-            'results' => Values::array_get($payload, 'results'),
-        ];
-
-        $this->solution = ['bulkHostingSid' => $bulkHostingSid ?: $this->properties['bulkHostingSid'], ];
+        $this->properties = ['bulkHostingSid' => Values::array_get($payload, 'bulk_hosting_sid'), 'requestStatus' => Values::array_get($payload, 'request_status'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'notificationEmail' => Values::array_get($payload, 'notification_email'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateCompleted' => Deserialize::dateTime(Values::array_get($payload, 'date_completed')), 'url' => Values::array_get($payload, 'url'), 'totalCount' => Values::array_get($payload, 'total_count'), 'results' => Values::array_get($payload, 'results')];
+        $this->solution = ['bulkHostingSid' => $bulkHostingSid ?: $this->properties['bulkHostingSid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return BulkHostedNumberOrderContext Context for this BulkHostedNumberOrderInstance
      */
-    protected function proxy(): BulkHostedNumberOrderContext
+    protected function proxy() : BulkHostedNumberOrderContext
     {
         if (!$this->context) {
-            $this->context = new BulkHostedNumberOrderContext(
-                $this->version,
-                $this->solution['bulkHostingSid']
-            );
+            $this->context = new BulkHostedNumberOrderContext($this->version, $this->solution['bulkHostingSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the BulkHostedNumberOrderInstance
      *
@@ -90,12 +68,10 @@ class BulkHostedNumberOrderInstance extends InstanceResource
      * @return BulkHostedNumberOrderInstance Fetched BulkHostedNumberOrderInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): BulkHostedNumberOrderInstance
+    public function fetch(array $options = []) : BulkHostedNumberOrderInstance
     {
-
         return $this->proxy()->fetch($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -108,27 +84,23 @@ class BulkHostedNumberOrderInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Numbers.V2.BulkHostedNumberOrderInstance ' . \implode(' ', $context) . ']';
     }
 }
-

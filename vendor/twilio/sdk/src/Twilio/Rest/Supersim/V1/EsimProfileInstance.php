@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Supersim\V1;
 
-
-namespace Twilio\Rest\Supersim\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -52,58 +48,33 @@ class EsimProfileInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'iccid' => Values::array_get($payload, 'iccid'),
-            'simSid' => Values::array_get($payload, 'sim_sid'),
-            'status' => Values::array_get($payload, 'status'),
-            'eid' => Values::array_get($payload, 'eid'),
-            'smdpPlusAddress' => Values::array_get($payload, 'smdp_plus_address'),
-            'matchingId' => Values::array_get($payload, 'matching_id'),
-            'activationCode' => Values::array_get($payload, 'activation_code'),
-            'errorCode' => Values::array_get($payload, 'error_code'),
-            'errorMessage' => Values::array_get($payload, 'error_message'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'iccid' => Values::array_get($payload, 'iccid'), 'simSid' => Values::array_get($payload, 'sim_sid'), 'status' => Values::array_get($payload, 'status'), 'eid' => Values::array_get($payload, 'eid'), 'smdpPlusAddress' => Values::array_get($payload, 'smdp_plus_address'), 'matchingId' => Values::array_get($payload, 'matching_id'), 'activationCode' => Values::array_get($payload, 'activation_code'), 'errorCode' => Values::array_get($payload, 'error_code'), 'errorMessage' => Values::array_get($payload, 'error_message'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return EsimProfileContext Context for this EsimProfileInstance
      */
-    protected function proxy(): EsimProfileContext
+    protected function proxy() : EsimProfileContext
     {
         if (!$this->context) {
-            $this->context = new EsimProfileContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new EsimProfileContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the EsimProfileInstance
      *
      * @return EsimProfileInstance Fetched EsimProfileInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): EsimProfileInstance
+    public function fetch() : EsimProfileInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -116,27 +87,23 @@ class EsimProfileInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Supersim.V1.EsimProfileInstance ' . \implode(' ', $context) . ']';
     }
 }
-

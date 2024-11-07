@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service;
 
-
-namespace Twilio\Rest\Verify\V2\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class MessagingConfigurationContext extends InstanceContext
-    {
+{
     /**
      * Initialize the MessagingConfigurationContext
      *
@@ -32,59 +28,34 @@ class MessagingConfigurationContext extends InstanceContext
      * @param string $serviceSid The SID of the [Service](https://www.twilio.com/docs/verify/api/service) that the resource is associated with.
      * @param string $country The [ISO-3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code of the country this configuration will be applied to. If this is a global configuration, Country will take the value `all`.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid,
-        $country
-    ) {
+    public function __construct(Version $version, $serviceSid, $country)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        'country' =>
-            $country,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/MessagingConfigurations/' . \rawurlencode($country)
-        .'';
+        $this->solution = ['serviceSid' => $serviceSid, 'country' => $country];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/MessagingConfigurations/' . \rawurlencode($country) . '';
     }
-
     /**
      * Delete the MessagingConfigurationInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the MessagingConfigurationInstance
      *
      * @return MessagingConfigurationInstance Fetched MessagingConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): MessagingConfigurationInstance
+    public function fetch() : MessagingConfigurationInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new MessagingConfigurationInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['country']
-        );
+        return new MessagingConfigurationInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['country']);
     }
-
-
     /**
      * Update the MessagingConfigurationInstance
      *
@@ -92,35 +63,22 @@ class MessagingConfigurationContext extends InstanceContext
      * @return MessagingConfigurationInstance Updated MessagingConfigurationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $messagingServiceSid): MessagingConfigurationInstance
+    public function update(string $messagingServiceSid) : MessagingConfigurationInstance
     {
-
-        $data = Values::of([
-            'MessagingServiceSid' =>
-                $messagingServiceSid,
-        ]);
-
+        $data = Values::of(['MessagingServiceSid' => $messagingServiceSid]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new MessagingConfigurationInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['country']
-        );
+        return new MessagingConfigurationInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['country']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Verify.V2.MessagingConfigurationContext ' . \implode(' ', $context) . ']';
     }

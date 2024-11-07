@@ -13,40 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Events\V1\Sink;
 
-namespace Twilio\Rest\Events\V1\Sink;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class SinkValidateList extends ListResource
-    {
+{
     /**
      * Construct the SinkValidateList
      *
      * @param Version $version Version that contains the resource
      * @param string $sid A 34 character string that uniquely identifies the Sink being validated.
      */
-    public function __construct(
-        Version $version,
-        string $sid
-    ) {
+    public function __construct(Version $version, string $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        
-        ];
-
-        $this->uri = '/Sinks/' . \rawurlencode($sid)
-        .'/Validate';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Sinks/' . \rawurlencode($sid) . '/Validate';
     }
-
     /**
      * Create the SinkValidateInstance
      *
@@ -54,30 +41,18 @@ class SinkValidateList extends ListResource
      * @return SinkValidateInstance Created SinkValidateInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $testId): SinkValidateInstance
+    public function create(string $testId) : SinkValidateInstance
     {
-
-        $data = Values::of([
-            'TestId' =>
-                $testId,
-        ]);
-
+        $data = Values::of(['TestId' => $testId]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new SinkValidateInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new SinkValidateInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Events.V1.SinkValidateList]';
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class AtextAfterCFWS implements Reason
 {
@@ -8,7 +8,6 @@ class AtextAfterCFWS implements Reason
     {
         return 133;
     }
-
     public function description() : string
     {
         return 'ATEXT found after CFWS';

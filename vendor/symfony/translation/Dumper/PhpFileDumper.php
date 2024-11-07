@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Translation\Dumper;
 
-namespace Symfony\Component\Translation\Dumper;
-
-use Symfony\Component\Translation\MessageCatalogue;
-
+use Isolated\Symfony\Component\Translation\MessageCatalogue;
 /**
  * PhpFileDumper generates PHP files from a message catalogue.
  *
@@ -25,9 +23,8 @@ class PhpFileDumper extends FileDumper
      */
     public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = [])
     {
-        return "<?php\n\nreturn ".var_export($messages->all($domain), true).";\n";
+        return "<?php\n\nreturn " . \var_export($messages->all($domain), \true) . ";\n";
     }
-
     /**
      * {@inheritdoc}
      */

@@ -1,36 +1,30 @@
 <?php
 
-namespace Egulias\EmailValidator\Validation;
+namespace Isolated\Egulias\EmailValidator\Validation;
 
-use Egulias\EmailValidator\EmailLexer;
-use Egulias\EmailValidator\Result\InvalidEmail;
-use Egulias\EmailValidator\Result\Reason\RFCWarnings;
-
+use Isolated\Egulias\EmailValidator\EmailLexer;
+use Isolated\Egulias\EmailValidator\Result\InvalidEmail;
+use Isolated\Egulias\EmailValidator\Result\Reason\RFCWarnings;
 class NoRFCWarningsValidation extends RFCValidation
 {
     /**
      * @var InvalidEmail|null
      */
     private $error;
-
     /**
      * {@inheritdoc}
      */
     public function isValid(string $email, EmailLexer $emailLexer) : bool
     {
         if (!parent::isValid($email, $emailLexer)) {
-            return false;
+            return \false;
         }
-
         if (empty($this->getWarnings())) {
-            return true;
+            return \true;
         }
-
         $this->error = new InvalidEmail(new RFCWarnings(), '');
-
-        return false;
+        return \false;
     }
-
     /**
      * {@inheritdoc}
      */

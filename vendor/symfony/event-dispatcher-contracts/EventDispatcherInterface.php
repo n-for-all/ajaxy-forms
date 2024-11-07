@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Contracts\EventDispatcher;
 
-namespace Symfony\Contracts\EventDispatcher;
-
-use Psr\EventDispatcher\EventDispatcherInterface as PsrEventDispatcherInterface;
-
+use Isolated\Psr\EventDispatcher\EventDispatcherInterface as PsrEventDispatcherInterface;
 /**
  * Allows providing hooks on domain-specific lifecycles by dispatching events.
  */
@@ -27,5 +25,5 @@ interface EventDispatcherInterface extends PsrEventDispatcherInterface
      *
      * @return object The passed $event MUST be returned
      */
-    public function dispatch(object $event, ?string $eventName = null): object;
+    public function dispatch(object $event, ?string $eventName = null) : object;
 }

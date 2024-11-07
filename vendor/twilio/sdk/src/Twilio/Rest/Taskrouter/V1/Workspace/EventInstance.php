@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace;
 
-
-namespace Twilio\Rest\Taskrouter\V1\Workspace;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property string|null $actorSid
@@ -56,62 +52,33 @@ class EventInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $workspaceSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'actorSid' => Values::array_get($payload, 'actor_sid'),
-            'actorType' => Values::array_get($payload, 'actor_type'),
-            'actorUrl' => Values::array_get($payload, 'actor_url'),
-            'description' => Values::array_get($payload, 'description'),
-            'eventData' => Values::array_get($payload, 'event_data'),
-            'eventDate' => Deserialize::dateTime(Values::array_get($payload, 'event_date')),
-            'eventDateMs' => Values::array_get($payload, 'event_date_ms'),
-            'eventType' => Values::array_get($payload, 'event_type'),
-            'resourceSid' => Values::array_get($payload, 'resource_sid'),
-            'resourceType' => Values::array_get($payload, 'resource_type'),
-            'resourceUrl' => Values::array_get($payload, 'resource_url'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'source' => Values::array_get($payload, 'source'),
-            'sourceIpAddress' => Values::array_get($payload, 'source_ip_address'),
-            'url' => Values::array_get($payload, 'url'),
-            'workspaceSid' => Values::array_get($payload, 'workspace_sid'),
-        ];
-
-        $this->solution = ['workspaceSid' => $workspaceSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'actorSid' => Values::array_get($payload, 'actor_sid'), 'actorType' => Values::array_get($payload, 'actor_type'), 'actorUrl' => Values::array_get($payload, 'actor_url'), 'description' => Values::array_get($payload, 'description'), 'eventData' => Values::array_get($payload, 'event_data'), 'eventDate' => Deserialize::dateTime(Values::array_get($payload, 'event_date')), 'eventDateMs' => Values::array_get($payload, 'event_date_ms'), 'eventType' => Values::array_get($payload, 'event_type'), 'resourceSid' => Values::array_get($payload, 'resource_sid'), 'resourceType' => Values::array_get($payload, 'resource_type'), 'resourceUrl' => Values::array_get($payload, 'resource_url'), 'sid' => Values::array_get($payload, 'sid'), 'source' => Values::array_get($payload, 'source'), 'sourceIpAddress' => Values::array_get($payload, 'source_ip_address'), 'url' => Values::array_get($payload, 'url'), 'workspaceSid' => Values::array_get($payload, 'workspace_sid')];
+        $this->solution = ['workspaceSid' => $workspaceSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return EventContext Context for this EventInstance
      */
-    protected function proxy(): EventContext
+    protected function proxy() : EventContext
     {
         if (!$this->context) {
-            $this->context = new EventContext(
-                $this->version,
-                $this->solution['workspaceSid'],
-                $this->solution['sid']
-            );
+            $this->context = new EventContext($this->version, $this->solution['workspaceSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the EventInstance
      *
      * @return EventInstance Fetched EventInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): EventInstance
+    public function fetch() : EventInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -124,27 +91,23 @@ class EventInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Taskrouter.V1.EventInstance ' . \implode(' ', $context) . ']';
     }
 }
-

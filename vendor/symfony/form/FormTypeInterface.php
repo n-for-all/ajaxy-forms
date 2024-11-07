@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form;
 
-namespace Symfony\Component\Form;
-
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
@@ -29,7 +27,6 @@ interface FormTypeInterface
      * @see FormTypeExtensionInterface::buildForm()
      */
     public function buildForm(FormBuilderInterface $builder, array $options);
-
     /**
      * Builds the form view.
      *
@@ -45,7 +42,6 @@ interface FormTypeInterface
      * @see FormTypeExtensionInterface::buildView()
      */
     public function buildView(FormView $view, FormInterface $form, array $options);
-
     /**
      * Finishes the form view.
      *
@@ -62,12 +58,10 @@ interface FormTypeInterface
      * @see FormTypeExtensionInterface::finishView()
      */
     public function finishView(FormView $view, FormInterface $form, array $options);
-
     /**
      * Configures the options for this type.
      */
     public function configureOptions(OptionsResolver $resolver);
-
     /**
      * Returns the prefix of the template block name for this type.
      *
@@ -77,7 +71,6 @@ interface FormTypeInterface
      * @return string
      */
     public function getBlockPrefix();
-
     /**
      * Returns the name of the parent type.
      *

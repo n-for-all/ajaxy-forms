@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl;
 
-namespace Symfony\Component\Intl;
-
-use Symfony\Component\Intl\Data\Bundle\Reader\BufferedBundleReader;
-use Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReader;
-use Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReaderInterface;
-use Symfony\Component\Intl\Data\Bundle\Reader\PhpBundleReader;
-
+use Isolated\Symfony\Component\Intl\Data\Bundle\Reader\BufferedBundleReader;
+use Isolated\Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReader;
+use Isolated\Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReaderInterface;
+use Isolated\Symfony\Component\Intl\Data\Bundle\Reader\PhpBundleReader;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  *
@@ -24,9 +22,7 @@ use Symfony\Component\Intl\Data\Bundle\Reader\PhpBundleReader;
 abstract class ResourceBundle
 {
     private static $entryReader;
-
-    abstract protected static function getPath(): string;
-
+    protected static abstract function getPath() : string;
     /**
      * Reads an entry from a resource bundle.
      *
@@ -43,33 +39,24 @@ abstract class ResourceBundle
      * @return mixed returns an array or {@link \ArrayAccess} instance for
      *               complex data and a scalar value for simple data
      */
-    final protected static function readEntry(array $indices, ?string $locale = null, bool $fallback = true)
+    protected static final function readEntry(array $indices, ?string $locale = null, bool $fallback = \true)
     {
         if (null === self::$entryReader) {
-            self::$entryReader = new BundleEntryReader(new BufferedBundleReader(
-                new PhpBundleReader(),
-                Intl::BUFFER_SIZE
-            ));
-
-            $localeAliases = self::$entryReader->readEntry(Intl::getDataDirectory().'/'.Intl::LOCALE_DIR, 'meta', ['Aliases']);
-            self::$entryReader->setLocaleAliases($localeAliases instanceof \Traversable ? iterator_to_array($localeAliases) : $localeAliases);
+            self::$entryReader = new BundleEntryReader(new BufferedBundleReader(new PhpBundleReader(), Intl::BUFFER_SIZE));
+            $localeAliases = self::$entryReader->readEntry(Intl::getDataDirectory() . '/' . Intl::LOCALE_DIR, 'meta', ['Aliases']);
+            self::$entryReader->setLocaleAliases($localeAliases instanceof \Traversable ? \iterator_to_array($localeAliases) : $localeAliases);
         }
-
         return self::$entryReader->readEntry(static::getPath(), $locale ?? \Locale::getDefault(), $indices, $fallback);
     }
-
-    final protected static function asort(iterable $list, ?string $locale = null): array
+    protected static final function asort(iterable $list, ?string $locale = null) : array
     {
         if ($list instanceof \Traversable) {
-            $list = iterator_to_array($list);
+            $list = \iterator_to_array($list);
         }
-
         $collator = new \Collator($locale ?? \Locale::getDefault());
         $collator->asort($list);
-
         return $list;
     }
-
     private function __construct()
     {
     }

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Csrf\Exception;
 
-namespace Symfony\Component\Security\Csrf\Exception;
-
-use Symfony\Component\Security\Core\Exception\RuntimeException;
-
+use Isolated\Symfony\Component\Security\Core\Exception\RuntimeException;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */

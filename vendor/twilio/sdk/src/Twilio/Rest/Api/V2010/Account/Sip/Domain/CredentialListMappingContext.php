@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Sip\Domain;
 
-
-namespace Twilio\Rest\Api\V2010\Account\Sip\Domain;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class CredentialListMappingContext extends InstanceContext
-    {
+{
     /**
      * Initialize the CredentialListMappingContext
      *
@@ -32,74 +28,44 @@ class CredentialListMappingContext extends InstanceContext
      * @param string $domainSid A 34 character string that uniquely identifies the SIP Domain for which the CredentialList resource will be mapped.
      * @param string $sid A 34 character string that uniquely identifies the resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $domainSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $accountSid, $domainSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'domainSid' =>
-            $domainSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/SIP/Domains/' . \rawurlencode($domainSid)
-        .'/CredentialListMappings/' . \rawurlencode($sid)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'domainSid' => $domainSid, 'sid' => $sid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/SIP/Domains/' . \rawurlencode($domainSid) . '/CredentialListMappings/' . \rawurlencode($sid) . '.json';
     }
-
     /**
      * Delete the CredentialListMappingInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the CredentialListMappingInstance
      *
      * @return CredentialListMappingInstance Fetched CredentialListMappingInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): CredentialListMappingInstance
+    public function fetch() : CredentialListMappingInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new CredentialListMappingInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['domainSid'],
-            $this->solution['sid']
-        );
+        return new CredentialListMappingInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['domainSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.CredentialListMappingContext ' . \implode(' ', $context) . ']';
     }

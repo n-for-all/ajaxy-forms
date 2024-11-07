@@ -13,22 +13,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\DeployedDevices;
 
-
-namespace Twilio\Rest\Preview\DeployedDevices;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Preview\DeployedDevices\Fleet\CertificateList;
-use Twilio\Rest\Preview\DeployedDevices\Fleet\DeviceList;
-use Twilio\Rest\Preview\DeployedDevices\Fleet\KeyList;
-use Twilio\Rest\Preview\DeployedDevices\Fleet\DeploymentList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Preview\DeployedDevices\Fleet\CertificateList;
+use Isolated\Twilio\Rest\Preview\DeployedDevices\Fleet\DeviceList;
+use Isolated\Twilio\Rest\Preview\DeployedDevices\Fleet\KeyList;
+use Isolated\Twilio\Rest\Preview\DeployedDevices\Fleet\DeploymentList;
 /**
  * @property CertificateList $certificates
  * @property DeviceList $devices
@@ -40,66 +36,45 @@ use Twilio\Rest\Preview\DeployedDevices\Fleet\DeploymentList;
  * @method \Twilio\Rest\Preview\DeployedDevices\Fleet\DeploymentContext deployments(string $sid)
  */
 class FleetContext extends InstanceContext
-    {
+{
     protected $_certificates;
     protected $_devices;
     protected $_keys;
     protected $_deployments;
-
     /**
      * Initialize the FleetContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid Provides a 34 character string that uniquely identifies the requested Fleet resource.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Fleets/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Fleets/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the FleetInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the FleetInstance
      *
      * @return FleetInstance Fetched FleetInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): FleetInstance
+    public function fetch() : FleetInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new FleetInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new FleetInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the FleetInstance
      *
@@ -107,88 +82,53 @@ class FleetContext extends InstanceContext
      * @return FleetInstance Updated FleetInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): FleetInstance
+    public function update(array $options = []) : FleetInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'DefaultDeploymentSid' =>
-                $options['defaultDeploymentSid'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName'], 'DefaultDeploymentSid' => $options['defaultDeploymentSid']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new FleetInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new FleetInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the certificates
      */
-    protected function getCertificates(): CertificateList
+    protected function getCertificates() : CertificateList
     {
         if (!$this->_certificates) {
-            $this->_certificates = new CertificateList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_certificates = new CertificateList($this->version, $this->solution['sid']);
         }
-
         return $this->_certificates;
     }
-
     /**
      * Access the devices
      */
-    protected function getDevices(): DeviceList
+    protected function getDevices() : DeviceList
     {
         if (!$this->_devices) {
-            $this->_devices = new DeviceList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_devices = new DeviceList($this->version, $this->solution['sid']);
         }
-
         return $this->_devices;
     }
-
     /**
      * Access the keys
      */
-    protected function getKeys(): KeyList
+    protected function getKeys() : KeyList
     {
         if (!$this->_keys) {
-            $this->_keys = new KeyList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_keys = new KeyList($this->version, $this->solution['sid']);
         }
-
         return $this->_keys;
     }
-
     /**
      * Access the deployments
      */
-    protected function getDeployments(): DeploymentList
+    protected function getDeployments() : DeploymentList
     {
         if (!$this->_deployments) {
-            $this->_deployments = new DeploymentList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_deployments = new DeploymentList($this->version, $this->solution['sid']);
         }
-
         return $this->_deployments;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -196,16 +136,14 @@ class FleetContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -214,26 +152,24 @@ class FleetContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.DeployedDevices.FleetContext ' . \implode(' ', $context) . ']';
     }

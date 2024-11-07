@@ -1,5 +1,7 @@
 <?php
 
+namespace Isolated;
+
 /*
  * This file is part of the Symfony package.
  *
@@ -8,10 +10,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-use Twig\Environment;
-use Twig\Extension\DebugExtension;
-
+use Isolated\Twig\Environment;
+use Isolated\Twig\Extension\DebugExtension;
 /**
  * @internal
  *
@@ -20,6 +20,5 @@ use Twig\Extension\DebugExtension;
 function twig_var_dump(Environment $env, $context, ...$vars)
 {
     trigger_deprecation('twig/twig', '3.9', 'Using the internal "%s" function is deprecated.', __FUNCTION__);
-
     DebugExtension::dump($env, $context, ...$vars);
 }

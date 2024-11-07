@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1\Service;
 
-namespace Twilio\Rest\Messaging\V1\Service;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class UsAppToPersonUsecaseList extends ListResource
-    {
+{
     /**
      * Construct the UsAppToPersonUsecaseList
      *
      * @param Version $version Version that contains the resource
      * @param string $messagingServiceSid The SID of the [Messaging Service](https://www.twilio.com/docs/messaging/api/service-resource) to fetch the resource from.
      */
-    public function __construct(
-        Version $version,
-        string $messagingServiceSid
-    ) {
+    public function __construct(Version $version, string $messagingServiceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'messagingServiceSid' =>
-            $messagingServiceSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($messagingServiceSid)
-        .'/Compliance/Usa2p/Usecases';
+        $this->solution = ['messagingServiceSid' => $messagingServiceSid];
+        $this->uri = '/Services/' . \rawurlencode($messagingServiceSid) . '/Compliance/Usa2p/Usecases';
     }
-
     /**
      * Fetch the UsAppToPersonUsecaseInstance
      *
@@ -55,32 +42,19 @@ class UsAppToPersonUsecaseList extends ListResource
      * @return UsAppToPersonUsecaseInstance Fetched UsAppToPersonUsecaseInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): UsAppToPersonUsecaseInstance
+    public function fetch(array $options = []) : UsAppToPersonUsecaseInstance
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'BrandRegistrationSid' =>
-                $options['brandRegistrationSid'],
-        ]);
-
+        $params = Values::of(['BrandRegistrationSid' => $options['brandRegistrationSid']]);
         $payload = $this->version->fetch('GET', $this->uri, $params, []);
-
-        return new UsAppToPersonUsecaseInstance(
-            $this->version,
-            $payload,
-            $this->solution['messagingServiceSid']
-        );
+        return new UsAppToPersonUsecaseInstance($this->version, $payload, $this->solution['messagingServiceSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Messaging.V1.UsAppToPersonUsecaseList]';
     }

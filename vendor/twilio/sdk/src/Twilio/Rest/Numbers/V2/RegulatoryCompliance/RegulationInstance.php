@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance;
 
-
-namespace Twilio\Rest\Numbers\V2\RegulatoryCompliance;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $sid
  * @property string|null $friendlyName
@@ -44,51 +40,33 @@ class RegulationInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'isoCountry' => Values::array_get($payload, 'iso_country'),
-            'numberType' => Values::array_get($payload, 'number_type'),
-            'endUserType' => Values::array_get($payload, 'end_user_type'),
-            'requirements' => Values::array_get($payload, 'requirements'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'isoCountry' => Values::array_get($payload, 'iso_country'), 'numberType' => Values::array_get($payload, 'number_type'), 'endUserType' => Values::array_get($payload, 'end_user_type'), 'requirements' => Values::array_get($payload, 'requirements'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return RegulationContext Context for this RegulationInstance
      */
-    protected function proxy(): RegulationContext
+    protected function proxy() : RegulationContext
     {
         if (!$this->context) {
-            $this->context = new RegulationContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new RegulationContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the RegulationInstance
      *
      * @return RegulationInstance Fetched RegulationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): RegulationInstance
+    public function fetch() : RegulationInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -101,27 +79,23 @@ class RegulationInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Numbers.V2.RegulationInstance ' . \implode(' ', $context) . ']';
     }
 }
-

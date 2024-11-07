@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\ChoiceList\Loader;
 
-namespace Symfony\Component\Form\ChoiceList\Loader;
-
-use Symfony\Component\Form\ChoiceList\ChoiceListInterface;
-
+use Isolated\Symfony\Component\Form\ChoiceList\ChoiceListInterface;
 /**
  * Loads a choice list.
  *
@@ -37,7 +35,6 @@ interface ChoiceLoaderInterface
      * @return ChoiceListInterface
      */
     public function loadChoiceList(callable $value = null);
-
     /**
      * Loads the choices corresponding to the given values.
      *
@@ -55,7 +52,6 @@ interface ChoiceLoaderInterface
      * @return array
      */
     public function loadChoicesForValues(array $values, callable $value = null);
-
     /**
      * Loads the values corresponding to the given choices.
      *

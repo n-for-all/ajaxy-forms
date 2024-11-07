@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'FRF' => [
-            'F',
-            'franc francès',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['FRF' => ['F', 'franc francès']]];

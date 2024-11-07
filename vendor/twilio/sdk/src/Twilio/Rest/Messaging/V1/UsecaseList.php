@@ -13,57 +13,42 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class UsecaseList extends ListResource
-    {
+{
     /**
      * Construct the UsecaseList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Services/Usecases';
     }
-
     /**
      * Fetch the UsecaseInstance
      *
      * @return UsecaseInstance Fetched UsecaseInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): UsecaseInstance
+    public function fetch() : UsecaseInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new UsecaseInstance(
-            $this->version,
-            $payload
-        );
+        return new UsecaseInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Messaging.V1.UsecaseList]';
     }

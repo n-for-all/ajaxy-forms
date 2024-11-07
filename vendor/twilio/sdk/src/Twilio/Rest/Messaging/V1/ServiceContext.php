@@ -13,25 +13,21 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-use Twilio\Rest\Messaging\V1\Service\AlphaSenderList;
-use Twilio\Rest\Messaging\V1\Service\PhoneNumberList;
-use Twilio\Rest\Messaging\V1\Service\UsAppToPersonUsecaseList;
-use Twilio\Rest\Messaging\V1\Service\ChannelSenderList;
-use Twilio\Rest\Messaging\V1\Service\ShortCodeList;
-use Twilio\Rest\Messaging\V1\Service\UsAppToPersonList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
+use Isolated\Twilio\Rest\Messaging\V1\Service\AlphaSenderList;
+use Isolated\Twilio\Rest\Messaging\V1\Service\PhoneNumberList;
+use Isolated\Twilio\Rest\Messaging\V1\Service\UsAppToPersonUsecaseList;
+use Isolated\Twilio\Rest\Messaging\V1\Service\ChannelSenderList;
+use Isolated\Twilio\Rest\Messaging\V1\Service\ShortCodeList;
+use Isolated\Twilio\Rest\Messaging\V1\Service\UsAppToPersonList;
 /**
  * @property AlphaSenderList $alphaSenders
  * @property PhoneNumberList $phoneNumbers
@@ -46,68 +42,47 @@ use Twilio\Rest\Messaging\V1\Service\UsAppToPersonList;
  * @method \Twilio\Rest\Messaging\V1\Service\ChannelSenderContext channelSenders(string $sid)
  */
 class ServiceContext extends InstanceContext
-    {
+{
     protected $_alphaSenders;
     protected $_phoneNumbers;
     protected $_usAppToPersonUsecases;
     protected $_channelSenders;
     protected $_shortCodes;
     protected $_usAppToPerson;
-
     /**
      * Initialize the ServiceContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The SID of the Service resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the ServiceInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the ServiceInstance
      *
      * @return ServiceInstance Fetched ServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ServiceInstance
+    public function fetch() : ServiceInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ServiceInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new ServiceInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the ServiceInstance
      *
@@ -115,146 +90,73 @@ class ServiceContext extends InstanceContext
      * @return ServiceInstance Updated ServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ServiceInstance
+    public function update(array $options = []) : ServiceInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'InboundRequestUrl' =>
-                $options['inboundRequestUrl'],
-            'InboundMethod' =>
-                $options['inboundMethod'],
-            'FallbackUrl' =>
-                $options['fallbackUrl'],
-            'FallbackMethod' =>
-                $options['fallbackMethod'],
-            'StatusCallback' =>
-                $options['statusCallback'],
-            'StickySender' =>
-                Serialize::booleanToString($options['stickySender']),
-            'MmsConverter' =>
-                Serialize::booleanToString($options['mmsConverter']),
-            'SmartEncoding' =>
-                Serialize::booleanToString($options['smartEncoding']),
-            'ScanMessageContent' =>
-                $options['scanMessageContent'],
-            'FallbackToLongCode' =>
-                Serialize::booleanToString($options['fallbackToLongCode']),
-            'AreaCodeGeomatch' =>
-                Serialize::booleanToString($options['areaCodeGeomatch']),
-            'ValidityPeriod' =>
-                $options['validityPeriod'],
-            'SynchronousValidation' =>
-                Serialize::booleanToString($options['synchronousValidation']),
-            'Usecase' =>
-                $options['usecase'],
-            'UseInboundWebhookOnNumber' =>
-                Serialize::booleanToString($options['useInboundWebhookOnNumber']),
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName'], 'InboundRequestUrl' => $options['inboundRequestUrl'], 'InboundMethod' => $options['inboundMethod'], 'FallbackUrl' => $options['fallbackUrl'], 'FallbackMethod' => $options['fallbackMethod'], 'StatusCallback' => $options['statusCallback'], 'StickySender' => Serialize::booleanToString($options['stickySender']), 'MmsConverter' => Serialize::booleanToString($options['mmsConverter']), 'SmartEncoding' => Serialize::booleanToString($options['smartEncoding']), 'ScanMessageContent' => $options['scanMessageContent'], 'FallbackToLongCode' => Serialize::booleanToString($options['fallbackToLongCode']), 'AreaCodeGeomatch' => Serialize::booleanToString($options['areaCodeGeomatch']), 'ValidityPeriod' => $options['validityPeriod'], 'SynchronousValidation' => Serialize::booleanToString($options['synchronousValidation']), 'Usecase' => $options['usecase'], 'UseInboundWebhookOnNumber' => Serialize::booleanToString($options['useInboundWebhookOnNumber'])]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new ServiceInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new ServiceInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the alphaSenders
      */
-    protected function getAlphaSenders(): AlphaSenderList
+    protected function getAlphaSenders() : AlphaSenderList
     {
         if (!$this->_alphaSenders) {
-            $this->_alphaSenders = new AlphaSenderList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_alphaSenders = new AlphaSenderList($this->version, $this->solution['sid']);
         }
-
         return $this->_alphaSenders;
     }
-
     /**
      * Access the phoneNumbers
      */
-    protected function getPhoneNumbers(): PhoneNumberList
+    protected function getPhoneNumbers() : PhoneNumberList
     {
         if (!$this->_phoneNumbers) {
-            $this->_phoneNumbers = new PhoneNumberList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_phoneNumbers = new PhoneNumberList($this->version, $this->solution['sid']);
         }
-
         return $this->_phoneNumbers;
     }
-
     /**
      * Access the usAppToPersonUsecases
      */
-    protected function getUsAppToPersonUsecases(): UsAppToPersonUsecaseList
+    protected function getUsAppToPersonUsecases() : UsAppToPersonUsecaseList
     {
         if (!$this->_usAppToPersonUsecases) {
-            $this->_usAppToPersonUsecases = new UsAppToPersonUsecaseList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_usAppToPersonUsecases = new UsAppToPersonUsecaseList($this->version, $this->solution['sid']);
         }
-
         return $this->_usAppToPersonUsecases;
     }
-
     /**
      * Access the channelSenders
      */
-    protected function getChannelSenders(): ChannelSenderList
+    protected function getChannelSenders() : ChannelSenderList
     {
         if (!$this->_channelSenders) {
-            $this->_channelSenders = new ChannelSenderList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_channelSenders = new ChannelSenderList($this->version, $this->solution['sid']);
         }
-
         return $this->_channelSenders;
     }
-
     /**
      * Access the shortCodes
      */
-    protected function getShortCodes(): ShortCodeList
+    protected function getShortCodes() : ShortCodeList
     {
         if (!$this->_shortCodes) {
-            $this->_shortCodes = new ShortCodeList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_shortCodes = new ShortCodeList($this->version, $this->solution['sid']);
         }
-
         return $this->_shortCodes;
     }
-
     /**
      * Access the usAppToPerson
      */
-    protected function getUsAppToPerson(): UsAppToPersonList
+    protected function getUsAppToPerson() : UsAppToPersonList
     {
         if (!$this->_usAppToPerson) {
-            $this->_usAppToPerson = new UsAppToPersonList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_usAppToPerson = new UsAppToPersonList($this->version, $this->solution['sid']);
         }
-
         return $this->_usAppToPerson;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -262,16 +164,14 @@ class ServiceContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -280,26 +180,24 @@ class ServiceContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.ServiceContext ' . \implode(' ', $context) . ']';
     }

@@ -8,16 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node\Expression;
 
-namespace Twig\Node\Expression;
-
-use Twig\Compiler;
-use Twig\Node\Expression\Binary\AndBinary;
-use Twig\Node\Expression\Test\DefinedTest;
-use Twig\Node\Expression\Test\NullTest;
-use Twig\Node\Expression\Unary\NotUnary;
-use Twig\Node\Node;
-
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Expression\Binary\AndBinary;
+use Isolated\Twig\Node\Expression\Test\DefinedTest;
+use Isolated\Twig\Node\Expression\Test\NullTest;
+use Isolated\Twig\Node\Expression\Unary\NotUnary;
+use Isolated\Twig\Node\Node;
 class NullCoalesceExpression extends ConditionalExpression
 {
     public function __construct(Node $left, Node $right, int $lineno)
@@ -25,17 +23,11 @@ class NullCoalesceExpression extends ConditionalExpression
         $test = new DefinedTest(clone $left, 'defined', new Node(), $left->getTemplateLine());
         // for "block()", we don't need the null test as the return value is always a string
         if (!$left instanceof BlockReferenceExpression) {
-            $test = new AndBinary(
-                $test,
-                new NotUnary(new NullTest($left, 'null', new Node(), $left->getTemplateLine()), $left->getTemplateLine()),
-                $left->getTemplateLine()
-            );
+            $test = new AndBinary($test, new NotUnary(new NullTest($left, 'null', new Node(), $left->getTemplateLine()), $left->getTemplateLine()), $left->getTemplateLine());
         }
-
         parent::__construct($test, $left, $right, $lineno);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
         /*
          * This optimizes only one case. PHP 7 also supports more complex expressions
@@ -45,14 +37,8 @@ class NullCoalesceExpression extends ConditionalExpression
          * as benefits are probably not worth the added complexity.
          */
         if ($this->getNode('expr2') instanceof NameExpression) {
-            $this->getNode('expr2')->setAttribute('always_defined', true);
-            $compiler
-                ->raw('((')
-                ->subcompile($this->getNode('expr2'))
-                ->raw(') ?? (')
-                ->subcompile($this->getNode('expr3'))
-                ->raw('))')
-            ;
+            $this->getNode('expr2')->setAttribute('always_defined', \true);
+            $compiler->raw('((')->subcompile($this->getNode('expr2'))->raw(') ?? (')->subcompile($this->getNode('expr3'))->raw('))');
         } else {
             parent::compile($compiler);
         }

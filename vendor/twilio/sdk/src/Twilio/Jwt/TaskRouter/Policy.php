@@ -1,8 +1,6 @@
 <?php
 
-
-namespace Twilio\Jwt\TaskRouter;
-
+namespace Isolated\Twilio\Jwt\TaskRouter;
 
 /**
  * Twilio API Policy constructor
@@ -10,30 +8,31 @@ namespace Twilio\Jwt\TaskRouter;
  * @author Justin Witz <justin.witz@twilio.com>
  * @license  http://creativecommons.org/licenses/MIT/ MIT
  */
-class Policy {
+class Policy
+{
     private $url;
     private $method;
     private $queryFilter;
     private $postFilter;
     private $allow;
-
-    public function __construct(string $url, string $method, ?array $queryFilter = [], ?array $postFilter = [], bool $allow = true) {
+    public function __construct(string $url, string $method, ?array $queryFilter = [], ?array $postFilter = [], bool $allow = \true)
+    {
         $this->url = $url;
         $this->method = $method;
         $this->queryFilter = $queryFilter;
         $this->postFilter = $postFilter;
         $this->allow = $allow;
     }
-
-    public function addQueryFilter($queryFilter): void {
+    public function addQueryFilter($queryFilter) : void
+    {
         $this->queryFilter[] = $queryFilter;
     }
-
-    public function addPostFilter($postFilter): void {
+    public function addPostFilter($postFilter) : void
+    {
         $this->postFilter[] = $postFilter;
     }
-
-    public function toArray(): array {
+    public function toArray() : array
+    {
         $policy_array = ['url' => $this->url, 'method' => $this->method, 'allow' => $this->allow];
         if ($this->queryFilter !== null) {
             if (\count($this->queryFilter) > 0) {

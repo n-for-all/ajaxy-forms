@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\TokenParser;
 
-namespace Twig\TokenParser;
-
-use Twig\Error\SyntaxError;
-use Twig\Node\Node;
-use Twig\Parser;
-use Twig\Token;
-
+use Isolated\Twig\Error\SyntaxError;
+use Isolated\Twig\Node\Node;
+use Isolated\Twig\Parser;
+use Isolated\Twig\Token;
 /**
  * Interface implemented by token parsers.
  *
@@ -26,8 +24,7 @@ interface TokenParserInterface
     /**
      * Sets the parser associated with this token parser.
      */
-    public function setParser(Parser $parser): void;
-
+    public function setParser(Parser $parser) : void;
     /**
      * Parses a token and returns a node.
      *
@@ -36,7 +33,6 @@ interface TokenParserInterface
      * @throws SyntaxError
      */
     public function parse(Token $token);
-
     /**
      * Gets the tag name associated with this token parser.
      *

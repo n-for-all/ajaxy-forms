@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $domainSid
  * @property string|null $configSid
@@ -47,53 +43,33 @@ class DomainConfigMessagingServiceInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $messagingServiceSid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'domainSid' => Values::array_get($payload, 'domain_sid'),
-            'configSid' => Values::array_get($payload, 'config_sid'),
-            'messagingServiceSid' => Values::array_get($payload, 'messaging_service_sid'),
-            'fallbackUrl' => Values::array_get($payload, 'fallback_url'),
-            'callbackUrl' => Values::array_get($payload, 'callback_url'),
-            'continueOnFailure' => Values::array_get($payload, 'continue_on_failure'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['messagingServiceSid' => $messagingServiceSid ?: $this->properties['messagingServiceSid'], ];
+        $this->properties = ['domainSid' => Values::array_get($payload, 'domain_sid'), 'configSid' => Values::array_get($payload, 'config_sid'), 'messagingServiceSid' => Values::array_get($payload, 'messaging_service_sid'), 'fallbackUrl' => Values::array_get($payload, 'fallback_url'), 'callbackUrl' => Values::array_get($payload, 'callback_url'), 'continueOnFailure' => Values::array_get($payload, 'continue_on_failure'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['messagingServiceSid' => $messagingServiceSid ?: $this->properties['messagingServiceSid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return DomainConfigMessagingServiceContext Context for this DomainConfigMessagingServiceInstance
      */
-    protected function proxy(): DomainConfigMessagingServiceContext
+    protected function proxy() : DomainConfigMessagingServiceContext
     {
         if (!$this->context) {
-            $this->context = new DomainConfigMessagingServiceContext(
-                $this->version,
-                $this->solution['messagingServiceSid']
-            );
+            $this->context = new DomainConfigMessagingServiceContext($this->version, $this->solution['messagingServiceSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the DomainConfigMessagingServiceInstance
      *
      * @return DomainConfigMessagingServiceInstance Fetched DomainConfigMessagingServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DomainConfigMessagingServiceInstance
+    public function fetch() : DomainConfigMessagingServiceInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -106,27 +82,23 @@ class DomainConfigMessagingServiceInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.DomainConfigMessagingServiceInstance ' . \implode(' ', $context) . ']';
     }
 }
-

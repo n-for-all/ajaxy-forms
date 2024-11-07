@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Call;
 
-
-namespace Twilio\Rest\Api\V2010\Account\Call;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class StreamContext extends InstanceContext
-    {
+{
     /**
      * Initialize the StreamContext
      *
@@ -34,30 +30,13 @@ class StreamContext extends InstanceContext
      * @param string $callSid The SID of the [Call](https://www.twilio.com/docs/voice/api/call-resource) the Stream resource is associated with.
      * @param string $sid The SID or the `name` of the Stream resource to be stopped
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $callSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $accountSid, $callSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'callSid' =>
-            $callSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Calls/' . \rawurlencode($callSid)
-        .'/Streams/' . \rawurlencode($sid)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'callSid' => $callSid, 'sid' => $sid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Calls/' . \rawurlencode($callSid) . '/Streams/' . \rawurlencode($sid) . '.json';
     }
-
     /**
      * Update the StreamInstance
      *
@@ -65,36 +44,22 @@ class StreamContext extends InstanceContext
      * @return StreamInstance Updated StreamInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $status): StreamInstance
+    public function update(string $status) : StreamInstance
     {
-
-        $data = Values::of([
-            'Status' =>
-                $status,
-        ]);
-
+        $data = Values::of(['Status' => $status]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new StreamInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['callSid'],
-            $this->solution['sid']
-        );
+        return new StreamInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['callSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.StreamContext ' . \implode(' ', $context) . ']';
     }

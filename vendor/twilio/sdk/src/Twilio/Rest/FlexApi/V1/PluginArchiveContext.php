@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class PluginArchiveContext extends InstanceContext
-    {
+{
     /**
      * Initialize the PluginArchiveContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The SID of the Flex Plugin resource to archive.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/PluginService/Plugins/' . \rawurlencode($sid)
-        .'/Archive';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/PluginService/Plugins/' . \rawurlencode($sid) . '/Archive';
     }
-
     /**
      * Update the PluginArchiveInstance
      *
@@ -55,33 +42,23 @@ class PluginArchiveContext extends InstanceContext
      * @return PluginArchiveInstance Updated PluginArchiveInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): PluginArchiveInstance
+    public function update(array $options = []) : PluginArchiveInstance
     {
-
         $options = new Values($options);
-
         $headers = Values::of(['Flex-Metadata' => $options['flexMetadata']]);
-
         $payload = $this->version->update('POST', $this->uri, [], [], $headers);
-
-        return new PluginArchiveInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new PluginArchiveInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.PluginArchiveContext ' . \implode(' ', $context) . ']';
     }

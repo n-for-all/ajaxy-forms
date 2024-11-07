@@ -13,37 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Supersim\V1;
 
-namespace Twilio\Rest\Supersim\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class EsimProfileList extends ListResource
-    {
+{
     /**
      * Construct the EsimProfileList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/ESimProfiles';
     }
-
     /**
      * Create the EsimProfileInstance
      *
@@ -51,31 +43,13 @@ class EsimProfileList extends ListResource
      * @return EsimProfileInstance Created EsimProfileInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(array $options = []): EsimProfileInstance
+    public function create(array $options = []) : EsimProfileInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'CallbackUrl' =>
-                $options['callbackUrl'],
-            'CallbackMethod' =>
-                $options['callbackMethod'],
-            'GenerateMatchingId' =>
-                Serialize::booleanToString($options['generateMatchingId']),
-            'Eid' =>
-                $options['eid'],
-        ]);
-
+        $data = Values::of(['CallbackUrl' => $options['callbackUrl'], 'CallbackMethod' => $options['callbackMethod'], 'GenerateMatchingId' => Serialize::booleanToString($options['generateMatchingId']), 'Eid' => $options['eid']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new EsimProfileInstance(
-            $this->version,
-            $payload
-        );
+        return new EsimProfileInstance($this->version, $payload);
     }
-
-
     /**
      * Reads EsimProfileInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -92,11 +66,10 @@ class EsimProfileList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return EsimProfileInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams EsimProfileInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -116,15 +89,12 @@ class EsimProfileList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of EsimProfileInstance records from the API.
      * Request is executed immediately
@@ -134,32 +104,13 @@ class EsimProfileList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return EsimProfilePage Page of EsimProfileInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): EsimProfilePage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : EsimProfilePage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Eid' =>
-                $options['eid'],
-            'SimSid' =>
-                $options['simSid'],
-            'Status' =>
-                $options['status'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Eid' => $options['eid'], 'SimSid' => $options['simSid'], 'Status' => $options['status'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new EsimProfilePage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of EsimProfileInstance records from the API.
      * Request is executed immediately
@@ -167,39 +118,26 @@ class EsimProfileList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return EsimProfilePage Page of EsimProfileInstance
      */
-    public function getPage(string $targetUrl): EsimProfilePage
+    public function getPage(string $targetUrl) : EsimProfilePage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new EsimProfilePage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a EsimProfileContext
      *
      * @param string $sid The SID of the eSIM Profile resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): EsimProfileContext
+    public function getContext(string $sid) : EsimProfileContext
     {
-        return new EsimProfileContext(
-            $this->version,
-            $sid
-        );
+        return new EsimProfileContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Supersim.V1.EsimProfileList]';
     }

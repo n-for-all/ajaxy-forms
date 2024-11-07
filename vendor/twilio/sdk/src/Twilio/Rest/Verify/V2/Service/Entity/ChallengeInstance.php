@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2\Service\Entity;
 
-
-namespace Twilio\Rest\Verify\V2\Service\Entity;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Verify\V2\Service\Entity\Challenge\NotificationList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Verify\V2\Service\Entity\Challenge\NotificationList;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -49,7 +45,6 @@ use Twilio\Rest\Verify\V2\Service\Entity\Challenge\NotificationList;
 class ChallengeInstance extends InstanceResource
 {
     protected $_notifications;
-
     /**
      * Initialize the ChallengeInstance
      *
@@ -62,64 +57,33 @@ class ChallengeInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $identity, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'serviceSid' => Values::array_get($payload, 'service_sid'),
-            'entitySid' => Values::array_get($payload, 'entity_sid'),
-            'identity' => Values::array_get($payload, 'identity'),
-            'factorSid' => Values::array_get($payload, 'factor_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'dateResponded' => Deserialize::dateTime(Values::array_get($payload, 'date_responded')),
-            'expirationDate' => Deserialize::dateTime(Values::array_get($payload, 'expiration_date')),
-            'status' => Values::array_get($payload, 'status'),
-            'respondedReason' => Values::array_get($payload, 'responded_reason'),
-            'details' => Values::array_get($payload, 'details'),
-            'hiddenDetails' => Values::array_get($payload, 'hidden_details'),
-            'metadata' => Values::array_get($payload, 'metadata'),
-            'factorType' => Values::array_get($payload, 'factor_type'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'identity' => $identity, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'serviceSid' => Values::array_get($payload, 'service_sid'), 'entitySid' => Values::array_get($payload, 'entity_sid'), 'identity' => Values::array_get($payload, 'identity'), 'factorSid' => Values::array_get($payload, 'factor_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'dateResponded' => Deserialize::dateTime(Values::array_get($payload, 'date_responded')), 'expirationDate' => Deserialize::dateTime(Values::array_get($payload, 'expiration_date')), 'status' => Values::array_get($payload, 'status'), 'respondedReason' => Values::array_get($payload, 'responded_reason'), 'details' => Values::array_get($payload, 'details'), 'hiddenDetails' => Values::array_get($payload, 'hidden_details'), 'metadata' => Values::array_get($payload, 'metadata'), 'factorType' => Values::array_get($payload, 'factor_type'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['serviceSid' => $serviceSid, 'identity' => $identity, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ChallengeContext Context for this ChallengeInstance
      */
-    protected function proxy(): ChallengeContext
+    protected function proxy() : ChallengeContext
     {
         if (!$this->context) {
-            $this->context = new ChallengeContext(
-                $this->version,
-                $this->solution['serviceSid'],
-                $this->solution['identity'],
-                $this->solution['sid']
-            );
+            $this->context = new ChallengeContext($this->version, $this->solution['serviceSid'], $this->solution['identity'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the ChallengeInstance
      *
      * @return ChallengeInstance Fetched ChallengeInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ChallengeInstance
+    public function fetch() : ChallengeInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the ChallengeInstance
      *
@@ -127,20 +91,17 @@ class ChallengeInstance extends InstanceResource
      * @return ChallengeInstance Updated ChallengeInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ChallengeInstance
+    public function update(array $options = []) : ChallengeInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the notifications
      */
-    protected function getNotifications(): NotificationList
+    protected function getNotifications() : NotificationList
     {
         return $this->proxy()->notifications;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -153,27 +114,23 @@ class ChallengeInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Verify.V2.ChallengeInstance ' . \implode(' ', $context) . ']';
     }
 }
-

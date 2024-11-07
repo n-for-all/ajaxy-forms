@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class InsightsQuestionnairesQuestionContext extends InstanceContext
-    {
+{
     /**
      * Initialize the InsightsQuestionnairesQuestionContext
      *
      * @param Version $version Version that contains the resource
      * @param string $questionSid The SID of the question
      */
-    public function __construct(
-        Version $version,
-        $questionSid
-    ) {
+    public function __construct(Version $version, $questionSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'questionSid' =>
-            $questionSid,
-        ];
-
-        $this->uri = '/Insights/QualityManagement/Questions/' . \rawurlencode($questionSid)
-        .'';
+        $this->solution = ['questionSid' => $questionSid];
+        $this->uri = '/Insights/QualityManagement/Questions/' . \rawurlencode($questionSid) . '';
     }
-
     /**
      * Delete the InsightsQuestionnairesQuestionInstance
      *
@@ -56,17 +43,12 @@ class InsightsQuestionnairesQuestionContext extends InstanceContext
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(array $options = []): bool
+    public function delete(array $options = []) : bool
     {
-
         $options = new Values($options);
-
         $headers = Values::of(['Authorization' => $options['authorization']]);
-
         return $this->version->delete('DELETE', $this->uri, [], [], $headers);
     }
-
-
     /**
      * Update the InsightsQuestionnairesQuestionInstance
      *
@@ -75,46 +57,24 @@ class InsightsQuestionnairesQuestionContext extends InstanceContext
      * @return InsightsQuestionnairesQuestionInstance Updated InsightsQuestionnairesQuestionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(bool $allowNa, array $options = []): InsightsQuestionnairesQuestionInstance
+    public function update(bool $allowNa, array $options = []) : InsightsQuestionnairesQuestionInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'AllowNa' =>
-                Serialize::booleanToString($allowNa),
-            'CategorySid' =>
-                $options['categorySid'],
-            'Question' =>
-                $options['question'],
-            'Description' =>
-                $options['description'],
-            'AnswerSetId' =>
-                $options['answerSetId'],
-        ]);
-
+        $data = Values::of(['AllowNa' => Serialize::booleanToString($allowNa), 'CategorySid' => $options['categorySid'], 'Question' => $options['question'], 'Description' => $options['description'], 'AnswerSetId' => $options['answerSetId']]);
         $headers = Values::of(['Authorization' => $options['authorization']]);
-
         $payload = $this->version->update('POST', $this->uri, [], $data, $headers);
-
-        return new InsightsQuestionnairesQuestionInstance(
-            $this->version,
-            $payload,
-            $this->solution['questionSid']
-        );
+        return new InsightsQuestionnairesQuestionInstance($this->version, $payload, $this->solution['questionSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.InsightsQuestionnairesQuestionContext ' . \implode(' ', $context) . ']';
     }

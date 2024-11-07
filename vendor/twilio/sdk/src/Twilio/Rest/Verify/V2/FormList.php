@@ -13,52 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2;
 
-namespace Twilio\Rest\Verify\V2;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class FormList extends ListResource
-    {
+{
     /**
      * Construct the FormList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a FormContext
      *
      * @param string $formType The Type of this Form. Currently only `form-push` is supported.
      */
-    public function getContext(
-        string $formType
-        
-    ): FormContext
+    public function getContext(string $formType) : FormContext
     {
-        return new FormContext(
-            $this->version,
-            $formType
-        );
+        return new FormContext($this->version, $formType);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Verify.V2.FormList]';
     }

@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1\TrustProducts;
 
-
-namespace Twilio\Rest\Trusthub\V1\TrustProducts;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $trustProductSid
@@ -46,64 +42,43 @@ class TrustProductsChannelEndpointAssignmentInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $trustProductSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'trustProductSid' => Values::array_get($payload, 'trust_product_sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'channelEndpointType' => Values::array_get($payload, 'channel_endpoint_type'),
-            'channelEndpointSid' => Values::array_get($payload, 'channel_endpoint_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['trustProductSid' => $trustProductSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'trustProductSid' => Values::array_get($payload, 'trust_product_sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'channelEndpointType' => Values::array_get($payload, 'channel_endpoint_type'), 'channelEndpointSid' => Values::array_get($payload, 'channel_endpoint_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['trustProductSid' => $trustProductSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return TrustProductsChannelEndpointAssignmentContext Context for this TrustProductsChannelEndpointAssignmentInstance
      */
-    protected function proxy(): TrustProductsChannelEndpointAssignmentContext
+    protected function proxy() : TrustProductsChannelEndpointAssignmentContext
     {
         if (!$this->context) {
-            $this->context = new TrustProductsChannelEndpointAssignmentContext(
-                $this->version,
-                $this->solution['trustProductSid'],
-                $this->solution['sid']
-            );
+            $this->context = new TrustProductsChannelEndpointAssignmentContext($this->version, $this->solution['trustProductSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the TrustProductsChannelEndpointAssignmentInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the TrustProductsChannelEndpointAssignmentInstance
      *
      * @return TrustProductsChannelEndpointAssignmentInstance Fetched TrustProductsChannelEndpointAssignmentInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): TrustProductsChannelEndpointAssignmentInstance
+    public function fetch() : TrustProductsChannelEndpointAssignmentInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -116,27 +91,23 @@ class TrustProductsChannelEndpointAssignmentInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Trusthub.V1.TrustProductsChannelEndpointAssignmentInstance ' . \implode(' ', $context) . ']';
     }
 }
-

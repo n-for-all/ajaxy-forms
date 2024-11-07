@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account;
 
-namespace Twilio\Rest\Api\V2010\Account;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class ShortCodeList extends ListResource
-    {
+{
     /**
      * Construct the ShortCodeList
      *
      * @param Version $version Version that contains the resource
      * @param string $accountSid The SID of the [Account](https://www.twilio.com/docs/iam/api/account) that created the ShortCode resource(s) to fetch.
      */
-    public function __construct(
-        Version $version,
-        string $accountSid
-    ) {
+    public function __construct(Version $version, string $accountSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/SMS/ShortCodes.json';
+        $this->solution = ['accountSid' => $accountSid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/SMS/ShortCodes.json';
     }
-
     /**
      * Reads ShortCodeInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -64,11 +51,10 @@ class ShortCodeList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return ShortCodeInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams ShortCodeInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -88,15 +74,12 @@ class ShortCodeList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of ShortCodeInstance records from the API.
      * Request is executed immediately
@@ -106,30 +89,13 @@ class ShortCodeList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return ShortCodePage Page of ShortCodeInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): ShortCodePage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : ShortCodePage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'ShortCode' =>
-                $options['shortCode'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['FriendlyName' => $options['friendlyName'], 'ShortCode' => $options['shortCode'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new ShortCodePage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of ShortCodeInstance records from the API.
      * Request is executed immediately
@@ -137,40 +103,26 @@ class ShortCodeList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return ShortCodePage Page of ShortCodeInstance
      */
-    public function getPage(string $targetUrl): ShortCodePage
+    public function getPage(string $targetUrl) : ShortCodePage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new ShortCodePage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a ShortCodeContext
      *
      * @param string $sid The Twilio-provided string that uniquely identifies the ShortCode resource to fetch
      */
-    public function getContext(
-        string $sid
-        
-    ): ShortCodeContext
+    public function getContext(string $sid) : ShortCodeContext
     {
-        return new ShortCodeContext(
-            $this->version,
-            $this->solution['accountSid'],
-            $sid
-        );
+        return new ShortCodeContext($this->version, $this->solution['accountSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Api.V2010.ShortCodeList]';
     }

@@ -13,68 +13,47 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2;
 
-
-namespace Twilio\Rest\Intelligence\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class OperatorAttachmentsContext extends InstanceContext
-    {
+{
     /**
      * Initialize the OperatorAttachmentsContext
      *
      * @param Version $version Version that contains the resource
      * @param string $serviceSid The unique SID identifier of the Service.
      */
-    public function __construct(
-        Version $version,
-        $serviceSid
-    ) {
+    public function __construct(Version $version, $serviceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Operators';
+        $this->solution = ['serviceSid' => $serviceSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Operators';
     }
-
     /**
      * Fetch the OperatorAttachmentsInstance
      *
      * @return OperatorAttachmentsInstance Fetched OperatorAttachmentsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): OperatorAttachmentsInstance
+    public function fetch() : OperatorAttachmentsInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new OperatorAttachmentsInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid']
-        );
+        return new OperatorAttachmentsInstance($this->version, $payload, $this->solution['serviceSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Intelligence.V2.OperatorAttachmentsContext ' . \implode(' ', $context) . ']';
     }

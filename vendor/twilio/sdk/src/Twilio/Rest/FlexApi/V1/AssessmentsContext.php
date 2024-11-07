@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class AssessmentsContext extends InstanceContext
-    {
+{
     /**
      * Initialize the AssessmentsContext
      *
      * @param Version $version Version that contains the resource
      * @param string $assessmentSid The SID of the assessment to be modified
      */
-    public function __construct(
-        Version $version,
-        $assessmentSid
-    ) {
+    public function __construct(Version $version, $assessmentSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'assessmentSid' =>
-            $assessmentSid,
-        ];
-
-        $this->uri = '/Insights/QualityManagement/Assessments/' . \rawurlencode($assessmentSid)
-        .'';
+        $this->solution = ['assessmentSid' => $assessmentSid];
+        $this->uri = '/Insights/QualityManagement/Assessments/' . \rawurlencode($assessmentSid) . '';
     }
-
     /**
      * Update the AssessmentsInstance
      *
@@ -58,42 +45,24 @@ class AssessmentsContext extends InstanceContext
      * @return AssessmentsInstance Updated AssessmentsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $offset, string $answerText, string $answerId, array $options = []): AssessmentsInstance
+    public function update(string $offset, string $answerText, string $answerId, array $options = []) : AssessmentsInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Offset' =>
-                $offset,
-            'AnswerText' =>
-                $answerText,
-            'AnswerId' =>
-                $answerId,
-        ]);
-
+        $data = Values::of(['Offset' => $offset, 'AnswerText' => $answerText, 'AnswerId' => $answerId]);
         $headers = Values::of(['Authorization' => $options['authorization']]);
-
         $payload = $this->version->update('POST', $this->uri, [], $data, $headers);
-
-        return new AssessmentsInstance(
-            $this->version,
-            $payload,
-            $this->solution['assessmentSid']
-        );
+        return new AssessmentsInstance($this->version, $payload, $this->solution['assessmentSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.AssessmentsContext ' . \implode(' ', $context) . ']';
     }

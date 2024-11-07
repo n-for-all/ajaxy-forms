@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Signature\Exception;
 
-namespace Symfony\Component\Security\Core\Signature\Exception;
-
-use Symfony\Component\Security\Core\Exception\RuntimeException;
-
+use Isolated\Symfony\Component\Security\Core\Exception\RuntimeException;
 /**
  * @author Wouter de Jong <wouter@wouterj.nl>
  */

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Intl\Data\Bundle\Compiler;
 
-namespace Symfony\Component\Intl\Data\Bundle\Compiler;
-
-use Symfony\Component\Intl\Exception\RuntimeException;
-
+use Isolated\Symfony\Component\Intl\Exception\RuntimeException;
 /**
  * Compiles .txt resource bundles to binary .res files.
  *
@@ -23,7 +21,6 @@ use Symfony\Component\Intl\Exception\RuntimeException;
 class GenrbCompiler implements BundleCompilerInterface
 {
     private $genrb;
-
     /**
      * Creates a new compiler based on the "genrb" executable.
      *
@@ -34,28 +31,23 @@ class GenrbCompiler implements BundleCompilerInterface
      */
     public function __construct(string $genrb = 'genrb', string $envVars = '')
     {
-        exec('which '.$genrb, $output, $status);
-
+        \exec('which ' . $genrb, $output, $status);
         if (0 !== $status) {
-            throw new RuntimeException(sprintf('The command "%s" is not installed.', $genrb));
+            throw new RuntimeException(\sprintf('The command "%s" is not installed.', $genrb));
         }
-
-        $this->genrb = ($envVars ? $envVars.' ' : '').$genrb;
+        $this->genrb = ($envVars ? $envVars . ' ' : '') . $genrb;
     }
-
     /**
      * {@inheritdoc}
      */
     public function compile(string $sourcePath, string $targetDir)
     {
-        if (is_dir($sourcePath)) {
+        if (\is_dir($sourcePath)) {
             $sourcePath .= '/*.txt';
         }
-
-        exec($this->genrb.' --quiet -e UTF-8 -d '.$targetDir.' '.$sourcePath, $output, $status);
-
+        \exec($this->genrb . ' --quiet -e UTF-8 -d ' . $targetDir . ' ' . $sourcePath, $output, $status);
         if (0 !== $status) {
-            throw new RuntimeException(sprintf('genrb failed with status %d while compiling "%s" to "%s".', $status, $sourcePath, $targetDir));
+            throw new RuntimeException(\sprintf('genrb failed with status %d while compiling "%s" to "%s".', $status, $sourcePath, $targetDir));
         }
     }
 }

@@ -1,15 +1,14 @@
 <?php
 
-namespace Egulias\EmailValidator\Parser;
+namespace Isolated\Egulias\EmailValidator\Parser;
 
-use Egulias\EmailValidator\Result\Result;
-use Egulias\EmailValidator\Result\InvalidEmail;
-use Egulias\EmailValidator\Result\Reason\CommentsInIDRight;
-
+use Isolated\Egulias\EmailValidator\Result\Result;
+use Isolated\Egulias\EmailValidator\Result\InvalidEmail;
+use Isolated\Egulias\EmailValidator\Result\Reason\CommentsInIDRight;
 class IDLeftPart extends LocalPart
 {
-    protected function parseComments(): Result
+    protected function parseComments() : Result
     {
-       return new InvalidEmail(new CommentsInIDRight(), ((array) $this->lexer->token)['value']);
+        return new InvalidEmail(new CommentsInIDRight(), ((array) $this->lexer->token)['value']);
     }
 }

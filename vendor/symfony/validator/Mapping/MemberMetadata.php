@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Mapping;
 
-namespace Symfony\Component\Validator\Mapping;
-
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\Composite;
-use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
-
+use Isolated\Symfony\Component\Validator\Constraint;
+use Isolated\Symfony\Component\Validator\Constraints\Composite;
+use Isolated\Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 /**
  * Stores all metadata needed for validating a class property.
  *
@@ -35,26 +33,22 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
      *           {@link getClassName()} instead.
      */
     public $class;
-
     /**
      * @internal This property is public in order to reduce the size of the
      *           class' serialized representation. Do not access it. Use
      *           {@link getName()} instead.
      */
     public $name;
-
     /**
      * @internal This property is public in order to reduce the size of the
      *           class' serialized representation. Do not access it. Use
      *           {@link getPropertyName()} instead.
      */
     public $property;
-
     /**
      * @var \ReflectionMethod[]|\ReflectionProperty[]
      */
     private $reflMember = [];
-
     /**
      * @param string $class    The name of the class this member is defined on
      * @param string $name     The name of the member
@@ -66,31 +60,22 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
         $this->name = $name;
         $this->property = $property;
     }
-
     /**
      * {@inheritdoc}
      */
     public function addConstraint(Constraint $constraint)
     {
         $this->checkConstraint($constraint);
-
         parent::addConstraint($constraint);
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
     public function __sleep()
     {
-        return array_merge(parent::__sleep(), [
-            'class',
-            'name',
-            'property',
-        ]);
+        return \array_merge(parent::__sleep(), ['class', 'name', 'property']);
     }
-
     /**
      * Returns the name of the member.
      *
@@ -100,7 +85,6 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
     {
         return $this->name;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -108,7 +92,6 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
     {
         return $this->class;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -116,7 +99,6 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
     {
         return $this->property;
     }
-
     /**
      * Returns whether this member is public.
      *
@@ -128,7 +110,6 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
     {
         return $this->getReflectionMember($objectOrClassName)->isPublic();
     }
-
     /**
      * Returns whether this member is protected.
      *
@@ -140,7 +121,6 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
     {
         return $this->getReflectionMember($objectOrClassName)->isProtected();
     }
-
     /**
      * Returns whether this member is private.
      *
@@ -152,7 +132,6 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
     {
         return $this->getReflectionMember($objectOrClassName)->isPrivate();
     }
-
     /**
      * Returns the reflection instance for accessing the member's value.
      *
@@ -166,10 +145,8 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
         if (!isset($this->reflMember[$className])) {
             $this->reflMember[$className] = $this->newReflectionMember($objectOrClassName);
         }
-
         return $this->reflMember[$className];
     }
-
     /**
      * Creates a new reflection instance for accessing the member's value.
      *
@@ -177,14 +154,12 @@ abstract class MemberMetadata extends GenericMetadata implements PropertyMetadat
      *
      * @return \ReflectionMethod|\ReflectionProperty
      */
-    abstract protected function newReflectionMember($objectOrClassName);
-
+    protected abstract function newReflectionMember($objectOrClassName);
     private function checkConstraint(Constraint $constraint)
     {
-        if (!\in_array(Constraint::PROPERTY_CONSTRAINT, (array) $constraint->getTargets(), true)) {
-            throw new ConstraintDefinitionException(sprintf('The constraint "%s" cannot be put on properties or getters.', get_debug_type($constraint)));
+        if (!\in_array(Constraint::PROPERTY_CONSTRAINT, (array) $constraint->getTargets(), \true)) {
+            throw new ConstraintDefinitionException(\sprintf('The constraint "%s" cannot be put on properties or getters.', \get_debug_type($constraint)));
         }
-
         if ($constraint instanceof Composite) {
             foreach ($constraint->getNestedConstraints() as $nestedConstraint) {
                 $this->checkConstraint($nestedConstraint);

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Translation\Extractor;
 
-namespace Symfony\Component\Translation\Extractor;
-
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
-
+use Isolated\Symfony\Component\Translation\Exception\InvalidArgumentException;
 /**
  * Base class used by classes that extract translation messages from files.
  *
@@ -27,27 +25,24 @@ abstract class AbstractFileExtractor
      */
     protected function extractFiles($resource)
     {
-        if (is_iterable($resource)) {
+        if (\is_iterable($resource)) {
             $files = [];
             foreach ($resource as $file) {
                 if ($this->canBeExtracted($file)) {
                     $files[] = $this->toSplFileInfo($file);
                 }
             }
-        } elseif (is_file($resource)) {
+        } elseif (\is_file($resource)) {
             $files = $this->canBeExtracted($resource) ? [$this->toSplFileInfo($resource)] : [];
         } else {
             $files = $this->extractFromDirectory($resource);
         }
-
         return $files;
     }
-
-    private function toSplFileInfo(string $file): \SplFileInfo
+    private function toSplFileInfo(string $file) : \SplFileInfo
     {
         return new \SplFileInfo($file);
     }
-
     /**
      * @return bool
      *
@@ -55,22 +50,19 @@ abstract class AbstractFileExtractor
      */
     protected function isFile(string $file)
     {
-        if (!is_file($file)) {
-            throw new InvalidArgumentException(sprintf('The "%s" file does not exist.', $file));
+        if (!\is_file($file)) {
+            throw new InvalidArgumentException(\sprintf('The "%s" file does not exist.', $file));
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * @return bool
      */
-    abstract protected function canBeExtracted(string $file);
-
+    protected abstract function canBeExtracted(string $file);
     /**
      * @param string|array $resource Files, a file or a directory
      *
      * @return iterable
      */
-    abstract protected function extractFromDirectory($resource);
+    protected abstract function extractFromDirectory($resource);
 }

@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\DeployedDevices\Fleet;
 
-
-namespace Twilio\Rest\Preview\DeployedDevices\Fleet;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class CertificateContext extends InstanceContext
-    {
+{
     /**
      * Initialize the CertificateContext
      *
@@ -33,59 +29,34 @@ class CertificateContext extends InstanceContext
      * @param string $fleetSid 
      * @param string $sid Provides a 34 character string that uniquely identifies the requested Certificate credential resource.
      */
-    public function __construct(
-        Version $version,
-        $fleetSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $fleetSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'fleetSid' =>
-            $fleetSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Fleets/' . \rawurlencode($fleetSid)
-        .'/Certificates/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['fleetSid' => $fleetSid, 'sid' => $sid];
+        $this->uri = '/Fleets/' . \rawurlencode($fleetSid) . '/Certificates/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the CertificateInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the CertificateInstance
      *
      * @return CertificateInstance Fetched CertificateInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): CertificateInstance
+    public function fetch() : CertificateInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new CertificateInstance(
-            $this->version,
-            $payload,
-            $this->solution['fleetSid'],
-            $this->solution['sid']
-        );
+        return new CertificateInstance($this->version, $payload, $this->solution['fleetSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the CertificateInstance
      *
@@ -93,39 +64,23 @@ class CertificateContext extends InstanceContext
      * @return CertificateInstance Updated CertificateInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): CertificateInstance
+    public function update(array $options = []) : CertificateInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'DeviceSid' =>
-                $options['deviceSid'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName'], 'DeviceSid' => $options['deviceSid']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new CertificateInstance(
-            $this->version,
-            $payload,
-            $this->solution['fleetSid'],
-            $this->solution['sid']
-        );
+        return new CertificateInstance($this->version, $payload, $this->solution['fleetSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.DeployedDevices.CertificateContext ' . \implode(' ', $context) . ']';
     }

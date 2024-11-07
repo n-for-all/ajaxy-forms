@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\PasswordHasher\Hasher;
 
-namespace Symfony\Component\PasswordHasher\Hasher;
-
-use Symfony\Component\PasswordHasher\PasswordHasherInterface;
-
+use Isolated\Symfony\Component\PasswordHasher\PasswordHasherInterface;
 /**
  * Hashes passwords using the best available hasher.
  * Verifies them using a chain of hashers.
@@ -26,38 +24,31 @@ final class MigratingPasswordHasher implements PasswordHasherInterface
 {
     private $bestHasher;
     private $extraHashers;
-
     public function __construct(PasswordHasherInterface $bestHasher, PasswordHasherInterface ...$extraHashers)
     {
         $this->bestHasher = $bestHasher;
         $this->extraHashers = $extraHashers;
     }
-
-    public function hash(string $plainPassword, ?string $salt = null): string
+    public function hash(string $plainPassword, ?string $salt = null) : string
     {
         return $this->bestHasher->hash($plainPassword, $salt);
     }
-
-    public function verify(string $hashedPassword, string $plainPassword, ?string $salt = null): bool
+    public function verify(string $hashedPassword, string $plainPassword, ?string $salt = null) : bool
     {
         if ($this->bestHasher->verify($hashedPassword, $plainPassword, $salt)) {
-            return true;
+            return \true;
         }
-
         if (!$this->bestHasher->needsRehash($hashedPassword)) {
-            return false;
+            return \false;
         }
-
         foreach ($this->extraHashers as $hasher) {
             if ($hasher->verify($hashedPassword, $plainPassword, $salt)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
-    public function needsRehash(string $hashedPassword): bool
+    public function needsRehash(string $hashedPassword) : bool
     {
         return $this->bestHasher->needsRehash($hashedPassword);
     }

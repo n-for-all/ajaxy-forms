@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\DeployedDevices\Fleet;
 
-
-namespace Twilio\Rest\Preview\DeployedDevices\Fleet;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $sid
  * @property string|null $url
@@ -49,66 +45,43 @@ class CertificateInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $fleetSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'url' => Values::array_get($payload, 'url'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'fleetSid' => Values::array_get($payload, 'fleet_sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'deviceSid' => Values::array_get($payload, 'device_sid'),
-            'thumbprint' => Values::array_get($payload, 'thumbprint'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-        ];
-
-        $this->solution = ['fleetSid' => $fleetSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'url' => Values::array_get($payload, 'url'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'fleetSid' => Values::array_get($payload, 'fleet_sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'deviceSid' => Values::array_get($payload, 'device_sid'), 'thumbprint' => Values::array_get($payload, 'thumbprint'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated'))];
+        $this->solution = ['fleetSid' => $fleetSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return CertificateContext Context for this CertificateInstance
      */
-    protected function proxy(): CertificateContext
+    protected function proxy() : CertificateContext
     {
         if (!$this->context) {
-            $this->context = new CertificateContext(
-                $this->version,
-                $this->solution['fleetSid'],
-                $this->solution['sid']
-            );
+            $this->context = new CertificateContext($this->version, $this->solution['fleetSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the CertificateInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the CertificateInstance
      *
      * @return CertificateInstance Fetched CertificateInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): CertificateInstance
+    public function fetch() : CertificateInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the CertificateInstance
      *
@@ -116,12 +89,10 @@ class CertificateInstance extends InstanceResource
      * @return CertificateInstance Updated CertificateInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): CertificateInstance
+    public function update(array $options = []) : CertificateInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -134,27 +105,23 @@ class CertificateInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.DeployedDevices.CertificateInstance ' . \implode(' ', $context) . ']';
     }
 }
-

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form\Util;
+namespace Isolated\Symfony\Component\Form\Util;
 
 /**
  * Iterator that traverses an array of forms.
@@ -35,7 +34,6 @@ class InheritDataAwareIterator extends \IteratorIterator implements \RecursiveIt
     {
         return new static($this->current());
     }
-
     /**
      * @return bool
      */

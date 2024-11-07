@@ -8,17 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Mapping;
 
-namespace Symfony\Component\Validator\Mapping;
-
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\Cascade;
-use Symfony\Component\Validator\Constraints\DisableAutoMapping;
-use Symfony\Component\Validator\Constraints\EnableAutoMapping;
-use Symfony\Component\Validator\Constraints\Traverse;
-use Symfony\Component\Validator\Constraints\Valid;
-use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
-
+use Isolated\Symfony\Component\Validator\Constraint;
+use Isolated\Symfony\Component\Validator\Constraints\Cascade;
+use Isolated\Symfony\Component\Validator\Constraints\DisableAutoMapping;
+use Isolated\Symfony\Component\Validator\Constraints\EnableAutoMapping;
+use Isolated\Symfony\Component\Validator\Constraints\Traverse;
+use Isolated\Symfony\Component\Validator\Constraints\Valid;
+use Isolated\Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 /**
  * A generic container of {@link Constraint} objects.
  *
@@ -36,7 +34,6 @@ class GenericMetadata implements MetadataInterface
      *           {@link getConstraints()} and {@link findConstraints()} instead.
      */
     public $constraints = [];
-
     /**
      * @var array
      *
@@ -45,7 +42,6 @@ class GenericMetadata implements MetadataInterface
      *           {@link findConstraints()} instead.
      */
     public $constraintsByGroup = [];
-
     /**
      * The strategy for cascading objects.
      *
@@ -60,7 +56,6 @@ class GenericMetadata implements MetadataInterface
      *           {@link getCascadingStrategy()} instead.
      */
     public $cascadingStrategy = CascadingStrategy::NONE;
-
     /**
      * The strategy for traversing traversable objects.
      *
@@ -75,7 +70,6 @@ class GenericMetadata implements MetadataInterface
      *           {@link getTraversalStrategy()} instead.
      */
     public $traversalStrategy = TraversalStrategy::NONE;
-
     /**
      * Is auto-mapping enabled?
      *
@@ -88,7 +82,6 @@ class GenericMetadata implements MetadataInterface
      *           {@link getAutoMappingStrategy()} instead.
      */
     public $autoMappingStrategy = AutoMappingStrategy::NONE;
-
     /**
      * Returns the names of the properties that should be serialized.
      *
@@ -96,30 +89,20 @@ class GenericMetadata implements MetadataInterface
      */
     public function __sleep()
     {
-        return [
-            'constraints',
-            'constraintsByGroup',
-            'cascadingStrategy',
-            'traversalStrategy',
-            'autoMappingStrategy',
-        ];
+        return ['constraints', 'constraintsByGroup', 'cascadingStrategy', 'traversalStrategy', 'autoMappingStrategy'];
     }
-
     /**
      * Clones this object.
      */
     public function __clone()
     {
         $constraints = $this->constraints;
-
         $this->constraints = [];
         $this->constraintsByGroup = [];
-
         foreach ($constraints as $constraint) {
             $this->addConstraint(clone $constraint);
         }
     }
-
     /**
      * Adds a constraint.
      *
@@ -139,37 +122,28 @@ class GenericMetadata implements MetadataInterface
     public function addConstraint(Constraint $constraint)
     {
         if ($constraint instanceof Traverse || $constraint instanceof Cascade) {
-            throw new ConstraintDefinitionException(sprintf('The constraint "%s" can only be put on classes. Please use "Symfony\Component\Validator\Constraints\Valid" instead.', get_debug_type($constraint)));
+            throw new ConstraintDefinitionException(\sprintf('The constraint "%s" can only be put on classes. Please use "Symfony\\Component\\Validator\\Constraints\\Valid" instead.', \get_debug_type($constraint)));
         }
-
         if ($constraint instanceof Valid && null === $constraint->groups) {
             $this->cascadingStrategy = CascadingStrategy::CASCADE;
-
             if ($constraint->traverse) {
                 $this->traversalStrategy = TraversalStrategy::IMPLICIT;
             } else {
                 $this->traversalStrategy = TraversalStrategy::NONE;
             }
-
             return $this;
         }
-
         if ($constraint instanceof DisableAutoMapping || $constraint instanceof EnableAutoMapping) {
             $this->autoMappingStrategy = $constraint instanceof EnableAutoMapping ? AutoMappingStrategy::ENABLED : AutoMappingStrategy::DISABLED;
-
             // The constraint is not added
             return $this;
         }
-
         $this->constraints[] = $constraint;
-
         foreach ($constraint->groups as $group) {
             $this->constraintsByGroup[$group][] = $constraint;
         }
-
         return $this;
     }
-
     /**
      * Adds an list of constraints.
      *
@@ -182,10 +156,8 @@ class GenericMetadata implements MetadataInterface
         foreach ($constraints as $constraint) {
             $this->addConstraint($constraint);
         }
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -193,7 +165,6 @@ class GenericMetadata implements MetadataInterface
     {
         return $this->constraints;
     }
-
     /**
      * Returns whether this element has any constraints.
      *
@@ -203,7 +174,6 @@ class GenericMetadata implements MetadataInterface
     {
         return \count($this->constraints) > 0;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -213,7 +183,6 @@ class GenericMetadata implements MetadataInterface
     {
         return $this->constraintsByGroup[$group] ?? [];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -221,7 +190,6 @@ class GenericMetadata implements MetadataInterface
     {
         return $this->cascadingStrategy;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -229,11 +197,10 @@ class GenericMetadata implements MetadataInterface
     {
         return $this->traversalStrategy;
     }
-
     /**
      * @see AutoMappingStrategy
      */
-    public function getAutoMappingStrategy(): int
+    public function getAutoMappingStrategy() : int
     {
         return $this->autoMappingStrategy;
     }

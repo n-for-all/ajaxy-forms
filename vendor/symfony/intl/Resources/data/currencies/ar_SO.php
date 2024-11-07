@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'SOS' => [
-            'S',
-            'شلن صومالي',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['SOS' => ['S', 'شلن صومالي']]];

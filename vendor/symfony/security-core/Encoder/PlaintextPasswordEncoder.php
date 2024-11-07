@@ -8,13 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Encoder;
 
-namespace Symfony\Component\Security\Core\Encoder;
-
-use Symfony\Component\PasswordHasher\Hasher\PlaintextPasswordHasher;
-
+use Isolated\Symfony\Component\PasswordHasher\Hasher\PlaintextPasswordHasher;
 trigger_deprecation('symfony/security-core', '5.3', 'The "%s" class is deprecated, use "%s" instead.', PlaintextPasswordEncoder::class, PlaintextPasswordHasher::class);
-
 /**
  * PlaintextPasswordEncoder does not do any encoding but is useful in testing environments.
  *
@@ -27,11 +24,10 @@ trigger_deprecation('symfony/security-core', '5.3', 'The "%s" class is deprecate
 class PlaintextPasswordEncoder extends BasePasswordEncoder
 {
     use LegacyEncoderTrait;
-
     /**
      * @param bool $ignorePasswordCase Compare password case-insensitive
      */
-    public function __construct(bool $ignorePasswordCase = false)
+    public function __construct(bool $ignorePasswordCase = \false)
     {
         $this->hasher = new PlaintextPasswordHasher($ignorePasswordCase);
     }

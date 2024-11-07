@@ -13,74 +13,50 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2;
 
-
-namespace Twilio\Rest\Intelligence\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class CustomOperatorContext extends InstanceContext
-    {
+{
     /**
      * Initialize the CustomOperatorContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid A 34 character string that uniquely identifies this Custom Operator.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Operators/Custom/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Operators/Custom/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the CustomOperatorInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the CustomOperatorInstance
      *
      * @return CustomOperatorInstance Fetched CustomOperatorInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): CustomOperatorInstance
+    public function fetch() : CustomOperatorInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new CustomOperatorInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new CustomOperatorInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the CustomOperatorInstance
      *
@@ -90,40 +66,24 @@ class CustomOperatorContext extends InstanceContext
      * @return CustomOperatorInstance Updated CustomOperatorInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $friendlyName, array $config, array $options = []): CustomOperatorInstance
+    public function update(string $friendlyName, array $config, array $options = []) : CustomOperatorInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $friendlyName,
-            'Config' =>
-                Serialize::jsonObject($config),
-        ]);
-
+        $data = Values::of(['FriendlyName' => $friendlyName, 'Config' => Serialize::jsonObject($config)]);
         $headers = Values::of(['If-Match' => $options['ifMatch']]);
-
         $payload = $this->version->update('POST', $this->uri, [], $data, $headers);
-
-        return new CustomOperatorInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new CustomOperatorInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Intelligence.V2.CustomOperatorContext ' . \implode(' ', $context) . ']';
     }

@@ -8,15 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\DataCollector\Type;
 
-namespace Symfony\Component\Form\Extension\DataCollector\Type;
-
-use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\DataCollector\EventListener\DataCollectorListener;
-use Symfony\Component\Form\Extension\DataCollector\FormDataCollectorInterface;
-use Symfony\Component\Form\FormBuilderInterface;
-
+use Isolated\Symfony\Component\Form\AbstractTypeExtension;
+use Isolated\Symfony\Component\Form\Extension\Core\Type\FormType;
+use Isolated\Symfony\Component\Form\Extension\DataCollector\EventListener\DataCollectorListener;
+use Isolated\Symfony\Component\Form\Extension\DataCollector\FormDataCollectorInterface;
+use Isolated\Symfony\Component\Form\FormBuilderInterface;
 /**
  * Type extension for collecting data of a form with this type.
  *
@@ -29,12 +27,10 @@ class DataCollectorTypeExtension extends AbstractTypeExtension
      * @var DataCollectorListener
      */
     private $listener;
-
     public function __construct(FormDataCollectorInterface $dataCollector)
     {
         $this->listener = new DataCollectorListener($dataCollector);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -42,11 +38,10 @@ class DataCollectorTypeExtension extends AbstractTypeExtension
     {
         $builder->addEventSubscriber($this->listener);
     }
-
     /**
      * {@inheritdoc}
      */
-    public static function getExtendedTypes(): iterable
+    public static function getExtendedTypes() : iterable
     {
         return [FormType::class];
     }

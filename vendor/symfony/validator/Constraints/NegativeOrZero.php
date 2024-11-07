@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Constraints;
+namespace Isolated\Symfony\Component\Validator\Constraints;
 
 /**
  * @Annotation
@@ -21,6 +20,5 @@ namespace Symfony\Component\Validator\Constraints;
 class NegativeOrZero extends LessThanOrEqual
 {
     use ZeroComparisonConstraintTrait;
-
     public $message = 'This value should be either negative or zero.';
 }

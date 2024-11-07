@@ -13,35 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Insights\V1;
 
-namespace Twilio\Rest\Insights\V1;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class ConferenceList extends ListResource
-    {
+{
     /**
      * Construct the ConferenceList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Conferences';
     }
-
     /**
      * Reads ConferenceInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -58,11 +50,10 @@ class ConferenceList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return ConferenceInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams ConferenceInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -82,15 +73,12 @@ class ConferenceList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of ConferenceInstance records from the API.
      * Request is executed immediately
@@ -100,46 +88,13 @@ class ConferenceList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return ConferencePage Page of ConferenceInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): ConferencePage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : ConferencePage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'ConferenceSid' =>
-                $options['conferenceSid'],
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'Status' =>
-                $options['status'],
-            'CreatedAfter' =>
-                $options['createdAfter'],
-            'CreatedBefore' =>
-                $options['createdBefore'],
-            'MixerRegion' =>
-                $options['mixerRegion'],
-            'Tags' =>
-                $options['tags'],
-            'Subaccount' =>
-                $options['subaccount'],
-            'DetectedIssues' =>
-                $options['detectedIssues'],
-            'EndReason' =>
-                $options['endReason'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['ConferenceSid' => $options['conferenceSid'], 'FriendlyName' => $options['friendlyName'], 'Status' => $options['status'], 'CreatedAfter' => $options['createdAfter'], 'CreatedBefore' => $options['createdBefore'], 'MixerRegion' => $options['mixerRegion'], 'Tags' => $options['tags'], 'Subaccount' => $options['subaccount'], 'DetectedIssues' => $options['detectedIssues'], 'EndReason' => $options['endReason'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new ConferencePage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of ConferenceInstance records from the API.
      * Request is executed immediately
@@ -147,39 +102,26 @@ class ConferenceList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return ConferencePage Page of ConferenceInstance
      */
-    public function getPage(string $targetUrl): ConferencePage
+    public function getPage(string $targetUrl) : ConferencePage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new ConferencePage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a ConferenceContext
      *
      * @param string $conferenceSid The unique SID identifier of the Conference.
      */
-    public function getContext(
-        string $conferenceSid
-        
-    ): ConferenceContext
+    public function getContext(string $conferenceSid) : ConferenceContext
     {
-        return new ConferenceContext(
-            $this->version,
-            $conferenceSid
-        );
+        return new ConferenceContext($this->version, $conferenceSid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Insights.V1.ConferenceList]';
     }

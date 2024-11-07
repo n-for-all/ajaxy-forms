@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'MYR' => [
-            'RM',
-            'Malaysian Ringgit',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['MYR' => ['RM', 'Malaysian Ringgit']]];

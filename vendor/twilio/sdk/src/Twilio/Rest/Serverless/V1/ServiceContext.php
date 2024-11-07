@@ -13,23 +13,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Serverless\V1;
 
-
-namespace Twilio\Rest\Serverless\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-use Twilio\Rest\Serverless\V1\Service\FunctionList;
-use Twilio\Rest\Serverless\V1\Service\BuildList;
-use Twilio\Rest\Serverless\V1\Service\EnvironmentList;
-use Twilio\Rest\Serverless\V1\Service\AssetList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
+use Isolated\Twilio\Rest\Serverless\V1\Service\FunctionList;
+use Isolated\Twilio\Rest\Serverless\V1\Service\BuildList;
+use Isolated\Twilio\Rest\Serverless\V1\Service\EnvironmentList;
+use Isolated\Twilio\Rest\Serverless\V1\Service\AssetList;
 /**
  * @property FunctionList $functions
  * @property BuildList $builds
@@ -41,66 +37,45 @@ use Twilio\Rest\Serverless\V1\Service\AssetList;
  * @method \Twilio\Rest\Serverless\V1\Service\AssetContext assets(string $sid)
  */
 class ServiceContext extends InstanceContext
-    {
+{
     protected $_functions;
     protected $_builds;
     protected $_environments;
     protected $_assets;
-
     /**
      * Initialize the ServiceContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The `sid` or `unique_name` of the Service resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/Services/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the ServiceInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the ServiceInstance
      *
      * @return ServiceInstance Fetched ServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ServiceInstance
+    public function fetch() : ServiceInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ServiceInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new ServiceInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the ServiceInstance
      *
@@ -108,90 +83,53 @@ class ServiceContext extends InstanceContext
      * @return ServiceInstance Updated ServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ServiceInstance
+    public function update(array $options = []) : ServiceInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'IncludeCredentials' =>
-                Serialize::booleanToString($options['includeCredentials']),
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'UiEditable' =>
-                Serialize::booleanToString($options['uiEditable']),
-        ]);
-
+        $data = Values::of(['IncludeCredentials' => Serialize::booleanToString($options['includeCredentials']), 'FriendlyName' => $options['friendlyName'], 'UiEditable' => Serialize::booleanToString($options['uiEditable'])]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new ServiceInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new ServiceInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the functions
      */
-    protected function getFunctions(): FunctionList
+    protected function getFunctions() : FunctionList
     {
         if (!$this->_functions) {
-            $this->_functions = new FunctionList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_functions = new FunctionList($this->version, $this->solution['sid']);
         }
-
         return $this->_functions;
     }
-
     /**
      * Access the builds
      */
-    protected function getBuilds(): BuildList
+    protected function getBuilds() : BuildList
     {
         if (!$this->_builds) {
-            $this->_builds = new BuildList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_builds = new BuildList($this->version, $this->solution['sid']);
         }
-
         return $this->_builds;
     }
-
     /**
      * Access the environments
      */
-    protected function getEnvironments(): EnvironmentList
+    protected function getEnvironments() : EnvironmentList
     {
         if (!$this->_environments) {
-            $this->_environments = new EnvironmentList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_environments = new EnvironmentList($this->version, $this->solution['sid']);
         }
-
         return $this->_environments;
     }
-
     /**
      * Access the assets
      */
-    protected function getAssets(): AssetList
+    protected function getAssets() : AssetList
     {
         if (!$this->_assets) {
-            $this->_assets = new AssetList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_assets = new AssetList($this->version, $this->solution['sid']);
         }
-
         return $this->_assets;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -199,16 +137,14 @@ class ServiceContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -217,26 +153,24 @@ class ServiceContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Serverless.V1.ServiceContext ' . \implode(' ', $context) . ']';
     }

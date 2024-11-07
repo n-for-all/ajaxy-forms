@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Translation\Reader;
 
-namespace Symfony\Component\Translation\Reader;
-
-use Symfony\Component\Translation\MessageCatalogue;
-
+use Isolated\Symfony\Component\Translation\MessageCatalogue;
 /**
  * TranslationReader reads translation messages from translation files.
  *

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Twig\Extension;
+namespace Isolated\Twig\Extension;
 
 /**
  * Enables usage of the deprecated Twig\Extension\AbstractExtension::getGlobals() method.
@@ -24,5 +23,5 @@ interface GlobalsInterface
     /**
      * @return array<string, mixed>
      */
-    public function getGlobals(): array;
+    public function getGlobals() : array;
 }

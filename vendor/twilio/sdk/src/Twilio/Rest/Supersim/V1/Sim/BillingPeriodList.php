@@ -13,40 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Supersim\V1\Sim;
 
-namespace Twilio\Rest\Supersim\V1\Sim;
-
-use Twilio\ListResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class BillingPeriodList extends ListResource
-    {
+{
     /**
      * Construct the BillingPeriodList
      *
      * @param Version $version Version that contains the resource
      * @param string $simSid The SID of the Super SIM to list Billing Periods for.
      */
-    public function __construct(
-        Version $version,
-        string $simSid
-    ) {
+    public function __construct(Version $version, string $simSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'simSid' =>
-            $simSid,
-        
-        ];
-
-        $this->uri = '/Sims/' . \rawurlencode($simSid)
-        .'/BillingPeriods';
+        $this->solution = ['simSid' => $simSid];
+        $this->uri = '/Sims/' . \rawurlencode($simSid) . '/BillingPeriods';
     }
-
     /**
      * Reads BillingPeriodInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -62,11 +49,10 @@ class BillingPeriodList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return BillingPeriodInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams BillingPeriodInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -85,15 +71,12 @@ class BillingPeriodList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of BillingPeriodInstance records from the API.
      * Request is executed immediately
@@ -103,24 +86,12 @@ class BillingPeriodList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return BillingPeriodPage Page of BillingPeriodInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): BillingPeriodPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : BillingPeriodPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new BillingPeriodPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of BillingPeriodInstance records from the API.
      * Request is executed immediately
@@ -128,23 +99,17 @@ class BillingPeriodList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return BillingPeriodPage Page of BillingPeriodInstance
      */
-    public function getPage(string $targetUrl): BillingPeriodPage
+    public function getPage(string $targetUrl) : BillingPeriodPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new BillingPeriodPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Supersim.V1.BillingPeriodList]';
     }

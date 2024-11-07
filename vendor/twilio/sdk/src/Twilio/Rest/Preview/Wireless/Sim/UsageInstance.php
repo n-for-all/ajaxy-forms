@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Wireless\Sim;
 
-
-namespace Twilio\Rest\Preview\Wireless\Sim;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $simSid
  * @property string|null $simUniqueName
@@ -47,41 +43,23 @@ class UsageInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $simSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'simSid' => Values::array_get($payload, 'sim_sid'),
-            'simUniqueName' => Values::array_get($payload, 'sim_unique_name'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'period' => Values::array_get($payload, 'period'),
-            'commandsUsage' => Values::array_get($payload, 'commands_usage'),
-            'commandsCosts' => Values::array_get($payload, 'commands_costs'),
-            'dataUsage' => Values::array_get($payload, 'data_usage'),
-            'dataCosts' => Values::array_get($payload, 'data_costs'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['simSid' => $simSid, ];
+        $this->properties = ['simSid' => Values::array_get($payload, 'sim_sid'), 'simUniqueName' => Values::array_get($payload, 'sim_unique_name'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'period' => Values::array_get($payload, 'period'), 'commandsUsage' => Values::array_get($payload, 'commands_usage'), 'commandsCosts' => Values::array_get($payload, 'commands_costs'), 'dataUsage' => Values::array_get($payload, 'data_usage'), 'dataCosts' => Values::array_get($payload, 'data_costs'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['simSid' => $simSid];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return UsageContext Context for this UsageInstance
      */
-    protected function proxy(): UsageContext
+    protected function proxy() : UsageContext
     {
         if (!$this->context) {
-            $this->context = new UsageContext(
-                $this->version,
-                $this->solution['simSid']
-            );
+            $this->context = new UsageContext($this->version, $this->solution['simSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the UsageInstance
      *
@@ -89,12 +67,10 @@ class UsageInstance extends InstanceResource
      * @return UsageInstance Fetched UsageInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): UsageInstance
+    public function fetch(array $options = []) : UsageInstance
     {
-
         return $this->proxy()->fetch($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -107,27 +83,23 @@ class UsageInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.Wireless.UsageInstance ' . \implode(' ', $context) . ']';
     }
 }
-

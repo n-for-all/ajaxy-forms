@@ -13,75 +13,53 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2;
 
-namespace Twilio\Rest\Numbers\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class BulkHostedNumberOrderList extends ListResource
-    {
+{
     /**
      * Construct the BulkHostedNumberOrderList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/HostedNumber/Orders/Bulk';
     }
-
     /**
      * Create the BulkHostedNumberOrderInstance
      *
      * @return BulkHostedNumberOrderInstance Created BulkHostedNumberOrderInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(): BulkHostedNumberOrderInstance
+    public function create() : BulkHostedNumberOrderInstance
     {
-
         $data = $body->toArray();
         $headers['Content-Type'] = 'application/json';
         $payload = $this->version->create('POST', $this->uri, [], $data, $headers);
-
-        return new BulkHostedNumberOrderInstance(
-            $this->version,
-            $payload
-        );
+        return new BulkHostedNumberOrderInstance($this->version, $payload);
     }
-
-
     /**
      * Constructs a BulkHostedNumberOrderContext
      *
      * @param string $bulkHostingSid A 34 character string that uniquely identifies this BulkHostedNumberOrder.
      */
-    public function getContext(
-        string $bulkHostingSid
-        
-    ): BulkHostedNumberOrderContext
+    public function getContext(string $bulkHostingSid) : BulkHostedNumberOrderContext
     {
-        return new BulkHostedNumberOrderContext(
-            $this->version,
-            $bulkHostingSid
-        );
+        return new BulkHostedNumberOrderContext($this->version, $bulkHostingSid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V2.BulkHostedNumberOrderList]';
     }

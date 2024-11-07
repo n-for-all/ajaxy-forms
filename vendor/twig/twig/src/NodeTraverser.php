@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig;
 
-namespace Twig;
-
-use Twig\Node\Node;
-use Twig\NodeVisitor\NodeVisitorInterface;
-
+use Isolated\Twig\Node\Node;
+use Isolated\Twig\NodeVisitor\NodeVisitorInterface;
 /**
  * A node traverser.
  *
@@ -25,7 +23,6 @@ final class NodeTraverser
 {
     private $env;
     private $visitors = [];
-
     /**
      * @param NodeVisitorInterface[] $visitors
      */
@@ -36,33 +33,28 @@ final class NodeTraverser
             $this->addVisitor($visitor);
         }
     }
-
-    public function addVisitor(NodeVisitorInterface $visitor): void
+    public function addVisitor(NodeVisitorInterface $visitor) : void
     {
         $this->visitors[$visitor->getPriority()][] = $visitor;
     }
-
     /**
      * Traverses a node and calls the registered visitors.
      */
-    public function traverse(Node $node): Node
+    public function traverse(Node $node) : Node
     {
-        ksort($this->visitors);
+        \ksort($this->visitors);
         foreach ($this->visitors as $visitors) {
             foreach ($visitors as $visitor) {
                 $node = $this->traverseForVisitor($visitor, $node);
             }
         }
-
         return $node;
     }
-
-    private function traverseForVisitor(NodeVisitorInterface $visitor, Node $node): ?Node
+    private function traverseForVisitor(NodeVisitorInterface $visitor, Node $node) : ?Node
     {
         $node = $visitor->enterNode($node, $this->env);
-
         foreach ($node as $k => $n) {
-            if (null !== $m = $this->traverseForVisitor($visitor, $n)) {
+            if (null !== ($m = $this->traverseForVisitor($visitor, $n))) {
                 if ($m !== $n) {
                     $node->setNode($k, $m);
                 }
@@ -70,7 +62,6 @@ final class NodeTraverser
                 $node->removeNode($k);
             }
         }
-
         return $visitor->leaveNode($node, $this->env);
     }
 }

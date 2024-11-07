@@ -13,68 +13,47 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Pricing\V1\Voice;
 
-
-namespace Twilio\Rest\Pricing\V1\Voice;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class NumberContext extends InstanceContext
-    {
+{
     /**
      * Initialize the NumberContext
      *
      * @param Version $version Version that contains the resource
      * @param string $number The phone number to fetch.
      */
-    public function __construct(
-        Version $version,
-        $number
-    ) {
+    public function __construct(Version $version, $number)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'number' =>
-            $number,
-        ];
-
-        $this->uri = '/Voice/Numbers/' . \rawurlencode($number)
-        .'';
+        $this->solution = ['number' => $number];
+        $this->uri = '/Voice/Numbers/' . \rawurlencode($number) . '';
     }
-
     /**
      * Fetch the NumberInstance
      *
      * @return NumberInstance Fetched NumberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): NumberInstance
+    public function fetch() : NumberInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new NumberInstance(
-            $this->version,
-            $payload,
-            $this->solution['number']
-        );
+        return new NumberInstance($this->version, $payload, $this->solution['number']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Pricing.V1.NumberContext ' . \implode(' ', $context) . ']';
     }

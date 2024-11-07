@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'BWP' => [
-            'P',
-            'Botswanan Pula',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['BWP' => ['P', 'Botswanan Pula']]];

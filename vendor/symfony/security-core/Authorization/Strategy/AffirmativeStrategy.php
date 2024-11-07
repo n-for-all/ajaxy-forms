@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Authorization\Strategy;
 
-namespace Symfony\Component\Security\Core\Authorization\Strategy;
-
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
-
+use Isolated\Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 /**
  * Grants access if any voter returns an affirmative response.
  *
@@ -28,36 +26,30 @@ final class AffirmativeStrategy implements AccessDecisionStrategyInterface, \Str
      * @var bool
      */
     private $allowIfAllAbstainDecisions;
-
-    public function __construct(bool $allowIfAllAbstainDecisions = false)
+    public function __construct(bool $allowIfAllAbstainDecisions = \false)
     {
         $this->allowIfAllAbstainDecisions = $allowIfAllAbstainDecisions;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function decide(\Traversable $results): bool
+    public function decide(\Traversable $results) : bool
     {
         $deny = 0;
         foreach ($results as $result) {
             if (VoterInterface::ACCESS_GRANTED === $result) {
-                return true;
+                return \true;
             }
-
             if (VoterInterface::ACCESS_DENIED === $result) {
                 ++$deny;
             }
         }
-
         if ($deny > 0) {
-            return false;
+            return \false;
         }
-
         return $this->allowIfAllAbstainDecisions;
     }
-
-    public function __toString(): string
+    public function __toString() : string
     {
         return 'affirmative';
     }

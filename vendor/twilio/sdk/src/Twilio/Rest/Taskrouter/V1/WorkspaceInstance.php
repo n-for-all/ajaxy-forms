@@ -13,28 +13,24 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1;
 
-
-namespace Twilio\Rest\Taskrouter\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Taskrouter\V1\Workspace\TaskQueueList;
-use Twilio\Rest\Taskrouter\V1\Workspace\EventList;
-use Twilio\Rest\Taskrouter\V1\Workspace\TaskChannelList;
-use Twilio\Rest\Taskrouter\V1\Workspace\ActivityList;
-use Twilio\Rest\Taskrouter\V1\Workspace\WorkerList;
-use Twilio\Rest\Taskrouter\V1\Workspace\WorkflowList;
-use Twilio\Rest\Taskrouter\V1\Workspace\TaskList;
-use Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceCumulativeStatisticsList;
-use Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceRealTimeStatisticsList;
-use Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceStatisticsList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\TaskQueueList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\EventList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\TaskChannelList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\ActivityList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\WorkerList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\WorkflowList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\TaskList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceCumulativeStatisticsList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceRealTimeStatisticsList;
+use Isolated\Twilio\Rest\Taskrouter\V1\Workspace\WorkspaceStatisticsList;
 /**
  * @property string|null $accountSid
  * @property \DateTime|null $dateCreated
@@ -64,7 +60,6 @@ class WorkspaceInstance extends InstanceResource
     protected $_cumulativeStatistics;
     protected $_realTimeStatistics;
     protected $_statistics;
-
     /**
      * Initialize the WorkspaceInstance
      *
@@ -75,71 +70,43 @@ class WorkspaceInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'defaultActivityName' => Values::array_get($payload, 'default_activity_name'),
-            'defaultActivitySid' => Values::array_get($payload, 'default_activity_sid'),
-            'eventCallbackUrl' => Values::array_get($payload, 'event_callback_url'),
-            'eventsFilter' => Values::array_get($payload, 'events_filter'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'multiTaskEnabled' => Values::array_get($payload, 'multi_task_enabled'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'timeoutActivityName' => Values::array_get($payload, 'timeout_activity_name'),
-            'timeoutActivitySid' => Values::array_get($payload, 'timeout_activity_sid'),
-            'prioritizeQueueOrder' => Values::array_get($payload, 'prioritize_queue_order'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'defaultActivityName' => Values::array_get($payload, 'default_activity_name'), 'defaultActivitySid' => Values::array_get($payload, 'default_activity_sid'), 'eventCallbackUrl' => Values::array_get($payload, 'event_callback_url'), 'eventsFilter' => Values::array_get($payload, 'events_filter'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'multiTaskEnabled' => Values::array_get($payload, 'multi_task_enabled'), 'sid' => Values::array_get($payload, 'sid'), 'timeoutActivityName' => Values::array_get($payload, 'timeout_activity_name'), 'timeoutActivitySid' => Values::array_get($payload, 'timeout_activity_sid'), 'prioritizeQueueOrder' => Values::array_get($payload, 'prioritize_queue_order'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return WorkspaceContext Context for this WorkspaceInstance
      */
-    protected function proxy(): WorkspaceContext
+    protected function proxy() : WorkspaceContext
     {
         if (!$this->context) {
-            $this->context = new WorkspaceContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new WorkspaceContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Delete the WorkspaceInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->proxy()->delete();
     }
-
     /**
      * Fetch the WorkspaceInstance
      *
      * @return WorkspaceInstance Fetched WorkspaceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): WorkspaceInstance
+    public function fetch() : WorkspaceInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the WorkspaceInstance
      *
@@ -147,92 +114,80 @@ class WorkspaceInstance extends InstanceResource
      * @return WorkspaceInstance Updated WorkspaceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): WorkspaceInstance
+    public function update(array $options = []) : WorkspaceInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the taskQueues
      */
-    protected function getTaskQueues(): TaskQueueList
+    protected function getTaskQueues() : TaskQueueList
     {
         return $this->proxy()->taskQueues;
     }
-
     /**
      * Access the events
      */
-    protected function getEvents(): EventList
+    protected function getEvents() : EventList
     {
         return $this->proxy()->events;
     }
-
     /**
      * Access the taskChannels
      */
-    protected function getTaskChannels(): TaskChannelList
+    protected function getTaskChannels() : TaskChannelList
     {
         return $this->proxy()->taskChannels;
     }
-
     /**
      * Access the activities
      */
-    protected function getActivities(): ActivityList
+    protected function getActivities() : ActivityList
     {
         return $this->proxy()->activities;
     }
-
     /**
      * Access the workers
      */
-    protected function getWorkers(): WorkerList
+    protected function getWorkers() : WorkerList
     {
         return $this->proxy()->workers;
     }
-
     /**
      * Access the workflows
      */
-    protected function getWorkflows(): WorkflowList
+    protected function getWorkflows() : WorkflowList
     {
         return $this->proxy()->workflows;
     }
-
     /**
      * Access the tasks
      */
-    protected function getTasks(): TaskList
+    protected function getTasks() : TaskList
     {
         return $this->proxy()->tasks;
     }
-
     /**
      * Access the cumulativeStatistics
      */
-    protected function getCumulativeStatistics(): WorkspaceCumulativeStatisticsList
+    protected function getCumulativeStatistics() : WorkspaceCumulativeStatisticsList
     {
         return $this->proxy()->cumulativeStatistics;
     }
-
     /**
      * Access the realTimeStatistics
      */
-    protected function getRealTimeStatistics(): WorkspaceRealTimeStatisticsList
+    protected function getRealTimeStatistics() : WorkspaceRealTimeStatisticsList
     {
         return $this->proxy()->realTimeStatistics;
     }
-
     /**
      * Access the statistics
      */
-    protected function getStatistics(): WorkspaceStatisticsList
+    protected function getStatistics() : WorkspaceStatisticsList
     {
         return $this->proxy()->statistics;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -245,27 +200,23 @@ class WorkspaceInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Taskrouter.V1.WorkspaceInstance ' . \implode(' ', $context) . ']';
     }
 }
-

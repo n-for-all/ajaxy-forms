@@ -3,12 +3,12 @@
 namespace Ajaxy\Forms\Inc\Types;
 
 use Ajaxy\Forms\Inc\Types\Data\Posts;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\ChoiceList\ChoiceList;
-use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Isolated\Symfony\Component\Form\AbstractType;
+use Isolated\Symfony\Component\Form\ChoiceList\ChoiceList;
+use Isolated\Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
+use Isolated\Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Isolated\Symfony\Component\OptionsResolver\Options;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PostType extends AbstractType
 {

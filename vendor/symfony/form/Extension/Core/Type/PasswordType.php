@@ -8,15 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\Type;
 
-namespace Symfony\Component\Form\Extension\Core\Type;
-
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\Form\AbstractType;
+use Isolated\Symfony\Component\Form\FormInterface;
+use Isolated\Symfony\Component\Form\FormView;
+use Isolated\Symfony\Component\OptionsResolver\Options;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 class PasswordType extends AbstractType
 {
     /**
@@ -28,23 +26,15 @@ class PasswordType extends AbstractType
             $view->vars['value'] = '';
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'always_empty' => true,
-            'trim' => false,
-            'invalid_message' => function (Options $options, $previousValue) {
-                return ($options['legacy_error_messages'] ?? true)
-                    ? $previousValue
-                    : 'The password is invalid.';
-            },
-        ]);
+        $resolver->setDefaults(['always_empty' => \true, 'trim' => \false, 'invalid_message' => function (Options $options, $previousValue) {
+            return $options['legacy_error_messages'] ?? \true ? $previousValue : 'The password is invalid.';
+        }]);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -52,7 +42,6 @@ class PasswordType extends AbstractType
     {
         return TextType::class;
     }
-
     /**
      * {@inheritdoc}
      */

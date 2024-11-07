@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Intl\Exception;
+namespace Isolated\Symfony\Component\Intl\Exception;
 
 /**
  * @author Eriksen Costa <eriksen.costa@infranology.com.br>
@@ -26,14 +25,7 @@ class MethodArgumentValueNotImplementedException extends NotImplementedException
      */
     public function __construct(string $methodName, string $argName, $argValue, string $additionalMessage = '')
     {
-        $message = sprintf(
-            'The %s() method\'s argument $%s value %s behavior is not implemented.%s',
-            $methodName,
-            $argName,
-            var_export($argValue, true),
-            '' !== $additionalMessage ? ' '.$additionalMessage.'. ' : ''
-        );
-
+        $message = \sprintf('The %s() method\'s argument $%s value %s behavior is not implemented.%s', $methodName, $argName, \var_export($argValue, \true), '' !== $additionalMessage ? ' ' . $additionalMessage . '. ' : '');
         parent::__construct($message);
     }
 }

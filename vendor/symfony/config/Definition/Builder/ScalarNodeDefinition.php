@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Config\Definition\Builder;
 
-namespace Symfony\Component\Config\Definition\Builder;
-
-use Symfony\Component\Config\Definition\ScalarNode;
-
+use Isolated\Symfony\Component\Config\Definition\ScalarNode;
 /**
  * This class provides a fluent interface for defining a node.
  *

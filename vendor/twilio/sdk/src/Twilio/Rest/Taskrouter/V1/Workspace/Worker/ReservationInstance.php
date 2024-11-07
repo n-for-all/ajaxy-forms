@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace\Worker;
 
-
-namespace Twilio\Rest\Taskrouter\V1\Workspace\Worker;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property \DateTime|null $dateCreated
@@ -52,57 +48,33 @@ class ReservationInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $workspaceSid, string $workerSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'reservationStatus' => Values::array_get($payload, 'reservation_status'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'taskSid' => Values::array_get($payload, 'task_sid'),
-            'workerName' => Values::array_get($payload, 'worker_name'),
-            'workerSid' => Values::array_get($payload, 'worker_sid'),
-            'workspaceSid' => Values::array_get($payload, 'workspace_sid'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['workspaceSid' => $workspaceSid, 'workerSid' => $workerSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'reservationStatus' => Values::array_get($payload, 'reservation_status'), 'sid' => Values::array_get($payload, 'sid'), 'taskSid' => Values::array_get($payload, 'task_sid'), 'workerName' => Values::array_get($payload, 'worker_name'), 'workerSid' => Values::array_get($payload, 'worker_sid'), 'workspaceSid' => Values::array_get($payload, 'workspace_sid'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['workspaceSid' => $workspaceSid, 'workerSid' => $workerSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ReservationContext Context for this ReservationInstance
      */
-    protected function proxy(): ReservationContext
+    protected function proxy() : ReservationContext
     {
         if (!$this->context) {
-            $this->context = new ReservationContext(
-                $this->version,
-                $this->solution['workspaceSid'],
-                $this->solution['workerSid'],
-                $this->solution['sid']
-            );
+            $this->context = new ReservationContext($this->version, $this->solution['workspaceSid'], $this->solution['workerSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the ReservationInstance
      *
      * @return ReservationInstance Fetched ReservationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ReservationInstance
+    public function fetch() : ReservationInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the ReservationInstance
      *
@@ -110,12 +82,10 @@ class ReservationInstance extends InstanceResource
      * @return ReservationInstance Updated ReservationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ReservationInstance
+    public function update(array $options = []) : ReservationInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -128,27 +98,23 @@ class ReservationInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Taskrouter.V1.ReservationInstance ' . \implode(' ', $context) . ']';
     }
 }
-

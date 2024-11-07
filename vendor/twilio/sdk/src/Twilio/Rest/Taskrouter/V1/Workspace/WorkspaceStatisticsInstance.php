@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace;
 
-
-namespace Twilio\Rest\Taskrouter\V1\Workspace;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property array|null $realtime
  * @property array|null $cumulative
@@ -43,37 +39,23 @@ class WorkspaceStatisticsInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $workspaceSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'realtime' => Values::array_get($payload, 'realtime'),
-            'cumulative' => Values::array_get($payload, 'cumulative'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'workspaceSid' => Values::array_get($payload, 'workspace_sid'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['workspaceSid' => $workspaceSid, ];
+        $this->properties = ['realtime' => Values::array_get($payload, 'realtime'), 'cumulative' => Values::array_get($payload, 'cumulative'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'workspaceSid' => Values::array_get($payload, 'workspace_sid'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['workspaceSid' => $workspaceSid];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return WorkspaceStatisticsContext Context for this WorkspaceStatisticsInstance
      */
-    protected function proxy(): WorkspaceStatisticsContext
+    protected function proxy() : WorkspaceStatisticsContext
     {
         if (!$this->context) {
-            $this->context = new WorkspaceStatisticsContext(
-                $this->version,
-                $this->solution['workspaceSid']
-            );
+            $this->context = new WorkspaceStatisticsContext($this->version, $this->solution['workspaceSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the WorkspaceStatisticsInstance
      *
@@ -81,12 +63,10 @@ class WorkspaceStatisticsInstance extends InstanceResource
      * @return WorkspaceStatisticsInstance Fetched WorkspaceStatisticsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): WorkspaceStatisticsInstance
+    public function fetch(array $options = []) : WorkspaceStatisticsInstance
     {
-
         return $this->proxy()->fetch($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -99,27 +79,23 @@ class WorkspaceStatisticsInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Taskrouter.V1.WorkspaceStatisticsInstance ' . \implode(' ', $context) . ']';
     }
 }
-

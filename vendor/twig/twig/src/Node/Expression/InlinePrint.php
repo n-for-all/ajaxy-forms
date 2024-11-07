@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node\Expression;
 
-namespace Twig\Node\Expression;
-
-use Twig\Compiler;
-use Twig\Node\Node;
-
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Node;
 /**
  * @internal
  */
@@ -23,12 +21,8 @@ final class InlinePrint extends AbstractExpression
     {
         parent::__construct(['node' => $node], [], $lineno);
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
-        $compiler
-            ->raw('yield ')
-            ->subcompile($this->getNode('node'))
-        ;
+        $compiler->raw('yield ')->subcompile($this->getNode('node'));
     }
 }

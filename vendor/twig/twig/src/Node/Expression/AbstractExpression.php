@@ -9,11 +9,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node\Expression;
 
-namespace Twig\Node\Expression;
-
-use Twig\Node\Node;
-
+use Isolated\Twig\Node\Node;
 /**
  * Abstract class for all nodes that represents an expression.
  *
@@ -21,7 +19,7 @@ use Twig\Node\Node;
  */
 abstract class AbstractExpression extends Node
 {
-    public function isGenerator(): bool
+    public function isGenerator() : bool
     {
         return $this->hasAttribute('is_generator') && $this->getAttribute('is_generator');
     }

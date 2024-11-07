@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node;
 
-namespace Twig\Node;
-
-use Twig\Attribute\YieldReady;
-use Twig\Compiler;
-use Twig\Node\Expression\AbstractExpression;
-
+use Isolated\Twig\Attribute\YieldReady;
+use Isolated\Twig\Compiler;
+use Isolated\Twig\Node\Expression\AbstractExpression;
 /**
  * Checks if casting an expression to __toString() is allowed by the sandbox.
  *
@@ -32,16 +30,9 @@ class CheckToStringNode extends AbstractExpression
     {
         parent::__construct(['expr' => $expr], [], $expr->getTemplateLine(), $expr->getNodeTag());
     }
-
-    public function compile(Compiler $compiler): void
+    public function compile(Compiler $compiler) : void
     {
         $expr = $this->getNode('expr');
-        $compiler
-            ->raw('$this->sandbox->ensureToStringAllowed(')
-            ->subcompile($expr)
-            ->raw(', ')
-            ->repr($expr->getTemplateLine())
-            ->raw(', $this->source)')
-        ;
+        $compiler->raw('$this->sandbox->ensureToStringAllowed(')->subcompile($expr)->raw(', ')->repr($expr->getTemplateLine())->raw(', $this->source)');
     }
 }

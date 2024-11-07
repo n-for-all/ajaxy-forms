@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Insights\V1\Room;
 
-
-namespace Twilio\Rest\Insights\V1\Room;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ParticipantContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ParticipantContext
      *
@@ -31,56 +27,34 @@ class ParticipantContext extends InstanceContext
      * @param string $roomSid The SID of the Room resource.
      * @param string $participantSid The SID of the Participant resource.
      */
-    public function __construct(
-        Version $version,
-        $roomSid,
-        $participantSid
-    ) {
+    public function __construct(Version $version, $roomSid, $participantSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'roomSid' =>
-            $roomSid,
-        'participantSid' =>
-            $participantSid,
-        ];
-
-        $this->uri = '/Video/Rooms/' . \rawurlencode($roomSid)
-        .'/Participants/' . \rawurlencode($participantSid)
-        .'';
+        $this->solution = ['roomSid' => $roomSid, 'participantSid' => $participantSid];
+        $this->uri = '/Video/Rooms/' . \rawurlencode($roomSid) . '/Participants/' . \rawurlencode($participantSid) . '';
     }
-
     /**
      * Fetch the ParticipantInstance
      *
      * @return ParticipantInstance Fetched ParticipantInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ParticipantInstance
+    public function fetch() : ParticipantInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ParticipantInstance(
-            $this->version,
-            $payload,
-            $this->solution['roomSid'],
-            $this->solution['participantSid']
-        );
+        return new ParticipantInstance($this->version, $payload, $this->solution['roomSid'], $this->solution['participantSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Insights.V1.ParticipantContext ' . \implode(' ', $context) . ']';
     }

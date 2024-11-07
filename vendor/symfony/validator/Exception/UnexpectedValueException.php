@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Exception;
+namespace Isolated\Symfony\Component\Validator\Exception;
 
 /**
  * @author Christian Flothmann <christian.flothmann@sensiolabs.de>
@@ -17,15 +16,12 @@ namespace Symfony\Component\Validator\Exception;
 class UnexpectedValueException extends UnexpectedTypeException
 {
     private $expectedType;
-
     public function __construct($value, string $expectedType)
     {
         parent::__construct($value, $expectedType);
-
         $this->expectedType = $expectedType;
     }
-
-    public function getExpectedType(): string
+    public function getExpectedType() : string
     {
         return $this->expectedType;
     }

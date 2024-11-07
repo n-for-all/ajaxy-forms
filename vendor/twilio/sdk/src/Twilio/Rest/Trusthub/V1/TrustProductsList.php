@@ -13,36 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Trusthub\V1;
 
-namespace Twilio\Rest\Trusthub\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class TrustProductsList extends ListResource
-    {
+{
     /**
      * Construct the TrustProductsList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/TrustProducts';
     }
-
     /**
      * Create the TrustProductsInstance
      *
@@ -53,31 +45,13 @@ class TrustProductsList extends ListResource
      * @return TrustProductsInstance Created TrustProductsInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $friendlyName, string $email, string $policySid, array $options = []): TrustProductsInstance
+    public function create(string $friendlyName, string $email, string $policySid, array $options = []) : TrustProductsInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $friendlyName,
-            'Email' =>
-                $email,
-            'PolicySid' =>
-                $policySid,
-            'StatusCallback' =>
-                $options['statusCallback'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $friendlyName, 'Email' => $email, 'PolicySid' => $policySid, 'StatusCallback' => $options['statusCallback']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new TrustProductsInstance(
-            $this->version,
-            $payload
-        );
+        return new TrustProductsInstance($this->version, $payload);
     }
-
-
     /**
      * Reads TrustProductsInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -94,11 +68,10 @@ class TrustProductsList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return TrustProductsInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams TrustProductsInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -118,15 +91,12 @@ class TrustProductsList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of TrustProductsInstance records from the API.
      * Request is executed immediately
@@ -136,32 +106,13 @@ class TrustProductsList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return TrustProductsPage Page of TrustProductsInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): TrustProductsPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : TrustProductsPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Status' =>
-                $options['status'],
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'PolicySid' =>
-                $options['policySid'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Status' => $options['status'], 'FriendlyName' => $options['friendlyName'], 'PolicySid' => $options['policySid'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new TrustProductsPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of TrustProductsInstance records from the API.
      * Request is executed immediately
@@ -169,39 +120,26 @@ class TrustProductsList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return TrustProductsPage Page of TrustProductsInstance
      */
-    public function getPage(string $targetUrl): TrustProductsPage
+    public function getPage(string $targetUrl) : TrustProductsPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new TrustProductsPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a TrustProductsContext
      *
      * @param string $sid The unique string that we created to identify the Trust Product resource.
      */
-    public function getContext(
-        string $sid
-        
-    ): TrustProductsContext
+    public function getContext(string $sid) : TrustProductsContext
     {
-        return new TrustProductsContext(
-            $this->version,
-            $sid
-        );
+        return new TrustProductsContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Trusthub.V1.TrustProductsList]';
     }

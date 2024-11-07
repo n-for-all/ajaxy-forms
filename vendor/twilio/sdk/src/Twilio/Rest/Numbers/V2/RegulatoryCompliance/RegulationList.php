@@ -13,35 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2\RegulatoryCompliance;
 
-namespace Twilio\Rest\Numbers\V2\RegulatoryCompliance;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class RegulationList extends ListResource
-    {
+{
     /**
      * Construct the RegulationList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/RegulatoryCompliance/Regulations';
     }
-
     /**
      * Reads RegulationInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -58,11 +50,10 @@ class RegulationList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return RegulationInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams RegulationInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -82,15 +73,12 @@ class RegulationList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of RegulationInstance records from the API.
      * Request is executed immediately
@@ -100,32 +88,13 @@ class RegulationList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return RegulationPage Page of RegulationInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): RegulationPage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : RegulationPage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'EndUserType' =>
-                $options['endUserType'],
-            'IsoCountry' =>
-                $options['isoCountry'],
-            'NumberType' =>
-                $options['numberType'],
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['EndUserType' => $options['endUserType'], 'IsoCountry' => $options['isoCountry'], 'NumberType' => $options['numberType'], 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new RegulationPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of RegulationInstance records from the API.
      * Request is executed immediately
@@ -133,39 +102,26 @@ class RegulationList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return RegulationPage Page of RegulationInstance
      */
-    public function getPage(string $targetUrl): RegulationPage
+    public function getPage(string $targetUrl) : RegulationPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new RegulationPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a RegulationContext
      *
      * @param string $sid The unique string that identifies the Regulation resource.
      */
-    public function getContext(
-        string $sid
-        
-    ): RegulationContext
+    public function getContext(string $sid) : RegulationContext
     {
-        return new RegulationContext(
-            $this->version,
-            $sid
-        );
+        return new RegulationContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V2.RegulationList]';
     }

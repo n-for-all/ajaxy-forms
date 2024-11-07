@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\Node\Expression\Binary;
 
-namespace Twig\Node\Expression\Binary;
-
-use Twig\Compiler;
-
+use Isolated\Twig\Compiler;
 class SpaceshipBinary extends AbstractBinary
 {
-    public function operator(Compiler $compiler): Compiler
+    public function operator(Compiler $compiler) : Compiler
     {
         return $compiler->raw('<=>');
     }

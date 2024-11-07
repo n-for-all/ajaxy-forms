@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Supersim\V1;
 
-
-namespace Twilio\Rest\Supersim\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property string|null $simSid
@@ -47,25 +43,10 @@ class UsageRecordInstance extends InstanceResource
     public function __construct(Version $version, array $payload)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'simSid' => Values::array_get($payload, 'sim_sid'),
-            'networkSid' => Values::array_get($payload, 'network_sid'),
-            'fleetSid' => Values::array_get($payload, 'fleet_sid'),
-            'isoCountry' => Values::array_get($payload, 'iso_country'),
-            'period' => Values::array_get($payload, 'period'),
-            'dataUpload' => Values::array_get($payload, 'data_upload'),
-            'dataDownload' => Values::array_get($payload, 'data_download'),
-            'dataTotal' => Values::array_get($payload, 'data_total'),
-            'dataTotalBilled' => Values::array_get($payload, 'data_total_billed'),
-            'billedUnit' => Values::array_get($payload, 'billed_unit'),
-        ];
-
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'simSid' => Values::array_get($payload, 'sim_sid'), 'networkSid' => Values::array_get($payload, 'network_sid'), 'fleetSid' => Values::array_get($payload, 'fleet_sid'), 'isoCountry' => Values::array_get($payload, 'iso_country'), 'period' => Values::array_get($payload, 'period'), 'dataUpload' => Values::array_get($payload, 'data_upload'), 'dataDownload' => Values::array_get($payload, 'data_download'), 'dataTotal' => Values::array_get($payload, 'data_total'), 'dataTotalBilled' => Values::array_get($payload, 'data_total_billed'), 'billedUnit' => Values::array_get($payload, 'billed_unit')];
         $this->solution = [];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -78,23 +59,19 @@ class UsageRecordInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Supersim.V1.UsageRecordInstance]';
     }
 }
-

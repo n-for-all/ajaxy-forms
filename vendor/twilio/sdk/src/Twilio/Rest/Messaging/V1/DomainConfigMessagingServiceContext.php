@@ -13,68 +13,47 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Messaging\V1;
 
-
-namespace Twilio\Rest\Messaging\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class DomainConfigMessagingServiceContext extends InstanceContext
-    {
+{
     /**
      * Initialize the DomainConfigMessagingServiceContext
      *
      * @param Version $version Version that contains the resource
      * @param string $messagingServiceSid Unique string used to identify the Messaging service that this domain should be associated with.
      */
-    public function __construct(
-        Version $version,
-        $messagingServiceSid
-    ) {
+    public function __construct(Version $version, $messagingServiceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'messagingServiceSid' =>
-            $messagingServiceSid,
-        ];
-
-        $this->uri = '/LinkShortening/MessagingService/' . \rawurlencode($messagingServiceSid)
-        .'/DomainConfig';
+        $this->solution = ['messagingServiceSid' => $messagingServiceSid];
+        $this->uri = '/LinkShortening/MessagingService/' . \rawurlencode($messagingServiceSid) . '/DomainConfig';
     }
-
     /**
      * Fetch the DomainConfigMessagingServiceInstance
      *
      * @return DomainConfigMessagingServiceInstance Fetched DomainConfigMessagingServiceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): DomainConfigMessagingServiceInstance
+    public function fetch() : DomainConfigMessagingServiceInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new DomainConfigMessagingServiceInstance(
-            $this->version,
-            $payload,
-            $this->solution['messagingServiceSid']
-        );
+        return new DomainConfigMessagingServiceInstance($this->version, $payload, $this->solution['messagingServiceSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Messaging.V1.DomainConfigMessagingServiceContext ' . \implode(' ', $context) . ']';
     }

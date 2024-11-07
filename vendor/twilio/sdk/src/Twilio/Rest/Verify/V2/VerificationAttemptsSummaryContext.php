@@ -13,37 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Verify\V2;
 
-
-namespace Twilio\Rest\Verify\V2;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Serialize;
 class VerificationAttemptsSummaryContext extends InstanceContext
-    {
+{
     /**
      * Initialize the VerificationAttemptsSummaryContext
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Attempts/Summary';
     }
-
     /**
      * Fetch the VerificationAttemptsSummaryInstance
      *
@@ -51,45 +42,23 @@ class VerificationAttemptsSummaryContext extends InstanceContext
      * @return VerificationAttemptsSummaryInstance Fetched VerificationAttemptsSummaryInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): VerificationAttemptsSummaryInstance
+    public function fetch(array $options = []) : VerificationAttemptsSummaryInstance
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'VerifyServiceSid' =>
-                $options['verifyServiceSid'],
-            'DateCreatedAfter' =>
-                Serialize::iso8601DateTime($options['dateCreatedAfter']),
-            'DateCreatedBefore' =>
-                Serialize::iso8601DateTime($options['dateCreatedBefore']),
-            'Country' =>
-                $options['country'],
-            'Channel' =>
-                $options['channel'],
-            'DestinationPrefix' =>
-                $options['destinationPrefix'],
-        ]);
-
+        $params = Values::of(['VerifyServiceSid' => $options['verifyServiceSid'], 'DateCreatedAfter' => Serialize::iso8601DateTime($options['dateCreatedAfter']), 'DateCreatedBefore' => Serialize::iso8601DateTime($options['dateCreatedBefore']), 'Country' => $options['country'], 'Channel' => $options['channel'], 'DestinationPrefix' => $options['destinationPrefix']]);
         $payload = $this->version->fetch('GET', $this->uri, $params, []);
-
-        return new VerificationAttemptsSummaryInstance(
-            $this->version,
-            $payload
-        );
+        return new VerificationAttemptsSummaryInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Verify.V2.VerificationAttemptsSummaryContext ' . \implode(' ', $context) . ']';
     }

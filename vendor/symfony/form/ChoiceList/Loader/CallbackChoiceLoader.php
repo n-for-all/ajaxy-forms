@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Form\ChoiceList\Loader;
+namespace Isolated\Symfony\Component\Form\ChoiceList\Loader;
 
 /**
  * Loads an {@link ArrayChoiceList} instance from a callable returning iterable choices.
@@ -19,7 +18,6 @@ namespace Symfony\Component\Form\ChoiceList\Loader;
 class CallbackChoiceLoader extends AbstractChoiceLoader
 {
     private $callback;
-
     /**
      * @param callable $callback The callable returning iterable choices
      */
@@ -27,8 +25,7 @@ class CallbackChoiceLoader extends AbstractChoiceLoader
     {
         $this->callback = $callback;
     }
-
-    protected function loadChoices(): iterable
+    protected function loadChoices() : iterable
     {
         return ($this->callback)();
     }

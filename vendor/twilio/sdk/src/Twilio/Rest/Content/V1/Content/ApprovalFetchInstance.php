@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Content\V1\Content;
 
-
-namespace Twilio\Rest\Content\V1\Content;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $sid
  * @property string|null $accountSid
@@ -41,48 +37,33 @@ class ApprovalFetchInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $contentSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'whatsapp' => Values::array_get($payload, 'whatsapp'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['contentSid' => $contentSid, ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'whatsapp' => Values::array_get($payload, 'whatsapp'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['contentSid' => $contentSid];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ApprovalFetchContext Context for this ApprovalFetchInstance
      */
-    protected function proxy(): ApprovalFetchContext
+    protected function proxy() : ApprovalFetchContext
     {
         if (!$this->context) {
-            $this->context = new ApprovalFetchContext(
-                $this->version,
-                $this->solution['contentSid']
-            );
+            $this->context = new ApprovalFetchContext($this->version, $this->solution['contentSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the ApprovalFetchInstance
      *
      * @return ApprovalFetchInstance Fetched ApprovalFetchInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ApprovalFetchInstance
+    public function fetch() : ApprovalFetchInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -95,27 +76,23 @@ class ApprovalFetchInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Content.V1.ApprovalFetchInstance ' . \implode(' ', $context) . ']';
     }
 }
-

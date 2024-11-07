@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Mapping;
 
-namespace Symfony\Component\Validator\Mapping;
-
-use Symfony\Component\Validator\Constraint;
-
+use Isolated\Symfony\Component\Validator\Constraint;
 /**
  * A container for validation metadata.
  *
@@ -38,7 +36,6 @@ interface MetadataInterface
      * @see CascadingStrategy
      */
     public function getCascadingStrategy();
-
     /**
      * Returns the strategy for traversing traversable objects.
      *
@@ -47,14 +44,12 @@ interface MetadataInterface
      * @see TraversalStrategy
      */
     public function getTraversalStrategy();
-
     /**
      * Returns all constraints of this element.
      *
      * @return Constraint[]
      */
     public function getConstraints();
-
     /**
      * Returns all constraints for a given validation group.
      *

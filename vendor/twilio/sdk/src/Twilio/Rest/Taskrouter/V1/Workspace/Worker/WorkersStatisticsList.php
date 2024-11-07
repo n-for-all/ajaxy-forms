@@ -13,54 +13,37 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace\Worker;
 
-namespace Twilio\Rest\Taskrouter\V1\Workspace\Worker;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class WorkersStatisticsList extends ListResource
-    {
+{
     /**
      * Construct the WorkersStatisticsList
      *
      * @param Version $version Version that contains the resource
      * @param string $workspaceSid The SID of the Workspace with the Worker to fetch.
      */
-    public function __construct(
-        Version $version,
-        string $workspaceSid
-    ) {
+    public function __construct(Version $version, string $workspaceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'workspaceSid' =>
-            $workspaceSid,
-        
-        ];
+        $this->solution = ['workspaceSid' => $workspaceSid];
     }
-
     /**
      * Constructs a WorkersStatisticsContext
      */
-    public function getContext(
-        
-    ): WorkersStatisticsContext
+    public function getContext() : WorkersStatisticsContext
     {
-        return new WorkersStatisticsContext(
-            $this->version,
-            $this->solution['workspaceSid']
-        );
+        return new WorkersStatisticsContext($this->version, $this->solution['workspaceSid']);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Taskrouter.V1.WorkersStatisticsList]';
     }

@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\TokenParser;
 
-namespace Twig\TokenParser;
-
-use Twig\Error\SyntaxError;
-use Twig\Node\Expression\ConstantExpression;
-use Twig\Node\Node;
-use Twig\Token;
-
+use Isolated\Twig\Error\SyntaxError;
+use Isolated\Twig\Node\Expression\ConstantExpression;
+use Isolated\Twig\Node\Node;
+use Isolated\Twig\Token;
 /**
  * Imports blocks defined in another template into the current template.
  *
@@ -32,41 +30,45 @@ use Twig\Token;
  */
 final class UseTokenParser extends AbstractTokenParser
 {
-    public function parse(Token $token): Node
+    public function parse(Token $token) : Node
     {
         $template = $this->parser->getExpressionParser()->parseExpression();
         $stream = $this->parser->getStream();
-
         if (!$template instanceof ConstantExpression) {
             throw new SyntaxError('The template references in a "use" statement must be a string.', $stream->getCurrent()->getLine(), $stream->getSourceContext());
         }
-
         $targets = [];
         if ($stream->nextIf('with')) {
-            while (true) {
-                $name = $stream->expect(/* Token::NAME_TYPE */ 5)->getValue();
-
+            while (\true) {
+                $name = $stream->expect(
+                    /* Token::NAME_TYPE */
+                    5
+                )->getValue();
                 $alias = $name;
                 if ($stream->nextIf('as')) {
-                    $alias = $stream->expect(/* Token::NAME_TYPE */ 5)->getValue();
+                    $alias = $stream->expect(
+                        /* Token::NAME_TYPE */
+                        5
+                    )->getValue();
                 }
-
                 $targets[$name] = new ConstantExpression($alias, -1);
-
-                if (!$stream->nextIf(/* Token::PUNCTUATION_TYPE */ 9, ',')) {
+                if (!$stream->nextIf(
+                    /* Token::PUNCTUATION_TYPE */
+                    9,
+                    ','
+                )) {
                     break;
                 }
             }
         }
-
-        $stream->expect(/* Token::BLOCK_END_TYPE */ 3);
-
+        $stream->expect(
+            /* Token::BLOCK_END_TYPE */
+            3
+        );
         $this->parser->addTrait(new Node(['template' => $template, 'targets' => new Node($targets)]));
-
         return new Node();
     }
-
-    public function getTag(): string
+    public function getTag() : string
     {
         return 'use';
     }

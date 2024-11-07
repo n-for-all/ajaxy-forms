@@ -13,72 +13,48 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Voice\V1;
 
-
-namespace Twilio\Rest\Voice\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class SourceIpMappingContext extends InstanceContext
-    {
+{
     /**
      * Initialize the SourceIpMappingContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The Twilio-provided string that uniquely identifies the IP Record resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/SourceIpMappings/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/SourceIpMappings/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the SourceIpMappingInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the SourceIpMappingInstance
      *
      * @return SourceIpMappingInstance Fetched SourceIpMappingInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): SourceIpMappingInstance
+    public function fetch() : SourceIpMappingInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new SourceIpMappingInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new SourceIpMappingInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the SourceIpMappingInstance
      *
@@ -86,34 +62,22 @@ class SourceIpMappingContext extends InstanceContext
      * @return SourceIpMappingInstance Updated SourceIpMappingInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $sipDomainSid): SourceIpMappingInstance
+    public function update(string $sipDomainSid) : SourceIpMappingInstance
     {
-
-        $data = Values::of([
-            'SipDomainSid' =>
-                $sipDomainSid,
-        ]);
-
+        $data = Values::of(['SipDomainSid' => $sipDomainSid]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new SourceIpMappingInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new SourceIpMappingInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Voice.V1.SourceIpMappingContext ' . \implode(' ', $context) . ']';
     }

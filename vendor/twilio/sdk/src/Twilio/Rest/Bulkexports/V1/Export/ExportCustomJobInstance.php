@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Bulkexports\V1\Export;
 
-
-namespace Twilio\Rest\Bulkexports\V1\Export;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $friendlyName
  * @property string|null $resourceType
@@ -48,25 +44,10 @@ class ExportCustomJobInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $resourceType)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'resourceType' => Values::array_get($payload, 'resource_type'),
-            'startDay' => Values::array_get($payload, 'start_day'),
-            'endDay' => Values::array_get($payload, 'end_day'),
-            'webhookUrl' => Values::array_get($payload, 'webhook_url'),
-            'webhookMethod' => Values::array_get($payload, 'webhook_method'),
-            'email' => Values::array_get($payload, 'email'),
-            'jobSid' => Values::array_get($payload, 'job_sid'),
-            'details' => Values::array_get($payload, 'details'),
-            'jobQueuePosition' => Values::array_get($payload, 'job_queue_position'),
-            'estimatedCompletionTime' => Values::array_get($payload, 'estimated_completion_time'),
-        ];
-
-        $this->solution = ['resourceType' => $resourceType, ];
+        $this->properties = ['friendlyName' => Values::array_get($payload, 'friendly_name'), 'resourceType' => Values::array_get($payload, 'resource_type'), 'startDay' => Values::array_get($payload, 'start_day'), 'endDay' => Values::array_get($payload, 'end_day'), 'webhookUrl' => Values::array_get($payload, 'webhook_url'), 'webhookMethod' => Values::array_get($payload, 'webhook_method'), 'email' => Values::array_get($payload, 'email'), 'jobSid' => Values::array_get($payload, 'job_sid'), 'details' => Values::array_get($payload, 'details'), 'jobQueuePosition' => Values::array_get($payload, 'job_queue_position'), 'estimatedCompletionTime' => Values::array_get($payload, 'estimated_completion_time')];
+        $this->solution = ['resourceType' => $resourceType];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -79,23 +60,19 @@ class ExportCustomJobInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Bulkexports.V1.ExportCustomJobInstance]';
     }
 }
-

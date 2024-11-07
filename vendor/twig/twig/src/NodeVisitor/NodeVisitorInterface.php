@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Twig\NodeVisitor;
 
-namespace Twig\NodeVisitor;
-
-use Twig\Environment;
-use Twig\Node\Node;
-
+use Isolated\Twig\Environment;
+use Isolated\Twig\Node\Node;
 /**
  * Interface for node visitor classes.
  *
@@ -26,15 +24,13 @@ interface NodeVisitorInterface
      *
      * @return Node The modified node
      */
-    public function enterNode(Node $node, Environment $env): Node;
-
+    public function enterNode(Node $node, Environment $env) : Node;
     /**
      * Called after child nodes are visited.
      *
      * @return Node|null The modified node or null if the node must be removed
      */
-    public function leaveNode(Node $node, Environment $env): ?Node;
-
+    public function leaveNode(Node $node, Environment $env) : ?Node;
     /**
      * Returns the priority for this visitor.
      *

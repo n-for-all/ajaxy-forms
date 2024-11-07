@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'PHP' => [
-            '₱',
-            'peso filipino',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['PHP' => ['₱', 'peso filipino']]];

@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'BZD' => [
-            '$',
-            'dólar beliceño',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['BZD' => ['$', 'dólar beliceño']]];

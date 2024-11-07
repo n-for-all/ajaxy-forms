@@ -3,9 +3,10 @@
 namespace Ajaxy\Forms\Inc\Types;
 
 
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Isolated\Symfony\Component\Form\FormView;
+use Isolated\Symfony\Component\Form\FormInterface;
+use Isolated\Symfony\Component\Form\AbstractType;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 
 class HtmlType extends AbstractType
 {
@@ -38,7 +39,7 @@ class HtmlType extends AbstractType
      *
      * @return void
      */
-    public function buildView(\Symfony\Component\Form\FormView $view, \Symfony\Component\Form\FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['html'] = $options['html'];
         return parent::buildView($view,  $form,  $options);

@@ -13,41 +13,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Wireless\Sim;
 
-
-namespace Twilio\Rest\Preview\Wireless\Sim;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class UsageContext extends InstanceContext
-    {
+{
     /**
      * Initialize the UsageContext
      *
      * @param Version $version Version that contains the resource
      * @param string $simSid 
      */
-    public function __construct(
-        Version $version,
-        $simSid
-    ) {
+    public function __construct(Version $version, $simSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'simSid' =>
-            $simSid,
-        ];
-
-        $this->uri = '/Sims/' . \rawurlencode($simSid)
-        .'/Usage';
+        $this->solution = ['simSid' => $simSid];
+        $this->uri = '/Sims/' . \rawurlencode($simSid) . '/Usage';
     }
-
     /**
      * Fetch the UsageInstance
      *
@@ -55,38 +42,23 @@ class UsageContext extends InstanceContext
      * @return UsageInstance Fetched UsageInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): UsageInstance
+    public function fetch(array $options = []) : UsageInstance
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'End' =>
-                $options['end'],
-            'Start' =>
-                $options['start'],
-        ]);
-
+        $params = Values::of(['End' => $options['end'], 'Start' => $options['start']]);
         $payload = $this->version->fetch('GET', $this->uri, $params, []);
-
-        return new UsageInstance(
-            $this->version,
-            $payload,
-            $this->solution['simSid']
-        );
+        return new UsageInstance($this->version, $payload, $this->solution['simSid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.Wireless.UsageContext ' . \implode(' ', $context) . ']';
     }

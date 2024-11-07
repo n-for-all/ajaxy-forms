@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'ERN' => [
-            'Nfk',
-            'ناكفا أريتري',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['ERN' => ['Nfk', 'ناكفا أريتري']]];

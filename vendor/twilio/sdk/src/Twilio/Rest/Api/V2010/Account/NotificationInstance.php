@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account;
 
-
-namespace Twilio\Rest\Api\V2010\Account;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $accountSid
  * @property string|null $apiVersion
@@ -56,62 +52,33 @@ class NotificationInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $accountSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'apiVersion' => Values::array_get($payload, 'api_version'),
-            'callSid' => Values::array_get($payload, 'call_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'errorCode' => Values::array_get($payload, 'error_code'),
-            'log' => Values::array_get($payload, 'log'),
-            'messageDate' => Deserialize::dateTime(Values::array_get($payload, 'message_date')),
-            'messageText' => Values::array_get($payload, 'message_text'),
-            'moreInfo' => Values::array_get($payload, 'more_info'),
-            'requestMethod' => Values::array_get($payload, 'request_method'),
-            'requestUrl' => Values::array_get($payload, 'request_url'),
-            'requestVariables' => Values::array_get($payload, 'request_variables'),
-            'responseBody' => Values::array_get($payload, 'response_body'),
-            'responseHeaders' => Values::array_get($payload, 'response_headers'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'uri' => Values::array_get($payload, 'uri'),
-        ];
-
-        $this->solution = ['accountSid' => $accountSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'apiVersion' => Values::array_get($payload, 'api_version'), 'callSid' => Values::array_get($payload, 'call_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'errorCode' => Values::array_get($payload, 'error_code'), 'log' => Values::array_get($payload, 'log'), 'messageDate' => Deserialize::dateTime(Values::array_get($payload, 'message_date')), 'messageText' => Values::array_get($payload, 'message_text'), 'moreInfo' => Values::array_get($payload, 'more_info'), 'requestMethod' => Values::array_get($payload, 'request_method'), 'requestUrl' => Values::array_get($payload, 'request_url'), 'requestVariables' => Values::array_get($payload, 'request_variables'), 'responseBody' => Values::array_get($payload, 'response_body'), 'responseHeaders' => Values::array_get($payload, 'response_headers'), 'sid' => Values::array_get($payload, 'sid'), 'uri' => Values::array_get($payload, 'uri')];
+        $this->solution = ['accountSid' => $accountSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return NotificationContext Context for this NotificationInstance
      */
-    protected function proxy(): NotificationContext
+    protected function proxy() : NotificationContext
     {
         if (!$this->context) {
-            $this->context = new NotificationContext(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['sid']
-            );
+            $this->context = new NotificationContext($this->version, $this->solution['accountSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the NotificationInstance
      *
      * @return NotificationInstance Fetched NotificationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): NotificationInstance
+    public function fetch() : NotificationInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Magic getter to access properties
      *
@@ -124,27 +91,23 @@ class NotificationInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.NotificationInstance ' . \implode(' ', $context) . ']';
     }
 }
-

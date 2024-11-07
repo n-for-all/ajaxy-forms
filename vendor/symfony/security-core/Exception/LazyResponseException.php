@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Exception;
 
-namespace Symfony\Component\Security\Core\Exception;
-
-use Symfony\Component\HttpFoundation\Response;
-
+use Isolated\Symfony\Component\HttpFoundation\Response;
 /**
  * A signaling exception that wraps a lazily computed response.
  *
@@ -21,13 +19,11 @@ use Symfony\Component\HttpFoundation\Response;
 class LazyResponseException extends \Exception implements ExceptionInterface
 {
     private $response;
-
     public function __construct(Response $response)
     {
         $this->response = $response;
     }
-
-    public function getResponse(): Response
+    public function getResponse() : Response
     {
         return $this->response;
     }

@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Preview\Marketplace;
 
-
-namespace Twilio\Rest\Preview\Marketplace;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Rest\Preview\Marketplace\AvailableAddOn\AvailableAddOnExtensionList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Rest\Preview\Marketplace\AvailableAddOn\AvailableAddOnExtensionList;
 /**
  * @property string|null $sid
  * @property string|null $friendlyName
@@ -36,7 +32,6 @@ use Twilio\Rest\Preview\Marketplace\AvailableAddOn\AvailableAddOnExtensionList;
 class AvailableAddOnInstance extends InstanceResource
 {
     protected $_extensions;
-
     /**
      * Initialize the AvailableAddOnInstance
      *
@@ -47,59 +42,40 @@ class AvailableAddOnInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'description' => Values::array_get($payload, 'description'),
-            'pricingType' => Values::array_get($payload, 'pricing_type'),
-            'configurationSchema' => Values::array_get($payload, 'configuration_schema'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'description' => Values::array_get($payload, 'description'), 'pricingType' => Values::array_get($payload, 'pricing_type'), 'configurationSchema' => Values::array_get($payload, 'configuration_schema'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return AvailableAddOnContext Context for this AvailableAddOnInstance
      */
-    protected function proxy(): AvailableAddOnContext
+    protected function proxy() : AvailableAddOnContext
     {
         if (!$this->context) {
-            $this->context = new AvailableAddOnContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new AvailableAddOnContext($this->version, $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the AvailableAddOnInstance
      *
      * @return AvailableAddOnInstance Fetched AvailableAddOnInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): AvailableAddOnInstance
+    public function fetch() : AvailableAddOnInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Access the extensions
      */
-    protected function getExtensions(): AvailableAddOnExtensionList
+    protected function getExtensions() : AvailableAddOnExtensionList
     {
         return $this->proxy()->extensions;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -112,27 +88,23 @@ class AvailableAddOnInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Preview.Marketplace.AvailableAddOnInstance ' . \implode(' ', $context) . ']';
     }
 }
-

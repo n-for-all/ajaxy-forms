@@ -13,43 +13,30 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace;
 
-namespace Twilio\Rest\Taskrouter\V1\Workspace;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class TaskChannelList extends ListResource
-    {
+{
     /**
      * Construct the TaskChannelList
      *
      * @param Version $version Version that contains the resource
      * @param string $workspaceSid The SID of the Workspace that the new Task Channel belongs to.
      */
-    public function __construct(
-        Version $version,
-        string $workspaceSid
-    ) {
+    public function __construct(Version $version, string $workspaceSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'workspaceSid' =>
-            $workspaceSid,
-        
-        ];
-
-        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid)
-        .'/TaskChannels';
+        $this->solution = ['workspaceSid' => $workspaceSid];
+        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid) . '/TaskChannels';
     }
-
     /**
      * Create the TaskChannelInstance
      *
@@ -59,30 +46,13 @@ class TaskChannelList extends ListResource
      * @return TaskChannelInstance Created TaskChannelInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $friendlyName, string $uniqueName, array $options = []): TaskChannelInstance
+    public function create(string $friendlyName, string $uniqueName, array $options = []) : TaskChannelInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $friendlyName,
-            'UniqueName' =>
-                $uniqueName,
-            'ChannelOptimizedRouting' =>
-                Serialize::booleanToString($options['channelOptimizedRouting']),
-        ]);
-
+        $data = Values::of(['FriendlyName' => $friendlyName, 'UniqueName' => $uniqueName, 'ChannelOptimizedRouting' => Serialize::booleanToString($options['channelOptimizedRouting'])]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new TaskChannelInstance(
-            $this->version,
-            $payload,
-            $this->solution['workspaceSid']
-        );
+        return new TaskChannelInstance($this->version, $payload, $this->solution['workspaceSid']);
     }
-
-
     /**
      * Reads TaskChannelInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -98,11 +68,10 @@ class TaskChannelList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return TaskChannelInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams TaskChannelInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -121,15 +90,12 @@ class TaskChannelList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of TaskChannelInstance records from the API.
      * Request is executed immediately
@@ -139,24 +105,12 @@ class TaskChannelList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return TaskChannelPage Page of TaskChannelInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): TaskChannelPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : TaskChannelPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new TaskChannelPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of TaskChannelInstance records from the API.
      * Request is executed immediately
@@ -164,40 +118,26 @@ class TaskChannelList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return TaskChannelPage Page of TaskChannelInstance
      */
-    public function getPage(string $targetUrl): TaskChannelPage
+    public function getPage(string $targetUrl) : TaskChannelPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new TaskChannelPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a TaskChannelContext
      *
      * @param string $sid The SID of the Task Channel resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): TaskChannelContext
+    public function getContext(string $sid) : TaskChannelContext
     {
-        return new TaskChannelContext(
-            $this->version,
-            $this->solution['workspaceSid'],
-            $sid
-        );
+        return new TaskChannelContext($this->version, $this->solution['workspaceSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Taskrouter.V1.TaskChannelList]';
     }

@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Sync\V1\Service\SyncStream;
 
-
-namespace Twilio\Rest\Sync\V1\Service\SyncStream;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $sid
  * @property array|null $data
@@ -41,16 +37,10 @@ class StreamMessageInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $serviceSid, string $streamSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'data' => Values::array_get($payload, 'data'),
-        ];
-
-        $this->solution = ['serviceSid' => $serviceSid, 'streamSid' => $streamSid, ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'data' => Values::array_get($payload, 'data')];
+        $this->solution = ['serviceSid' => $serviceSid, 'streamSid' => $streamSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -63,23 +53,19 @@ class StreamMessageInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Sync.V1.StreamMessageInstance]';
     }
 }
-

@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1\Interaction\InteractionChannel;
 
-
-namespace Twilio\Rest\FlexApi\V1\Interaction\InteractionChannel;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class InteractionChannelParticipantContext extends InstanceContext
-    {
+{
     /**
      * Initialize the InteractionChannelParticipantContext
      *
@@ -33,30 +29,13 @@ class InteractionChannelParticipantContext extends InstanceContext
      * @param string $channelSid The Channel Sid for the new Channel Participant.
      * @param string $sid The unique string created by Twilio to identify an Interaction Channel resource.
      */
-    public function __construct(
-        Version $version,
-        $interactionSid,
-        $channelSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $interactionSid, $channelSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'interactionSid' =>
-            $interactionSid,
-        'channelSid' =>
-            $channelSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Interactions/' . \rawurlencode($interactionSid)
-        .'/Channels/' . \rawurlencode($channelSid)
-        .'/Participants/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['interactionSid' => $interactionSid, 'channelSid' => $channelSid, 'sid' => $sid];
+        $this->uri = '/Interactions/' . \rawurlencode($interactionSid) . '/Channels/' . \rawurlencode($channelSid) . '/Participants/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Update the InteractionChannelParticipantInstance
      *
@@ -64,36 +43,22 @@ class InteractionChannelParticipantContext extends InstanceContext
      * @return InteractionChannelParticipantInstance Updated InteractionChannelParticipantInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $status): InteractionChannelParticipantInstance
+    public function update(string $status) : InteractionChannelParticipantInstance
     {
-
-        $data = Values::of([
-            'Status' =>
-                $status,
-        ]);
-
+        $data = Values::of(['Status' => $status]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new InteractionChannelParticipantInstance(
-            $this->version,
-            $payload,
-            $this->solution['interactionSid'],
-            $this->solution['channelSid'],
-            $this->solution['sid']
-        );
+        return new InteractionChannelParticipantInstance($this->version, $payload, $this->solution['interactionSid'], $this->solution['channelSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.InteractionChannelParticipantContext ' . \implode(' ', $context) . ']';
     }

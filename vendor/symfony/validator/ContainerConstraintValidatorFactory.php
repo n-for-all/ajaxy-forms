@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator;
 
-namespace Symfony\Component\Validator;
-
-use Psr\Container\ContainerInterface;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Validator\Exception\ValidatorException;
-
+use Isolated\Psr\Container\ContainerInterface;
+use Isolated\Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Isolated\Symfony\Component\Validator\Exception\ValidatorException;
 /**
  * Uses a service container to create constraint validators.
  *
@@ -24,13 +22,11 @@ class ContainerConstraintValidatorFactory implements ConstraintValidatorFactoryI
 {
     private $container;
     private $validators;
-
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->validators = [];
     }
-
     /**
      * {@inheritdoc}
      *
@@ -40,23 +36,19 @@ class ContainerConstraintValidatorFactory implements ConstraintValidatorFactoryI
     public function getInstance(Constraint $constraint)
     {
         $name = $constraint->validatedBy();
-
         if (!isset($this->validators[$name])) {
             if ($this->container->has($name)) {
                 $this->validators[$name] = $this->container->get($name);
             } else {
-                if (!class_exists($name)) {
-                    throw new ValidatorException(sprintf('Constraint validator "%s" does not exist or is not enabled. Check the "validatedBy" method in your constraint class "%s".', $name, get_debug_type($constraint)));
+                if (!\class_exists($name)) {
+                    throw new ValidatorException(\sprintf('Constraint validator "%s" does not exist or is not enabled. Check the "validatedBy" method in your constraint class "%s".', $name, \get_debug_type($constraint)));
                 }
-
                 $this->validators[$name] = new $name();
             }
         }
-
         if (!$this->validators[$name] instanceof ConstraintValidatorInterface) {
             throw new UnexpectedTypeException($this->validators[$name], ConstraintValidatorInterface::class);
         }
-
         return $this->validators[$name];
     }
 }

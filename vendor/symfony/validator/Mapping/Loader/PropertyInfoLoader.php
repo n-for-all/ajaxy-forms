@@ -8,20 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Validator\Mapping\Loader;
 
-namespace Symfony\Component\Validator\Mapping\Loader;
-
-use Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface;
-use Symfony\Component\PropertyInfo\PropertyListExtractorInterface;
-use Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface;
-use Symfony\Component\PropertyInfo\Type as PropertyInfoType;
-use Symfony\Component\Validator\Constraints\All;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\Type;
-use Symfony\Component\Validator\Mapping\AutoMappingStrategy;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
-
+use Isolated\Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface;
+use Isolated\Symfony\Component\PropertyInfo\PropertyListExtractorInterface;
+use Isolated\Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface;
+use Isolated\Symfony\Component\PropertyInfo\Type as PropertyInfoType;
+use Isolated\Symfony\Component\Validator\Constraints\All;
+use Isolated\Symfony\Component\Validator\Constraints\NotBlank;
+use Isolated\Symfony\Component\Validator\Constraints\NotNull;
+use Isolated\Symfony\Component\Validator\Constraints\Type;
+use Isolated\Symfony\Component\Validator\Mapping\AutoMappingStrategy;
+use Isolated\Symfony\Component\Validator\Mapping\ClassMetadata;
 /**
  * Guesses and loads the appropriate constraints using PropertyInfo.
  *
@@ -30,12 +28,10 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 final class PropertyInfoLoader implements LoaderInterface
 {
     use AutoMappingTrait;
-
     private $listExtractor;
     private $typeExtractor;
     private $accessExtractor;
     private $classValidatorRegexp;
-
     public function __construct(PropertyListExtractorInterface $listExtractor, PropertyTypeExtractorInterface $typeExtractor, PropertyAccessExtractorInterface $accessExtractor, ?string $classValidatorRegexp = null)
     {
         $this->listExtractor = $listExtractor;
@@ -43,78 +39,67 @@ final class PropertyInfoLoader implements LoaderInterface
         $this->accessExtractor = $accessExtractor;
         $this->classValidatorRegexp = $classValidatorRegexp;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function loadClassMetadata(ClassMetadata $metadata): bool
+    public function loadClassMetadata(ClassMetadata $metadata) : bool
     {
         $className = $metadata->getClassName();
-        if (!$properties = $this->listExtractor->getProperties($className)) {
-            return false;
+        if (!($properties = $this->listExtractor->getProperties($className))) {
+            return \false;
         }
-
-        $loaded = false;
+        $loaded = \false;
         $enabledForClass = $this->isAutoMappingEnabledForClass($metadata, $this->classValidatorRegexp);
         foreach ($properties as $property) {
-            if (false === $this->accessExtractor->isWritable($className, $property)) {
+            if (\false === $this->accessExtractor->isWritable($className, $property)) {
                 continue;
             }
-
-            if (!property_exists($className, $property)) {
+            if (!\property_exists($className, $property)) {
                 continue;
             }
-
             $types = $this->typeExtractor->getTypes($className, $property);
             if (null === $types) {
                 continue;
             }
-
             $enabledForProperty = $enabledForClass;
-            $hasTypeConstraint = false;
-            $hasNotNullConstraint = false;
-            $hasNotBlankConstraint = false;
+            $hasTypeConstraint = \false;
+            $hasNotNullConstraint = \false;
+            $hasNotBlankConstraint = \false;
             $allConstraint = null;
             foreach ($metadata->getPropertyMetadata($property) as $propertyMetadata) {
                 // Enabling or disabling auto-mapping explicitly always takes precedence
                 if (AutoMappingStrategy::DISABLED === $propertyMetadata->getAutoMappingStrategy()) {
                     continue 2;
                 }
-
                 if (AutoMappingStrategy::ENABLED === $propertyMetadata->getAutoMappingStrategy()) {
-                    $enabledForProperty = true;
+                    $enabledForProperty = \true;
                 }
-
                 foreach ($propertyMetadata->getConstraints() as $constraint) {
                     if ($constraint instanceof Type) {
-                        $hasTypeConstraint = true;
+                        $hasTypeConstraint = \true;
                     } elseif ($constraint instanceof NotNull) {
-                        $hasNotNullConstraint = true;
+                        $hasNotNullConstraint = \true;
                     } elseif ($constraint instanceof NotBlank) {
-                        $hasNotBlankConstraint = true;
+                        $hasNotBlankConstraint = \true;
                     } elseif ($constraint instanceof All) {
                         $allConstraint = $constraint;
                     }
                 }
             }
-
             if (!$enabledForProperty) {
                 continue;
             }
-
-            $loaded = true;
+            $loaded = \true;
             $builtinTypes = [];
-            $nullable = false;
-            $scalar = true;
+            $nullable = \false;
+            $scalar = \true;
             foreach ($types as $type) {
                 $builtinTypes[] = $type->getBuiltinType();
-
-                if ($scalar && !\in_array($type->getBuiltinType(), [PropertyInfoType::BUILTIN_TYPE_INT, PropertyInfoType::BUILTIN_TYPE_FLOAT, PropertyInfoType::BUILTIN_TYPE_STRING, PropertyInfoType::BUILTIN_TYPE_BOOL], true)) {
-                    $scalar = false;
+                if ($scalar && !\in_array($type->getBuiltinType(), [PropertyInfoType::BUILTIN_TYPE_INT, PropertyInfoType::BUILTIN_TYPE_FLOAT, PropertyInfoType::BUILTIN_TYPE_STRING, PropertyInfoType::BUILTIN_TYPE_BOOL], \true)) {
+                    $scalar = \false;
                 }
-
                 if (!$nullable && $type->isNullable()) {
-                    $nullable = true;
+                    $nullable = \true;
                 }
             }
             if (!$hasTypeConstraint) {
@@ -123,57 +108,48 @@ final class PropertyInfoLoader implements LoaderInterface
                         [$collectionValueType] = $collectionValueType;
                         $this->handleAllConstraint($property, $allConstraint, $collectionValueType, $metadata);
                     }
-
                     $metadata->addPropertyConstraint($property, $this->getTypeConstraint($builtinTypes[0], $types[0]));
                 } elseif ($scalar) {
                     $metadata->addPropertyConstraint($property, new Type(['type' => 'scalar']));
                 }
             }
-
             if (!$nullable && !$hasNotBlankConstraint && !$hasNotNullConstraint) {
                 $metadata->addPropertyConstraint($property, new NotNull());
             }
         }
-
         return $loaded;
     }
-
-    private function getTypeConstraint(string $builtinType, PropertyInfoType $type): Type
+    private function getTypeConstraint(string $builtinType, PropertyInfoType $type) : Type
     {
-        if (PropertyInfoType::BUILTIN_TYPE_OBJECT === $builtinType && null !== $className = $type->getClassName()) {
+        if (PropertyInfoType::BUILTIN_TYPE_OBJECT === $builtinType && null !== ($className = $type->getClassName())) {
             return new Type(['type' => $className]);
         }
-
         return new Type(['type' => $builtinType]);
     }
-
     private function handleAllConstraint(string $property, ?All $allConstraint, PropertyInfoType $propertyInfoType, ClassMetadata $metadata)
     {
-        $containsTypeConstraint = false;
-        $containsNotNullConstraint = false;
+        $containsTypeConstraint = \false;
+        $containsNotNullConstraint = \false;
         if (null !== $allConstraint) {
             foreach ($allConstraint->constraints as $constraint) {
                 if ($constraint instanceof Type) {
-                    $containsTypeConstraint = true;
+                    $containsTypeConstraint = \true;
                 } elseif ($constraint instanceof NotNull) {
-                    $containsNotNullConstraint = true;
+                    $containsNotNullConstraint = \true;
                 }
             }
         }
-
         $constraints = [];
         if (!$containsNotNullConstraint && !$propertyInfoType->isNullable()) {
             $constraints[] = new NotNull();
         }
-
         if (!$containsTypeConstraint) {
             $constraints[] = $this->getTypeConstraint($propertyInfoType->getBuiltinType(), $propertyInfoType);
         }
-
         if (null === $allConstraint) {
             $metadata->addPropertyConstraint($property, new All(['constraints' => $constraints]));
         } else {
-            $allConstraint->constraints = array_merge($allConstraint->constraints, $constraints);
+            $allConstraint->constraints = \array_merge($allConstraint->constraints, $constraints);
         }
     }
 }

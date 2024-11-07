@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Translation\DependencyInjection;
 
-namespace Symfony\Component\Translation\DependencyInjection;
-
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
-
+use Isolated\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Isolated\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
+use Isolated\Symfony\Component\DependencyInjection\ContainerBuilder;
+use Isolated\Symfony\Component\DependencyInjection\Reference;
 class TranslatorPass implements CompilerPassInterface
 {
     private $translatorServiceId;
@@ -23,36 +21,31 @@ class TranslatorPass implements CompilerPassInterface
     private $loaderTag;
     private $debugCommandServiceId;
     private $updateCommandServiceId;
-
     public function __construct(string $translatorServiceId = 'translator.default', string $readerServiceId = 'translation.reader', string $loaderTag = 'translation.loader', string $debugCommandServiceId = 'console.command.translation_debug', string $updateCommandServiceId = 'console.command.translation_extract')
     {
         if (0 < \func_num_args()) {
             trigger_deprecation('symfony/translation', '5.3', 'Configuring "%s" is deprecated.', __CLASS__);
         }
-
         $this->translatorServiceId = $translatorServiceId;
         $this->readerServiceId = $readerServiceId;
         $this->loaderTag = $loaderTag;
         $this->debugCommandServiceId = $debugCommandServiceId;
         $this->updateCommandServiceId = $updateCommandServiceId;
     }
-
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition($this->translatorServiceId)) {
             return;
         }
-
         $loaders = [];
         $loaderRefs = [];
-        foreach ($container->findTaggedServiceIds($this->loaderTag, true) as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds($this->loaderTag, \true) as $id => $attributes) {
             $loaderRefs[$id] = new Reference($id);
             $loaders[$id][] = $attributes[0]['alias'];
             if (isset($attributes[0]['legacy-alias'])) {
                 $loaders[$id][] = $attributes[0]['legacy-alias'];
             }
         }
-
         if ($container->hasDefinition($this->readerServiceId)) {
             $definition = $container->getDefinition($this->readerServiceId);
             foreach ($loaders as $id => $formats) {
@@ -61,22 +54,14 @@ class TranslatorPass implements CompilerPassInterface
                 }
             }
         }
-
-        $container
-            ->findDefinition($this->translatorServiceId)
-            ->replaceArgument(0, ServiceLocatorTagPass::register($container, $loaderRefs))
-            ->replaceArgument(3, $loaders)
-        ;
-
+        $container->findDefinition($this->translatorServiceId)->replaceArgument(0, ServiceLocatorTagPass::register($container, $loaderRefs))->replaceArgument(3, $loaders);
         if (!$container->hasParameter('twig.default_path')) {
             return;
         }
-
-        $paths = array_keys($container->getDefinition('twig.template_iterator')->getArgument(1));
+        $paths = \array_keys($container->getDefinition('twig.template_iterator')->getArgument(1));
         if ($container->hasDefinition($this->debugCommandServiceId)) {
             $definition = $container->getDefinition($this->debugCommandServiceId);
             $definition->replaceArgument(4, $container->getParameter('twig.default_path'));
-
             if (\count($definition->getArguments()) > 6) {
                 $definition->replaceArgument(6, $paths);
             }
@@ -84,7 +69,6 @@ class TranslatorPass implements CompilerPassInterface
         if ($container->hasDefinition($this->updateCommandServiceId)) {
             $definition = $container->getDefinition($this->updateCommandServiceId);
             $definition->replaceArgument(5, $container->getParameter('twig.default_path'));
-
             if (\count($definition->getArguments()) > 7) {
                 $definition->replaceArgument(7, $paths);
             }

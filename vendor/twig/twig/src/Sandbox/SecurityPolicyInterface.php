@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Twig\Sandbox;
+namespace Isolated\Twig\Sandbox;
 
 /**
  * Interface that all security policy classes must implements.
@@ -25,21 +24,19 @@ interface SecurityPolicyInterface
      *
      * @throws SecurityError
      */
-    public function checkSecurity($tags, $filters, $functions): void;
-
+    public function checkSecurity($tags, $filters, $functions) : void;
     /**
      * @param object $obj
      * @param string $method
      *
      * @throws SecurityNotAllowedMethodError
      */
-    public function checkMethodAllowed($obj, $method): void;
-
+    public function checkMethodAllowed($obj, $method) : void;
     /**
      * @param object $obj
      * @param string $property
      *
      * @throws SecurityNotAllowedPropertyError
      */
-    public function checkPropertyAllowed($obj, $property): void;
+    public function checkPropertyAllowed($obj, $property) : void;
 }

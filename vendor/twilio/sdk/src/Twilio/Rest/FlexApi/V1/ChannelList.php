@@ -13,37 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class ChannelList extends ListResource
-    {
+{
     /**
      * Construct the ChannelList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/Channels';
     }
-
     /**
      * Create the ChannelInstance
      *
@@ -55,43 +47,13 @@ class ChannelList extends ListResource
      * @return ChannelInstance Created ChannelInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $flexFlowSid, string $identity, string $chatUserFriendlyName, string $chatFriendlyName, array $options = []): ChannelInstance
+    public function create(string $flexFlowSid, string $identity, string $chatUserFriendlyName, string $chatFriendlyName, array $options = []) : ChannelInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FlexFlowSid' =>
-                $flexFlowSid,
-            'Identity' =>
-                $identity,
-            'ChatUserFriendlyName' =>
-                $chatUserFriendlyName,
-            'ChatFriendlyName' =>
-                $chatFriendlyName,
-            'Target' =>
-                $options['target'],
-            'ChatUniqueName' =>
-                $options['chatUniqueName'],
-            'PreEngagementData' =>
-                $options['preEngagementData'],
-            'TaskSid' =>
-                $options['taskSid'],
-            'TaskAttributes' =>
-                $options['taskAttributes'],
-            'LongLived' =>
-                Serialize::booleanToString($options['longLived']),
-        ]);
-
+        $data = Values::of(['FlexFlowSid' => $flexFlowSid, 'Identity' => $identity, 'ChatUserFriendlyName' => $chatUserFriendlyName, 'ChatFriendlyName' => $chatFriendlyName, 'Target' => $options['target'], 'ChatUniqueName' => $options['chatUniqueName'], 'PreEngagementData' => $options['preEngagementData'], 'TaskSid' => $options['taskSid'], 'TaskAttributes' => $options['taskAttributes'], 'LongLived' => Serialize::booleanToString($options['longLived'])]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new ChannelInstance(
-            $this->version,
-            $payload
-        );
+        return new ChannelInstance($this->version, $payload);
     }
-
-
     /**
      * Reads ChannelInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -107,11 +69,10 @@ class ChannelList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return ChannelInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams ChannelInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -130,15 +91,12 @@ class ChannelList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of ChannelInstance records from the API.
      * Request is executed immediately
@@ -148,24 +106,12 @@ class ChannelList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return ChannelPage Page of ChannelInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): ChannelPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : ChannelPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new ChannelPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of ChannelInstance records from the API.
      * Request is executed immediately
@@ -173,39 +119,26 @@ class ChannelList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return ChannelPage Page of ChannelInstance
      */
-    public function getPage(string $targetUrl): ChannelPage
+    public function getPage(string $targetUrl) : ChannelPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new ChannelPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a ChannelContext
      *
      * @param string $sid The SID of the Flex chat channel resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): ChannelContext
+    public function getContext(string $sid) : ChannelContext
     {
-        return new ChannelContext(
-            $this->version,
-            $sid
-        );
+        return new ChannelContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.FlexApi.V1.ChannelList]';
     }

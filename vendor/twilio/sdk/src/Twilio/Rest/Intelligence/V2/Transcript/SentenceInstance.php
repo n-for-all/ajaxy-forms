@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2\Transcript;
 
-
-namespace Twilio\Rest\Intelligence\V2\Transcript;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property int|null $mediaChannel
  * @property int|null $sentenceIndex
@@ -44,21 +40,10 @@ class SentenceInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $transcriptSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'mediaChannel' => Values::array_get($payload, 'media_channel'),
-            'sentenceIndex' => Values::array_get($payload, 'sentence_index'),
-            'startTime' => Values::array_get($payload, 'start_time'),
-            'endTime' => Values::array_get($payload, 'end_time'),
-            'transcript' => Values::array_get($payload, 'transcript'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'confidence' => Values::array_get($payload, 'confidence'),
-        ];
-
-        $this->solution = ['transcriptSid' => $transcriptSid, ];
+        $this->properties = ['mediaChannel' => Values::array_get($payload, 'media_channel'), 'sentenceIndex' => Values::array_get($payload, 'sentence_index'), 'startTime' => Values::array_get($payload, 'start_time'), 'endTime' => Values::array_get($payload, 'end_time'), 'transcript' => Values::array_get($payload, 'transcript'), 'sid' => Values::array_get($payload, 'sid'), 'confidence' => Values::array_get($payload, 'confidence')];
+        $this->solution = ['transcriptSid' => $transcriptSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -71,23 +56,19 @@ class SentenceInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Intelligence.V2.SentenceInstance]';
     }
 }
-

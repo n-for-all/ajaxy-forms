@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form;
 
-namespace Symfony\Component\Form;
-
-use Symfony\Component\Form\Exception\BadMethodCallException;
-
+use Isolated\Symfony\Component\Form\Exception\BadMethodCallException;
 /**
  * Wraps errors in forms.
  *
@@ -23,17 +21,14 @@ class FormError
     protected $messageTemplate;
     protected $messageParameters;
     protected $messagePluralization;
-
     private $message;
     private $cause;
-
     /**
      * The form that spawned this error.
      *
      * @var FormInterface
      */
     private $origin;
-
     /**
      * Any array key in $messageParameters will be used as a placeholder in
      * $messageTemplate.
@@ -55,7 +50,6 @@ class FormError
         $this->messagePluralization = $messagePluralization;
         $this->cause = $cause;
     }
-
     /**
      * Returns the error message.
      *
@@ -65,7 +59,6 @@ class FormError
     {
         return $this->message;
     }
-
     /**
      * Returns the error message template.
      *
@@ -75,7 +68,6 @@ class FormError
     {
         return $this->messageTemplate;
     }
-
     /**
      * Returns the parameters to be inserted in the message template.
      *
@@ -85,7 +77,6 @@ class FormError
     {
         return $this->messageParameters;
     }
-
     /**
      * Returns the value for error message pluralization.
      *
@@ -95,7 +86,6 @@ class FormError
     {
         return $this->messagePluralization;
     }
-
     /**
      * Returns the cause of this error.
      *
@@ -105,7 +95,6 @@ class FormError
     {
         return $this->cause;
     }
-
     /**
      * Sets the form that caused this error.
      *
@@ -118,10 +107,8 @@ class FormError
         if (null !== $this->origin) {
             throw new BadMethodCallException('setOrigin() must only be called once.');
         }
-
         $this->origin = $origin;
     }
-
     /**
      * Returns the form that caused this error.
      *

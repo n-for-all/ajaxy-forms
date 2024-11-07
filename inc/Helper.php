@@ -4,12 +4,15 @@ namespace Ajaxy\Forms\Inc;
 
 use Ajaxy\Forms\Inc\Types\Transformer\UploadedFilesTransformer;
 use Ajaxy\Forms\Inc\Types\Transformer\UploadedFileTransformer;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Validator\Constraints\All;
-use Symfony\Component\Validator\Constraints\File;
+use Isolated\Symfony\Component\Form\CallbackTransformer;
+use Isolated\Symfony\Component\Form\Extension\Core\Type\FileType;
+use Isolated\Symfony\Component\Form\FormError;
+use Isolated\Symfony\Component\Form\FormEvent;
+use Isolated\Symfony\Component\Form\FormEvents;
+use Isolated\Symfony\Component\Validator\Constraints\All;
+use Isolated\Symfony\Component\Validator\Constraints\File;
+use Isolated\Twig\Environment;
+use Isolated\Twig\Loader\ArrayLoader;
 
 class Helper
 {
@@ -25,8 +28,8 @@ class Helper
      */
     public static function create_twig_template($string, $parameters)
     {
-        $loader = new \Twig\Loader\ArrayLoader([]);
-        $twig = new \Twig\Environment($loader, ['autoescape' => false]);
+        $loader = new ArrayLoader([]);
+        $twig = new Environment($loader, ['autoescape' => false]);
         $template = $twig->createTemplate($string);
         return $template->render($parameters);
     }
@@ -310,7 +313,8 @@ class Helper
         return $nData;
     }
 
-    public static function parse_file_field_options($field_options, $validation = true){
+    public static function parse_file_field_options($field_options, $validation = true)
+    {
         $mime_types = [];
         if (isset($field_options['mime_types']) && !empty($field_options['mime_types'])) {
             $mime_types = \array_map(function ($mime_type) {
@@ -319,7 +323,7 @@ class Helper
         } else {
             $mime_types = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif'];
         }
-        
+
 
         $field_options = array_filter($field_options, function ($key) {
             return !in_array($key, ['max_size', 'max_size_message', 'extensions', 'extensions_message', 'not_found_message', 'not_readable_message', 'upload_cant_write_error_message', 'upload_error_message', 'upload_form_size_error_message', 'upload_ini_size_error_message', 'upload_no_file_error_message', 'upload_partial_error_message', 'mime_types', 'mime_types_message']);
@@ -346,7 +350,7 @@ class Helper
                 $field_options['upload_cant_write_error_message'] ?? null,
                 null,
                 $field_options['upload_error_message'] ?? null
-    
+
             );
             if ($multiple) {
                 $field_options['constraints'][] = $constraint;
@@ -354,22 +358,23 @@ class Helper
             } else {
                 $field_options['constraints'] = $constraint;
             }
-        }else{
+        } else {
             unset($field_options['constraints']);
             unset($field_options['required']);
         }
         return $field_options;
     }
-    public static function validate_upload($form, $file, $extensions, $extensions_message, $invalid_message, $required = true){
+    public static function validate_upload($form, $file, $extensions, $extensions_message, $invalid_message, $required = true)
+    {
         if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
             if ($extensions && \count($extensions) > 0) {
                 if (!in_array(strtolower($file->getClientOriginalExtension()), $extensions)) {
                     $message = \str_replace(['{{ extension }}', '{{ extensions }}'], [$file->getClientOriginalExtension(), implode(', ', $extensions)], $extensions_message ? $extensions_message : 'The extension of the file is invalid ({{ extension }}). Allowed extensions are {{ extensions }}');
-                    $form->addError(new \Symfony\Component\Form\FormError($message));
+                    $form->addError(new FormError($message));
                 }
             }
         } else if ($required) {
-            $form->addError(new \Symfony\Component\Form\FormError($invalid_message));
+            $form->addError(new FormError($invalid_message));
         }
     }
     public static function create_file_field($builder, $field, $field_options, $validation = true)
@@ -385,7 +390,7 @@ class Helper
         $builder->add($field['name'], FileType::class, $field_options);
         if ($multiple) {
             $builder->get($field['name'])->addModelTransformer(new UploadedFilesTransformer());
-            $builder->get($field['name'])->addEventListener(\Symfony\Component\Form\FormEvents::POST_SUBMIT, function ($event) use ($extensions, $extensions_message, $invalid_message, $required) {
+            $builder->get($field['name'])->addEventListener(FormEvents::POST_SUBMIT, function ($event) use ($extensions, $extensions_message, $invalid_message, $required) {
                 $form = $event->getForm();
                 $data = $form->getData();
                 if ($extensions) {
@@ -398,7 +403,7 @@ class Helper
                         self::validate_upload($form, $file, $extensions, $extensions_message, $invalid_message, $required);
                     }
                 } else if ($required) {
-                    $form->addError(new \Symfony\Component\Form\FormError($invalid_message));
+                    $form->addError(new FormError($invalid_message));
                 }
             });
         } else {
@@ -406,7 +411,7 @@ class Helper
             $builder->get($field['name'])->addEventListener(FormEvents::POST_SUBMIT, function ($event) use ($extensions, $extensions_message, $invalid_message, $required) {
                 $form = $event->getForm();
                 $data = $form->getData();
-                
+
                 self::validate_upload($form, $data, $extensions, $extensions_message, $invalid_message, $required);
             });
         }

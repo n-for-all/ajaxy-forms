@@ -13,20 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account;
 
-
-namespace Twilio\Rest\Api\V2010\Account;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Api\V2010\Account\Conference\ParticipantList;
-use Twilio\Rest\Api\V2010\Account\Conference\RecordingList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Api\V2010\Account\Conference\ParticipantList;
+use Isolated\Twilio\Rest\Api\V2010\Account\Conference\RecordingList;
 /**
  * @property string|null $accountSid
  * @property \DateTime|null $dateCreated
@@ -45,7 +41,6 @@ class ConferenceInstance extends InstanceResource
 {
     protected $_participants;
     protected $_recordings;
-
     /**
      * Initialize the ConferenceInstance
      *
@@ -57,57 +52,33 @@ class ConferenceInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $accountSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'apiVersion' => Values::array_get($payload, 'api_version'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'region' => Values::array_get($payload, 'region'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'status' => Values::array_get($payload, 'status'),
-            'uri' => Values::array_get($payload, 'uri'),
-            'subresourceUris' => Values::array_get($payload, 'subresource_uris'),
-            'reasonConferenceEnded' => Values::array_get($payload, 'reason_conference_ended'),
-            'callSidEndingConference' => Values::array_get($payload, 'call_sid_ending_conference'),
-        ];
-
-        $this->solution = ['accountSid' => $accountSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'apiVersion' => Values::array_get($payload, 'api_version'), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'region' => Values::array_get($payload, 'region'), 'sid' => Values::array_get($payload, 'sid'), 'status' => Values::array_get($payload, 'status'), 'uri' => Values::array_get($payload, 'uri'), 'subresourceUris' => Values::array_get($payload, 'subresource_uris'), 'reasonConferenceEnded' => Values::array_get($payload, 'reason_conference_ended'), 'callSidEndingConference' => Values::array_get($payload, 'call_sid_ending_conference')];
+        $this->solution = ['accountSid' => $accountSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ConferenceContext Context for this ConferenceInstance
      */
-    protected function proxy(): ConferenceContext
+    protected function proxy() : ConferenceContext
     {
         if (!$this->context) {
-            $this->context = new ConferenceContext(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['sid']
-            );
+            $this->context = new ConferenceContext($this->version, $this->solution['accountSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the ConferenceInstance
      *
      * @return ConferenceInstance Fetched ConferenceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ConferenceInstance
+    public function fetch() : ConferenceInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the ConferenceInstance
      *
@@ -115,28 +86,24 @@ class ConferenceInstance extends InstanceResource
      * @return ConferenceInstance Updated ConferenceInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ConferenceInstance
+    public function update(array $options = []) : ConferenceInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the participants
      */
-    protected function getParticipants(): ParticipantList
+    protected function getParticipants() : ParticipantList
     {
         return $this->proxy()->participants;
     }
-
     /**
      * Access the recordings
      */
-    protected function getRecordings(): RecordingList
+    protected function getRecordings() : RecordingList
     {
         return $this->proxy()->recordings;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -149,27 +116,23 @@ class ConferenceInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.ConferenceInstance ' . \implode(' ', $context) . ']';
     }
 }
-

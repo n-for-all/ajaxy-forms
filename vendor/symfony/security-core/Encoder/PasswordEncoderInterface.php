@@ -8,14 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Encoder;
 
-namespace Symfony\Component\Security\Core\Encoder;
-
-use Symfony\Component\PasswordHasher\PasswordHasherInterface;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-
+use Isolated\Symfony\Component\PasswordHasher\PasswordHasherInterface;
+use Isolated\Symfony\Component\Security\Core\Exception\BadCredentialsException;
 trigger_deprecation('symfony/security-core', '5.3', 'The "%s" class is deprecated, use "%s" instead.', PasswordEncoderInterface::class, PasswordHasherInterface::class);
-
 /**
  * PasswordEncoderInterface is the interface for all encoders.
  *
@@ -34,7 +31,6 @@ interface PasswordEncoderInterface
      * @throws \InvalidArgumentException If the salt is invalid
      */
     public function encodePassword(string $raw, ?string $salt);
-
     /**
      * Checks a raw password against an encoded password.
      *
@@ -47,9 +43,8 @@ interface PasswordEncoderInterface
      * @throws \InvalidArgumentException If the salt is invalid
      */
     public function isPasswordValid(string $encoded, string $raw, ?string $salt);
-
     /**
      * Checks if an encoded password would benefit from rehashing.
      */
-    public function needsRehash(string $encoded): bool;
+    public function needsRehash(string $encoded) : bool;
 }

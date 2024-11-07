@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Intl\Exception;
+namespace Isolated\Symfony\Component\Intl\Exception;
 
 /**
  * Base exception class for not implemented behaviors of the intl extension in the Locale component.
@@ -21,12 +20,11 @@ namespace Symfony\Component\Intl\Exception;
 class NotImplementedException extends RuntimeException
 {
     public const INTL_INSTALL_MESSAGE = 'Please install the "intl" extension for full localization capabilities.';
-
     /**
      * @param string $message The exception message. A note to install the intl extension is appended to this string
      */
     public function __construct(string $message)
     {
-        parent::__construct($message.' '.self::INTL_INSTALL_MESSAGE);
+        parent::__construct($message . ' ' . self::INTL_INSTALL_MESSAGE);
     }
 }

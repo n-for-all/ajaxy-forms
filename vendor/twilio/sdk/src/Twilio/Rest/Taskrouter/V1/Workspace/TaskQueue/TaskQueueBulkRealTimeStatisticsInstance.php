@@ -13,16 +13,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue;
 
-
-namespace Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property string|null $workspaceSid
@@ -42,19 +38,10 @@ class TaskQueueBulkRealTimeStatisticsInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $workspaceSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'workspaceSid' => Values::array_get($payload, 'workspace_sid'),
-            'taskQueueData' => Values::array_get($payload, 'task_queue_data'),
-            'taskQueueResponseCount' => Values::array_get($payload, 'task_queue_response_count'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['workspaceSid' => $workspaceSid, ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'workspaceSid' => Values::array_get($payload, 'workspace_sid'), 'taskQueueData' => Values::array_get($payload, 'task_queue_data'), 'taskQueueResponseCount' => Values::array_get($payload, 'task_queue_response_count'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['workspaceSid' => $workspaceSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -67,23 +54,19 @@ class TaskQueueBulkRealTimeStatisticsInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Taskrouter.V1.TaskQueueBulkRealTimeStatisticsInstance]';
     }
 }
-

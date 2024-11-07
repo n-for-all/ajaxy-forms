@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Bridge\Twig\Extension;
 
-namespace Symfony\Bridge\Twig\Extension;
-
-use Symfony\Component\Asset\Packages;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
-
+use Isolated\Symfony\Component\Asset\Packages;
+use Isolated\Twig\Extension\AbstractExtension;
+use Isolated\Twig\TwigFunction;
 /**
  * Twig extension for the Symfony Asset component.
  *
@@ -23,38 +21,31 @@ use Twig\TwigFunction;
 final class AssetExtension extends AbstractExtension
 {
     private $packages;
-
     public function __construct(Packages $packages)
     {
         $this->packages = $packages;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getFunctions(): array
+    public function getFunctions() : array
     {
-        return [
-            new TwigFunction('asset', [$this, 'getAssetUrl']),
-            new TwigFunction('asset_version', [$this, 'getAssetVersion']),
-        ];
+        return [new TwigFunction('asset', [$this, 'getAssetUrl']), new TwigFunction('asset_version', [$this, 'getAssetVersion'])];
     }
-
     /**
      * Returns the public url/path of an asset.
      *
      * If the package used to generate the path is an instance of
      * UrlPackage, you will always get a URL and not a path.
      */
-    public function getAssetUrl(string $path, string $packageName = null): string
+    public function getAssetUrl(string $path, string $packageName = null) : string
     {
         return $this->packages->getUrl($path, $packageName);
     }
-
     /**
      * Returns the version of an asset.
      */
-    public function getAssetVersion(string $path, string $packageName = null): string
+    public function getAssetVersion(string $path, string $packageName = null) : string
     {
         return $this->packages->getVersion($path, $packageName);
     }

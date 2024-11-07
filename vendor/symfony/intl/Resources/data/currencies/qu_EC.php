@@ -1,14 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'PEN' => [
-            'PEN',
-            'Sol Peruano',
-        ],
-        'USD' => [
-            '$',
-            'Dólar Americano',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['PEN' => ['PEN', 'Sol Peruano'], 'USD' => ['$', 'Dólar Americano']]];

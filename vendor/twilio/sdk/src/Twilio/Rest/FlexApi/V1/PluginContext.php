@@ -13,49 +13,35 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FlexApi\V1;
 
-
-namespace Twilio\Rest\FlexApi\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\FlexApi\V1\Plugin\PluginVersionsList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\FlexApi\V1\Plugin\PluginVersionsList;
 /**
  * @property PluginVersionsList $pluginVersions
  * @method \Twilio\Rest\FlexApi\V1\Plugin\PluginVersionsContext pluginVersions(string $sid)
  */
 class PluginContext extends InstanceContext
-    {
+{
     protected $_pluginVersions;
-
     /**
      * Initialize the PluginContext
      *
      * @param Version $version Version that contains the resource
      * @param string $sid The SID of the Flex Plugin resource to fetch.
      */
-    public function __construct(
-        Version $version,
-        $sid
-    ) {
+    public function __construct(Version $version, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/PluginService/Plugins/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['sid' => $sid];
+        $this->uri = '/PluginService/Plugins/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Fetch the PluginInstance
      *
@@ -63,23 +49,13 @@ class PluginContext extends InstanceContext
      * @return PluginInstance Fetched PluginInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): PluginInstance
+    public function fetch(array $options = []) : PluginInstance
     {
-
         $options = new Values($options);
-
         $headers = Values::of(['Flex-Metadata' => $options['flexMetadata']]);
-
         $payload = $this->version->fetch('GET', $this->uri, [], [], $headers);
-
-        return new PluginInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new PluginInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Update the PluginInstance
      *
@@ -87,45 +63,24 @@ class PluginContext extends InstanceContext
      * @return PluginInstance Updated PluginInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): PluginInstance
+    public function update(array $options = []) : PluginInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'Description' =>
-                $options['description'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName'], 'Description' => $options['description']]);
         $headers = Values::of(['Flex-Metadata' => $options['flexMetadata']]);
-
         $payload = $this->version->update('POST', $this->uri, [], $data, $headers);
-
-        return new PluginInstance(
-            $this->version,
-            $payload,
-            $this->solution['sid']
-        );
+        return new PluginInstance($this->version, $payload, $this->solution['sid']);
     }
-
-
     /**
      * Access the pluginVersions
      */
-    protected function getPluginVersions(): PluginVersionsList
+    protected function getPluginVersions() : PluginVersionsList
     {
         if (!$this->_pluginVersions) {
-            $this->_pluginVersions = new PluginVersionsList(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->_pluginVersions = new PluginVersionsList($this->version, $this->solution['sid']);
         }
-
         return $this->_pluginVersions;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -133,16 +88,14 @@ class PluginContext extends InstanceContext
      * @return ListResource The requested subresource
      * @throws TwilioException For unknown subresources
      */
-    public function __get(string $name): ListResource
+    public function __get(string $name) : ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -151,26 +104,24 @@ class PluginContext extends InstanceContext
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.FlexApi.V1.PluginContext ' . \implode(' ', $context) . ']';
     }

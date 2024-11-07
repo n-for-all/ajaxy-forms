@@ -13,19 +13,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Proxy\V1\Service\Session;
 
-namespace Twilio\Rest\Proxy\V1\Service\Session;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class ParticipantList extends ListResource
-    {
+{
     /**
      * Construct the ParticipantList
      *
@@ -33,28 +30,13 @@ class ParticipantList extends ListResource
      * @param string $serviceSid The SID of the parent [Service](https://www.twilio.com/docs/proxy/api/service) resource.
      * @param string $sessionSid The SID of the parent [Session](https://www.twilio.com/docs/proxy/api/session) resource.
      */
-    public function __construct(
-        Version $version,
-        string $serviceSid,
-        string $sessionSid
-    ) {
+    public function __construct(Version $version, string $serviceSid, string $sessionSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'serviceSid' =>
-            $serviceSid,
-        
-        'sessionSid' =>
-            $sessionSid,
-        
-        ];
-
-        $this->uri = '/Services/' . \rawurlencode($serviceSid)
-        .'/Sessions/' . \rawurlencode($sessionSid)
-        .'/Participants';
+        $this->solution = ['serviceSid' => $serviceSid, 'sessionSid' => $sessionSid];
+        $this->uri = '/Services/' . \rawurlencode($serviceSid) . '/Sessions/' . \rawurlencode($sessionSid) . '/Participants';
     }
-
     /**
      * Create the ParticipantInstance
      *
@@ -63,33 +45,13 @@ class ParticipantList extends ListResource
      * @return ParticipantInstance Created ParticipantInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $identifier, array $options = []): ParticipantInstance
+    public function create(string $identifier, array $options = []) : ParticipantInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'Identifier' =>
-                $identifier,
-            'FriendlyName' =>
-                $options['friendlyName'],
-            'ProxyIdentifier' =>
-                $options['proxyIdentifier'],
-            'ProxyIdentifierSid' =>
-                $options['proxyIdentifierSid'],
-        ]);
-
+        $data = Values::of(['Identifier' => $identifier, 'FriendlyName' => $options['friendlyName'], 'ProxyIdentifier' => $options['proxyIdentifier'], 'ProxyIdentifierSid' => $options['proxyIdentifierSid']]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new ParticipantInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid'],
-            $this->solution['sessionSid']
-        );
+        return new ParticipantInstance($this->version, $payload, $this->solution['serviceSid'], $this->solution['sessionSid']);
     }
-
-
     /**
      * Reads ParticipantInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -105,11 +67,10 @@ class ParticipantList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return ParticipantInstance[] Array of results
      */
-    public function read(int $limit = null, $pageSize = null): array
+    public function read(int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($limit, $pageSize), false);
+        return \iterator_to_array($this->stream($limit, $pageSize), \false);
     }
-
     /**
      * Streams ParticipantInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -128,15 +89,12 @@ class ParticipantList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(int $limit = null, $pageSize = null): Stream
+    public function stream(int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of ParticipantInstance records from the API.
      * Request is executed immediately
@@ -146,24 +104,12 @@ class ParticipantList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return ParticipantPage Page of ParticipantInstance
      */
-    public function page(
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): ParticipantPage
+    public function page($pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : ParticipantPage
     {
-
-        $params = Values::of([
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new ParticipantPage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of ParticipantInstance records from the API.
      * Request is executed immediately
@@ -171,41 +117,26 @@ class ParticipantList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return ParticipantPage Page of ParticipantInstance
      */
-    public function getPage(string $targetUrl): ParticipantPage
+    public function getPage(string $targetUrl) : ParticipantPage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new ParticipantPage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Constructs a ParticipantContext
      *
      * @param string $sid The Twilio-provided string that uniquely identifies the Participant resource to delete.
      */
-    public function getContext(
-        string $sid
-        
-    ): ParticipantContext
+    public function getContext(string $sid) : ParticipantContext
     {
-        return new ParticipantContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $this->solution['sessionSid'],
-            $sid
-        );
+        return new ParticipantContext($this->version, $this->solution['serviceSid'], $this->solution['sessionSid'], $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Proxy.V1.ParticipantList]';
     }

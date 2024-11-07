@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\ChoiceList\Loader;
 
-namespace Symfony\Component\Form\ChoiceList\Loader;
-
-use Symfony\Component\Form\ChoiceList\ArrayChoiceList;
-use Symfony\Component\Form\ChoiceList\ChoiceListInterface;
-
+use Isolated\Symfony\Component\Form\ChoiceList\ArrayChoiceList;
+use Isolated\Symfony\Component\Form\ChoiceList\ChoiceListInterface;
 /**
  * @author Jules Pietri <jules@heahprod.com>
  */
@@ -25,17 +23,15 @@ abstract class AbstractChoiceLoader implements ChoiceLoaderInterface
      * @var ArrayChoiceList
      */
     private $choiceList;
-
     /**
      * @final
      *
      * {@inheritdoc}
      */
-    public function loadChoiceList(callable $value = null): ChoiceListInterface
+    public function loadChoiceList(callable $value = null) : ChoiceListInterface
     {
         return $this->choiceList ?? ($this->choiceList = new ArrayChoiceList($this->loadChoices(), $value));
     }
-
     /**
      * {@inheritdoc}
      */
@@ -44,14 +40,11 @@ abstract class AbstractChoiceLoader implements ChoiceLoaderInterface
         if (!$values) {
             return [];
         }
-
         if ($this->choiceList) {
             return $this->choiceList->getChoicesForValues($values);
         }
-
         return $this->doLoadChoicesForValues($values, $value);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -60,27 +53,21 @@ abstract class AbstractChoiceLoader implements ChoiceLoaderInterface
         if (!$choices) {
             return [];
         }
-
         if ($value) {
             // if a value callback exists, use it
-            return array_map($value, $choices);
+            return \array_map($value, $choices);
         }
-
         if ($this->choiceList) {
             return $this->choiceList->getValuesForChoices($choices);
         }
-
         return $this->doLoadValuesForChoices($choices);
     }
-
-    abstract protected function loadChoices(): iterable;
-
-    protected function doLoadChoicesForValues(array $values, ?callable $value): array
+    protected abstract function loadChoices() : iterable;
+    protected function doLoadChoicesForValues(array $values, ?callable $value) : array
     {
         return $this->loadChoiceList($value)->getChoicesForValues($values);
     }
-
-    protected function doLoadValuesForChoices(array $choices): array
+    protected function doLoadValuesForChoices(array $choices) : array
     {
         return $this->loadChoiceList()->getValuesForChoices($choices);
     }

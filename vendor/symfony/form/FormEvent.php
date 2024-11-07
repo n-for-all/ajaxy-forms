@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form;
 
-namespace Symfony\Component\Form;
-
-use Symfony\Contracts\EventDispatcher\Event;
-
+use Isolated\Symfony\Contracts\EventDispatcher\Event;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
@@ -20,7 +18,6 @@ class FormEvent extends Event
 {
     private $form;
     protected $data;
-
     /**
      * @param mixed $data The data
      */
@@ -29,7 +26,6 @@ class FormEvent extends Event
         $this->form = $form;
         $this->data = $data;
     }
-
     /**
      * Returns the form at the source of the event.
      *
@@ -39,7 +35,6 @@ class FormEvent extends Event
     {
         return $this->form;
     }
-
     /**
      * Returns the data associated with this event.
      *
@@ -49,7 +44,6 @@ class FormEvent extends Event
     {
         return $this->data;
     }
-
     /**
      * Allows updating with some filtered data.
      *

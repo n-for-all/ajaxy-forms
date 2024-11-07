@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Conversations\V1\Service\Configuration;
 
-
-namespace Twilio\Rest\Conversations\V1\Service\Configuration;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 /**
  * @property string|null $accountSid
  * @property string|null $chatServiceSid
@@ -45,51 +41,33 @@ class NotificationInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $chatServiceSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'chatServiceSid' => Values::array_get($payload, 'chat_service_sid'),
-            'newMessage' => Values::array_get($payload, 'new_message'),
-            'addedToConversation' => Values::array_get($payload, 'added_to_conversation'),
-            'removedFromConversation' => Values::array_get($payload, 'removed_from_conversation'),
-            'logEnabled' => Values::array_get($payload, 'log_enabled'),
-            'url' => Values::array_get($payload, 'url'),
-        ];
-
-        $this->solution = ['chatServiceSid' => $chatServiceSid, ];
+        $this->properties = ['accountSid' => Values::array_get($payload, 'account_sid'), 'chatServiceSid' => Values::array_get($payload, 'chat_service_sid'), 'newMessage' => Values::array_get($payload, 'new_message'), 'addedToConversation' => Values::array_get($payload, 'added_to_conversation'), 'removedFromConversation' => Values::array_get($payload, 'removed_from_conversation'), 'logEnabled' => Values::array_get($payload, 'log_enabled'), 'url' => Values::array_get($payload, 'url')];
+        $this->solution = ['chatServiceSid' => $chatServiceSid];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return NotificationContext Context for this NotificationInstance
      */
-    protected function proxy(): NotificationContext
+    protected function proxy() : NotificationContext
     {
         if (!$this->context) {
-            $this->context = new NotificationContext(
-                $this->version,
-                $this->solution['chatServiceSid']
-            );
+            $this->context = new NotificationContext($this->version, $this->solution['chatServiceSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the NotificationInstance
      *
      * @return NotificationInstance Fetched NotificationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): NotificationInstance
+    public function fetch() : NotificationInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the NotificationInstance
      *
@@ -97,12 +75,10 @@ class NotificationInstance extends InstanceResource
      * @return NotificationInstance Updated NotificationInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): NotificationInstance
+    public function update(array $options = []) : NotificationInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -115,27 +91,23 @@ class NotificationInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Conversations.V1.NotificationInstance ' . \implode(' ', $context) . ']';
     }
 }
-

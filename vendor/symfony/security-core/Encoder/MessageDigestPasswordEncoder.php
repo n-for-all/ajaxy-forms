@@ -8,14 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Encoder;
 
-namespace Symfony\Component\Security\Core\Encoder;
-
-use Symfony\Component\PasswordHasher\Hasher\MessageDigestPasswordHasher;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-
+use Isolated\Symfony\Component\PasswordHasher\Hasher\MessageDigestPasswordHasher;
+use Isolated\Symfony\Component\Security\Core\Exception\BadCredentialsException;
 trigger_deprecation('symfony/security-core', '5.3', 'The "%s" class is deprecated, use "%s" instead.', MessageDigestPasswordEncoder::class, MessageDigestPasswordHasher::class);
-
 /**
  * MessageDigestPasswordEncoder uses a message digest algorithm.
  *
@@ -29,26 +26,22 @@ class MessageDigestPasswordEncoder extends BasePasswordEncoder
     private $encodeHashAsBase64;
     private $iterations = 1;
     private $encodedLength = -1;
-
     /**
      * @param string $algorithm          The digest algorithm to use
      * @param bool   $encodeHashAsBase64 Whether to base64 encode the password hash
      * @param int    $iterations         The number of iterations to use to stretch the password hash
      */
-    public function __construct(string $algorithm = 'sha512', bool $encodeHashAsBase64 = true, int $iterations = 5000)
+    public function __construct(string $algorithm = 'sha512', bool $encodeHashAsBase64 = \true, int $iterations = 5000)
     {
         $this->algorithm = $algorithm;
         $this->encodeHashAsBase64 = $encodeHashAsBase64;
-
         try {
             $this->encodedLength = \strlen($this->encodePassword('', 'salt'));
         } catch (\LogicException $e) {
             // ignore algorithm not supported
         }
-
         $this->iterations = $iterations;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -57,31 +50,25 @@ class MessageDigestPasswordEncoder extends BasePasswordEncoder
         if ($this->isPasswordTooLong($raw)) {
             throw new BadCredentialsException('Invalid password.');
         }
-
-        if (!\in_array($this->algorithm, hash_algos(), true)) {
-            throw new \LogicException(sprintf('The algorithm "%s" is not supported.', $this->algorithm));
+        if (!\in_array($this->algorithm, \hash_algos(), \true)) {
+            throw new \LogicException(\sprintf('The algorithm "%s" is not supported.', $this->algorithm));
         }
-
         $salted = $this->mergePasswordAndSalt($raw, $salt);
-        $digest = hash($this->algorithm, $salted, true);
-
+        $digest = \hash($this->algorithm, $salted, \true);
         // "stretch" hash
         for ($i = 1; $i < $this->iterations; ++$i) {
-            $digest = hash($this->algorithm, $digest.$salted, true);
+            $digest = \hash($this->algorithm, $digest . $salted, \true);
         }
-
-        return $this->encodeHashAsBase64 ? base64_encode($digest) : bin2hex($digest);
+        return $this->encodeHashAsBase64 ? \base64_encode($digest) : \bin2hex($digest);
     }
-
     /**
      * {@inheritdoc}
      */
     public function isPasswordValid(string $encoded, string $raw, ?string $salt)
     {
-        if (\strlen($encoded) !== $this->encodedLength || str_contains($encoded, '$')) {
-            return false;
+        if (\strlen($encoded) !== $this->encodedLength || \str_contains($encoded, '$')) {
+            return \false;
         }
-
         return !$this->isPasswordTooLong($raw) && $this->comparePasswords($encoded, $this->encodePassword($raw, $salt));
     }
 }

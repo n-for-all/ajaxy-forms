@@ -13,17 +13,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Message;
 
-
-namespace Twilio\Rest\Api\V2010\Account\Message;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class MediaContext extends InstanceContext
-    {
+{
     /**
      * Initialize the MediaContext
      *
@@ -32,74 +28,44 @@ class MediaContext extends InstanceContext
      * @param string $messageSid The SID of the Message resource that is associated with the Media resource.
      * @param string $sid The unique identifier of the to-be-deleted Media resource.
      */
-    public function __construct(
-        Version $version,
-        $accountSid,
-        $messageSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $accountSid, $messageSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'accountSid' =>
-            $accountSid,
-        'messageSid' =>
-            $messageSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Accounts/' . \rawurlencode($accountSid)
-        .'/Messages/' . \rawurlencode($messageSid)
-        .'/Media/' . \rawurlencode($sid)
-        .'.json';
+        $this->solution = ['accountSid' => $accountSid, 'messageSid' => $messageSid, 'sid' => $sid];
+        $this->uri = '/Accounts/' . \rawurlencode($accountSid) . '/Messages/' . \rawurlencode($messageSid) . '/Media/' . \rawurlencode($sid) . '.json';
     }
-
     /**
      * Delete the MediaInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the MediaInstance
      *
      * @return MediaInstance Fetched MediaInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): MediaInstance
+    public function fetch() : MediaInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new MediaInstance(
-            $this->version,
-            $payload,
-            $this->solution['accountSid'],
-            $this->solution['messageSid'],
-            $this->solution['sid']
-        );
+        return new MediaInstance($this->version, $payload, $this->solution['accountSid'], $this->solution['messageSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.MediaContext ' . \implode(' ', $context) . ']';
     }

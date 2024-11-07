@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Bridge\Twig\Extension;
 
-namespace Symfony\Bridge\Twig\Extension;
-
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
-use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
-use Symfony\Component\HttpKernel\Fragment\FragmentUriGeneratorInterface;
-
+use Isolated\Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Isolated\Symfony\Component\HttpKernel\Fragment\FragmentHandler;
+use Isolated\Symfony\Component\HttpKernel\Fragment\FragmentUriGeneratorInterface;
 /**
  * Provides integration with the HttpKernel component.
  *
@@ -24,13 +22,11 @@ final class HttpKernelRuntime
 {
     private $handler;
     private $fragmentUriGenerator;
-
     public function __construct(FragmentHandler $handler, FragmentUriGeneratorInterface $fragmentUriGenerator = null)
     {
         $this->handler = $handler;
         $this->fragmentUriGenerator = $fragmentUriGenerator;
     }
-
     /**
      * Renders a fragment.
      *
@@ -38,14 +34,12 @@ final class HttpKernelRuntime
      *
      * @see FragmentHandler::render()
      */
-    public function renderFragment($uri, array $options = []): string
+    public function renderFragment($uri, array $options = []) : string
     {
         $strategy = $options['strategy'] ?? 'inline';
         unset($options['strategy']);
-
         return $this->handler->render($uri, $strategy, $options);
     }
-
     /**
      * Renders a fragment.
      *
@@ -53,17 +47,15 @@ final class HttpKernelRuntime
      *
      * @see FragmentHandler::render()
      */
-    public function renderFragmentStrategy(string $strategy, $uri, array $options = []): string
+    public function renderFragmentStrategy(string $strategy, $uri, array $options = []) : string
     {
         return $this->handler->render($uri, $strategy, $options);
     }
-
-    public function generateFragmentUri(ControllerReference $controller, bool $absolute = false, bool $strict = true, bool $sign = true): string
+    public function generateFragmentUri(ControllerReference $controller, bool $absolute = \false, bool $strict = \true, bool $sign = \true) : string
     {
         if (null === $this->fragmentUriGenerator) {
-            throw new \LogicException(sprintf('An instance of "%s" must be provided to use "%s()".', FragmentUriGeneratorInterface::class, __METHOD__));
+            throw new \LogicException(\sprintf('An instance of "%s" must be provided to use "%s()".', FragmentUriGeneratorInterface::class, __METHOD__));
         }
-
         return $this->fragmentUriGenerator->generate($controller, null, $absolute, $strict, $sign);
     }
 }

@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Intl\Util;
+namespace Isolated\Symfony\Component\Intl\Util;
 
 /**
  * Facilitates the comparison of ICU version strings.
@@ -54,10 +53,8 @@ class IcuVersion
     {
         $version1 = self::normalize($version1, $precision);
         $version2 = self::normalize($version2, $precision);
-
-        return version_compare($version1, $version2, $operator);
+        return \version_compare($version1, $version2, $operator);
     }
-
     /**
      * Normalizes a version string to the number of components given in the
      * parameter $precision.
@@ -84,15 +81,12 @@ class IcuVersion
      */
     public static function normalize(string $version, ?int $precision)
     {
-        $version = preg_replace('/^(\d)\.(\d)/', '$1$2', $version);
-
+        $version = \preg_replace('/^(\\d)\\.(\\d)/', '$1$2', $version);
         if (1 === \strlen($version)) {
             $version .= '0';
         }
-
         return Version::normalize($version, $precision);
     }
-
     /**
      * Must not be instantiated.
      */

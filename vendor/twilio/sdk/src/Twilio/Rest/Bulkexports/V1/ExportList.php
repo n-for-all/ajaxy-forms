@@ -13,68 +13,50 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Bulkexports\V1;
 
-namespace Twilio\Rest\Bulkexports\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Version;
-use Twilio\InstanceContext;
-use Twilio\Rest\Bulkexports\V1\Export\JobList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
+use Isolated\Twilio\Rest\Bulkexports\V1\Export\JobList;
 /**
  * @property JobList $jobs
  * @method \Twilio\Rest\Bulkexports\V1\Export\JobContext jobs(string $jobSid)
  */
 class ExportList extends ListResource
-    {
+{
     protected $_jobs = null;
-
     /**
      * Construct the ExportList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a ExportContext
      *
      * @param string $resourceType The type of communication – Messages, Calls, Conferences, and Participants
      */
-    public function getContext(
-        string $resourceType
-        
-    ): ExportContext
+    public function getContext(string $resourceType) : ExportContext
     {
-        return new ExportContext(
-            $this->version,
-            $resourceType
-        );
+        return new ExportContext($this->version, $resourceType);
     }
-
     /**
      * Access the jobs
      */
-    protected function getJobs(): JobList
+    protected function getJobs() : JobList
     {
         if (!$this->_jobs) {
-            $this->_jobs = new JobList(
-                $this->version
-            );
+            $this->_jobs = new JobList($this->version);
         }
         return $this->_jobs;
     }
-
     /**
      * Magic getter to lazy load subresources
      *
@@ -86,12 +68,10 @@ class ExportList extends ListResource
     {
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown subresource ' . $name);
     }
-
     /**
      * Magic caller to get resource contexts
      *
@@ -100,22 +80,20 @@ class ExportList extends ListResource
      * @return InstanceContext The requested resource context
      * @throws TwilioException For unknown resource
      */
-    public function __call(string $name, array $arguments): InstanceContext
+    public function __call(string $name, array $arguments) : InstanceContext
     {
-        $property = $this->$name;
+        $property = $this->{$name};
         if (\method_exists($property, 'getContext')) {
             return \call_user_func_array(array($property, 'getContext'), $arguments);
         }
-
         throw new TwilioException('Resource does not have a context');
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Bulkexports.V1.ExportList]';
     }

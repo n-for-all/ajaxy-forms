@@ -13,35 +13,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Accounts\V1;
 
-namespace Twilio\Rest\Accounts\V1;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
 class SafelistList extends ListResource
-    {
+{
     /**
      * Construct the SafelistList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
-
+        $this->solution = [];
         $this->uri = '/SafeList/Numbers';
     }
-
     /**
      * Create the SafelistInstance
      *
@@ -49,23 +41,12 @@ class SafelistList extends ListResource
      * @return SafelistInstance Created SafelistInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function create(string $phoneNumber): SafelistInstance
+    public function create(string $phoneNumber) : SafelistInstance
     {
-
-        $data = Values::of([
-            'PhoneNumber' =>
-                $phoneNumber,
-        ]);
-
+        $data = Values::of(['PhoneNumber' => $phoneNumber]);
         $payload = $this->version->create('POST', $this->uri, [], $data);
-
-        return new SafelistInstance(
-            $this->version,
-            $payload
-        );
+        return new SafelistInstance($this->version, $payload);
     }
-
-
     /**
      * Delete the SafelistInstance
      *
@@ -73,20 +54,12 @@ class SafelistList extends ListResource
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(array $options = []): bool
+    public function delete(array $options = []) : bool
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'PhoneNumber' =>
-                $options['phoneNumber'],
-        ]);
-
+        $params = Values::of(['PhoneNumber' => $options['phoneNumber']]);
         return $this->version->delete('DELETE', $this->uri, $params);
     }
-
-
     /**
      * Fetch the SafelistInstance
      *
@@ -94,31 +67,19 @@ class SafelistList extends ListResource
      * @return SafelistInstance Fetched SafelistInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(array $options = []): SafelistInstance
+    public function fetch(array $options = []) : SafelistInstance
     {
-
         $options = new Values($options);
-
-        $params = Values::of([
-            'PhoneNumber' =>
-                $options['phoneNumber'],
-        ]);
-
+        $params = Values::of(['PhoneNumber' => $options['phoneNumber']]);
         $payload = $this->version->fetch('GET', $this->uri, $params, []);
-
-        return new SafelistInstance(
-            $this->version,
-            $payload
-        );
+        return new SafelistInstance($this->version, $payload);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Accounts.V1.SafelistList]';
     }

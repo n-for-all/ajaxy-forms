@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\Type;
 
-namespace Symfony\Component\Form\Extension\Core\Type;
-
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\Form\AbstractType;
+use Isolated\Symfony\Component\OptionsResolver\Options;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 class RangeType extends AbstractType
 {
     /**
@@ -22,15 +20,10 @@ class RangeType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'invalid_message' => function (Options $options, $previousValue) {
-                return ($options['legacy_error_messages'] ?? true)
-                    ? $previousValue
-                    : 'Please choose a valid range.';
-            },
-        ]);
+        $resolver->setDefaults(['invalid_message' => function (Options $options, $previousValue) {
+            return $options['legacy_error_messages'] ?? \true ? $previousValue : 'Please choose a valid range.';
+        }]);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -38,7 +31,6 @@ class RangeType extends AbstractType
     {
         return TextType::class;
     }
-
     /**
      * {@inheritdoc}
      */

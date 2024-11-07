@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Api\V2010\Account\Queue;
 
-
-namespace Twilio\Rest\Api\V2010\Account\Queue;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
 /**
  * @property string|null $callSid
  * @property \DateTime|null $dateEnqueued
@@ -47,52 +43,33 @@ class MemberInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $accountSid, string $queueSid, string $callSid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'callSid' => Values::array_get($payload, 'call_sid'),
-            'dateEnqueued' => Deserialize::dateTime(Values::array_get($payload, 'date_enqueued')),
-            'position' => Values::array_get($payload, 'position'),
-            'uri' => Values::array_get($payload, 'uri'),
-            'waitTime' => Values::array_get($payload, 'wait_time'),
-            'queueSid' => Values::array_get($payload, 'queue_sid'),
-        ];
-
-        $this->solution = ['accountSid' => $accountSid, 'queueSid' => $queueSid, 'callSid' => $callSid ?: $this->properties['callSid'], ];
+        $this->properties = ['callSid' => Values::array_get($payload, 'call_sid'), 'dateEnqueued' => Deserialize::dateTime(Values::array_get($payload, 'date_enqueued')), 'position' => Values::array_get($payload, 'position'), 'uri' => Values::array_get($payload, 'uri'), 'waitTime' => Values::array_get($payload, 'wait_time'), 'queueSid' => Values::array_get($payload, 'queue_sid')];
+        $this->solution = ['accountSid' => $accountSid, 'queueSid' => $queueSid, 'callSid' => $callSid ?: $this->properties['callSid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return MemberContext Context for this MemberInstance
      */
-    protected function proxy(): MemberContext
+    protected function proxy() : MemberContext
     {
         if (!$this->context) {
-            $this->context = new MemberContext(
-                $this->version,
-                $this->solution['accountSid'],
-                $this->solution['queueSid'],
-                $this->solution['callSid']
-            );
+            $this->context = new MemberContext($this->version, $this->solution['accountSid'], $this->solution['queueSid'], $this->solution['callSid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the MemberInstance
      *
      * @return MemberInstance Fetched MemberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): MemberInstance
+    public function fetch() : MemberInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the MemberInstance
      *
@@ -101,12 +78,10 @@ class MemberInstance extends InstanceResource
      * @return MemberInstance Updated MemberInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(string $url, array $options = []): MemberInstance
+    public function update(string $url, array $options = []) : MemberInstance
     {
-
         return $this->proxy()->update($url, $options);
     }
-
     /**
      * Magic getter to access properties
      *
@@ -119,27 +94,23 @@ class MemberInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Api.V2010.MemberInstance ' . \implode(' ', $context) . ']';
     }
 }
-

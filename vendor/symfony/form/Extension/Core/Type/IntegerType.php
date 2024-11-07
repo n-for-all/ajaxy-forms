@@ -8,17 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Form\Extension\Core\Type;
 
-namespace Symfony\Component\Form\Extension\Core\Type;
-
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\DataTransformer\IntegerToLocalizedStringTransformer;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Isolated\Symfony\Component\Form\AbstractType;
+use Isolated\Symfony\Component\Form\Extension\Core\DataTransformer\IntegerToLocalizedStringTransformer;
+use Isolated\Symfony\Component\Form\FormBuilderInterface;
+use Isolated\Symfony\Component\Form\FormInterface;
+use Isolated\Symfony\Component\Form\FormView;
+use Isolated\Symfony\Component\OptionsResolver\Options;
+use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
 class IntegerType extends AbstractType
 {
     /**
@@ -28,7 +26,6 @@ class IntegerType extends AbstractType
     {
         $builder->addViewTransformer(new IntegerToLocalizedStringTransformer($options['grouping'], $options['rounding_mode'], !$options['grouping'] ? 'en' : null));
     }
-
     /**
      * {@inheritdoc}
      */
@@ -38,35 +35,22 @@ class IntegerType extends AbstractType
             $view->vars['type'] = 'text';
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'grouping' => false,
+            'grouping' => \false,
             // Integer cast rounds towards 0, so do the same when displaying fractions
             'rounding_mode' => \NumberFormatter::ROUND_DOWN,
-            'compound' => false,
+            'compound' => \false,
             'invalid_message' => function (Options $options, $previousValue) {
-                return ($options['legacy_error_messages'] ?? true)
-                    ? $previousValue
-                    : 'Please enter an integer.';
+                return $options['legacy_error_messages'] ?? \true ? $previousValue : 'Please enter an integer.';
             },
         ]);
-
-        $resolver->setAllowedValues('rounding_mode', [
-            \NumberFormatter::ROUND_FLOOR,
-            \NumberFormatter::ROUND_DOWN,
-            \NumberFormatter::ROUND_HALFDOWN,
-            \NumberFormatter::ROUND_HALFEVEN,
-            \NumberFormatter::ROUND_HALFUP,
-            \NumberFormatter::ROUND_UP,
-            \NumberFormatter::ROUND_CEILING,
-        ]);
+        $resolver->setAllowedValues('rounding_mode', [\NumberFormatter::ROUND_FLOOR, \NumberFormatter::ROUND_DOWN, \NumberFormatter::ROUND_HALFDOWN, \NumberFormatter::ROUND_HALFEVEN, \NumberFormatter::ROUND_HALFUP, \NumberFormatter::ROUND_UP, \NumberFormatter::ROUND_CEILING]);
     }
-
     /**
      * {@inheritdoc}
      */

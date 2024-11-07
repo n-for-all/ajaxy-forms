@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator\Mapping\Loader;
+namespace Isolated\Symfony\Component\Validator\Mapping\Loader;
 
 /**
  * Base loader for loading validation metadata from a list of files.
@@ -31,7 +30,6 @@ abstract class FilesLoader extends LoaderChain
     {
         parent::__construct($this->getFileLoaders($paths));
     }
-
     /**
      * Returns an array of file loaders for the given file paths.
      *
@@ -40,18 +38,15 @@ abstract class FilesLoader extends LoaderChain
     protected function getFileLoaders(array $paths)
     {
         $loaders = [];
-
         foreach ($paths as $path) {
             $loaders[] = $this->getFileLoaderInstance($path);
         }
-
         return $loaders;
     }
-
     /**
      * Creates a loader for the given file path.
      *
      * @return LoaderInterface
      */
-    abstract protected function getFileLoaderInstance(string $path);
+    protected abstract function getFileLoaderInstance(string $path);
 }

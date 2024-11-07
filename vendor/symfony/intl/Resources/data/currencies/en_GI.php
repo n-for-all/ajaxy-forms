@@ -1,14 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'GBP' => [
-            'GB£',
-            'British Pound',
-        ],
-        'GIP' => [
-            '£',
-            'Gibraltar Pound',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['GBP' => ['GB£', 'British Pound'], 'GIP' => ['£', 'Gibraltar Pound']]];

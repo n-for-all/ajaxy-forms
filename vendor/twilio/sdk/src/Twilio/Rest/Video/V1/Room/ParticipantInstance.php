@@ -13,22 +13,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Video\V1\Room;
 
-
-namespace Twilio\Rest\Video\V1\Room;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Rest\Video\V1\Room\Participant\SubscribeRulesList;
-use Twilio\Rest\Video\V1\Room\Participant\SubscribedTrackList;
-use Twilio\Rest\Video\V1\Room\Participant\PublishedTrackList;
-use Twilio\Rest\Video\V1\Room\Participant\AnonymizeList;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Rest\Video\V1\Room\Participant\SubscribeRulesList;
+use Isolated\Twilio\Rest\Video\V1\Room\Participant\SubscribedTrackList;
+use Isolated\Twilio\Rest\Video\V1\Room\Participant\PublishedTrackList;
+use Isolated\Twilio\Rest\Video\V1\Room\Participant\AnonymizeList;
 /**
  * @property string|null $sid
  * @property string|null $roomSid
@@ -49,7 +45,6 @@ class ParticipantInstance extends InstanceResource
     protected $_subscribedTracks;
     protected $_publishedTracks;
     protected $_anonymize;
-
     /**
      * Initialize the ParticipantInstance
      *
@@ -61,57 +56,33 @@ class ParticipantInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $roomSid, string $sid = null)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'roomSid' => Values::array_get($payload, 'room_sid'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'status' => Values::array_get($payload, 'status'),
-            'identity' => Values::array_get($payload, 'identity'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'startTime' => Deserialize::dateTime(Values::array_get($payload, 'start_time')),
-            'endTime' => Deserialize::dateTime(Values::array_get($payload, 'end_time')),
-            'duration' => Values::array_get($payload, 'duration'),
-            'url' => Values::array_get($payload, 'url'),
-            'links' => Values::array_get($payload, 'links'),
-        ];
-
-        $this->solution = ['roomSid' => $roomSid, 'sid' => $sid ?: $this->properties['sid'], ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'roomSid' => Values::array_get($payload, 'room_sid'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'status' => Values::array_get($payload, 'status'), 'identity' => Values::array_get($payload, 'identity'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'startTime' => Deserialize::dateTime(Values::array_get($payload, 'start_time')), 'endTime' => Deserialize::dateTime(Values::array_get($payload, 'end_time')), 'duration' => Values::array_get($payload, 'duration'), 'url' => Values::array_get($payload, 'url'), 'links' => Values::array_get($payload, 'links')];
+        $this->solution = ['roomSid' => $roomSid, 'sid' => $sid ?: $this->properties['sid']];
     }
-
     /**
      * Generate an instance context for the instance, the context is capable of
      * performing various actions.  All instance actions are proxied to the context
      *
      * @return ParticipantContext Context for this ParticipantInstance
      */
-    protected function proxy(): ParticipantContext
+    protected function proxy() : ParticipantContext
     {
         if (!$this->context) {
-            $this->context = new ParticipantContext(
-                $this->version,
-                $this->solution['roomSid'],
-                $this->solution['sid']
-            );
+            $this->context = new ParticipantContext($this->version, $this->solution['roomSid'], $this->solution['sid']);
         }
-
         return $this->context;
     }
-
     /**
      * Fetch the ParticipantInstance
      *
      * @return ParticipantInstance Fetched ParticipantInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ParticipantInstance
+    public function fetch() : ParticipantInstance
     {
-
         return $this->proxy()->fetch();
     }
-
     /**
      * Update the ParticipantInstance
      *
@@ -119,44 +90,38 @@ class ParticipantInstance extends InstanceResource
      * @return ParticipantInstance Updated ParticipantInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ParticipantInstance
+    public function update(array $options = []) : ParticipantInstance
     {
-
         return $this->proxy()->update($options);
     }
-
     /**
      * Access the subscribeRules
      */
-    protected function getSubscribeRules(): SubscribeRulesList
+    protected function getSubscribeRules() : SubscribeRulesList
     {
         return $this->proxy()->subscribeRules;
     }
-
     /**
      * Access the subscribedTracks
      */
-    protected function getSubscribedTracks(): SubscribedTrackList
+    protected function getSubscribedTracks() : SubscribedTrackList
     {
         return $this->proxy()->subscribedTracks;
     }
-
     /**
      * Access the publishedTracks
      */
-    protected function getPublishedTracks(): PublishedTrackList
+    protected function getPublishedTracks() : PublishedTrackList
     {
         return $this->proxy()->publishedTracks;
     }
-
     /**
      * Access the anonymize
      */
-    protected function getAnonymize(): AnonymizeList
+    protected function getAnonymize() : AnonymizeList
     {
         return $this->proxy()->anonymize;
     }
-
     /**
      * Magic getter to access properties
      *
@@ -169,27 +134,23 @@ class ParticipantInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Video.V1.ParticipantInstance ' . \implode(' ', $context) . ']';
     }
 }
-

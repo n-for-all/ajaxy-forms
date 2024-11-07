@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Symfony\Component\Validator;
+namespace Isolated\Symfony\Component\Validator;
 
 /**
  * A violation of a constraint that happened during validation.
@@ -39,7 +38,6 @@ interface ConstraintViolationInterface
      * @return string|\Stringable
      */
     public function getMessage();
-
     /**
      * Returns the raw violation message.
      *
@@ -50,7 +48,6 @@ interface ConstraintViolationInterface
      * @return string The raw violation message
      */
     public function getMessageTemplate();
-
     /**
      * Returns the parameters to be inserted into the raw violation message.
      *
@@ -60,7 +57,6 @@ interface ConstraintViolationInterface
      * @see getMessageTemplate()
      */
     public function getParameters();
-
     /**
      * Returns a number for pluralizing the violation message.
      *
@@ -78,7 +74,6 @@ interface ConstraintViolationInterface
      * @return int|null The number to use to pluralize of the message
      */
     public function getPlural();
-
     /**
      * Returns the root element of the validation.
      *
@@ -88,7 +83,6 @@ interface ConstraintViolationInterface
      *               is not necessarily the value that was originally validated.
      */
     public function getRoot();
-
     /**
      * Returns the property path from the root element to the violation.
      *
@@ -102,7 +96,6 @@ interface ConstraintViolationInterface
      *                for example "addresses[1].street".
      */
     public function getPropertyPath();
-
     /**
      * Returns the value that caused the violation.
      *
@@ -110,7 +103,6 @@ interface ConstraintViolationInterface
      *               fail
      */
     public function getInvalidValue();
-
     /**
      * Returns a machine-digestible error code for the violation.
      *

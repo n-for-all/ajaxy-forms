@@ -13,52 +13,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\FrontlineApi\V1;
 
-namespace Twilio\Rest\FrontlineApi\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class UserList extends ListResource
-    {
+{
     /**
      * Construct the UserList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a UserContext
      *
      * @param string $sid The SID of the User resource to fetch. This value can be either the `sid` or the `identity` of the User resource to fetch.
      */
-    public function getContext(
-        string $sid
-        
-    ): UserContext
+    public function getContext(string $sid) : UserContext
     {
-        return new UserContext(
-            $this->version,
-            $sid
-        );
+        return new UserContext($this->version, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.FrontlineApi.V1.UserList]';
     }

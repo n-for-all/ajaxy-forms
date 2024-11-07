@@ -13,42 +13,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Intelligence\V2\Transcript;
 
-namespace Twilio\Rest\Intelligence\V2\Transcript;
-
-use Twilio\ListResource;
-use Twilio\Options;
-use Twilio\Stream;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Serialize;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Stream;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Serialize;
 class SentenceList extends ListResource
-    {
+{
     /**
      * Construct the SentenceList
      *
      * @param Version $version Version that contains the resource
      * @param string $transcriptSid The unique SID identifier of the Transcript.
      */
-    public function __construct(
-        Version $version,
-        string $transcriptSid
-    ) {
+    public function __construct(Version $version, string $transcriptSid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'transcriptSid' =>
-            $transcriptSid,
-        
-        ];
-
-        $this->uri = '/Transcripts/' . \rawurlencode($transcriptSid)
-        .'/Sentences';
+        $this->solution = ['transcriptSid' => $transcriptSid];
+        $this->uri = '/Transcripts/' . \rawurlencode($transcriptSid) . '/Sentences';
     }
-
     /**
      * Reads SentenceInstance records from the API as a list.
      * Unlike stream(), this operation is eager and will load `limit` records into
@@ -65,11 +52,10 @@ class SentenceList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return SentenceInstance[] Array of results
      */
-    public function read(array $options = [], int $limit = null, $pageSize = null): array
+    public function read(array $options = [], int $limit = null, $pageSize = null) : array
     {
-        return \iterator_to_array($this->stream($options, $limit, $pageSize), false);
+        return \iterator_to_array($this->stream($options, $limit, $pageSize), \false);
     }
-
     /**
      * Streams SentenceInstance records from the API as a generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -89,15 +75,12 @@ class SentenceList extends ListResource
      *                        efficient page size, i.e. min(limit, 1000)
      * @return Stream stream of results
      */
-    public function stream(array $options = [], int $limit = null, $pageSize = null): Stream
+    public function stream(array $options = [], int $limit = null, $pageSize = null) : Stream
     {
         $limits = $this->version->readLimits($limit, $pageSize);
-
         $page = $this->page($options, $limits['pageSize']);
-
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
-
     /**
      * Retrieve a single page of SentenceInstance records from the API.
      * Request is executed immediately
@@ -107,28 +90,13 @@ class SentenceList extends ListResource
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return SentencePage Page of SentenceInstance
      */
-    public function page(
-        array $options = [],
-        $pageSize = Values::NONE,
-        string $pageToken = Values::NONE,
-        $pageNumber = Values::NONE
-    ): SentencePage
+    public function page(array $options = [], $pageSize = Values::NONE, string $pageToken = Values::NONE, $pageNumber = Values::NONE) : SentencePage
     {
         $options = new Values($options);
-
-        $params = Values::of([
-            'Redacted' =>
-                Serialize::booleanToString($options['redacted']),
-            'PageToken' => $pageToken,
-            'Page' => $pageNumber,
-            'PageSize' => $pageSize,
-        ]);
-
+        $params = Values::of(['Redacted' => Serialize::booleanToString($options['redacted']), 'PageToken' => $pageToken, 'Page' => $pageNumber, 'PageSize' => $pageSize]);
         $response = $this->version->page('GET', $this->uri, $params);
-
         return new SentencePage($this->version, $response, $this->solution);
     }
-
     /**
      * Retrieve a specific page of SentenceInstance records from the API.
      * Request is executed immediately
@@ -136,23 +104,17 @@ class SentenceList extends ListResource
      * @param string $targetUrl API-generated URL for the requested results page
      * @return SentencePage Page of SentenceInstance
      */
-    public function getPage(string $targetUrl): SentencePage
+    public function getPage(string $targetUrl) : SentencePage
     {
-        $response = $this->version->getDomain()->getClient()->request(
-            'GET',
-            $targetUrl
-        );
-
+        $response = $this->version->getDomain()->getClient()->request('GET', $targetUrl);
         return new SentencePage($this->version, $response, $this->solution);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Intelligence.V2.SentenceList]';
     }

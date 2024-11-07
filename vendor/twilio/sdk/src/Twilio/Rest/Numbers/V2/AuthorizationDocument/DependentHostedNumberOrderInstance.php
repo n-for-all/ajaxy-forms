@@ -13,18 +13,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Numbers\V2\AuthorizationDocument;
 
-
-namespace Twilio\Rest\Numbers\V2\AuthorizationDocument;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\InstanceResource;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\Deserialize;
-use Twilio\Base\PhoneNumberCapabilities;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\InstanceResource;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\Deserialize;
+use Isolated\Twilio\Base\PhoneNumberCapabilities;
 /**
  * @property string|null $sid
  * @property string|null $bulkHostingRequestSid
@@ -57,32 +53,10 @@ class DependentHostedNumberOrderInstance extends InstanceResource
     public function __construct(Version $version, array $payload, string $signingDocumentSid)
     {
         parent::__construct($version);
-
         // Marshaled Properties
-        $this->properties = [
-            'sid' => Values::array_get($payload, 'sid'),
-            'bulkHostingRequestSid' => Values::array_get($payload, 'bulk_hosting_request_sid'),
-            'nextStep' => Values::array_get($payload, 'next_step'),
-            'accountSid' => Values::array_get($payload, 'account_sid'),
-            'incomingPhoneNumberSid' => Values::array_get($payload, 'incoming_phone_number_sid'),
-            'addressSid' => Values::array_get($payload, 'address_sid'),
-            'signingDocumentSid' => Values::array_get($payload, 'signing_document_sid'),
-            'phoneNumber' => Values::array_get($payload, 'phone_number'),
-            'capabilities' => Deserialize::phoneNumberCapabilities(Values::array_get($payload, 'capabilities')),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'status' => Values::array_get($payload, 'status'),
-            'failureReason' => Values::array_get($payload, 'failure_reason'),
-            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
-            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
-            'email' => Values::array_get($payload, 'email'),
-            'ccEmails' => Values::array_get($payload, 'cc_emails'),
-            'contactTitle' => Values::array_get($payload, 'contact_title'),
-            'contactPhoneNumber' => Values::array_get($payload, 'contact_phone_number'),
-        ];
-
-        $this->solution = ['signingDocumentSid' => $signingDocumentSid, ];
+        $this->properties = ['sid' => Values::array_get($payload, 'sid'), 'bulkHostingRequestSid' => Values::array_get($payload, 'bulk_hosting_request_sid'), 'nextStep' => Values::array_get($payload, 'next_step'), 'accountSid' => Values::array_get($payload, 'account_sid'), 'incomingPhoneNumberSid' => Values::array_get($payload, 'incoming_phone_number_sid'), 'addressSid' => Values::array_get($payload, 'address_sid'), 'signingDocumentSid' => Values::array_get($payload, 'signing_document_sid'), 'phoneNumber' => Values::array_get($payload, 'phone_number'), 'capabilities' => Deserialize::phoneNumberCapabilities(Values::array_get($payload, 'capabilities')), 'friendlyName' => Values::array_get($payload, 'friendly_name'), 'status' => Values::array_get($payload, 'status'), 'failureReason' => Values::array_get($payload, 'failure_reason'), 'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')), 'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')), 'email' => Values::array_get($payload, 'email'), 'ccEmails' => Values::array_get($payload, 'cc_emails'), 'contactTitle' => Values::array_get($payload, 'contact_title'), 'contactPhoneNumber' => Values::array_get($payload, 'contact_phone_number')];
+        $this->solution = ['signingDocumentSid' => $signingDocumentSid];
     }
-
     /**
      * Magic getter to access properties
      *
@@ -95,23 +69,19 @@ class DependentHostedNumberOrderInstance extends InstanceResource
         if (\array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-
         if (\property_exists($this, '_' . $name)) {
             $method = 'get' . \ucfirst($name);
-            return $this->$method();
+            return $this->{$method}();
         }
-
         throw new TwilioException('Unknown property: ' . $name);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Numbers.V2.DependentHostedNumberOrderInstance]';
     }
 }
-

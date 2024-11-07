@@ -13,30 +13,23 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Voice\V1;
 
-namespace Twilio\Rest\Voice\V1;
-
-use Twilio\ListResource;
-use Twilio\Version;
-
-
+use Isolated\Twilio\ListResource;
+use Isolated\Twilio\Version;
 class ArchivedCallList extends ListResource
-    {
+{
     /**
      * Construct the ArchivedCallList
      *
      * @param Version $version Version that contains the resource
      */
-    public function __construct(
-        Version $version
-    ) {
+    public function __construct(Version $version)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        ];
+        $this->solution = [];
     }
-
     /**
      * Constructs a ArchivedCallContext
      *
@@ -44,25 +37,16 @@ class ArchivedCallList extends ListResource
      *
      * @param string $sid The Twilio-provided Call SID that uniquely identifies the Call resource to delete
      */
-    public function getContext(
-        \DateTime $date
-        , string $sid
-        
-    ): ArchivedCallContext
+    public function getContext(\DateTime $date, string $sid) : ArchivedCallContext
     {
-        return new ArchivedCallContext(
-            $this->version,
-            $date,
-            $sid
-        );
+        return new ArchivedCallContext($this->version, $date, $sid);
     }
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return '[Twilio.Voice.V1.ArchivedCallList]';
     }

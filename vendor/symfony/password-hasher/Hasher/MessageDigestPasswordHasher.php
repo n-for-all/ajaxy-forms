@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\PasswordHasher\Hasher;
 
-namespace Symfony\Component\PasswordHasher\Hasher;
-
-use Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
-use Symfony\Component\PasswordHasher\Exception\LogicException;
-use Symfony\Component\PasswordHasher\LegacyPasswordHasherInterface;
-
+use Isolated\Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
+use Isolated\Symfony\Component\PasswordHasher\Exception\LogicException;
+use Isolated\Symfony\Component\PasswordHasher\LegacyPasswordHasherInterface;
 /**
  * MessageDigestPasswordHasher uses a message digest algorithm.
  *
@@ -23,76 +21,61 @@ use Symfony\Component\PasswordHasher\LegacyPasswordHasherInterface;
 class MessageDigestPasswordHasher implements LegacyPasswordHasherInterface
 {
     use CheckPasswordLengthTrait;
-
     private $algorithm;
     private $encodeHashAsBase64;
     private $iterations = 1;
     private $hashLength = -1;
-
     /**
      * @param string $algorithm          The digest algorithm to use
      * @param bool   $encodeHashAsBase64 Whether to base64 encode the password hash
      * @param int    $iterations         The number of iterations to use to stretch the password hash
      */
-    public function __construct(string $algorithm = 'sha512', bool $encodeHashAsBase64 = true, int $iterations = 5000)
+    public function __construct(string $algorithm = 'sha512', bool $encodeHashAsBase64 = \true, int $iterations = 5000)
     {
         $this->algorithm = $algorithm;
         $this->encodeHashAsBase64 = $encodeHashAsBase64;
-
         try {
             $this->hashLength = \strlen($this->hash('', 'salt'));
         } catch (\LogicException $e) {
             // ignore algorithm not supported
         }
-
         $this->iterations = $iterations;
     }
-
-    public function hash(string $plainPassword, ?string $salt = null): string
+    public function hash(string $plainPassword, ?string $salt = null) : string
     {
         if ($this->isPasswordTooLong($plainPassword)) {
             throw new InvalidPasswordException();
         }
-
-        if (!\in_array($this->algorithm, hash_algos(), true)) {
-            throw new LogicException(sprintf('The algorithm "%s" is not supported.', $this->algorithm));
+        if (!\in_array($this->algorithm, \hash_algos(), \true)) {
+            throw new LogicException(\sprintf('The algorithm "%s" is not supported.', $this->algorithm));
         }
-
         $salted = $this->mergePasswordAndSalt($plainPassword, $salt);
-        $digest = hash($this->algorithm, $salted, true);
-
+        $digest = \hash($this->algorithm, $salted, \true);
         // "stretch" hash
         for ($i = 1; $i < $this->iterations; ++$i) {
-            $digest = hash($this->algorithm, $digest.$salted, true);
+            $digest = \hash($this->algorithm, $digest . $salted, \true);
         }
-
-        return $this->encodeHashAsBase64 ? base64_encode($digest) : bin2hex($digest);
+        return $this->encodeHashAsBase64 ? \base64_encode($digest) : \bin2hex($digest);
     }
-
-    public function verify(string $hashedPassword, string $plainPassword, ?string $salt = null): bool
+    public function verify(string $hashedPassword, string $plainPassword, ?string $salt = null) : bool
     {
-        if (\strlen($hashedPassword) !== $this->hashLength || false !== strpos($hashedPassword, '$')) {
-            return false;
+        if (\strlen($hashedPassword) !== $this->hashLength || \false !== \strpos($hashedPassword, '$')) {
+            return \false;
         }
-
-        return !$this->isPasswordTooLong($plainPassword) && hash_equals($hashedPassword, $this->hash($plainPassword, $salt));
+        return !$this->isPasswordTooLong($plainPassword) && \hash_equals($hashedPassword, $this->hash($plainPassword, $salt));
     }
-
-    public function needsRehash(string $hashedPassword): bool
+    public function needsRehash(string $hashedPassword) : bool
     {
-        return false;
+        return \false;
     }
-
-    private function mergePasswordAndSalt(string $password, ?string $salt): string
+    private function mergePasswordAndSalt(string $password, ?string $salt) : string
     {
         if (!$salt) {
             return $password;
         }
-
-        if (false !== strrpos($salt, '{') || false !== strrpos($salt, '}')) {
+        if (\false !== \strrpos($salt, '{') || \false !== \strrpos($salt, '}')) {
             throw new \InvalidArgumentException('Cannot use { or } in salt.');
         }
-
-        return $password.'{'.$salt.'}';
+        return $password . '{' . $salt . '}';
     }
 }

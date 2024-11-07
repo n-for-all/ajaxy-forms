@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class CRNoLF implements Reason
 {
@@ -8,7 +8,6 @@ class CRNoLF implements Reason
     {
         return 150;
     }
-
     public function description() : string
     {
         return 'Missing LF after CR';

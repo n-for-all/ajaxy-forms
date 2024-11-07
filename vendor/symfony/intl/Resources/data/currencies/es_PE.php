@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'PEN' => [
-            'S/',
-            'sol peruano',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['PEN' => ['S/', 'sol peruano']]];

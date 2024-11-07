@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result\Reason;
+namespace Isolated\Egulias\EmailValidator\Result\Reason;
 
 class ExpectingATEXT extends DetailedReason
 {
@@ -8,7 +8,6 @@ class ExpectingATEXT extends DetailedReason
     {
         return 137;
     }
-
     public function description() : string
     {
         return "Expecting ATEXT (Printable US-ASCII). Extended: " . $this->detailedDescription;

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Isolated\Symfony\Component\Security\Core\Exception;
 
-namespace Symfony\Component\Security\Core\Exception;
-
-use Symfony\Component\Security\Core\User\UserInterface;
-
+use Isolated\Symfony\Component\Security\Core\User\UserInterface;
 /**
  * AccountStatusException is the base class for authentication exceptions
  * caused by the user account status.
@@ -23,7 +21,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 abstract class AccountStatusException extends AuthenticationException
 {
     private $user;
-
     /**
      * Get the user.
      *
@@ -33,27 +30,24 @@ abstract class AccountStatusException extends AuthenticationException
     {
         return $this->user;
     }
-
     public function setUser(UserInterface $user)
     {
         $this->user = $user;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function __serialize(): array
+    public function __serialize() : array
     {
         return [$this->user, parent::__serialize()];
     }
-
     /**
      * {@inheritdoc}
      */
-    public function __unserialize(array $data): void
+    public function __unserialize(array $data) : void
     {
         [$this->user, $parentData] = $data;
-        $parentData = \is_array($parentData) ? $parentData : unserialize($parentData);
+        $parentData = \is_array($parentData) ? $parentData : \unserialize($parentData);
         parent::__unserialize($parentData);
     }
 }

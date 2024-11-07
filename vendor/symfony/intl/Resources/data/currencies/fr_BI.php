@@ -1,10 +1,5 @@
 <?php
 
-return [
-    'Names' => [
-        'BIF' => [
-            'FBu',
-            'franc burundais',
-        ],
-    ],
-];
+namespace Isolated;
+
+return ['Names' => ['BIF' => ['FBu', 'franc burundais']]];

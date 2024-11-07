@@ -13,19 +13,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+namespace Isolated\Twilio\Rest\Taskrouter\V1\Workspace;
 
-
-namespace Twilio\Rest\Taskrouter\V1\Workspace;
-
-use Twilio\Exceptions\TwilioException;
-use Twilio\Options;
-use Twilio\Values;
-use Twilio\Version;
-use Twilio\InstanceContext;
-
-
+use Isolated\Twilio\Exceptions\TwilioException;
+use Isolated\Twilio\Options;
+use Isolated\Twilio\Values;
+use Isolated\Twilio\Version;
+use Isolated\Twilio\InstanceContext;
 class ActivityContext extends InstanceContext
-    {
+{
     /**
      * Initialize the ActivityContext
      *
@@ -33,59 +29,34 @@ class ActivityContext extends InstanceContext
      * @param string $workspaceSid The SID of the Workspace that the new Activity belongs to.
      * @param string $sid The SID of the Activity resource to delete.
      */
-    public function __construct(
-        Version $version,
-        $workspaceSid,
-        $sid
-    ) {
+    public function __construct(Version $version, $workspaceSid, $sid)
+    {
         parent::__construct($version);
-
         // Path Solution
-        $this->solution = [
-        'workspaceSid' =>
-            $workspaceSid,
-        'sid' =>
-            $sid,
-        ];
-
-        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid)
-        .'/Activities/' . \rawurlencode($sid)
-        .'';
+        $this->solution = ['workspaceSid' => $workspaceSid, 'sid' => $sid];
+        $this->uri = '/Workspaces/' . \rawurlencode($workspaceSid) . '/Activities/' . \rawurlencode($sid) . '';
     }
-
     /**
      * Delete the ActivityInstance
      *
      * @return bool True if delete succeeds, false otherwise
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function delete(): bool
+    public function delete() : bool
     {
-
         return $this->version->delete('DELETE', $this->uri);
     }
-
-
     /**
      * Fetch the ActivityInstance
      *
      * @return ActivityInstance Fetched ActivityInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): ActivityInstance
+    public function fetch() : ActivityInstance
     {
-
         $payload = $this->version->fetch('GET', $this->uri, [], []);
-
-        return new ActivityInstance(
-            $this->version,
-            $payload,
-            $this->solution['workspaceSid'],
-            $this->solution['sid']
-        );
+        return new ActivityInstance($this->version, $payload, $this->solution['workspaceSid'], $this->solution['sid']);
     }
-
-
     /**
      * Update the ActivityInstance
      *
@@ -93,37 +64,23 @@ class ActivityContext extends InstanceContext
      * @return ActivityInstance Updated ActivityInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function update(array $options = []): ActivityInstance
+    public function update(array $options = []) : ActivityInstance
     {
-
         $options = new Values($options);
-
-        $data = Values::of([
-            'FriendlyName' =>
-                $options['friendlyName'],
-        ]);
-
+        $data = Values::of(['FriendlyName' => $options['friendlyName']]);
         $payload = $this->version->update('POST', $this->uri, [], $data);
-
-        return new ActivityInstance(
-            $this->version,
-            $payload,
-            $this->solution['workspaceSid'],
-            $this->solution['sid']
-        );
+        return new ActivityInstance($this->version, $payload, $this->solution['workspaceSid'], $this->solution['sid']);
     }
-
-
     /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         $context = [];
         foreach ($this->solution as $key => $value) {
-            $context[] = "$key=$value";
+            $context[] = "{$key}={$value}";
         }
         return '[Twilio.Taskrouter.V1.ActivityContext ' . \implode(' ', $context) . ']';
     }

@@ -379,7 +379,7 @@ function twig_capitalize_string_filter(Environment $env, $string)
  */
 function twig_test_empty($value)
 {
-    trigger_deprecation('twig/twig', '3.9', 'Using the internal "%s" function is deprecated.', __FUNCTION__);
+    // trigger_deprecation('twig/twig', '3.9', 'Using the internal "%s" function is deprecated.', __FUNCTION__);
 
     return CoreExtension::testEmpty($value);
 }

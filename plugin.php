@@ -383,6 +383,7 @@ class Plugin
      */
     public function on_submit($form_name, $form)
     {
+        $errors = [];
         $form->handleRequest();
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
@@ -393,7 +394,15 @@ class Plugin
             $actions = $registered_form->get_actions();
 
             foreach ($actions as $action) {
-                \call_user_func($action, $data, $registered_form);
+                try {
+                    \call_user_func($action, $data, $registered_form);
+                } catch (\Throwable $e) {
+                    $errors[] = $e->getMessage();
+                    continue;
+                }
+            }
+            if (count($errors) > 0) {
+                throw new \Exception(implode(', ', $errors));
             }
             $this->csrf_token_manager->refreshToken('form_intention_' . $registered_form->get_name());
             return true;
@@ -572,7 +581,16 @@ class Plugin
                 '_token' => $this->csrf_token_manager->getToken('form_intention_' . $form->get_name())->getValue()
             ]);
         }
-        $valid = $this->on_submit($form_name, $submitted_form);
+        $valid = false;
+        try {
+            $valid = $this->on_submit($form_name, $submitted_form);
+        } catch (\Exception $e) {
+            return new \WP_REST_Response([
+                'status' => 'error',
+                'message' => \sprintf($messages['wp_error'], $e->getMessage()),
+                '_token' => $this->csrf_token_manager->getToken('form_intention_' . $form->get_name())->getValue()
+            ]);
+        }
         if ($valid) {
             $message = $form->get_message('success');
 

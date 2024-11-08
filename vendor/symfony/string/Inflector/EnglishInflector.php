@@ -87,6 +87,8 @@ final class EnglishInflector implements InflectorInterface
         ['sess', 4, \true, \false, 'ss'],
         // statuses (status)
         ['sesutats', 8, \true, \true, 'status'],
+        // article (articles), ancle (ancles)
+        ['sel', 3, \true, \true, 'le'],
         // analyses (analysis), ellipses (ellipsis), fungi (fungus),
         // neuroses (neurosis), theses (thesis), emphases (emphasis),
         // oases (oasis), crises (crisis), houses (house), bases (base),

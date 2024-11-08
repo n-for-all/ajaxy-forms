@@ -202,65 +202,6 @@
             "install-path": "..\/egulias\/email-validator"
         },
         {
-            "name": "fivetwo\/remove-symfony-polyfill",
-            "version": "8.1.0",
-            "version_normalized": "8.1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/fivetwo\/remove-symfony-polyfill.git",
-                "reference": "9c195563c433edef1e650a29452647d366008860"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/fivetwo\/remove-symfony-polyfill\/zipball\/9c195563c433edef1e650a29452647d366008860",
-                "reference": "9c195563c433edef1e650a29452647d366008860",
-                "shasum": ""
-            },
-            "replace": {
-                "symfony\/polyfill-apcu": "*",
-                "symfony\/polyfill-ctype": "*",
-                "symfony\/polyfill-iconv": "*",
-                "symfony\/polyfill-intl-grapheme": "*",
-                "symfony\/polyfill-intl-icu": "*",
-                "symfony\/polyfill-intl-idn": "*",
-                "symfony\/polyfill-intl-messageformatter": "*",
-                "symfony\/polyfill-intl-normalizer": "*",
-                "symfony\/polyfill-mbstring": "*",
-                "symfony\/polyfill-php72": "*",
-                "symfony\/polyfill-php73": "*",
-                "symfony\/polyfill-php74": "*",
-                "symfony\/polyfill-php80": "*",
-                "symfony\/polyfill-php81": "*",
-                "symfony\/polyfill-util": "*",
-                "symfony\/polyfill-uuid": "*",
-                "symfony\/polyfill-xml": "*"
-            },
-            "time": "2022-05-27T05:46:59+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Matthew Suhocki",
-                    "email": "matt@fivetwo.org"
-                }
-            ],
-            "description": "Remove Symfony polyfills",
-            "keywords": [
-                "polyfill",
-                "remove",
-                "symfony"
-            ],
-            "support": {
-                "issues": "https:\/\/github.com\/fivetwo\/remove-symfony-polyfill\/issues",
-                "source": "https:\/\/github.com\/fivetwo\/remove-symfony-polyfill\/tree\/8.1.0"
-            },
-            "install-path": "..\/fivetwo\/remove-symfony-polyfill"
-        },
-        {
             "name": "psr\/container",
             "version": "1.1.2",
             "version_normalized": "1.1.2.0",
@@ -366,17 +307,17 @@
         },
         {
             "name": "symfony\/config",
-            "version": "v5.4.40",
-            "version_normalized": "5.4.40.0",
+            "version": "v5.4.46",
+            "version_normalized": "5.4.46.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/config.git",
-                "reference": "d4e1db78421163b98dd9971d247fd0df4a57ee5e"
+                "reference": "977c88a02d7d3f16904a81907531b19666a08e78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/config\/zipball\/d4e1db78421163b98dd9971d247fd0df4a57ee5e",
-                "reference": "d4e1db78421163b98dd9971d247fd0df4a57ee5e",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/config\/zipball\/977c88a02d7d3f16904a81907531b19666a08e78",
+                "reference": "977c88a02d7d3f16904a81907531b19666a08e78",
                 "shasum": ""
             },
             "require": {
@@ -400,7 +341,7 @@
             "suggest": {
                 "symfony\/yaml": "To use the yaml reference dumper"
             },
-            "time": "2024-05-31T14:33:22+00:00",
+            "time": "2024-10-30T07:58:02+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -428,7 +369,7 @@
             "description": "Helps you find, load, combine, autofill and validate configuration values of any kind",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/config\/tree\/v5.4.40"
+                "source": "https:\/\/github.com\/symfony\/config\/tree\/v5.4.46"
             },
             "funding": [
                 {
@@ -518,17 +459,17 @@
         },
         {
             "name": "symfony\/event-dispatcher",
-            "version": "v5.4.40",
-            "version_normalized": "5.4.40.0",
+            "version": "v5.4.45",
+            "version_normalized": "5.4.45.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/event-dispatcher.git",
-                "reference": "a54e2a8a114065f31020d6a89ede83e34c3b27a4"
+                "reference": "72982eb416f61003e9bb6e91f8b3213600dcf9e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/event-dispatcher\/zipball\/a54e2a8a114065f31020d6a89ede83e34c3b27a4",
-                "reference": "a54e2a8a114065f31020d6a89ede83e34c3b27a4",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/event-dispatcher\/zipball\/72982eb416f61003e9bb6e91f8b3213600dcf9e9",
+                "reference": "72982eb416f61003e9bb6e91f8b3213600dcf9e9",
                 "shasum": ""
             },
             "require": {
@@ -558,7 +499,7 @@
                 "symfony\/dependency-injection": "",
                 "symfony\/http-kernel": ""
             },
-            "time": "2024-05-31T14:33:22+00:00",
+            "time": "2024-09-25T14:11:13+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -586,7 +527,7 @@
             "description": "Provides tools that allow your application components to communicate with each other by dispatching events and listening to them",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/event-dispatcher\/tree\/v5.4.40"
+                "source": "https:\/\/github.com\/symfony\/event-dispatcher\/tree\/v5.4.45"
             },
             "funding": [
                 {
@@ -688,17 +629,17 @@
         },
         {
             "name": "symfony\/filesystem",
-            "version": "v5.4.41",
-            "version_normalized": "5.4.41.0",
+            "version": "v5.4.45",
+            "version_normalized": "5.4.45.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/filesystem.git",
-                "reference": "6d29dd9340b372fa603f04e6df4dd76bb808591e"
+                "reference": "57c8294ed37d4a055b77057827c67f9558c95c54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/6d29dd9340b372fa603f04e6df4dd76bb808591e",
-                "reference": "6d29dd9340b372fa603f04e6df4dd76bb808591e",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/57c8294ed37d4a055b77057827c67f9558c95c54",
+                "reference": "57c8294ed37d4a055b77057827c67f9558c95c54",
                 "shasum": ""
             },
             "require": {
@@ -710,7 +651,7 @@
             "require-dev": {
                 "symfony\/process": "^5.4|^6.4"
             },
-            "time": "2024-06-28T09:36:24+00:00",
+            "time": "2024-10-22T13:05:35+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -738,7 +679,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v5.4.41"
+                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v5.4.45"
             },
             "funding": [
                 {
@@ -939,99 +880,6 @@
             "install-path": "..\/symfony\/http-foundation"
         },
         {
-            "name": "symfony\/intl",
-            "version": "v5.4.40",
-            "version_normalized": "5.4.40.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/symfony\/intl.git",
-                "reference": "75482b3b0aadc7f652d99b4f543b1d21f6562ff4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/intl\/zipball\/75482b3b0aadc7f652d99b4f543b1d21f6562ff4",
-                "reference": "75482b3b0aadc7f652d99b4f543b1d21f6562ff4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2.5",
-                "symfony\/deprecation-contracts": "^2.1|^3",
-                "symfony\/polyfill-php80": "^1.16"
-            },
-            "require-dev": {
-                "symfony\/filesystem": "^4.4|^5.0|^6.0",
-                "symfony\/var-exporter": "^5.4|^6.0"
-            },
-            "time": "2024-05-31T14:33:22+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "Resources\/functions.php"
-                ],
-                "psr-4": {
-                    "Isolated\\Symfony\\Component\\Intl\\": ""
-                },
-                "classmap": [
-                    "Resources\/stubs"
-                ],
-                "exclude-from-classmap": [
-                    "\/Tests\/",
-                    "\/Resources\/data\/"
-                ]
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bernhard Schussek",
-                    "email": "bschussek@gmail.com"
-                },
-                {
-                    "name": "Eriksen Costa",
-                    "email": "eriksen.costa@infranology.com.br"
-                },
-                {
-                    "name": "Igor Wiedler",
-                    "email": "igor@wiedler.ch"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https:\/\/symfony.com\/contributors"
-                }
-            ],
-            "description": "Provides a PHP replacement layer for the C intl extension that includes additional data from the ICU library",
-            "homepage": "https:\/\/symfony.com",
-            "keywords": [
-                "i18n",
-                "icu",
-                "internationalization",
-                "intl",
-                "l10n",
-                "localization"
-            ],
-            "support": {
-                "source": "https:\/\/github.com\/symfony\/intl\/tree\/v5.4.40"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/symfony.com\/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https:\/\/github.com\/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "install-path": "..\/symfony\/intl"
-        },
-        {
             "name": "symfony\/mime",
             "version": "v5.0.0",
             "version_normalized": "5.0.0.0",
@@ -1101,17 +949,17 @@
         },
         {
             "name": "symfony\/options-resolver",
-            "version": "v5.4.40",
-            "version_normalized": "5.4.40.0",
+            "version": "v5.4.45",
+            "version_normalized": "5.4.45.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/options-resolver.git",
-                "reference": "bd1afbde6613a8d6b956115e0e14b196191fd0c4"
+                "reference": "74e5b6f0db3e8589e6cfd5efb317a1fc2bb52fb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/options-resolver\/zipball\/bd1afbde6613a8d6b956115e0e14b196191fd0c4",
-                "reference": "bd1afbde6613a8d6b956115e0e14b196191fd0c4",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/options-resolver\/zipball\/74e5b6f0db3e8589e6cfd5efb317a1fc2bb52fb6",
+                "reference": "74e5b6f0db3e8589e6cfd5efb317a1fc2bb52fb6",
                 "shasum": ""
             },
             "require": {
@@ -1120,7 +968,7 @@
                 "symfony\/polyfill-php73": "~1.0",
                 "symfony\/polyfill-php80": "^1.16"
             },
-            "time": "2024-05-31T14:33:22+00:00",
+            "time": "2024-09-25T14:11:13+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1153,7 +1001,7 @@
                 "options"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/options-resolver\/tree\/v5.4.40"
+                "source": "https:\/\/github.com\/symfony\/options-resolver\/tree\/v5.4.45"
             },
             "funding": [
                 {
@@ -1173,17 +1021,17 @@
         },
         {
             "name": "symfony\/password-hasher",
-            "version": "v5.4.40",
-            "version_normalized": "5.4.40.0",
+            "version": "v5.4.45",
+            "version_normalized": "5.4.45.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/password-hasher.git",
-                "reference": "21b98178ab2024e6c7d8ab72cca9ba16015c6093"
+                "reference": "6c5993b24505f98b90ca4896448012bbec54c7c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/password-hasher\/zipball\/21b98178ab2024e6c7d8ab72cca9ba16015c6093",
-                "reference": "21b98178ab2024e6c7d8ab72cca9ba16015c6093",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/password-hasher\/zipball\/6c5993b24505f98b90ca4896448012bbec54c7c8",
+                "reference": "6c5993b24505f98b90ca4896448012bbec54c7c8",
                 "shasum": ""
             },
             "require": {
@@ -1198,7 +1046,7 @@
                 "symfony\/console": "^5.3|^6.0",
                 "symfony\/security-core": "^5.3|^6.0"
             },
-            "time": "2024-05-31T14:33:22+00:00",
+            "time": "2024-09-25T14:11:13+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1230,7 +1078,7 @@
                 "password"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/password-hasher\/tree\/v5.4.40"
+                "source": "https:\/\/github.com\/symfony\/password-hasher\/tree\/v5.4.45"
             },
             "funding": [
                 {
@@ -1249,18 +1097,186 @@
             "install-path": "..\/symfony\/password-hasher"
         },
         {
-            "name": "symfony\/property-access",
-            "version": "v5.4.40",
-            "version_normalized": "5.4.40.0",
+            "name": "symfony\/polyfill-intl-grapheme",
+            "version": "v1.31.0",
+            "version_normalized": "1.31.0.0",
             "source": {
                 "type": "git",
-                "url": "https:\/\/github.com\/symfony\/property-access.git",
-                "reference": "6e4834145c2231b34eafabe440aaac478a95b456"
+                "url": "https:\/\/github.com\/symfony\/polyfill-intl-grapheme.git",
+                "reference": "b9123926e3b7bc2f98c02ad54f6a4b02b91a8abe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/property-access\/zipball\/6e4834145c2231b34eafabe440aaac478a95b456",
-                "reference": "6e4834145c2231b34eafabe440aaac478a95b456",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-intl-grapheme\/zipball\/b9123926e3b7bc2f98c02ad54f6a4b02b91a8abe",
+                "reference": "b9123926e3b7bc2f98c02ad54f6a4b02b91a8abe",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "suggest": {
+                "ext-intl": "For best performance"
+            },
+            "time": "2024-09-09T11:45:10+00:00",
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "name": "symfony\/polyfill",
+                    "url": "https:\/\/github.com\/symfony\/polyfill"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Isolated\\Symfony\\Polyfill\\Intl\\Grapheme\\": ""
+                }
+            },
+            "notification-url": "https:\/\/packagist.org\/downloads\/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https:\/\/symfony.com\/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for intl's grapheme_* functions",
+            "homepage": "https:\/\/symfony.com",
+            "keywords": [
+                "compatibility",
+                "grapheme",
+                "intl",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https:\/\/github.com\/symfony\/polyfill-intl-grapheme\/tree\/v1.31.0"
+            },
+            "funding": [
+                {
+                    "url": "https:\/\/symfony.com\/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https:\/\/github.com\/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "install-path": "..\/symfony\/polyfill-intl-grapheme"
+        },
+        {
+            "name": "symfony\/polyfill-intl-icu",
+            "version": "v1.31.0",
+            "version_normalized": "1.31.0.0",
+            "source": {
+                "type": "git",
+                "url": "https:\/\/github.com\/symfony\/polyfill-intl-icu.git",
+                "reference": "d80a05e9904d2c2b9b95929f3e4b5d3a8f418d78"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-intl-icu\/zipball\/d80a05e9904d2c2b9b95929f3e4b5d3a8f418d78",
+                "reference": "d80a05e9904d2c2b9b95929f3e4b5d3a8f418d78",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "suggest": {
+                "ext-intl": "For best performance and support of other locales than \"en\""
+            },
+            "time": "2024-09-09T11:45:10+00:00",
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "name": "symfony\/polyfill",
+                    "url": "https:\/\/github.com\/symfony\/polyfill"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Isolated\\Symfony\\Polyfill\\Intl\\Icu\\": ""
+                },
+                "classmap": [
+                    "Resources\/stubs"
+                ],
+                "exclude-from-classmap": [
+                    "\/Tests\/"
+                ]
+            },
+            "notification-url": "https:\/\/packagist.org\/downloads\/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https:\/\/symfony.com\/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for intl's ICU-related data and classes",
+            "homepage": "https:\/\/symfony.com",
+            "keywords": [
+                "compatibility",
+                "icu",
+                "intl",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https:\/\/github.com\/symfony\/polyfill-intl-icu\/tree\/v1.31.0"
+            },
+            "funding": [
+                {
+                    "url": "https:\/\/symfony.com\/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https:\/\/github.com\/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "install-path": "..\/symfony\/polyfill-intl-icu"
+        },
+        {
+            "name": "symfony\/property-access",
+            "version": "v5.4.45",
+            "version_normalized": "5.4.45.0",
+            "source": {
+                "type": "git",
+                "url": "https:\/\/github.com\/symfony\/property-access.git",
+                "reference": "111e7ed617509f1a9139686055d234aad6e388e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/property-access\/zipball\/111e7ed617509f1a9139686055d234aad6e388e0",
+                "reference": "111e7ed617509f1a9139686055d234aad6e388e0",
                 "shasum": ""
             },
             "require": {
@@ -1275,7 +1291,7 @@
             "suggest": {
                 "psr\/cache-implementation": "To cache access methods."
             },
-            "time": "2024-05-31T14:33:22+00:00",
+            "time": "2024-09-25T14:11:13+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1314,7 +1330,7 @@
                 "reflection"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/property-access\/tree\/v5.4.40"
+                "source": "https:\/\/github.com\/symfony\/property-access\/tree\/v5.4.45"
             },
             "funding": [
                 {
@@ -1334,17 +1350,17 @@
         },
         {
             "name": "symfony\/property-info",
-            "version": "v5.4.42",
-            "version_normalized": "5.4.42.0",
+            "version": "v5.4.45",
+            "version_normalized": "5.4.45.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/property-info.git",
-                "reference": "825aa937f6e8cd63dcc118d0af84d7d4979cddf4"
+                "reference": "cec75362b20263758c9c7af4c2f9af82614195ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/property-info\/zipball\/825aa937f6e8cd63dcc118d0af84d7d4979cddf4",
-                "reference": "825aa937f6e8cd63dcc118d0af84d7d4979cddf4",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/property-info\/zipball\/cec75362b20263758c9c7af4c2f9af82614195ae",
+                "reference": "cec75362b20263758c9c7af4c2f9af82614195ae",
                 "shasum": ""
             },
             "require": {
@@ -1372,7 +1388,7 @@
                 "symfony\/doctrine-bridge": "To use Doctrine metadata",
                 "symfony\/serializer": "To use Serializer metadata"
             },
-            "time": "2024-07-22T18:03:36+00:00",
+            "time": "2024-09-25T14:11:13+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1408,7 +1424,7 @@
                 "validator"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/property-info\/tree\/v5.4.42"
+                "source": "https:\/\/github.com\/symfony\/property-info\/tree\/v5.4.45"
             },
             "funding": [
                 {
@@ -1428,17 +1444,17 @@
         },
         {
             "name": "symfony\/security-core",
-            "version": "v5.4.42",
-            "version_normalized": "5.4.42.0",
+            "version": "v5.4.45",
+            "version_normalized": "5.4.45.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/security-core.git",
-                "reference": "3c6b81c68a828958ae0bcec9dd44a8e6ea0a38de"
+                "reference": "2d324971f4a241cf538502e14f15ad32f2b16b9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/security-core\/zipball\/3c6b81c68a828958ae0bcec9dd44a8e6ea0a38de",
-                "reference": "3c6b81c68a828958ae0bcec9dd44a8e6ea0a38de",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/security-core\/zipball\/2d324971f4a241cf538502e14f15ad32f2b16b9b",
+                "reference": "2d324971f4a241cf538502e14f15ad32f2b16b9b",
                 "shasum": ""
             },
             "require": {
@@ -1477,7 +1493,7 @@
                 "symfony\/ldap": "For using LDAP integration",
                 "symfony\/validator": "For using the user password constraint"
             },
-            "time": "2024-07-16T19:38:31+00:00",
+            "time": "2024-10-23T08:30:13+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1505,7 +1521,7 @@
             "description": "Symfony Security Component - Core Library",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/security-core\/tree\/v5.4.42"
+                "source": "https:\/\/github.com\/symfony\/security-core\/tree\/v5.4.45"
             },
             "funding": [
                 {
@@ -1525,17 +1541,17 @@
         },
         {
             "name": "symfony\/security-csrf",
-            "version": "v5.4.40",
-            "version_normalized": "5.4.40.0",
+            "version": "v5.4.45",
+            "version_normalized": "5.4.45.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/security-csrf.git",
-                "reference": "9058d522c1c33d7ba13f4b3c79555cc2c4c16028"
+                "reference": "28dcafc3220f12264bb2aabe2389a2163458c1f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/security-csrf\/zipball\/9058d522c1c33d7ba13f4b3c79555cc2c4c16028",
-                "reference": "9058d522c1c33d7ba13f4b3c79555cc2c4c16028",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/security-csrf\/zipball\/28dcafc3220f12264bb2aabe2389a2163458c1f4",
+                "reference": "28dcafc3220f12264bb2aabe2389a2163458c1f4",
                 "shasum": ""
             },
             "require": {
@@ -1553,7 +1569,7 @@
             "suggest": {
                 "symfony\/http-foundation": "For using the class SessionTokenStorage."
             },
-            "time": "2024-05-31T14:33:22+00:00",
+            "time": "2024-09-25T14:11:13+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1581,7 +1597,7 @@
             "description": "Symfony Security Component - CSRF Library",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/security-csrf\/tree\/v5.4.40"
+                "source": "https:\/\/github.com\/symfony\/security-csrf\/tree\/v5.4.45"
             },
             "funding": [
                 {
@@ -1687,17 +1703,17 @@
         },
         {
             "name": "symfony\/string",
-            "version": "v5.4.42",
-            "version_normalized": "5.4.42.0",
+            "version": "v5.4.45",
+            "version_normalized": "5.4.45.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/string.git",
-                "reference": "909cec913edea162a3b2836788228ad45fcab337"
+                "reference": "7f6807add88b1e2635f3c6de5e1ace631ed7cad2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/909cec913edea162a3b2836788228ad45fcab337",
-                "reference": "909cec913edea162a3b2836788228ad45fcab337",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/7f6807add88b1e2635f3c6de5e1ace631ed7cad2",
+                "reference": "7f6807add88b1e2635f3c6de5e1ace631ed7cad2",
                 "shasum": ""
             },
             "require": {
@@ -1717,7 +1733,7 @@
                 "symfony\/translation-contracts": "^1.1|^2",
                 "symfony\/var-exporter": "^4.4|^5.0|^6.0"
             },
-            "time": "2024-07-20T18:38:32+00:00",
+            "time": "2024-09-25T14:11:13+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1756,7 +1772,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/string\/tree\/v5.4.42"
+                "source": "https:\/\/github.com\/symfony\/string\/tree\/v5.4.45"
             },
             "funding": [
                 {
@@ -1776,17 +1792,17 @@
         },
         {
             "name": "symfony\/translation",
-            "version": "v5.4.42",
-            "version_normalized": "5.4.42.0",
+            "version": "v5.4.45",
+            "version_normalized": "5.4.45.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/translation.git",
-                "reference": "1d702caccb9f091b738696185f778b1bfef7b5b2"
+                "reference": "98f26acc99341ca4bab345fb14d7b1d7cb825bed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/translation\/zipball\/1d702caccb9f091b738696185f778b1bfef7b5b2",
-                "reference": "1d702caccb9f091b738696185f778b1bfef7b5b2",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/translation\/zipball\/98f26acc99341ca4bab345fb14d7b1d7cb825bed",
+                "reference": "98f26acc99341ca4bab345fb14d7b1d7cb825bed",
                 "shasum": ""
             },
             "require": {
@@ -1825,7 +1841,7 @@
                 "symfony\/config": "",
                 "symfony\/yaml": ""
             },
-            "time": "2024-07-26T12:14:19+00:00",
+            "time": "2024-09-25T14:11:13+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1856,7 +1872,7 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/translation\/tree\/v5.4.42"
+                "source": "https:\/\/github.com\/symfony\/translation\/tree\/v5.4.45"
             },
             "funding": [
                 {
@@ -2081,17 +2097,17 @@
         },
         {
             "name": "symfony\/validator",
-            "version": "v5.4.42",
-            "version_normalized": "5.4.42.0",
+            "version": "v5.4.46",
+            "version_normalized": "5.4.46.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/validator.git",
-                "reference": "5ad62a0b29cca8b89753b6d5f2bc5a4294b997ec"
+                "reference": "9849c2cae17964a42a77df6823ac90414e2b451d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/validator\/zipball\/5ad62a0b29cca8b89753b6d5f2bc5a4294b997ec",
-                "reference": "5ad62a0b29cca8b89753b6d5f2bc5a4294b997ec",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/validator\/zipball\/9849c2cae17964a42a77df6823ac90414e2b451d",
+                "reference": "9849c2cae17964a42a77df6823ac90414e2b451d",
                 "shasum": ""
             },
             "require": {
@@ -2148,7 +2164,7 @@
                 "symfony\/translation": "For translating validation errors.",
                 "symfony\/yaml": ""
             },
-            "time": "2024-07-26T11:57:39+00:00",
+            "time": "2024-11-04T11:03:12+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2177,7 +2193,7 @@
             "description": "Provides tools to validate values",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/validator\/tree\/v5.4.42"
+                "source": "https:\/\/github.com\/symfony\/validator\/tree\/v5.4.46"
             },
             "funding": [
                 {
@@ -2197,17 +2213,17 @@
         },
         {
             "name": "twig\/twig",
-            "version": "v3.11.0",
-            "version_normalized": "3.11.0.0",
+            "version": "v3.11.3",
+            "version_normalized": "3.11.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/twigphp\/Twig.git",
-                "reference": "e80fb8ebba85c7341a97a9ebf825d7fd4b77708d"
+                "reference": "3b06600ff3abefaf8ff55d5c336cd1c4253f8c7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/twigphp\/Twig\/zipball\/e80fb8ebba85c7341a97a9ebf825d7fd4b77708d",
-                "reference": "e80fb8ebba85c7341a97a9ebf825d7fd4b77708d",
+                "url": "https:\/\/api.github.com\/repos\/twigphp\/Twig\/zipball\/3b06600ff3abefaf8ff55d5c336cd1c4253f8c7e",
+                "reference": "3b06600ff3abefaf8ff55d5c336cd1c4253f8c7e",
                 "shasum": ""
             },
             "require": {
@@ -2222,7 +2238,7 @@
                 "psr\/container": "^1.0|^2.0",
                 "symfony\/phpunit-bridge": "^5.4.9|^6.4|^7.0"
             },
-            "time": "2024-08-08T16:15:16+00:00",
+            "time": "2024-11-07T12:34:41+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2264,7 +2280,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/twigphp\/Twig\/issues",
-                "source": "https:\/\/github.com\/twigphp\/Twig\/tree\/v3.11.0"
+                "source": "https:\/\/github.com\/twigphp\/Twig\/tree\/v3.11.3"
             },
             "funding": [
                 {
@@ -2277,62 +2293,6 @@
                 }
             ],
             "install-path": "..\/twig\/twig"
-        },
-        {
-            "name": "twilio\/sdk",
-            "version": "8.1.0",
-            "version_normalized": "8.1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/twilio\/twilio-php.git",
-                "reference": "547e6ceca9a1491a645065f344ddb592a3456298"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/twilio\/twilio-php\/zipball\/547e6ceca9a1491a645065f344ddb592a3456298",
-                "reference": "547e6ceca9a1491a645065f344ddb592a3456298",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1.0"
-            },
-            "require-dev": {
-                "guzzlehttp\/guzzle": "^6.3 || ^7.0",
-                "phpunit\/phpunit": ">=7.0 < 10"
-            },
-            "suggest": {
-                "guzzlehttp\/guzzle": "An HTTP client to execute the API requests"
-            },
-            "time": "2024-05-24T11:10:19+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Isolated\\Twilio\\": "src\/Twilio\/"
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Twilio API Team",
-                    "email": "api@twilio.com"
-                }
-            ],
-            "description": "A PHP wrapper for Twilio's API",
-            "homepage": "https:\/\/github.com\/twilio\/twilio-php",
-            "keywords": [
-                "api",
-                "sms",
-                "twilio"
-            ],
-            "support": {
-                "issues": "https:\/\/github.com\/twilio\/twilio-php\/issues",
-                "source": "https:\/\/github.com\/twilio\/twilio-php\/tree\/8.1.0"
-            },
-            "install-path": "..\/twilio\/sdk"
         }
     ],
     "dev": true,

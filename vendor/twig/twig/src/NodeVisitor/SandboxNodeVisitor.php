@@ -14,12 +14,14 @@ use Isolated\Twig\Environment;
 use Isolated\Twig\Node\CheckSecurityCallNode;
 use Isolated\Twig\Node\CheckSecurityNode;
 use Isolated\Twig\Node\CheckToStringNode;
+use Isolated\Twig\Node\Expression\ArrayExpression;
 use Isolated\Twig\Node\Expression\Binary\ConcatBinary;
 use Isolated\Twig\Node\Expression\Binary\RangeBinary;
 use Isolated\Twig\Node\Expression\FilterExpression;
 use Isolated\Twig\Node\Expression\FunctionExpression;
 use Isolated\Twig\Node\Expression\GetAttrExpression;
 use Isolated\Twig\Node\Expression\NameExpression;
+use Isolated\Twig\Node\Expression\Unary\SpreadUnary;
 use Isolated\Twig\Node\ModuleNode;
 use Isolated\Twig\Node\Node;
 use Isolated\Twig\Node\PrintNode;
@@ -105,7 +107,18 @@ final class SandboxNodeVisitor implements NodeVisitorInterface
     {
         $expr = $node->getNode($name);
         if (($expr instanceof NameExpression || $expr instanceof GetAttrExpression) && !$expr->isGenerator()) {
-            $node->setNode($name, new CheckToStringNode($expr));
+            // Simplify in 4.0 as the spread attribute has been removed there
+            $new = new CheckToStringNode($expr);
+            if ($expr->hasAttribute('spread')) {
+                $new->setAttribute('spread', $expr->getAttribute('spread'));
+            }
+            $node->setNode($name, $new);
+        } elseif ($expr instanceof SpreadUnary) {
+            $this->wrapNode($expr, 'node');
+        } elseif ($expr instanceof ArrayExpression) {
+            foreach ($expr as $name => $_) {
+                $this->wrapNode($expr, $name);
+            }
         }
     }
     private function wrapArrayNode(Node $node, string $name) : void

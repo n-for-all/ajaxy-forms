@@ -26,8 +26,9 @@ class Sms implements ActionInterface
             throw new \Exception('Message is required');
         }
 
-        $this->key = $options['account_sid'] ?? '';
-        $this->token = $options['auth_token'] ?? '';
+
+        $this->key = $options['key'] ?? '';
+        $this->token = $options['token'] ?? '';
         if (!$this->key || !$this->token) {
             throw new \Exception('Twilio credentials are required: account_sid and auth_token are required');
         }
@@ -44,14 +45,62 @@ class Sms implements ActionInterface
         return 'SMS';
     }
 
+    public function sendCurlMessage($accountSid, $data, $authToken)
+    {
+        $url = 'https://api.twilio.com/2010-04-01/Accounts/' . $accountSid . '/Messages.json';
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt(
+            $ch,
+            CURLOPT_USERPWD,
+            $accountSid . ':' . $authToken
+        );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $response = curl_exec($ch);
+
+        if ($response) {
+            curl_close($ch);
+            $response = json_decode($response);
+            if ($response->status != 200) {
+                throw new \Exception($response->message);
+            }
+        } else {
+            $error = curl_error($ch);
+            curl_close($ch);
+            throw new \Exception($error);
+        }
+    }
     public function execute($data, $form)
+    {
+        $values = [
+            'data' => $data,
+        ];
+        $to = Helper::create_twig_template($this->to, $values);
+
+        $message = $this->parseMessage(Helper::create_twig_template($this->message, $values));
+        try {
+            $data = array(
+                'From' => $this->from,
+                'To' => $to,
+                'Body' => $message
+            );
+            $this->sendCurlMessage($this->key, $data, $this->token);
+        } catch (\Exception $e) {
+            \error_log(\sprintf('SMS/Whatsapp action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage()));
+            throw new \Exception(\esc_html(\sprintf('SMS/Whatsapp action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage())));
+        }
+    }
+    public function oldexecute($data, $form)
     {
         $values = [
             'data' => $data,
         ];
 
         $to = Helper::create_twig_template($this->to, $values);
-        
+
         $message = $this->parseMessage(Helper::create_twig_template($this->message, $values));
         try {
             $client = new \Twilio\Rest\Client($this->key, $this->token);
@@ -77,31 +126,36 @@ class Sms implements ActionInterface
                 'name' => 'to',
                 'required' => true,
                 'help' => 'Enter the phone number to send the message to'
-            ], [
+            ],
+            [
                 'label' => 'From Number',
                 'type' => 'text',
                 'name' => 'from',
                 'required' => true,
                 'help' => 'Enter the phone number to send the message from (Twilio Number)'
-            ], [
+            ],
+            [
                 'label' => 'Message',
                 'type' => 'textarea',
                 'name' => 'message',
                 'required' => true,
                 'help' => 'Enter the message to send'
-            ], [
+            ],
+            [
                 'label' => 'Twilio Key',
                 'type' => 'text',
                 'name' => 'key',
                 'required' => true,
                 'help' => 'Enter the Twilio API Key'
-            ], [
+            ],
+            [
                 'label' => 'Twilio Token',
                 'type' => 'text',
                 'name' => 'token',
                 'required' => true,
                 'help' => 'Enter the Twilio API Token'
-            ], [
+            ],
+            [
                 'label' => 'Bitly Token',
                 'type' => 'text',
                 'name' => 'bitly_token',

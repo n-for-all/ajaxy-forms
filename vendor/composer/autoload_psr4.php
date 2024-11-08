@@ -6,8 +6,9 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Isolated\\Twilio\\' => array($vendorDir . '/twilio/sdk/src/Twilio'),
     'Isolated\\Twig\\' => array($vendorDir . '/twig/twig/src'),
+    'Isolated\\Symfony\\Polyfill\\Intl\\Icu\\' => array($vendorDir . '/symfony/polyfill-intl-icu'),
+    'Isolated\\Symfony\\Polyfill\\Intl\\Grapheme\\' => array($vendorDir . '/symfony/polyfill-intl-grapheme'),
     'Isolated\\Symfony\\Contracts\\Translation\\' => array($vendorDir . '/symfony/translation-contracts'),
     'Isolated\\Symfony\\Contracts\\Service\\' => array($vendorDir . '/symfony/service-contracts'),
     'Isolated\\Symfony\\Contracts\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher-contracts'),
@@ -21,7 +22,6 @@ return array(
     'Isolated\\Symfony\\Component\\PasswordHasher\\' => array($vendorDir . '/symfony/password-hasher'),
     'Isolated\\Symfony\\Component\\OptionsResolver\\' => array($vendorDir . '/symfony/options-resolver'),
     'Isolated\\Symfony\\Component\\Mime\\' => array($vendorDir . '/symfony/mime'),
-    'Isolated\\Symfony\\Component\\Intl\\' => array($vendorDir . '/symfony/intl'),
     'Isolated\\Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
     'Isolated\\Symfony\\Component\\Form\\' => array($vendorDir . '/symfony/form'),
     'Isolated\\Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),
@@ -33,5 +33,5 @@ return array(
     'Isolated\\Egulias\\EmailValidator\\' => array($vendorDir . '/egulias/email-validator/src'),
     'Isolated\\Doctrine\\Deprecations\\' => array($vendorDir . '/doctrine/deprecations/lib/Doctrine/Deprecations'),
     'Isolated\\Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/src'),
-    'Isolated\\Ajaxy\\Forms\\' => array($baseDir . '/src'),
+    'Ajaxy\\Forms\\' => array($baseDir . '/src'),
 );

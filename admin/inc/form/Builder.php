@@ -257,7 +257,7 @@ class Builder
 
     ?>
         <div class="wrap af-form-wrap">
-            <h1 class="wp-heading-inline"><?php esc_html_e('Form', "ajaxy-forms"); ?></h1>
+            <h1 class="wp-heading-inline"><?php esc_html_e('Form', "ajaxy-forms"); ?> <?php echo $form ? sprintf('(%s)', $form['name']) : ''; ?></h1>
             <hr class="wp-header-end">
             <?php if ($message) : ?>
                 <div id="message" class="notice notice-<?php echo esc_attr($message['type']); ?>">

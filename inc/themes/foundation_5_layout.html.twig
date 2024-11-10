@@ -332,9 +332,9 @@
     </div>
 {%- endblock radio_row %}
 
-{# Errors #}
-
-{% block form_errors -%}
+{%- block form_errors -%}
+    {%- if not form is rootform -%}
+    <div class="field-error field-{{name}}">
     {% if errors|length > 0 -%}
         {% if form is not rootform %}<small class="error">{% else %}<div data-alert class="alert-box alert">{% endif %}
         {%- for error in errors -%}
@@ -343,4 +343,6 @@
         {%- endfor -%}
         {% if form is not rootform %}</small>{% else %}</div>{% endif %}
     {%- endif %}
-{%- endblock form_errors %}
+    </div>
+    {%- endif -%}
+{%- endblock form_errors -%}

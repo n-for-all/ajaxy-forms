@@ -178,6 +178,14 @@ class Plugin
             if (isset($field['required']) && $field['required'] == "1") {
                 $field['constraints'][] = ['type' => 'not_blank', 'message' => $field_options['invalid_message'] ?? __('This field is required.')];
                 $field['required'] = '';
+                if ($field['type'] == 'email') {
+                    $check_constraint = \array_filter($field['constraints'], function ($constraint) {
+                        return $constraint['type'] == 'email';
+                    });
+                    if (count($check_constraint) == 0) {
+                        $field['constraints'][] = ['type' => 'email', 'message' => $field_options['invalid_message'] ?? __('This field is required.')];
+                    }
+                }
             }
 
             if (!empty($field['constraints'])) {

@@ -295,8 +295,10 @@
 
 {# Errors #}
 
-{% block form_errors -%}
-    {%- if errors|length > 0 -%}
+{%- block form_errors -%}
+    {%- if not form is rootform -%}
+    <div class="field-error field-{{name}}">
+   {%- if errors|length > 0 -%}
         <span class="{% if form is not rootform %}invalid-feedback{% else %}alert alert-danger{% endif %} d-block">
             {%- for error in errors -%}
                 <span class="d-block">
@@ -305,8 +307,9 @@
             {%- endfor -%}
         </span>
     {%- endif %}
-{%- endblock form_errors %}
-
+    </div>
+    {%- endif -%}
+{%- endblock form_errors -%}
 {# Help #}
 
 {% block form_help -%}

@@ -264,7 +264,7 @@ class Helper
                 continue;
             }
 
-            $value = isset($data[$field['name']]) ? $data[$field['name']] : $field['default'];
+            $value = isset($data[$field['name']]) ? $data[$field['name']] : $field['default'] ?? '';
             $label = $field['label'] && !empty($field['label']) ? $field['label'] : null;
 
             $nData[$field['name']] = [

@@ -44,7 +44,7 @@ class Builder
 
     function scripts()
     {
-        \wp_enqueue_script("ajaxy-forms-admin-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/builder.js', ['jquery', 'backbone', 'jquery-ui-draggable'], AJAXY_FORMS_VERSION, true);
+        \wp_enqueue_script("ajaxy-forms-admin-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/builder.js', ['jquery', 'backbone', 'jquery-ui-draggable', 'jquery-ui-sortable'], AJAXY_FORMS_VERSION, true);
         // \wp_enqueue_script("ajaxy-forms" . "-admin-actions-script", AJAXY_FORMS_PLUGIN_URL . '/admin/assets/js/actions.js', ['jquery', 'backbone', 'jquery-ui-draggable'], AJAXY_FORMS_VERSION, true);
         wp_localize_script(
             "ajaxy-forms-admin-script",

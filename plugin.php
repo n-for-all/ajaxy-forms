@@ -4,13 +4,13 @@
  * @package Ajaxy
  */
 /*
-	Plugin Name: Ajaxy Forms
-	Plugin URI: https://ajaxy.org/product/ajaxy-forms
-	Description: Enhanced WordPress forms with advanced features and integrations
-	Version: 1.0.4
-	Author: Naji Amer (Ajaxy)
-	Author URI: https://www.ajaxy.org
-	License: GPLv2 or later
+    Plugin Name: Ajaxy Forms
+    Plugin URI: https://ajaxy.org/product/ajaxy-forms
+    Description: Enhanced WordPress forms with advanced features and integrations
+    Version: 1.0.4
+    Author: Naji Amer (Ajaxy)
+    Author URI: https://www.ajaxy.org
+    License: GPLv2 or later
     License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
     Requires PHP: 7.4
 */
@@ -153,7 +153,7 @@ class Plugin
         $options = \array_replace([
             'csrf_protection' => false,
             'csrf_message' => __('It appears you\'ve already submitted this form, or it may have timed out. Please refresh the page and try again.', "ajaxy-forms"),
-            'csrf_token_id'   => 'form_intention_' . $form->get_name(),
+            'csrf_token_id' => 'form_intention_' . $form->get_name(),
             'allow_extra_fields' => true,
             'required' => false,
         ], $form->get_options());
@@ -299,10 +299,10 @@ class Plugin
                 if ($field['type'] == 'checkbox' || $field['type'] == 'radio') {
                     $builder->get($field['name'])->addModelTransformer(new CallbackTransformer(
                         function ($activeAsString) {
-                            return (bool)(int)$activeAsString;
+                            return (bool) (int) $activeAsString;
                         },
                         function ($activeAsBoolean) {
-                            return (string)(int)$activeAsBoolean;
+                            return (string) (int) $activeAsBoolean;
                         }
                     ));
                 }
@@ -376,8 +376,15 @@ class Plugin
             return sprintf('<div class="ajaxy-form"><div class="form-message success">%s</div></div>', $messages['success'] ?? '');
         }
 
-        $output = $twig->render($twig->createTemplate('{{ form(form) }}'), ['form' => $form->createView()]);
-        return $output;
+        try {
+
+            $output = $twig->render($twig->createTemplate('{{ form(form) }}'), ['form' => $form->createView()]);
+            return $output;
+        } catch (\Throwable $e) {
+            \error_log($e->getMessage());
+            return sprintf('<div class="ajaxy-form"><div class="form-message error">%s</div></div>', __('Error rendering form: ' . $e->getMessage(), "ajaxy-forms"));
+        }
+        return '';
     }
 
     /**
@@ -467,7 +474,7 @@ class Plugin
     public function scripts()
     {
         wp_enqueue_style("ajaxy-forms" . "-style", AJAXY_FORMS_PLUGIN_URL . '/assets/css/styles.css', [], "1.0");
-        wp_enqueue_script("ajaxy-forms" . '-script',  AJAXY_FORMS_PLUGIN_URL  . '/assets/js/script.js', array(), 1.0, true);
+        wp_enqueue_script("ajaxy-forms" . '-script', AJAXY_FORMS_PLUGIN_URL . '/assets/js/script.js', array(), 1.0, true);
         wp_localize_script("ajaxy-forms" . '-script', 'ajaxyFormsSettings', array(
             'nonce' => wp_create_nonce('wp_rest'),
             'dataUrl' => get_rest_url(null, sprintf('ajaxy-forms/v1/form-data/'))
@@ -684,21 +691,24 @@ register_activation_hook(__FILE__, function () {
     "docs" => false,
     "disable_constraints" => true,
     "inherited" => [],
-    "properties" => [[
-        "section" => "basic",
-        "order" => 1,
-        "label" => "Label",
-        "type" => "text",
-        "name" => "label",
-        "help" => "Enter the label for the field, keep empty to hide it",
-    ], [
-        "section" => "basic",
-        "order" => 1,
-        "label" => "Html",
-        "type" => "textarea",
-        "name" => "html",
-        "help" => "Enter the HTML to display in the form",
-    ]],
+    "properties" => [
+        [
+            "section" => "basic",
+            "order" => 1,
+            "label" => "Label",
+            "type" => "text",
+            "name" => "label",
+            "help" => "Enter the label for the field, keep empty to hide it",
+        ],
+        [
+            "section" => "basic",
+            "order" => 1,
+            "label" => "Html",
+            "type" => "textarea",
+            "name" => "html",
+            "help" => "Enter the HTML to display in the form",
+        ]
+    ],
     "order" => 50,
     "keywords" => "html,custom",
     "common" => false

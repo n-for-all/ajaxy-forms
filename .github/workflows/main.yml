@@ -51,6 +51,10 @@ jobs:
     # the job is executed for. In our case here, the commit that the release is attached to.
     - name: Checkout code
       uses: actions/checkout@v2
+      
+    # New step to install SVN
+    - name: Install Subversion (SVN)
+      run: sudo apt-get update && sudo apt-get install -y subversion
 
     # Optional: If your plugin is using composer dependencies, we want to include them
     # WITHOUT the dev dependencies.

@@ -33,15 +33,22 @@
                             echo '<hr />';
                             continue;
                         }
+                        // A saved credential is never printed back into the
+                        // page, an empty box means "keep what is stored".
+                        $is_secret = !empty($property['secret']);
+                        $stored_value = $action_values[$basename] ?? $property['default'] ?? '';
+                        $has_secret = $is_secret && '' !== (string)$stored_value;
+
                         $attributes = \Ajaxy\Forms\Admin\Inc\Helper::convert_array_to_attributes([
                             'name' => $name,
-                            'placeholder' => $property['placeholder'] ?? '',
-                            'value' => $action_values[$basename] ?? $property['default'] ?? '',
+                            'placeholder' => $has_secret ? __('Saved, leave empty to keep it', "ajaxy-forms") : ($property['placeholder'] ?? ''),
+                            'value' => $is_secret ? '' : $stored_value,
                             'class' => $property['class'] ?? null,
                             'id' => $property['id'] ?? '',
                             'multiple' => $property['multiple'] ?? '',
-                            'required' => $property['required'] ?? '',
-                            'type' => $type != 'select' ? $type : null,
+                            'required' => $has_secret ? '' : ($property['required'] ?? ''),
+                            'autocomplete' => $is_secret ? 'new-password' : null,
+                            'type' => $type != 'select' ? ($is_secret ? 'password' : $type) : null,
                         ]);
 
                 ?>

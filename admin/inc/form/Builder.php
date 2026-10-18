@@ -7,6 +7,11 @@ use Ajaxy\Forms\Inc\Data;
 class Builder
 {
     /**
+     * The capability required to manage forms
+     */
+    const CAPABILITY = 'activate_plugins';
+
+    /**
      * Notice to show on the page, set while saving
      */
     private $message = null;
@@ -57,6 +62,12 @@ class Builder
     {
         $page = $_GET['page'] ?? '';
         if ($page !== 'ajaxy-form') return;
+
+        // admin_init is reached by anyone who can load any admin screen, the
+        // menu capability does not apply here.
+        if (!\current_user_can(self::CAPABILITY)) {
+            return;
+        }
 
         $select_id = isset($_GET['form']) ? (int)$_GET['form'] : null;
         $action = isset($_GET['action']) ? $_GET['action'] : '';
@@ -153,6 +164,10 @@ class Builder
      */
     private function save_form($select_id, $tab)
     {
+        if (!\current_user_can(self::CAPABILITY)) {
+            \wp_die(\esc_html__('You are not allowed to edit forms.', 'ajaxy-forms'), 403);
+        }
+
         $nonce = 'save_form_' . ($select_id ? $select_id : 'new');
         $post_vars = array_map('stripslashes_deep', $_POST);
         if (!wp_verify_nonce($_REQUEST['_wpnonce'] ?? '', $nonce)) {
@@ -265,6 +280,10 @@ class Builder
 
     function form_page_handler()
     {
+        if (!\current_user_can(self::CAPABILITY)) {
+            \wp_die(\esc_html__('You are not allowed to manage forms.', 'ajaxy-forms'), 403);
+        }
+
         $select_id = isset($_GET['form']) ? (int)$_GET['form'] : null;
         $message = isset($_GET['message']) ? ["type" => "success", "message" => $_GET['message']] : '';
         $message = isset($_GET['error']) ? ["type" => "error", "message" => $_GET['error']] : $message;
@@ -432,6 +451,14 @@ class Builder
 
     public function action_ajax_handler()
     {
+        if (!\current_user_can(self::CAPABILITY)) {
+            wp_send_json([
+                'status' => 'error',
+                'message' => __('You are not allowed to edit form actions.', "ajaxy-forms"),
+            ], 403);
+            return;
+        }
+
         $post_vars = array_map('stripslashes_deep', $_POST);
         $name = $post_vars['name'] ?? '';
 
@@ -460,7 +487,28 @@ class Builder
             return;
         }
 
-        $saved = Data::update_form_action($form['id'], $name, $post_vars['form_action'] ?? []);
+        $values = $post_vars['form_action'] ?? [];
+
+        // The form never receives the saved credentials, so an empty one
+        // means it was left alone rather than cleared.
+        $existing = [];
+        try {
+            $existing = (array)\json_decode($form['actions'] ?? '', true);
+        } catch (\Throwable $e) {
+            $existing = [];
+        }
+        $previous = $existing[$name] ?? [];
+        foreach (\Ajaxy\Forms\Inc\Actions::getInstance()->get_properties($name) as $property) {
+            if (empty($property['secret'])) {
+                continue;
+            }
+            $key = $property['name'] ?? '';
+            if ($key && empty($values[$key]) && !empty($previous[$key])) {
+                $values[$key] = $previous[$key];
+            }
+        }
+
+        $saved = Data::update_form_action($form['id'], $name, $values);
         if ($saved === false) {
             wp_send_json([
                 'status' => 'error',

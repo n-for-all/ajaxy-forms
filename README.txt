@@ -29,6 +29,17 @@ https://www.youtube.com/watch?v=GHp9gHl_-k4
 == Changelog ==
 
 = 1.0.6 =
+
+**Security release, update as soon as you can.**
+
+* Form entries could be exported by anyone, with no login and no nonce, because the handler ran on admin_init which is reachable through admin-ajax.php. It now requires the capability and a nonce.
+* Submitted values, and the user agent, referer and address recorded alongside them, were written into the entries screens as markup. Anything a visitor sent ran in the browser of whoever opened those screens. Everything is escaped now.
+* Uploads were handed to WordPress with its file type checking turned off, so a form with a file field accepted any extension. The checking is back on, and executable extensions are refused whatever the field allows.
+* Every admin handler asks for the capability now rather than relying on its nonce alone.
+* The public endpoint behind the term and posts field only answers for public post types and published posts, caps how many it returns, and no longer takes meta queries from the caller.
+* Saved credentials are no longer printed back into the page, and the address recorded with an entry is taken from the connection rather than from headers the sender controls.
+* Deleting several entries at once deleted only the first.
+
 * The phone field shows the dial code rather than the full country name, so the selector stays narrow and the number gets the rest of the row. The country name is still available as a field setting.
 * Editing a form highlights Forms in the admin menu instead of New Form, and viewing a single entry highlights Entries instead of nothing.
 * A required checkbox now blocks the submission. It was validated with Not Blank, which accepts the "0" an unticked box holds, so the form went through regardless.

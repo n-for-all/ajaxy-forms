@@ -102,7 +102,14 @@ class Table extends \WP_List_Table
                     <button class="button" type="submit"><?php esc_html_e('Filter', 'ajaxy-forms'); ?></button>
                     <?php
                     if ($this->has_items()) {
-                        echo \sprintf('<a href="%s" target="_blank" class="button apply">%s</a>', esc_url(add_query_arg('export_action', $_GET['form'] ?? 'all')), esc_html(__('Export to Excel', 'ajaxy-forms')));
+                        echo \sprintf(
+                            '<a href="%s" target="_blank" class="button apply">%s</a>',
+                            esc_url(wp_nonce_url(
+                                add_query_arg('export_action', sanitize_text_field(wp_unslash($_GET['form'] ?? 'all'))),
+                                \Ajaxy\Forms\Admin\Inc\Entry\Settings::EXPORT_NONCE
+                            )),
+                            esc_html(__('Export to Excel', 'ajaxy-forms'))
+                        );
                     }
                     ?>
                 </div>
@@ -328,14 +335,15 @@ class Table extends \WP_List_Table
         foreach ($data as $key => $value) {
             $table .= '<tr valign="top">';
             if (!is_numeric($key)) {
-                $table .= '<td><strong>' . $key . ':</strong></td><td>';
+                $table .= '<td><strong>' . \esc_html((string)$key) . ':</strong></td><td>';
             } else {
                 $table .= '<td colspan="2">';
             }
             if (is_object($value) || is_array($value)) {
                 $table .= self::convert_to_table($value);
             } else {
-                $table .= $value;
+                // The user agent, referer and address are request headers.
+                $table .= \esc_html((string)$value);
             }
             $table .= '</td></tr>';
         }

@@ -27,6 +27,10 @@ class Settings
 
     function page_handler()
     {
+        if (!\current_user_can('activate_plugins')) {
+            \wp_die(\esc_html__('You are not allowed to manage forms.', 'ajaxy-forms'), 403);
+        }
+
         $table = new Table();
         $table->prepare_items();
 

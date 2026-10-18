@@ -7,6 +7,16 @@ use Ajaxy\Forms\Inc\Helper;
 class Settings
 {
     /**
+     * The capability required to read and export form entries
+     */
+    const CAPABILITY = 'activate_plugins';
+
+    /**
+     * The nonce action guarding the entries export
+     */
+    const EXPORT_NONCE = 'ajaxy-forms-export';
+
+    /**
      * Initialize the class and set its properties.
      */
     public function __construct()
@@ -58,9 +68,23 @@ class Settings
 
     function admin_init()
     {
-        if (isset($_REQUEST['export_action'])) {
-            \Ajaxy\Forms\Inc\Data::export($_REQUEST['export_action'] == 'all' ? null : $_REQUEST['export_action']);
+        if (!isset($_REQUEST['export_action'])) {
+            return;
         }
+
+        // admin_init runs on admin-ajax.php too, which anyone can reach, so
+        // the export has to carry its own authorisation.
+        if (!\current_user_can(self::CAPABILITY)) {
+            \wp_die(\esc_html__('You are not allowed to export form entries.', 'ajaxy-forms'), 403);
+        }
+
+        if (!\wp_verify_nonce($_REQUEST['_wpnonce'] ?? '', self::EXPORT_NONCE)) {
+            \wp_die(\esc_html__('This export link has expired, please reload the entries page and try again.', 'ajaxy-forms'), 403);
+        }
+
+        $export = \sanitize_text_field(\wp_unslash($_REQUEST['export_action']));
+
+        \Ajaxy\Forms\Inc\Data::export('all' === $export ? null : $export);
     }
 
     function scripts()
@@ -70,6 +94,10 @@ class Settings
 
     function page_handler()
     {
+        if (!\current_user_can(self::CAPABILITY)) {
+            \wp_die(\esc_html__('You are not allowed to view form entries.', 'ajaxy-forms'), 403);
+        }
+
         $table = new Table();
         $table->prepare_items();
 
@@ -93,6 +121,10 @@ class Settings
 
     function form_page_handler()
     {
+        if (!\current_user_can(self::CAPABILITY)) {
+            \wp_die(\esc_html__('You are not allowed to view form entries.', 'ajaxy-forms'), 403);
+        }
+
         global $wpdb;
         $table_name = $wpdb->prefix . 'form_entries'; // do not forget about tables prefix
 

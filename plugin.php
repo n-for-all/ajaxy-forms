@@ -642,29 +642,50 @@ class Plugin
         $type = $request->get_param('type') ?? null;
         switch ($type) {
             case 'posts_by_term':
-                $term_id = $request->get_param('term_id') ?? null;
-                $taxonomy = $request->get_param('taxonomy') ?? 'category';
-                $post_type = $request->get_param('post_type') ?? 'post';
+                // This endpoint answers to anyone, so the query it builds is
+                // kept to published posts of a public type, a bounded number
+                // of them, and no meta lookups.
+                $term_id = \absint($request->get_param('term_id'));
+                $taxonomy = \sanitize_key($request->get_param('taxonomy') ?? 'category');
+                $post_type = \sanitize_key($request->get_param('post_type') ?? 'post');
                 $orderby = $request->get_param('orderby') ?? 'date';
-                $order = $request->get_param('order') ?? 'DESC';
-                $meta_key = $request->get_param('meta_key') ?? '';
-                $meta_value = $request->get_param('meta_value') ?? '';
+                $order = \strtoupper($request->get_param('order') ?? 'DESC') === 'ASC' ? 'ASC' : 'DESC';
                 $exclude = $request->get_param('exclude') ?? '';
                 $include = $request->get_param('include') ?? '';
+
+                if (!$term_id || !\taxonomy_exists($taxonomy)) {
+                    return new \WP_REST_Response(['status' => 'error', 'message' => 'Unknown taxonomy']);
+                }
+
+                $post_type_object = \get_post_type_object($post_type);
+                if (!$post_type_object || empty($post_type_object->public)) {
+                    return new \WP_REST_Response(['status' => 'error', 'message' => 'Unknown post type']);
+                }
+
+                if (!\in_array($orderby, ['date', 'title', 'menu_order', 'ID', 'rand'], true)) {
+                    $orderby = 'date';
+                }
+
+                /**
+                 * How many posts the field may list at once.
+                 *
+                 * @param int $limit
+                 */
+                $limit = (int)\apply_filters('ajaxy_forms_posts_by_term_limit', 200);
+
                 $posts = get_posts(array(
                     'post_type' => $post_type,
                     'order' => $order,
                     'orderby' => $orderby,
-                    'meta_key' => $meta_key,
-                    'meta_value' => $meta_value,
-                    'exclude' => array_filter(explode(',', $exclude)),
-                    'include' => array_filter(explode(',', $include)),
-                    'posts_status' => 'publish',
-                    'posts_per_page' => -1,
+                    'exclude' => \array_map('absint', \array_filter(explode(',', $exclude))),
+                    'include' => \array_map('absint', \array_filter(explode(',', $include))),
+                    'post_status' => 'publish',
+                    'posts_per_page' => $limit,
+                    'numberposts' => $limit,
                     'tax_query' => array(
                         array(
                             'taxonomy' => $taxonomy,
-                            'field' => 'id',
+                            'field' => 'term_id',
                             'terms' => $term_id,
                         ),
                     ),

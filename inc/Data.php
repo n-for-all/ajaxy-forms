@@ -307,8 +307,8 @@ class Data
         global $wpdb;
         $metadata = array(
             'ip' => self::get_ip(),
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'],
-            'referer' => $_SERVER['HTTP_REFERER']
+            'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? \sanitize_text_field(\wp_unslash($_SERVER['HTTP_USER_AGENT'])) : '',
+            'referer' => isset($_SERVER['HTTP_REFERER']) ? \esc_url_raw(\wp_unslash($_SERVER['HTTP_REFERER'])) : ''
         );
 
         if (is_user_logged_in()) {
@@ -408,22 +408,33 @@ class Data
     public static function delete_entries($ids)
     {
         global $wpdb;
-        $ids = implode(',', array_map('absint', (array)$ids));
+        $ids = \array_filter(\array_map('absint', (array)$ids));
+        if (empty($ids)) {
+            return 0;
+        }
         $entries_table_name = self::get_entries_table_name();
 
+        // One placeholder per id, "IN ('1,2,3')" is a single string to MySQL
+        // and matches only the first id.
+        $placeholders = \implode(',', \array_fill(0, \count($ids), '%d'));
+
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-        return $wpdb->query($wpdb->prepare("DELETE FROM %i WHERE ID IN (%s)", $entries_table_name, $ids));
+        return $wpdb->query($wpdb->prepare("DELETE FROM %i WHERE ID IN ($placeholders)", \array_merge([$entries_table_name], $ids)));
     }
 
 
     public static function delete_forms($ids)
     {
         global $wpdb;
-        $ids = implode(',', array_map('absint', (array)$ids));
+        $ids = \array_filter(\array_map('absint', (array)$ids));
+        if (empty($ids)) {
+            return 0;
+        }
         $table_name = self::get_table_name();
+        $placeholders = \implode(',', \array_fill(0, \count($ids), '%d'));
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-        return $wpdb->query($wpdb->prepare("DELETE FROM %i WHERE ID IN (%s)", $table_name, $ids));
+        return $wpdb->query($wpdb->prepare("DELETE FROM %i WHERE ID IN ($placeholders)", \array_merge([$table_name], $ids)));
     }
 
     /**
@@ -435,15 +446,24 @@ class Data
      */
     public static function get_ip()
     {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? \wp_unslash($_SERVER['REMOTE_ADDR']) : '';
+
+        /**
+         * Headers such as X-Forwarded-For are set by whoever sends the
+         * request, so they are only worth reading on a site that sits behind
+         * a proxy it controls. Opt in, and name the header.
+         *
+         * @param string $header The $_SERVER key to read the address from
+         */
+        $header = \apply_filters('ajaxy_forms_remote_address_header', '');
+        if ($header && !empty($_SERVER[$header])) {
+            $forwarded = \explode(',', \wp_unslash($_SERVER[$header]));
+            $ip = \trim($forwarded[0]);
         }
 
-        return $ip;
+        $ip = \filter_var($ip, FILTER_VALIDATE_IP);
+
+        return $ip ? $ip : '';
     }
 
     /**

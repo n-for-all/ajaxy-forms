@@ -81,14 +81,17 @@ class Helper
                     return self::convert_to_fields_table($item);
                 }, $field['value_label']);
                 $output[] = [
-                    $field['label'] ?? '',
+                    \esc_html((string)($field['label'] ?? '')),
                     implode('', $innerTables)
                 ];
                 continue;
             }
+            $value = $field['value_label'] ?? $field['value'] ?? '';
             $output[] = [
-                $field['label'] ?? '',
-                $field['value_label'] ?? $field['value'] ?? ''
+                \esc_html((string)($field['label'] ?? '')),
+                \is_array($value) ? \array_map(function ($item) {
+                    return \esc_html((string)(\is_array($item) ? \implode(', ', $item) : $item));
+                }, $value) : \esc_html((string)$value)
             ];
         }
 
@@ -129,10 +132,10 @@ class Helper
         if (\is_array($data) && !isset($data['url'])) {
 
             foreach ($data as $file) {
-                $table .= '<a style="margin:0 0.2rem 0.2rem" href="' . $file['url'] . '" class="button button-secondary" target="_blank">' . $file['name'] . '</a>';
+                $table .= '<a style="margin:0 0.2rem 0.2rem" href="' . \esc_url($file['url'] ?? '') . '" class="button button-secondary" target="_blank" rel="noopener noreferrer">' . \esc_html((string)($file['name'] ?? '')) . '</a>';
             }
         } else {
-            $table .= '<a href="' . $data['url'] . '" class="button button-secondary" target="_blank">' . $data['name'] . '</a>';
+            $table .= '<a href="' . \esc_url($data['url'] ?? '') . '" class="button button-secondary" target="_blank" rel="noopener noreferrer">' . \esc_html((string)($data['name'] ?? '')) . '</a>';
         }
 
         $table .= '</div>';
@@ -144,25 +147,30 @@ class Helper
             return '';
         }
 
+        // Everything below comes from whoever filled the form in, so it is
+        // escaped on the way out. The nested tables are built here and are
+        // already escaped, which is why they alone go out as markup.
         $table = '<table class="fixed widefat striped ajaxy-data-table">';
         foreach ($data as $key => $field) {
             $table .= '<tr valign="top">';
-            $table .= '<td><strong>' . (!is_array($field) ? $key : $field['label']) . ':</strong></td>';
+            $table .= '<td><strong>' . \esc_html((string)(!is_array($field) ? $key : ($field['label'] ?? $key))) . ':</strong></td>';
             if (!is_array($field)) {
-                $table .= '<td>' . $field . '</td>';
+                $table .= '<td>' . \esc_html((string)$field) . '</td>';
             } elseif (is_object($field['value_label']) || is_array($field['value_label'])) {
-                if ($field['type'] == 'repeater_start') {
+                if (($field['type'] ?? '') == 'repeater_start') {
                     $innerTables = array_map(function ($item) {
                         return self::convert_to_fields_table($item);
-                    }, $field['value_label']);
+                    }, (array)$field['value_label']);
                     $table .= sprintf('<td>%s</td>', implode('', $innerTables));
-                } else if ($field['type'] == 'file') {
+                } else if (($field['type'] ?? '') == 'file') {
                     $table .= sprintf('<td>%s</td>', self::convert_to_file_table($field['value'], $field));
                 } else {
-                    $table .= sprintf('<td>%s</td>', \implode(', ', $field['value_label']));
+                    $table .= sprintf('<td>%s</td>', \implode(', ', \array_map(function ($value) {
+                        return \esc_html((string)(\is_array($value) ? \implode(', ', $value) : $value));
+                    }, (array)$field['value_label'])));
                 }
             } else {
-                $table .=  sprintf('<td>%s</td>', $field['value_label']);
+                $table .= sprintf('<td>%s</td>', \esc_html((string)$field['value_label']));
             }
             $table .= '</tr>';
         }
@@ -389,9 +397,25 @@ class Helper
         }
         return $field_options;
     }
+    /**
+     * Extensions that are never accepted, whatever the field allows
+     */
+    const BLOCKED_UPLOAD_EXTENSIONS = [
+        'php', 'php3', 'php4', 'php5', 'php7', 'php8', 'phps', 'pht', 'phtm', 'phtml', 'phar',
+        'shtml', 'htaccess', 'htpasswd', 'cgi', 'pl', 'py', 'rb', 'sh', 'bash', 'exe', 'dll',
+        'jsp', 'asp', 'aspx', 'swf', 'svgz',
+    ];
+
     public static function validate_upload($form, $file, $extensions, $extensions_message, $invalid_message, $required = true)
     {
         if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+            $extension = \strtolower($file->getClientOriginalExtension());
+
+            if ('' === $extension || \in_array($extension, self::BLOCKED_UPLOAD_EXTENSIONS, true)) {
+                $form->addError(new FormError($invalid_message));
+                return;
+            }
+
             if ($extensions && \count($extensions) > 0) {
                 if (!in_array(strtolower($file->getClientOriginalExtension()), $extensions)) {
                     $message = \str_replace(['{{ extension }}', '{{ extensions }}'], [$file->getClientOriginalExtension(), implode(', ', $extensions)], $extensions_message ? $extensions_message : 'The extension of the file is invalid ({{ extension }}). Allowed extensions are {{ extensions }}');
@@ -462,7 +486,10 @@ class Helper
                     'size' => $val->getSize()
                 );
 
-                $uploaded_file = wp_handle_upload($file, ['test_form' => false, 'test_size' => false, 'test_type' => false], null);
+                // test_type is what stops a .php landing in the uploads
+                // folder, it stays on. A form that needs a type WordPress
+                // does not allow should widen it through upload_mimes.
+                $uploaded_file = wp_handle_upload($file, ['test_form' => false, 'test_size' => true, 'test_type' => true], null);
 
                 if (!isset($uploaded_file['error'])) {
                     unset($file['tmp_name']);

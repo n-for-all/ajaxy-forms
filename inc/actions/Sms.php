@@ -144,6 +144,7 @@ class Sms implements ActionInterface
             [
                 'label' => 'Twilio Key',
                 'type' => 'text',
+                'secret' => true,
                 'name' => 'key',
                 'required' => true,
                 'help' => 'Enter the Twilio API Key'
@@ -151,6 +152,7 @@ class Sms implements ActionInterface
             [
                 'label' => 'Twilio Token',
                 'type' => 'text',
+                'secret' => true,
                 'name' => 'token',
                 'required' => true,
                 'help' => 'Enter the Twilio API Token'
@@ -158,6 +160,7 @@ class Sms implements ActionInterface
             [
                 'label' => 'Bitly Token',
                 'type' => 'text',
+                'secret' => true,
                 'name' => 'bitly_token',
                 'help' => 'Enter the Bitly API Token to shorten the URLs if any URLs are used'
             ]

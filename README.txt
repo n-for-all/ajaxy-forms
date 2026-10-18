@@ -4,7 +4,7 @@ Donate link: http://ajaxy.org/
 Version: 1.0.5
 Tags: form, ajax, survey, contact, entry
 Requires at least: 6.2
-Tested up to: 6.8
+Tested up to: 7.1
 Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html

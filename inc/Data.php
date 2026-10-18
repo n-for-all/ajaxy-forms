@@ -273,6 +273,14 @@ class Data
             $metadata = isset($form['metadata']) ? \json_decode($form['metadata'], true) : [];
             $actions = isset($form['actions']) ? \json_decode($form['actions'], true) : [];
 
+            // The builder stores every action it has ever been shown, the
+            // tick is what says whether it should run. A half filled in one
+            // that was never switched on would otherwise throw on its way up
+            // and take the submission with it.
+            $actions = \array_filter((array)$actions, function ($action) {
+                return !\is_array($action) || !empty($action['enabled']);
+            });
+
             self::$forms[$name] = new Form($name, $metadata['fields'] ?? [], $metadata['options'] ?? [], $actions, null, $metadata['theme'] ?? null);
         }
         return self::$forms[$name];

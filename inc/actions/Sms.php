@@ -3,6 +3,7 @@
 namespace Ajaxy\Forms\Inc\Actions;
 
 use Ajaxy\Forms\Inc\Helper;
+use Ajaxy\Forms\Inc\TemplateField;
 
 class Sms implements ActionInterface
 {
@@ -45,38 +46,53 @@ class Sms implements ActionInterface
         return 'SMS';
     }
 
+    /**
+     * Hand the message to Twilio
+     *
+     * Twilio answers 2xx once it has accepted the message. The "status" it
+     * returns in the body is the delivery state, queued or sent, never an
+     * http code, so reading it as one made every successful send look like
+     * a failure. The http status is what decides.
+     *
+     * @param string $accountSid
+     * @param array  $data
+     * @param string $authToken
+     *
+     * @throws \Exception when Twilio refuses the message
+     *
+     * @return void
+     */
     public function sendCurlMessage($accountSid, $data, $authToken)
     {
-        $url = 'https://api.twilio.com/2010-04-01/Accounts/' . $accountSid . '/Messages.json';
+        $url = 'https://api.twilio.com/2010-04-01/Accounts/' . \rawurlencode($accountSid) . '/Messages.json';
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-        curl_setopt(
-            $ch,
-            CURLOPT_USERPWD,
-            $accountSid . ':' . $authToken
-        );
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response = \wp_remote_post($url, [
+            'timeout' => 15,
+            'headers' => [
+                'Authorization' => 'Basic ' . \base64_encode($accountSid . ':' . $authToken),
+            ],
+            'body' => $data,
+        ]);
 
-        $response = curl_exec($ch);
+        if (\is_wp_error($response)) {
+            throw new \Exception($response->get_error_message());
+        }
 
-        if ($response) {
-            curl_close($ch);
-            $response = json_decode($response);
-            if ($response->status != 200) {
-                throw new \Exception($response->message);
-            }
-        } else {
-            $error = curl_error($ch);
-            curl_close($ch);
-            throw new \Exception($error);
+        $code = (int)\wp_remote_retrieve_response_code($response);
+        $body = \json_decode(\wp_remote_retrieve_body($response), true);
+
+        if ($code < 200 || $code >= 300) {
+            throw new \Exception(
+                !empty($body['message'])
+                    ? $body['message']
+                    : \sprintf('Twilio answered with %d', $code)
+            );
         }
     }
     public function execute($data, $form)
     {
         $values = [
-            'data' => $data,
+            'data' => TemplateField::from_data(Helper::parse_submit_data($data, $form)),
         ];
         $to = Helper::create_twig_template($this->to, $values);
 
@@ -93,30 +109,6 @@ class Sms implements ActionInterface
             throw new \Exception(\esc_html(\sprintf('SMS/Whatsapp action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage())));
         }
     }
-    public function oldexecute($data, $form)
-    {
-        $values = [
-            'data' => $data,
-        ];
-
-        $to = Helper::create_twig_template($this->to, $values);
-
-        $message = $this->parseMessage(Helper::create_twig_template($this->message, $values));
-        try {
-            $client = new \Twilio\Rest\Client($this->key, $this->token);
-            $client->messages->create(
-                $to,
-                [
-                    'from' => $this->from,
-                    'body' => $message
-                ]
-            );
-        } catch (\Twilio\Exceptions\TwilioException $e) {
-            \error_log(\sprintf('SMS/Whatsapp action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage()));
-            throw new \Exception(\esc_html(\sprintf('SMS/Whatsapp action failed to sent to %s with error %s - %s',   $this->to, $e->getCode(), $e->getMessage())));
-        }
-    }
-
     public static function get_properties()
     {
         return [

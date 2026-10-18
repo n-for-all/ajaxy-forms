@@ -3,6 +3,7 @@
 namespace Ajaxy\Forms\Inc\Actions;
 
 use Ajaxy\Forms\Inc\Helper;
+use Ajaxy\Forms\Inc\TemplateField;
 
 class Email implements ActionInterface
 {
@@ -55,18 +56,20 @@ class Email implements ActionInterface
 
         $this->headers[] = 'Content-Type: text/html; charset=UTF-8';
 
+        $parsed = Helper::parse_submit_data($data, $form);
         $values = [
-            'data' => Helper::parse_submit_data($data, $form),
+            'data' => TemplateField::from_data($parsed),
         ];
 
         $to = Helper::create_twig_template($this->to, $values);
         $subject = Helper::create_twig_template($this->subject, $values);
+
+        // The message used to be handed the raw submission while the subject
+        // got the parsed one, so the {{data[FIELD].value}} the help asks for
+        // came out empty here. Same shape in all three now.
         $message = Helper::create_twig_template(
-            $this->message,  
-            [
-                'data' => $data,
-                'table' => Helper::create_table($values['data'], $form)
-            ]
+            $this->message,
+            $values + ['table' => Helper::create_table($parsed, $form)]
         );
 
         $sent = \wp_mail($to, $subject, $message, $this->headers);

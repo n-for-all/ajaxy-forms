@@ -39,6 +39,9 @@ https://www.youtube.com/watch?v=GHp9gHl_-k4
 * The public endpoint behind the term and posts field only answers for public post types and published posts, caps how many it returns, and no longer takes meta queries from the caller.
 * Saved credentials are no longer printed back into the page, and the address recorded with an entry is taken from the connection rather than from headers the sender controls.
 * Deleting several entries at once deleted only the first.
+* The Enabled switch on a form action is honoured. An action that had been set up and then switched off still ran, and one that was half filled in could fail the whole submission.
+* An SMS or Whatsapp that Twilio accepted was reported back as a failure, because the delivery state it returns was read as though it were an http code.
+* The message of an email or an SMS accepts {{data[FIELD_NAME].value}} the way the subject always has. It was handed the raw submission, so those came out empty.
 
 * The phone field shows the dial code rather than the full country name, so the selector stays narrow and the number gets the rest of the row. The country name is still available as a field setting.
 * Editing a form highlights Forms in the admin menu instead of New Form, and viewing a single entry highlights Entries instead of nothing.

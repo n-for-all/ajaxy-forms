@@ -20,12 +20,18 @@ try {
                     <div class="drag-instructions post-body-plain">
                         <p><?php echo esc_html($starter_copy); ?></p>
                     </div>
-                    <?php include(AJAXY_FORMS_PLUGIN_DIR . '/admin/inc/form/templates/placeholders.tpl.php'); ?>
-                    <ul class="ui-sortable af-actions-list">
-                        <?php foreach ($actions as $action_name => $action) : ?>
-                            <?php include(AJAXY_FORMS_PLUGIN_DIR . '/admin/inc/form/templates/action.tpl.php'); ?>
-                        <?php endforeach; ?>
-                    </ul>
+                    <div class="af-actions-columns">
+                        <div class="af-actions-main">
+                            <ul class="ui-sortable af-actions-list">
+                                <?php foreach ($actions as $action_name => $action) : ?>
+                                    <?php include(AJAXY_FORMS_PLUGIN_DIR . '/admin/inc/form/templates/action.tpl.php'); ?>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <aside class="af-actions-side">
+                            <?php include(AJAXY_FORMS_PLUGIN_DIR . '/admin/inc/form/templates/placeholders.tpl.php'); ?>
+                        </aside>
+                    </div>
                 </div>
             </div>
         </div>
@@ -37,13 +43,6 @@ try {
         var toast = $('.af-toast');
         $('.af-toast').on('click', function() {
             toast.fadeOut();
-        });
-
-        $('.af-placeholders-toggle').on('click', function() {
-            var body = $(this).closest('.af-placeholders').find('.af-placeholders-body');
-            var open = body.is('[hidden]');
-            body.prop('hidden', !open);
-            $(this).attr('aria-expanded', open ? 'true' : 'false').text(open ? '<?php echo esc_js(__('hide', 'ajaxy-forms')); ?>' : '<?php echo esc_js(__('show', 'ajaxy-forms')); ?>');
         });
 
         $('.af-placeholders').on('click keydown', 'code.af-copy', function(e) {

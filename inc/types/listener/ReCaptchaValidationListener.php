@@ -2,58 +2,33 @@
 
 namespace Ajaxy\Forms\Inc\Types\Listener;
 
-use Isolated\Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Isolated\Symfony\Component\Form\FormError;
-use Isolated\Symfony\Component\Form\FormEvent;
-use Isolated\Symfony\Component\Form\FormEvents;
-
-class ReCaptchaValidationListener implements EventSubscriberInterface
+class ReCaptchaValidationListener extends CaptchaValidationListener
 {
-    private $options;
-
-    public function __construct(array $options)
+    /**
+     * @inheritDoc
+     */
+    protected function get_endpoint()
     {
-        $this->options = $options;
+        return 'https://www.google.com/recaptcha/api/siteverify';
     }
 
-    public static function getSubscribedEvents()
+    /**
+     * @inheritDoc
+     */
+    protected function get_response_field()
     {
-        return [
-            FormEvents::POST_SUBMIT => 'onPostSubmit'
-        ];
+        return 'g-recaptcha-response';
     }
 
-    public function onPostSubmit(FormEvent $event)
-    {
-        $valid = $this->validateReCaptcha();
-        if (!$valid) {
-            $event->getForm()->addError(new FormError($this->options['invalid_message']));
-        }
-    }
-
+    /**
+     * Verify the submitted token against Google
+     *
+     * @deprecated Use validate() instead
+     *
+     * @return boolean
+     */
     public function validateReCaptcha()
     {
-        if (isset($_POST['g-recaptcha-response'])) {
-            $params = sprintf( '?secret=%s&response=%s', $this->options['secret'], \sanitize_text_field($_POST[ 'g-recaptcha-response' ]) );
-            $response = wp_remote_post('https://www.google.com/recaptcha/api/siteverify'.$params);
-
-
-            if (is_wp_error($response)) {
-                return false;
-            }
-
-            $body = wp_remote_retrieve_body($response);
-            if (empty($body)) {
-                return false;
-            }
-            $result = json_decode($body);
-            if (empty($result)) {
-                return false;
-            }
-            if (! isset($result->success)) {
-                return false;
-            }
-            return $result->success;
-        }
+        return $this->validate();
     }
 }

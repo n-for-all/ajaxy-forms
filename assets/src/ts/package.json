@@ -10,7 +10,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/backbone": "^1.4.19"
+    "@rollup/plugin-node-resolve": "15.2.3",
+    "@rollup/plugin-replace": "5.0.7",
+    "@rollup/plugin-typescript": "11.1.6",
+    "@types/backbone": "^1.4.19",
+    "rollup": "4.21.0",
+    "tslib": "2.6.3",
+    "typescript": "5.4.5"
   },
   "dependencies": {
     "backbone": "^1.6.0"

@@ -124,9 +124,21 @@
 {%- endblock date_widget -%}
 
 {% block recaptcha_row %}
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
     <div id="{{ id }}" class="g-recaptcha" data-sitekey="{{ key }}"></div>
 {% endblock %}
+
+{% block turnstile_row %}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+    <div id="{{ id }}" class="cf-turnstile" data-sitekey="{{ key }}" data-theme="{{ theme|default('auto') ?: 'auto' }}" data-size="{{ size|default('normal') ?: 'normal' }}" data-appearance="{{ appearance|default('always') ?: 'always' }}"></div>
+{% endblock %}
+
+{%- block phone_widget -%}
+    <div {{ block('widget_container_attributes') }}>
+        {{- form_widget(form.country) -}}
+        {{- form_widget(form.number) -}}
+    </div>
+{%- endblock phone_widget -%}
 
 {%- block repeater_start_row -%}
     <div id="{{ id }}" class="repeater repeater-start">

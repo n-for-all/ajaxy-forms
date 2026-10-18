@@ -255,7 +255,32 @@ class Helper
         }
     }
 
-    public static function parse_submit_data($data, Form $form, $exclude = ['_message', '_token'], $exclude_types = ['submit', 'button', 'recaptcha', 'html', 'repeater_end'])
+    /**
+     * Strip anything unsafe out of a submitted value
+     *
+     * Backs the "Sanitize Html" field setting, which until now was offered in
+     * the builder but never applied to anything.
+     *
+     * @date 2026-10-18
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public static function sanitize_html($value)
+    {
+        if (\is_array($value)) {
+            return \array_map([self::class, 'sanitize_html'], $value);
+        }
+
+        if (!\is_string($value) || '' === $value) {
+            return $value;
+        }
+
+        return \wp_kses_post($value);
+    }
+
+    public static function parse_submit_data($data, Form $form, $exclude = ['_message', '_token'], $exclude_types = ['submit', 'button', 'recaptcha', 'turnstile', 'html', 'repeater_end'])
     {
         $nData = [];
         $fields = $form->get_fields();

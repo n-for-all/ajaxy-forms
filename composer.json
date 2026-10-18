@@ -10,7 +10,8 @@
 		"egulias/email-validator": "^3.0",
 		"symfony/mime": "5.0.0",
 		"symfony/http-foundation": "5.4.0",
-		"symfony/polyfill-intl-icu": "*"
+		"symfony/polyfill-intl-icu": "*",
+		"symfony/intl": "^5.4"
 	},
 	"replace": {
 		"symfony/polyfill-ctype": "*",
@@ -21,6 +22,11 @@
 		"symfony/polyfill-php73": "*",
 		"symfony/polyfill-php80": "*",
 		"symfony/polyfill-php81": "*"
+	},
+	"config": {
+		"platform": {
+			"php": "7.4.33"
+		}
 	},
 	"autoload": {
 		"psr-4": {

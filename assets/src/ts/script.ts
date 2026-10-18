@@ -1,5 +1,6 @@
 import "whatwg-fetch";
 import { Form } from "./form";
+import { captchas } from "./captcha";
 import AjaxyTermPostsManager from "./term_posts";
 import AjaxyRepeater from "./repeater";
 
@@ -9,6 +10,10 @@ class AjaxyForms {
 	term_posts: { [x: string]: AjaxyTermPostsManager } = {};
 	constructor() {
 		this.ready(() => {
+			// Rendered for every form, ajax or not, the markup asks the
+			// providers not to render themselves.
+			captchas.discover();
+
 			let forms = document.querySelectorAll("form.ajaxy-form.is-ajax");
 			if (forms.length > 0) {
 				[].forEach.call(forms, (form) => {

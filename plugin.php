@@ -7,7 +7,7 @@
     Plugin Name: Ajaxy Forms
     Plugin URI: https://ajaxy.org/product/ajaxy-forms
     Description: Enhanced WordPress forms with advanced features and integrations
-    Version: 1.0.4
+    Version: 1.0.5
     Author: Naji Amer (Ajaxy)
     Author URI: https://www.ajaxy.org
     License: GPLv2 or later
@@ -29,7 +29,10 @@ use Isolated\Symfony\Component\Form\Extension\Core\Type;
 use Isolated\Symfony\Component\Validator\Validation;
 use Isolated\Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Isolated\Symfony\Component\Form\FormRenderer;
-use Isolated\Symfony\Component\Form\Forms;
+use Isolated\Symfony\Component\Form\Extension\Core\CoreExtension;
+use Isolated\Symfony\Component\Form\FormFactory;
+use Isolated\Symfony\Component\Form\FormRegistry;
+use Isolated\Symfony\Component\Form\ResolvedFormTypeFactory;
 use Isolated\Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Isolated\Symfony\Component\Form\Extension\Csrf\CsrfExtension;
 use Isolated\Symfony\Component\Security\Csrf\CsrfTokenManager;
@@ -44,7 +47,7 @@ use WP_Error;
 define("AJAXY_FORMS_PLUGIN_URL", plugins_url('', __FILE__));
 define("AJAXY_FORMS_PLUGIN_DIR", plugin_dir_path(__FILE__));
 define("AJAXY_FORMS_BASENAME", plugin_basename(__FILE__));
-define("AJAXY_FORMS_VERSION", "1.0.0");
+define("AJAXY_FORMS_VERSION", "1.0.5");
 
 class Plugin
 {
@@ -55,6 +58,7 @@ class Plugin
     private $entry_settings = null;
     private $builder = null;
     private $csrf_token_manager = null;
+    private $form_registry = null;
 
 
 
@@ -143,11 +147,17 @@ class Plugin
         // Set up the Validator component
         $validator = Validation::createValidator();
 
-        // Set up the Form component
-        $formFactory = Forms::createFormFactoryBuilder()
-            ->addExtension(new CsrfExtension($this->csrf_token_manager))
-            ->addExtension(new ValidatorExtension($validator))
-            ->getFormFactory();
+        // Set up the Form component, the registry is kept so that the options
+        // a type actually accepts can be looked up before handing them over.
+        $this->form_registry = new FormRegistry(
+            [
+                new CoreExtension(),
+                new CsrfExtension($this->csrf_token_manager),
+                new ValidatorExtension($validator),
+            ],
+            new ResolvedFormTypeFactory()
+        );
+        $formFactory = new FormFactory($this->form_registry);
 
 
         $options = \array_replace([
@@ -224,10 +234,16 @@ class Plugin
                 }
             }
 
-            if ($field['type'] == 'choice') {
+            if (in_array($field['type'], ['choice', 'radio_group', 'checkbox_group'])) {
+                foreach (['multiple', 'expanded'] as $flag) {
+                    if (isset($field_options[$flag])) {
+                        $field_options[$flag] = \boolval($field_options[$flag]);
+                    }
+                }
+
                 if (isset($field_options['choices']) && is_array($field_options['choices'])) {
                     array_walk($field_options['choices'], function (&$choice) {
-                        if ($choice['value'] == '') {
+                        if (!isset($choice['value']) || $choice['value'] == '') {
                             $choice['value'] = \sanitize_text_field($choice['label']);
                         }
                     });
@@ -237,10 +253,14 @@ class Plugin
                     }));
 
                     if (count($selected) > 0) {
-                        $field_options['data'] = $selected[0]['value'];
+                        $field_options['data'] = $field_options['multiple'] ?? false
+                            ? \array_column($selected, 'value')
+                            : $selected[0]['value'];
                     }
 
-                    $field_options['choices'] = \array_combine(\array_column($field_options['choices'], 'value'), \array_column($field_options['choices'], 'label'));
+                    // Symfony keys the choices by their label and holds the
+                    // submitted value, not the other way around.
+                    $field_options['choices'] = \array_combine(\array_column($field_options['choices'], 'label'), \array_column($field_options['choices'], 'value'));
                 }
             }
 
@@ -261,11 +281,16 @@ class Plugin
             unset($field_options['name']);
             unset($field_options['type']);
 
+            $sanitize_html = !empty($field_options['sanitize_html']);
+            unset($field_options['sanitize_html']);
+
             if (isset($field_options['field_type'])) {
                 $field_options['type'] = $field_options['field_type'];
                 unset($field_options['field_type']);
             }
 
+
+            $field_options = $this->filter_options($field['type'], $field_options);
 
             try {
                 if ($field['type'] == 'repeater_start') {
@@ -296,6 +321,16 @@ class Plugin
                     continue;
                 }
                 $builder->add($field['name'], $this->get_field($field['type']), $field_options);
+                if ($sanitize_html) {
+                    $builder->get($field['name'])->addModelTransformer(new CallbackTransformer(
+                        function ($value) {
+                            return $value;
+                        },
+                        function ($value) {
+                            return Helper::sanitize_html($value);
+                        }
+                    ));
+                }
                 if ($field['type'] == 'checkbox' || $field['type'] == 'radio') {
                     $builder->get($field['name'])->addModelTransformer(new CallbackTransformer(
                         function ($activeAsString) {
@@ -394,12 +429,12 @@ class Plugin
      *
      * @param \Isolated\Symfony\Component\Form\FormInterface $form
      *
-     * @return void
+     * @return boolean
      */
     public function on_submit($form_name, $form)
     {
         $errors = [];
-        $form->handleRequest();
+        $this->handle_request($form);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
@@ -424,6 +459,38 @@ class Plugin
         }
 
         return false;
+    }
+
+
+    /**
+     * Handle the request for the form
+     *
+     * WordPress slashes $_GET/$_POST through wp_magic_quotes(), while the form
+     * is built from unslashed data stored in the database. The native request
+     * handler reads the superglobals directly, so submitted values containing
+     * quotes (O'Brien, "I'd like to cancel") would never match the registered
+     * choices and would be stored escaped. Unslash them for the handover only.
+     *
+     * @date 2026-10-18
+     *
+     * @param \Isolated\Symfony\Component\Form\FormInterface $form
+     *
+     * @return void
+     */
+    private function handle_request($form)
+    {
+        $post = $_POST;
+        $get = $_GET;
+
+        $_POST = \wp_unslash($_POST);
+        $_GET = \wp_unslash($_GET);
+
+        try {
+            $form->handleRequest();
+        } finally {
+            $_POST = $post;
+            $_GET = $get;
+        }
     }
 
 
@@ -473,14 +540,55 @@ class Plugin
 
     public function scripts()
     {
-        wp_enqueue_style("ajaxy-forms" . "-style", AJAXY_FORMS_PLUGIN_URL . '/assets/css/styles.css', [], "1.0");
-        wp_enqueue_script("ajaxy-forms" . '-script', AJAXY_FORMS_PLUGIN_URL . '/assets/js/script.js', array(), 1.0, true);
+        wp_enqueue_style("ajaxy-forms" . "-style", AJAXY_FORMS_PLUGIN_URL . '/assets/css/styles.css', [], AJAXY_FORMS_VERSION);
+        wp_enqueue_script("ajaxy-forms" . '-script', AJAXY_FORMS_PLUGIN_URL . '/assets/js/script.js', array(), AJAXY_FORMS_VERSION, true);
         wp_localize_script("ajaxy-forms" . '-script', 'ajaxyFormsSettings', array(
             'nonce' => wp_create_nonce('wp_rest'),
             'dataUrl' => get_rest_url(null, sprintf('ajaxy-forms/v1/form-data/'))
         ));
     }
 
+
+    /**
+     * Drop the options a form type does not accept
+     *
+     * The builder offers settings that belong to the plugin rather than to
+     * Symfony, and a field carried over from an older version may hold
+     * settings its type has since dropped. Either one would otherwise take
+     * the whole form down with an UndefinedOptionsException.
+     *
+     * @date 2026-10-18
+     *
+     * @param string $type    The field type as named by the builder
+     * @param array  $options
+     *
+     * @return array
+     */
+    private function filter_options($type, $options)
+    {
+        if (!$this->form_registry) {
+            return $options;
+        }
+
+        try {
+            $defined = $this->form_registry->getType($this->get_field($type))->getOptionsResolver()->getDefinedOptions();
+        } catch (\Throwable $e) {
+            return $options;
+        }
+
+        $unsupported = \array_diff(\array_keys($options), $defined);
+        if (empty($unsupported)) {
+            return $options;
+        }
+
+        \error_log(\sprintf(
+            'Ajaxy Forms: the %s field does not support the %s setting, it was ignored.',
+            $type,
+            \implode(', ', $unsupported)
+        ));
+
+        return \array_diff_key($options, \array_flip($unsupported));
+    }
 
     public function get_field($type)
     {

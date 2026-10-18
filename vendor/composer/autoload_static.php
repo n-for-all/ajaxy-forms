@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6b085c9f65637afcfeb0db9b8bef33dc
+class ComposerStaticInitf07d1dd9de8cdac63215d91c1b268560
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -15,6 +15,7 @@ class ComposerStaticInit6b085c9f65637afcfeb0db9b8bef33dc
         'ffecb95d45175fd40f75be8a23b34f90' => __DIR__ . '/..' . '/twig/twig/src/Resources/debug.php',
         'c7baa00073ee9c61edf148c51917cfb4' => __DIR__ . '/..' . '/twig/twig/src/Resources/escaper.php',
         'f844ccf1d25df8663951193c3fc307c8' => __DIR__ . '/..' . '/twig/twig/src/Resources/string_loader.php',
+        '53c7be3308b5aa229d03a4dfcf6ca18d' => __DIR__ . '/..' . '/symfony/intl/Resources/functions.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
     );
 
@@ -37,6 +38,7 @@ class ComposerStaticInit6b085c9f65637afcfeb0db9b8bef33dc
             'Isolated\\Symfony\\Component\\PasswordHasher\\' => 42,
             'Isolated\\Symfony\\Component\\OptionsResolver\\' => 43,
             'Isolated\\Symfony\\Component\\Mime\\' => 32,
+            'Isolated\\Symfony\\Component\\Intl\\' => 32,
             'Isolated\\Symfony\\Component\\HttpFoundation\\' => 42,
             'Isolated\\Symfony\\Component\\Form\\' => 32,
             'Isolated\\Symfony\\Component\\Filesystem\\' => 38,
@@ -120,6 +122,10 @@ class ComposerStaticInit6b085c9f65637afcfeb0db9b8bef33dc
         array (
             0 => __DIR__ . '/..' . '/symfony/mime',
         ),
+        'Isolated\\Symfony\\Component\\Intl\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/intl',
+        ),
         'Isolated\\Symfony\\Component\\HttpFoundation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/http-foundation',
@@ -172,18 +178,18 @@ class ComposerStaticInit6b085c9f65637afcfeb0db9b8bef33dc
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Isolated\\Collator' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/Collator.php',
-        'Isolated\\IntlDateFormatter' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/IntlDateFormatter.php',
-        'Isolated\\Locale' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/Locale.php',
-        'Isolated\\NumberFormatter' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/NumberFormatter.php',
+        'Isolated\\Collator' => __DIR__ . '/..' . '/symfony/intl/Resources/stubs/Collator.php',
+        'Isolated\\IntlDateFormatter' => __DIR__ . '/..' . '/symfony/intl/Resources/stubs/IntlDateFormatter.php',
+        'Isolated\\Locale' => __DIR__ . '/..' . '/symfony/intl/Resources/stubs/Locale.php',
+        'Isolated\\NumberFormatter' => __DIR__ . '/..' . '/symfony/intl/Resources/stubs/NumberFormatter.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6b085c9f65637afcfeb0db9b8bef33dc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6b085c9f65637afcfeb0db9b8bef33dc::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6b085c9f65637afcfeb0db9b8bef33dc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf07d1dd9de8cdac63215d91c1b268560::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf07d1dd9de8cdac63215d91c1b268560::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf07d1dd9de8cdac63215d91c1b268560::$classMap;
 
         }, null, ClassLoader::class);
     }

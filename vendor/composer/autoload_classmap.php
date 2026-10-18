@@ -7,8 +7,8 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
-    'Isolated\\Collator' => $vendorDir . '/symfony/polyfill-intl-icu/Resources/stubs/Collator.php',
-    'Isolated\\IntlDateFormatter' => $vendorDir . '/symfony/polyfill-intl-icu/Resources/stubs/IntlDateFormatter.php',
-    'Isolated\\Locale' => $vendorDir . '/symfony/polyfill-intl-icu/Resources/stubs/Locale.php',
-    'Isolated\\NumberFormatter' => $vendorDir . '/symfony/polyfill-intl-icu/Resources/stubs/NumberFormatter.php',
+    'Isolated\\Collator' => $vendorDir . '/symfony/intl/Resources/stubs/Collator.php',
+    'Isolated\\IntlDateFormatter' => $vendorDir . '/symfony/intl/Resources/stubs/IntlDateFormatter.php',
+    'Isolated\\Locale' => $vendorDir . '/symfony/intl/Resources/stubs/Locale.php',
+    'Isolated\\NumberFormatter' => $vendorDir . '/symfony/intl/Resources/stubs/NumberFormatter.php',
 );

@@ -1,6 +1,119 @@
 (function () {
     'use strict';
 
+    var PROVIDERS = [
+        { name: "recaptcha", selector: ".g-recaptcha", api: "grecaptcha" },
+        { name: "turnstile", selector: ".cf-turnstile", api: "turnstile" },
+    ];
+    var toArray = function (list) { return Array.prototype.slice.call(list); };
+    /**
+     * A single captcha widget, rendered explicitly so that we keep the widget id
+     * and can reset it, the token is single use and a failed submission leaves a
+     * spent one behind.
+     */
+    var Captcha = /** @class */ (function () {
+        function Captcha(element, provider) {
+            this.widgetId = null;
+            this.element = element;
+            this.provider = provider;
+        }
+        Captcha.prototype.api = function () {
+            return window[this.provider.api];
+        };
+        Captcha.prototype.params = function () {
+            var params = {};
+            var data = this.element.dataset;
+            for (var key in data) {
+                if (key === "ajaxyCaptcha" || !data[key])
+                    continue;
+                params[key] = data[key];
+            }
+            return params;
+        };
+        Captcha.prototype.render = function () {
+            if (this.widgetId !== null)
+                return true;
+            var api = this.api();
+            if (!api || typeof api.render !== "function")
+                return false;
+            try {
+                var widgetId = api.render(this.element, this.params());
+                this.widgetId = widgetId === undefined || widgetId === null ? this.element.id : widgetId;
+            }
+            catch (e) {
+                // Already rendered by the provider itself, keep it and reset by container.
+                this.widgetId = this.element.id;
+                console.warn("Ajaxy Forms: unable to render the captcha", e);
+            }
+            return true;
+        };
+        Captcha.prototype.reset = function () {
+            var api = this.api();
+            if (!api || typeof api.reset !== "function")
+                return;
+            try {
+                if (this.widgetId !== null)
+                    api.reset(this.widgetId);
+                else
+                    api.reset();
+            }
+            catch (e) {
+                console.warn("Ajaxy Forms: unable to reset the captcha", e);
+            }
+        };
+        return Captcha;
+    }());
+    /**
+     * Renders every captcha on the page and resets the ones belonging to a form.
+     *
+     * The provider scripts are printed inside the form markup and load async, so
+     * they are ready either before or well after this script runs, hence the poll.
+     */
+    var CaptchaManager = /** @class */ (function () {
+        function CaptchaManager() {
+            this.captchas = [];
+            this.timer = null;
+            this.attempts = 0;
+        }
+        CaptchaManager.prototype.discover = function (root) {
+            var _this = this;
+            if (root === void 0) { root = document; }
+            PROVIDERS.forEach(function (provider) {
+                toArray(root.querySelectorAll(provider.selector)).forEach(function (element) {
+                    if (element.dataset.ajaxyCaptcha)
+                        return;
+                    element.dataset.ajaxyCaptcha = provider.name;
+                    _this.captchas.push(new Captcha(element, provider));
+                });
+            });
+            this.render();
+        };
+        CaptchaManager.prototype.render = function () {
+            var _this = this;
+            if (this.pending().length === 0 || this.timer)
+                return;
+            this.attempts = 0;
+            this.timer = setInterval(function () {
+                _this.attempts++;
+                if (_this.pending().length === 0 || _this.attempts > 300) {
+                    clearInterval(_this.timer);
+                    _this.timer = null;
+                }
+            }, 100);
+        };
+        CaptchaManager.prototype.reset = function (root) {
+            this.captchas.forEach(function (captcha) {
+                if (!root || root.contains(captcha.element))
+                    captcha.reset();
+            });
+        };
+        CaptchaManager.prototype.pending = function () {
+            return this.captchas.filter(function (captcha) { return !captcha.render(); });
+        };
+        return CaptchaManager;
+    }());
+    var captchas = new CaptchaManager();
+
     var Form = /** @class */ (function () {
         function Form(element, submitButton, validate, _normalSubmit) {
             var _this = this;
@@ -79,6 +192,9 @@
                             _this.clearErrors();
                             _this.trigger("response", json);
                             (_a = _this.submitButton) === null || _a === void 0 ? void 0 : _a.classList.remove("loading");
+                            // The captcha token is single use, a spent one is
+                            // rejected on the next attempt unless we reset it.
+                            captchas.reset(_this.element);
                             if (json) {
                                 if (json.status == "error") {
                                     if (json.fields) {
@@ -112,6 +228,7 @@
                             _this.clearErrors();
                             _this.trigger("error", error);
                             (_a = _this.submitButton) === null || _a === void 0 ? void 0 : _a.classList.remove("loading");
+                            captchas.reset(_this.element);
                             _this.setMessage(error.message, "error");
                         });
                     })
@@ -119,6 +236,7 @@
                         var _a;
                         _this.trigger("error", e);
                         (_a = _this.submitButton) === null || _a === void 0 ? void 0 : _a.classList.remove("loading");
+                        captchas.reset(_this.element);
                         console.error(e);
                         _this.setMessage(e.message, "error");
                     });
@@ -211,7 +329,7 @@
         return Form;
     }());
 
-    /*! *****************************************************************************
+    /******************************************************************************
     Copyright (c) Microsoft Corporation.
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -225,7 +343,7 @@
     OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
     PERFORMANCE OF THIS SOFTWARE.
     ***************************************************************************** */
-    /* global Reflect, Promise */
+    /* global Reflect, Promise, SuppressedError, Symbol */
 
 
     var __assign = function() {
@@ -237,6 +355,11 @@
             return t;
         };
         return __assign.apply(this, arguments);
+    };
+
+    typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+        var e = new Error(message);
+        return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
     };
 
     var AjaxyTermPostsManager = /** @class */ (function () {
@@ -415,6 +538,9 @@
             this.repeaters = {};
             this.term_posts = {};
             this.ready(function () {
+                // Rendered for every form, ajax or not, the markup asks the
+                // providers not to render themselves.
+                captchas.discover();
                 var forms = document.querySelectorAll("form.ajaxy-form.is-ajax");
                 if (forms.length > 0) {
                     [].forEach.call(forms, function (form) {

@@ -2,7 +2,6 @@
 
 namespace Ajaxy\Forms\Inc\Types;
 
-use ReCaptcha\ReCaptcha;
 use Isolated\Symfony\Component\Form\AbstractType;
 use Isolated\Symfony\Component\Form\FormBuilderInterface;
 use Isolated\Symfony\Component\Form\FormInterface;
@@ -14,15 +13,6 @@ use Isolated\Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ReCaptchaType extends AbstractType
 {
-    /**
-     * ReCaptchaType constructor.
-     *
-     * @param ReCaptcha $reCaptcha
-     */
-    public function __construct()
-    {
-    }
-
     /**
      * @inheritDoc
      */

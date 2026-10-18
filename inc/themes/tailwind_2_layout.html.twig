@@ -146,9 +146,22 @@
 {%- endblock datetime_widget %}
 
 {% block recaptcha_row %}
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
     <div id="{{ id }}" class="mb-6 g-recaptcha" data-sitekey="{{ key }}"></div>
 {% endblock %}
+
+{% block turnstile_row %}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+    <div id="{{ id }}" class="mb-6 cf-turnstile" data-sitekey="{{ key }}" data-theme="{{ theme|default('auto') ?: 'auto' }}" data-size="{{ size|default('normal') ?: 'normal' }}" data-appearance="{{ appearance|default('always') ?: 'always' }}"></div>
+{% endblock %}
+
+{%- block phone_widget -%}
+    {%- set attr = attr|merge({ class: (attr.class|default('') ~ ' flex items-center w-full gap-x-2')|trim }) -%}
+    <div {{ block('widget_container_attributes') }}>
+        {{- form_widget(form.country, { attr: { class: 'phone-country w-auto max-w-xs flex-none rounded-sm border-0 px-2 py-1.5 pr-8 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-800 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm' } }) -}}
+        {{- form_widget(form.number, { attr: { class: 'phone-number block w-full flex-1 rounded-sm border-0 px-2 py-1.5 text-gray-900 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm' } }) -}}
+    </div>
+{%- endblock phone_widget -%}
 
 {%- block time_widget -%}
     {%- if widget == 'single_text' -%}

@@ -22,6 +22,7 @@ return array(
     'Isolated\\Symfony\\Component\\PasswordHasher\\' => array($vendorDir . '/symfony/password-hasher'),
     'Isolated\\Symfony\\Component\\OptionsResolver\\' => array($vendorDir . '/symfony/options-resolver'),
     'Isolated\\Symfony\\Component\\Mime\\' => array($vendorDir . '/symfony/mime'),
+    'Isolated\\Symfony\\Component\\Intl\\' => array($vendorDir . '/symfony/intl'),
     'Isolated\\Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
     'Isolated\\Symfony\\Component\\Form\\' => array($vendorDir . '/symfony/form'),
     'Isolated\\Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),

@@ -7,6 +7,11 @@ use Ajaxy\Forms\Inc\Data;
 class Builder
 {
     /**
+     * Notice to show on the page, set while saving
+     */
+    private $message = null;
+
+    /**
      * Initialize the class and set its properties.
      */
     public function __construct()
@@ -37,6 +42,10 @@ class Builder
             Data::delete_form($select_id);
             \wp_redirect(admin_url(sprintf('admin.php?page=ajaxy-forms&message=%s', urlencode(__('Form deleted successfully', "ajaxy-forms")))));
             exit();
+        }
+
+        if (isset($_POST['save_form'])) {
+            $this->save_form($select_id, isset($_GET['tab']) ? $_GET['tab'] : 0);
         }
 
         $this->metaboxes();
@@ -103,6 +112,131 @@ class Builder
     <?php
     }
 
+    /**
+     * Save the form being edited
+     *
+     * Runs on admin_init, before the page starts printing, so that the
+     * redirect that follows a successful save still has its headers.
+     *
+     * @date 2026-10-18
+     *
+     * @param int|null $select_id
+     * @param string   $tab
+     *
+     * @return void
+     */
+    private function save_form($select_id, $tab)
+    {
+        $nonce = 'save_form_' . ($select_id ? $select_id : 'new');
+        $post_vars = array_map('stripslashes_deep', $_POST);
+        if (!wp_verify_nonce($_REQUEST['_wpnonce'] ?? '', $nonce)) {
+            $this->message = [
+                'type' => 'error',
+                'message' => __('Nonce verification failed, Please try again.', "ajaxy-forms"),
+            ];
+        } else {
+            $fields = [];
+            if (isset($post_vars['fields'])) {
+                $fields = $post_vars['fields'];
+
+                \usort($fields, function ($a, $b) {
+                    return $a['_sort'] <=> $b['_sort'];
+                });
+
+                $names = [];
+                $index = 1;
+                $fields = \array_map(function ($field) use (&$names, &$index) {
+                    unset($field['_sort']);
+
+                    $name = $field['name'] ?? '';
+                    if (\trim($name) === '') {
+                        $field['name'] = \sanitize_title($field['label']);
+                    } else {
+                        $field['name'] = \sanitize_title($field['name']);
+                    }
+
+                    if (\trim($field['name']) === '') {
+                        $field['name'] = 'field_' . ($index++);
+                    }
+
+                    if (\in_array($field['name'], $names)) {
+                        $field['name'] = 'field_' . \uniqid();
+                    }
+
+                    $names[] = $field['name'];
+
+                    $properties = \Ajaxy\Forms\Inc\Fields::getInstance()->get_properties($field['type']);
+                    //remove default properties to reduce the settings size
+                    foreach ($properties as $key => $property) {
+                        $default = $property['default'] ?? '';
+                        switch ($property['type']) {
+                            case 'radio':
+                            case 'checkbox':
+                                $default = intval($property['default'] ?? 0);
+                                break;
+                            default:
+                                $default = $property['default'] ?? '';
+                                break;
+                        }
+                        if ($property['name'] != 'type' && isset($field[$property['name']]) && ($field[$property['name']] === $default || intval($field[$property['name']]) === $default)) {
+                            unset($field[$property['name']]);
+                        }
+                    }
+
+                    return $field;
+                }, $fields);
+            }
+
+            $metadata = [
+                'fields' =>  $fields,
+                'options' => $post_vars['options'] ?? [],
+                'initial_data' => [],
+                'theme' => $post_vars['theme'] ?? '',
+            ];
+
+            $name = \sanitize_title($post_vars['name'] ?? '');
+            if (\trim($name) === '') {
+                $name = 'form_' . \uniqid();
+            } else {
+                $old_form = Data::get_form_by_name($name);
+                if ($old_form && $old_form['id'] != $select_id) {
+                    $name = 'form_' . \uniqid();
+                }
+            }
+
+            if ($select_id) {
+                Data::update_form($select_id, $name, $metadata);
+            } else {
+                $select_id = Data::add_form($name, $metadata);
+            }
+
+            if (\is_wp_error($select_id)) {
+                $this->message = [
+                    'type' => 'error',
+                    'message' => $select_id->get_error_message(),
+                ];
+            } else if ($select_id) {
+                \wp_safe_redirect(
+                    add_query_arg(
+                        array(
+                            'action' => 'edit',
+                            'tab'   => $tab,
+                            'form'   => $select_id,
+                            'message' => urlencode(__('Form saved successfully', "ajaxy-forms")),
+                        ),
+                        admin_url('admin.php?page=ajaxy-form')
+                    )
+                );
+                exit();
+            } else {
+                $this->message = [
+                    'type' => 'error',
+                    'message' => __('Failed to save the form', "ajaxy-forms")
+                ];
+            }
+        }
+    }
+
     function form_page_handler()
     {
         $select_id = isset($_GET['form']) ? (int)$_GET['form'] : null;
@@ -146,113 +280,9 @@ class Builder
         }
 
         $nonce = 'save_form_' . ($select_id ? $select_id : 'new');
-        if (isset($_POST['save_form'])) {
-            $post_vars = array_map('stripslashes_deep', $_POST);
-            if (!wp_verify_nonce($_REQUEST['_wpnonce'] ?? '', $nonce)) {
-                $message = [
-                    'type' => 'error',
-                    'message' => __('Nonce verification failed, Please try again.', "ajaxy-forms"),
-                ];
-            } else {
-                $fields = [];
-                if (isset($post_vars['fields'])) {
-                    $fields = $post_vars['fields'];
 
-                    \usort($fields, function ($a, $b) {
-                        return $a['_sort'] <=> $b['_sort'];
-                    });
-
-                    $names = [];
-                    $index = 1;
-                    $fields = \array_map(function ($field) use (&$names, &$index) {
-                        unset($field['_sort']);
-
-                        $name = $field['name'] ?? '';
-                        if (\trim($name) === '') {
-                            $field['name'] = \sanitize_title($field['label']);
-                        } else {
-                            $field['name'] = \sanitize_title($field['name']);
-                        }
-
-                        if (\trim($field['name']) === '') {
-                            $field['name'] = 'field_' . ($index++);
-                        }
-
-                        if (\in_array($field['name'], $names)) {
-                            $field['name'] = 'field_' . \uniqid();
-                        }
-
-                        $names[] = $field['name'];
-
-                        $properties = \Ajaxy\Forms\Inc\Fields::getInstance()->get_properties($field['type']);
-                        //remove default properties to reduce the settings size
-                        foreach ($properties as $key => $property) {
-                            $default = $property['default'] ?? '';
-                            switch ($property['type']) {
-                                case 'radio':
-                                case 'checkbox':
-                                    $default = intval($property['default'] ?? 0);
-                                    break;
-                                default:
-                                    $default = $property['default'] ?? '';
-                                    break;
-                            }
-                            if ($property['name'] != 'type' && isset($field[$property['name']]) && ($field[$property['name']] === $default || intval($field[$property['name']]) === $default)) {
-                                unset($field[$property['name']]);
-                            }
-                        }
-
-                        return $field;
-                    }, $fields);
-                }
-
-                $metadata = [
-                    'fields' =>  $fields,
-                    'options' => $post_vars['options'] ?? [],
-                    'initial_data' => [],
-                    'theme' => $post_vars['theme'] ?? '',
-                ];
-
-                $name = \sanitize_title($post_vars['name'] ?? '');
-                if (\trim($name) === '') {
-                    $name = 'form_' . \uniqid();
-                } else {
-                    $old_form = Data::get_form_by_name($name);
-                    if ($old_form && $old_form['id'] != $select_id) {
-                        $name = 'form_' . \uniqid();
-                    }
-                }
-
-                if ($select_id) {
-                    Data::update_form($select_id, $name, $metadata);
-                } else {
-                    $select_id = Data::add_form($name, $metadata);
-                }
-
-                if (\is_wp_error($select_id)) {
-                    $message = [
-                        'type' => 'error',
-                        'message' => $select_id->get_error_message(),
-                    ];
-                } else if ($select_id) {
-                    \wp_redirect(
-                        add_query_arg(
-                            array(
-                                'action' => 'edit',
-                                'tab'   => $tab,
-                                'form'   => $select_id,
-                                'message' => urlencode(__('Form saved successfully', "ajaxy-forms")),
-                            ),
-                            admin_url('admin.php?page=ajaxy-form')
-                        )
-                    );
-                } else {
-                    $message = [
-                        'type' => 'error',
-                        'message' => __('Failed to save the form', "ajaxy-forms")
-                    ];
-                }
-            }
+        if ($this->message) {
+            $message = $this->message;
         }
 
     ?>

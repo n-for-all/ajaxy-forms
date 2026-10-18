@@ -1,5 +1,7 @@
 declare let ajaxyFormsSettings;
 
+import { captchas } from "./captcha";
+
 class Form {
 	element: HTMLFormElement;
 	submitButton: HTMLButtonElement | null;
@@ -74,6 +76,9 @@ class Form {
 								this.clearErrors();
 								this.trigger("response", json);
 								this.submitButton?.classList.remove("loading");
+								// The captcha token is single use, a spent one is
+								// rejected on the next attempt unless we reset it.
+								captchas.reset(this.element);
 								if (json) {
 									if (json.status == "error") {
 										if (json.fields) {
@@ -105,12 +110,14 @@ class Form {
 								this.clearErrors();
 								this.trigger("error", error);
 								this.submitButton?.classList.remove("loading");
+								captchas.reset(this.element);
 								this.setMessage(error.message, "error");
 							});
 					})
 					.catch((e) => {
 						this.trigger("error", e);
 						this.submitButton?.classList.remove("loading");
+						captchas.reset(this.element);
 						console.error(e);
 						this.setMessage(e.message, "error");
 					});

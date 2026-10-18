@@ -1,0 +1,5 @@
+<?php
+
+namespace Isolated;
+
+return ['Names' => ['Arab' => 'гарәп', 'Cyrl' => 'кирилл', 'Hans' => 'гадиләштерелгән', 'Hant' => 'традицион', 'Jpan' => 'япон', 'Kore' => 'корея', 'Latn' => 'латин', 'Zxxx' => 'язусыз']];

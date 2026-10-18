@@ -949,6 +949,71 @@ return [
         "keywords" => "captcha,recaptcha",
         "common" => true
     ],
+    'turnstile' => [
+        "label" => "Cloudflare Turnstile",
+        "class" => Types\TurnstileType::class,
+        "docs" => "https://developers.cloudflare.com/turnstile/",
+        "inherited" => ["label", "invalid_message"],
+        "properties" => [
+            [
+                "section" => "basic",
+                "order" => 1,
+                "type" => "text",
+                "name" => "key",
+                "label" => "Site Key",
+                "help" => "The site key of your Turnstile widget, found in the Cloudflare dashboard under Turnstile",
+            ],
+            [
+                "section" => "basic",
+                "order" => 2,
+                "type" => "text",
+                "name" => "secret",
+                "label" => "Secret Key",
+                "help" => "The secret key of your Turnstile widget, used to verify the submission server side",
+            ],
+            [
+                "section" => "advanced",
+                "order" => 1,
+                "type" => "select",
+                "name" => "theme",
+                "label" => "Theme",
+                "options" => [
+                    "auto" => "Auto",
+                    "light" => "Light",
+                    "dark" => "Dark",
+                ],
+                "help" => "The colour theme of the widget, auto follows the visitor system preference",
+            ],
+            [
+                "section" => "advanced",
+                "order" => 2,
+                "type" => "select",
+                "name" => "size",
+                "label" => "Size",
+                "options" => [
+                    "normal" => "Normal",
+                    "flexible" => "Flexible",
+                    "compact" => "Compact",
+                ],
+                "help" => "The size of the widget, flexible stretches to the width of its container",
+            ],
+            [
+                "section" => "advanced",
+                "order" => 3,
+                "type" => "select",
+                "name" => "appearance",
+                "label" => "Appearance",
+                "options" => [
+                    "always" => "Always",
+                    "interaction-only" => "Interaction only",
+                ],
+                "help" => "When the widget is visible, interaction only hides it unless the visitor has to solve a challenge",
+            ]
+        ],
+        "order" => 34,
+        "keywords" => "captcha,turnstile,cloudflare,spam",
+        "common" => true
+    ],
     'rating' => [
         "label" => "Rating",
         "class" => Types\RatingType::class,
@@ -1018,6 +1083,49 @@ return [
         "keywords" => "phone,telephone,tel",
         "common" => true
     ],
+    'phone' => [
+        "label" => "Phone with countries",
+        "class" => Types\PhoneType::class,
+        "docs" => "",
+        "inherited" => ["name", "label", "help", "data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "invalid_message"],
+        "properties" => [
+            [
+                "section" => "basic",
+                "order" => 1,
+                "type" => "select",
+                "name" => "default_country",
+                "label" => "Default Country",
+                "options" => function () {
+                    $options = ["" => "Ask the visitor to choose"];
+                    foreach (Types\Data\Countries::all() as $code => $country) {
+                        $options[$code] = \sprintf('%s (+%s)', $country['name'], $country['dial']);
+                    }
+
+                    return $options;
+                },
+                "help" => "The country selected when the form is first shown",
+            ],
+            [
+                "section" => "basic",
+                "order" => 2,
+                "type" => "text",
+                "name" => "number_placeholder",
+                "label" => "Number Placeholder",
+                "help" => "The placeholder shown inside the number input, for example 50 123 4567",
+            ],
+            [
+                "section" => "advanced",
+                "order" => 1,
+                "type" => "text",
+                "name" => "preferred_countries",
+                "label" => "Preferred Countries",
+                "help" => "A comma separated list of country codes listed above the rest, for example AE,SA,GB",
+            ],
+        ],
+        "order" => 5,
+        "keywords" => "phone,telephone,tel,country,international,mobile",
+        "common" => true
+    ],
     'color' => [
         "label" => "Color",
         "class" => Type\ColorType::class,
@@ -1081,6 +1189,14 @@ return [
             ],
             [
                 "section" => "basic",
+                "order" => 6,
+                "type" => "checkbox",
+                "name" => "expanded",
+                "label" => "Expanded",
+                "help" => "Render the choices as radio buttons, or as checkboxes when multiple is on, instead of a select box",
+            ],
+            [
+                "section" => "basic",
                 "order" => 5,
                 "type" => "text",
                 "name" => "placeholder",
@@ -1098,6 +1214,84 @@ return [
         ],
         "order" => 5,
         "keywords" => "choice,select,check",
+        "common" => true
+    ],
+    'radio_group' => [
+        "label" => "Radio Buttons",
+        "class" => Types\RadioGroupType::class,
+        "docs" => "https://symfony.com/doc/current/reference/forms/types/choice.html",
+        "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+        "properties" => [
+            [
+                "section" => "basic",
+                "order" => 1,
+                "type" => "repeater",
+                "name" => "choices",
+                "fields" => [
+                    [
+                        "order" => 1,
+                        "type" => "text",
+                        "name" => "label",
+                        "label" => "Label",
+                    ],
+                    [
+                        "order" => 2,
+                        "type" => "text",
+                        "name" => "value",
+                        "label" => "Value",
+                    ],
+                    [
+                        "order" => 3,
+                        "type" => "checkbox",
+                        "name" => "selected",
+                        "label" => "Selected",
+                    ]
+                ],
+                "label" => "Choices",
+                "help" => "Enter the choices, leave a value empty to use its label as the value",
+            ],
+        ],
+        "order" => 6,
+        "keywords" => "radio,choice,options,single",
+        "common" => true
+    ],
+    'checkbox_group' => [
+        "label" => "Checkbox Group",
+        "class" => Types\CheckboxGroupType::class,
+        "docs" => "https://symfony.com/doc/current/reference/forms/types/choice.html",
+        "inherited" => ["name", "label", "help", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+        "properties" => [
+            [
+                "section" => "basic",
+                "order" => 1,
+                "type" => "repeater",
+                "name" => "choices",
+                "fields" => [
+                    [
+                        "order" => 1,
+                        "type" => "text",
+                        "name" => "label",
+                        "label" => "Label",
+                    ],
+                    [
+                        "order" => 2,
+                        "type" => "text",
+                        "name" => "value",
+                        "label" => "Value",
+                    ],
+                    [
+                        "order" => 3,
+                        "type" => "checkbox",
+                        "name" => "selected",
+                        "label" => "Selected",
+                    ]
+                ],
+                "label" => "Choices",
+                "help" => "Enter the choices, leave a value empty to use its label as the value",
+            ],
+        ],
+        "order" => 7,
+        "keywords" => "checkbox,choice,options,multiple",
         "common" => true
     ],
     'country' => [
@@ -1142,48 +1336,48 @@ return [
         "keywords" => "country",
         "common" => false
     ],
-    // 'language' => [
-    //     "label" => "Language",
-    //     "class" => Type\LanguageType::class,
-    //     "docs" => "https://symfony.com/doc/current/reference/forms/types/language.html",
-    //     "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
-    //     "properties" => [
-    //         [
-    //             "section" => "basic",
-    //             "order" => 1,
-    //             "type" => "checkbox",
-    //             "name" => "alpha3",
-    //             "help" => 'If this option is true, the choice values use the <a href="https://en.wikipedia.org/wiki/ISO_639-2" target="_blank">ISO 639-2 alpha-3 (2T)</a> three-letter codes (e.g. French = fra) instead of the default <a href="https://en.wikipedia.org/wiki/ISO_639-1" target="_blank">ISO 639-1 alpha-2</a> two-letter codes (e.g. French = fr).',
-    //         ],
-    //         [
-    //             "section" => "basic",
-    //             "order" => 5,
-    //             "type" => "checkbox",
-    //             "name" => "multiple",
-    //             "label" => "Multiple",
-    //             "help" => "Whether the select box allows multiple choices",
-    //         ],
-    //         [
-    //             "section" => "basic",
-    //             "order" => 5,
-    //             "type" => "text",
-    //             "name" => "placeholder",
-    //             "label" => "Placeholder",
-    //             "help" => "The placeholder for the select box",
-    //         ],
-    //         [
-    //             "section" => "basic",
-    //             "order" => 5,
-    //             "type" => "text",
-    //             "name" => "preferred_choices",
-    //             "label" => "Preferred Choices",
-    //             "help" => "A comma separated list of choices that should be pre-selected",
-    //         ],
-    //     ],
-    //     "order" => 35,
-    //     "keywords" => "language,locale",
-    //     "common" => false
-    // ],
+    'language' => [
+        "label" => "Language",
+        "class" => Type\LanguageType::class,
+        "docs" => "https://symfony.com/doc/current/reference/forms/types/language.html",
+        "inherited" => ["name", "label", "help", "data", "empty_data", "required", "disabled", "attr", "help_attr", "help_html", "label_attr", "label_html", "row_attr", "sanitize_html", "trim", "invalid_message"],
+        "properties" => [
+            [
+                "section" => "basic",
+                "order" => 1,
+                "type" => "checkbox",
+                "name" => "alpha3",
+                "help" => 'If this option is true, the choice values use the <a href="https://en.wikipedia.org/wiki/ISO_639-2" target="_blank">ISO 639-2 alpha-3 (2T)</a> three-letter codes (e.g. French = fra) instead of the default <a href="https://en.wikipedia.org/wiki/ISO_639-1" target="_blank">ISO 639-1 alpha-2</a> two-letter codes (e.g. French = fr).',
+            ],
+            [
+                "section" => "basic",
+                "order" => 5,
+                "type" => "checkbox",
+                "name" => "multiple",
+                "label" => "Multiple",
+                "help" => "Whether the select box allows multiple choices",
+            ],
+            [
+                "section" => "basic",
+                "order" => 5,
+                "type" => "text",
+                "name" => "placeholder",
+                "label" => "Placeholder",
+                "help" => "The placeholder for the select box",
+            ],
+            [
+                "section" => "basic",
+                "order" => 5,
+                "type" => "text",
+                "name" => "preferred_choices",
+                "label" => "Preferred Choices",
+                "help" => "A comma separated list of choices that should be pre-selected",
+            ],
+        ],
+        "order" => 35,
+        "keywords" => "language,locale",
+        "common" => false
+    ],
     'locale' => [
         "label" => "Locale",
         "class" => Type\LocaleType::class,

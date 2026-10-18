@@ -1,0 +1,17 @@
+# Files and folders that are not part of the released plugin.
+/.git
+/.github
+/.history
+/.vscode
+/assets/src
+/node_modules
+/.distignore
+/.gitattributes
+/.gitignore
+/.DS_Store
+/phpcs.xml
+/prefix.sh
+/scoper.inc.php
+/composer.json
+/composer.lock
+/README.md

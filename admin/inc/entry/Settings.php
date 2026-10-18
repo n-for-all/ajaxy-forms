@@ -13,6 +13,8 @@ class Settings
     {
         add_action('admin_init', [$this, 'admin_init']);
         add_action('admin_menu', [$this, 'admin_menu'], 9);
+        add_filter('parent_file', [$this, 'parent_file']);
+        add_filter('submenu_file', [$this, 'submenu_file'], 10, 2);
         add_action('admin_enqueue_scripts', array(&$this, 'scripts'));
     }
 
@@ -20,6 +22,38 @@ class Settings
     {
         add_submenu_page('ajaxy-forms', __('Entries', "ajaxy-forms"), __('Entries', "ajaxy-forms"), 'activate_plugins', 'ajaxy-form-entries', [$this, "page_handler"]);
         add_submenu_page('ajaxy-forms-entry', __('Entries', "ajaxy-forms"), __('Entries', "ajaxy-forms"), 'activate_plugins', 'ajaxy-forms-entry', [$this, "form_page_handler"]);
+    }
+
+    /**
+     * Keep the Forms menu open while a single entry is being viewed
+     *
+     * That page hangs off a parent that is not a real menu, so without this
+     * nothing in the sidebar is highlighted at all.
+     *
+     * @date 2026-10-18
+     *
+     * @param string $parent_file
+     *
+     * @return string
+     */
+    public function parent_file($parent_file)
+    {
+        return ($_GET['page'] ?? '') === 'ajaxy-forms-entry' ? 'ajaxy-forms' : $parent_file;
+    }
+
+    /**
+     * Highlight Entries while a single entry is being viewed
+     *
+     * @date 2026-10-18
+     *
+     * @param string|null $submenu_file
+     * @param string      $parent_file
+     *
+     * @return string|null
+     */
+    public function submenu_file($submenu_file, $parent_file)
+    {
+        return ($_GET['page'] ?? '') === 'ajaxy-forms-entry' ? 'ajaxy-form-entries' : $submenu_file;
     }
 
     function admin_init()

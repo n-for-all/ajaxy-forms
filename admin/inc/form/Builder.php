@@ -18,6 +18,7 @@ class Builder
     {
         add_action('admin_init', [$this, 'admin_init']);
         add_action('admin_menu', [$this, 'admin_menu'], 9);
+        add_filter('submenu_file', [$this, 'submenu_file'], 10, 2);
         add_action('admin_enqueue_scripts', array(&$this, 'scripts'));
         add_action('wp_ajax_ajaxy_forms_action', [$this, 'action_ajax_handler']); // For non-logged-in users
     }
@@ -25,6 +26,31 @@ class Builder
     function admin_menu()
     {
         add_submenu_page('ajaxy-forms', __('Form Builder', "ajaxy-forms"), __('New Form', "ajaxy-forms"), 'activate_plugins', 'ajaxy-form', [$this, "form_page_handler"]);
+    }
+
+    /**
+     * Highlight the right entry in the admin menu
+     *
+     * The builder is registered as "New Form", so WordPress highlights that
+     * whenever it is open, including while an existing form is being edited.
+     * Point the highlight back at the list in that case.
+     *
+     * @date 2026-10-18
+     *
+     * @param string|null $submenu_file
+     * @param string      $parent_file
+     *
+     * @return string|null
+     */
+    public function submenu_file($submenu_file, $parent_file)
+    {
+        if (($_GET['page'] ?? '') !== 'ajaxy-form') {
+            return $submenu_file;
+        }
+
+        $editing = !empty($_GET['form']) && \in_array($_GET['action'] ?? '', ['edit', 'actions'], true);
+
+        return $editing ? 'ajaxy-forms' : $submenu_file;
     }
 
     function admin_init()

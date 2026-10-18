@@ -186,14 +186,20 @@ class Plugin
 
             $field['constraints'] = $field['constraints'] ?? [];
             if (isset($field['required']) && $field['required'] == "1") {
-                $field['constraints'][] = ['type' => 'not_blank', 'message' => $field_options['invalid_message'] ?? __('This field is required.')];
+                $required_message = $field_options['invalid_message'] ?? __('This field is required.');
+
+                // An unticked checkbox holds the string "0", which NotBlank
+                // accepts, so what has to be asserted is that it is ticked.
+                $required_constraint = \in_array($field['type'], ['checkbox', 'radio'], true) ? 'is_true' : 'not_blank';
+
+                $field['constraints'][] = ['type' => $required_constraint, 'message' => $required_message];
                 $field['required'] = '';
                 if ($field['type'] == 'email') {
                     $check_constraint = \array_filter($field['constraints'], function ($constraint) {
                         return $constraint['type'] == 'email';
                     });
                     if (count($check_constraint) == 0) {
-                        $field['constraints'][] = ['type' => 'email', 'message' => $field_options['invalid_message'] ?? __('This field is required.')];
+                        $field['constraints'][] = ['type' => 'email', 'message' => $required_message];
                     }
                 }
             }

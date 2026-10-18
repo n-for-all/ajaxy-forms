@@ -670,4 +670,66 @@
       box-shadow: 0 -1px 0 0 #ddd;
     }
   }
-}/*# sourceMappingURL=styles.css.map */
+}
+/* Placeholder reference on the Actions tab */
+.af-placeholders {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  border-left: 4px solid #2271b1;
+}
+.af-placeholders h3 {
+  margin: 0;
+  font-size: 13px;
+}
+.af-placeholders .af-placeholders-toggle {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 400;
+}
+.af-placeholders .af-placeholders-body {
+  margin-top: 10px;
+}
+.af-placeholders .af-placeholders-table {
+  margin: 8px 0;
+}
+.af-placeholders .af-placeholders-table td,
+.af-placeholders .af-placeholders-table th {
+  padding: 6px 10px;
+}
+.af-placeholders .af-placeholders-table code.af-copy {
+  cursor: pointer;
+  background: #f0f0f1;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.af-placeholders .af-placeholders-table code.af-copy:hover, .af-placeholders .af-placeholders-table code.af-copy:focus {
+  border-color: #2271b1;
+  background: #f6f7f7;
+}
+.af-placeholders .af-placeholders-table code.af-copy.af-copied {
+  background: #d7f0d7;
+  border-color: #46b450;
+}
+.af-placeholders .af-placeholders-table code.af-copy.af-copied::after {
+  content: " copied";
+  color: #2c6e2c;
+  font-size: 11px;
+}
+.af-placeholders .af-placeholder-type {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 9px;
+  background: #f0f0f1;
+  color: #646970;
+  font-size: 11px;
+}
+.af-placeholders .af-placeholder-same {
+  color: #646970;
+  font-style: italic;
+  font-size: 12px;
+}
+
+/*# sourceMappingURL=styles.css.map */

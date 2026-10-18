@@ -20,6 +20,7 @@ try {
                     <div class="drag-instructions post-body-plain">
                         <p><?php echo esc_html($starter_copy); ?></p>
                     </div>
+                    <?php include(AJAXY_FORMS_PLUGIN_DIR . '/admin/inc/form/templates/placeholders.tpl.php'); ?>
                     <ul class="ui-sortable af-actions-list">
                         <?php foreach ($actions as $action_name => $action) : ?>
                             <?php include(AJAXY_FORMS_PLUGIN_DIR . '/admin/inc/form/templates/action.tpl.php'); ?>
@@ -36,6 +37,31 @@ try {
         var toast = $('.af-toast');
         $('.af-toast').on('click', function() {
             toast.fadeOut();
+        });
+
+        $('.af-placeholders-toggle').on('click', function() {
+            var body = $(this).closest('.af-placeholders').find('.af-placeholders-body');
+            var open = body.is('[hidden]');
+            body.prop('hidden', !open);
+            $(this).attr('aria-expanded', open ? 'true' : 'false').text(open ? '<?php echo esc_js(__('hide', 'ajaxy-forms')); ?>' : '<?php echo esc_js(__('show', 'ajaxy-forms')); ?>');
+        });
+
+        $('.af-placeholders').on('click keydown', 'code.af-copy', function(e) {
+            if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+            e.preventDefault();
+            var code = this;
+            var text = $(code).text();
+            var done = function() {
+                $(code).addClass('af-copied');
+                setTimeout(function() { $(code).removeClass('af-copied'); }, 1200);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done, function() {});
+                return;
+            }
+            var temp = $('<textarea>').val(text).appendTo('body').select();
+            try { document.execCommand('copy'); done(); } catch (err) {}
+            temp.remove();
         });
 
         $('.af-actions-list .item-edit').on('click', function(e) {

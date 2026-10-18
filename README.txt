@@ -32,6 +32,8 @@ https://www.youtube.com/watch?v=GHp9gHl_-k4
 * The phone field shows the dial code rather than the full country name, so the selector stays narrow and the number gets the rest of the row. The country name is still available as a field setting.
 * Editing a form highlights Forms in the admin menu instead of New Form, and viewing a single entry highlights Entries instead of nothing.
 * A required checkbox now blocks the submission. It was validated with Not Blank, which accepts the "0" an unticked box holds, so the form went through regardless.
+* The Actions tab lists the placeholders this form accepts, one per field, click to copy.
+* The email To field says it takes several addresses, and the headers example no longer shows its own HTML tags.
 
 = 1.0.5 =
 * Added Cloudflare Turnstile as a captcha field.

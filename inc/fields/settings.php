@@ -1121,6 +1121,18 @@ return [
                 "label" => "Preferred Countries",
                 "help" => "A comma separated list of country codes listed above the rest, for example AE,SA,GB",
             ],
+            [
+                "section" => "advanced",
+                "order" => 2,
+                "type" => "select",
+                "name" => "country_label",
+                "label" => "Country Label",
+                "options" => [
+                    "code" => "Dial code, +971 (AE)",
+                    "name" => "Country name, United Arab Emirates (+971)",
+                ],
+                "help" => "What the country selector shows. The dial code keeps the selector narrow so the number gets the rest of the row",
+            ],
         ],
         "order" => 5,
         "keywords" => "phone,telephone,tel,country,international,mobile",

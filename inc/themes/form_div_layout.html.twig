@@ -134,6 +134,7 @@
 {% endblock %}
 
 {%- block phone_widget -%}
+    {%- set attr = attr|merge({ class: (attr.class|default('') ~ ' phone-field')|trim }) -%}
     <div {{ block('widget_container_attributes') }}>
         {{- form_widget(form.country) -}}
         {{- form_widget(form.number) -}}

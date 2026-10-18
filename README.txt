@@ -1,11 +1,11 @@
 === Ajaxy Forms ===
 Contributors: n-for-all
 Donate link: http://ajaxy.org/
-Version: 1.0.5
+Version: 1.0.6
 Tags: form, ajax, survey, contact, entry
 Requires at least: 6.2
 Tested up to: 7.1
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,9 @@ https://www.youtube.com/watch?v=GHp9gHl_-k4
 4. Sample form action settings supporting twig language
 
 == Changelog ==
+
+= 1.0.6 =
+* The phone field shows the dial code rather than the full country name, so the selector stays narrow and the number gets the rest of the row. The country name is still available as a field setting.
 
 = 1.0.5 =
 * Added Cloudflare Turnstile as a captcha field.

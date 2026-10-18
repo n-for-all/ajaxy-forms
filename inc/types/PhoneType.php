@@ -27,7 +27,7 @@ class PhoneType extends AbstractType
     {
         $builder
             ->add('country', ChoiceType::class, [
-                'choices' => Countries::get_choices(),
+                'choices' => Countries::get_choices($options['country_label']),
                 'preferred_choices' => $this->get_preferred_countries($options),
                 // Without a default there is nothing sensible to preselect,
                 // so the visitor is asked to pick one.
@@ -63,11 +63,16 @@ class PhoneType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
+            ->setDefault('country_label', 'code')
+            ->setNormalizer('country_label', function ($options, $value) {
+                return 'name' === $value ? 'name' : 'code';
+            })
             ->setDefault('default_country', '')
             ->setDefault('preferred_countries', '')
             ->setDefault('number_placeholder', '')
             ->setDefault('error_bubbling', false)
             ->setDefault('compound', true)
+            ->setAllowedTypes('country_label', ['string', 'null'])
             ->setAllowedTypes('default_country', ['string', 'null'])
             ->setAllowedTypes('preferred_countries', ['string', 'array', 'null'])
             ->setAllowedTypes('number_placeholder', ['string', 'null']);

@@ -314,15 +314,25 @@ class Countries
     }
 
     /**
-     * Choices for a select, labelled "Country (+code)" and keyed by alpha-2
+     * Choices for a select, keyed by alpha-2
+     *
+     * The dial code alone is not enough to tell the entries apart, 25 of them
+     * share +1, so the country it belongs to is named either in full or by
+     * its two letter code.
+     *
+     * @param string $format Either "code" or "name"
      *
      * @return array
      */
-    public static function get_choices()
+    public static function get_choices($format = 'code')
     {
         $choices = [];
         foreach (self::$countries as $code => $country) {
-            $choices[\sprintf('%s (+%s)', $country['name'], $country['dial'])] = $code;
+            $label = 'name' === $format
+                ? \sprintf('%s (+%s)', $country['name'], $country['dial'])
+                : \sprintf('+%s (%s)', $country['dial'], $code);
+
+            $choices[$label] = $code;
         }
 
         return $choices;

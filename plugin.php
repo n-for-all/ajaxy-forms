@@ -7,7 +7,7 @@
     Plugin Name: Ajaxy Forms
     Plugin URI: https://ajaxy.org/product/ajaxy-forms
     Description: Enhanced WordPress forms with advanced features and integrations
-    Version: 1.0.5
+    Version: 1.0.6
     Author: Naji Amer (Ajaxy)
     Author URI: https://www.ajaxy.org
     License: GPLv2 or later
@@ -47,7 +47,7 @@ use WP_Error;
 define("AJAXY_FORMS_PLUGIN_URL", plugins_url('', __FILE__));
 define("AJAXY_FORMS_PLUGIN_DIR", plugin_dir_path(__FILE__));
 define("AJAXY_FORMS_BASENAME", plugin_basename(__FILE__));
-define("AJAXY_FORMS_VERSION", "1.0.5");
+define("AJAXY_FORMS_VERSION", "1.0.6");
 
 class Plugin
 {

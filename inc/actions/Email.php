@@ -86,7 +86,7 @@ class Email implements ActionInterface
                 "type" => "email",
                 "name" => "from",
                 "required" => true,
-                "help" => "Enter the email address to send the email from",
+                "help" => "Enter the single email address to send the email from",
             ],
             [
                 "order" => 1,
@@ -94,7 +94,7 @@ class Email implements ActionInterface
                 "type" => "text",
                 "name" => "to",
                 "required" => true,
-                "help" => "Enter the email address to send the email to",
+                "help" => "Enter the email address to send the email to. Separate several with a comma, a name can be included as in Ops Team <ops@example.com>. Twig is supported, so {{data[FIELD_NAME].value}} sends to an address the visitor submitted",
             ],
             [
                 "order" => 2,
@@ -122,7 +122,7 @@ class Email implements ActionInterface
                 "type" => "textarea",
                 "name" => "headers",
                 "default" => "",
-                "help" => "Add some headers, ex. <b>cc: john@test.com</b>",
+                "help" => "One header per line, ex. cc: john@test.com or bcc: archive@test.com",
             ],
             [
                 "order" => 4,
